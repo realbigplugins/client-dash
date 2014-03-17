@@ -1,0 +1,8 @@
+.cd .wp-menu-image:before {
+	font: 400 2em/1 dashicons;
+	speak: none;
+	display: inline-block;
+}
+.cd-account .wp-menu-image:before {
+content: '\f337';
+}

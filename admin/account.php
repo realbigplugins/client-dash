@@ -14,7 +14,11 @@ function cd_account_page() {
 if ( !current_user_can( 'edit_others_posts' ) )  {
 	wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 } ?>
+<div class="wrap cd cd-account">
+		<h2 class="wp-menu-image">Account Information</h2>
+		<?php settings_errors(); ?>
 	HTML here
+</div>
 <?php
 }
 ?>
