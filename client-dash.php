@@ -7,6 +7,9 @@ Author: Kyle Maurer
 Author URI: http://realbigmarketing.com/staff/kyle
 */
 
+// Enqueue stylesheet
+include_once('css/style.php');
+
 // Remove all dashboard widgets
 include_once('widgets/ditch-widgets.php');
 
