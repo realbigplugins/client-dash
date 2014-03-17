@@ -8,7 +8,7 @@ Author URI: http://realbigmarketing.com/staff/kyle
 */
 
 // Remove all dashboard widgets
-
+include_once('widgets/ditch-widgets.php');
 
 // Add new dashboard widgets
 
