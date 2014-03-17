@@ -17,7 +17,7 @@ include_once('widgets/ditch-widgets.php');
 
 
 // Create admin pages
-
+require_once('admin/admin.php');
 
 // Create settings page
 
