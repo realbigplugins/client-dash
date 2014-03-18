@@ -1,8 +1,24 @@
+.cd h2 {
+	font-size: 3em;
+	margin: -5px 0 0 0;
+}
 .cd .wp-menu-image:before {
-	font: 400 2em/1 dashicons;
+	font: 100 55px/1 dashicons;
 	speak: none;
 	display: inline-block;
 }
+/* Dashboard widgets */
+.postbox-container a.cd {
+display: block;
+text-align: center;
+}
+.postbox-container .cd .wp-menu-image:before {
+font-size: 20em;
+}
+/* Assign the icons */
 .cd-account .wp-menu-image:before {
 content: '\f337';
+}
+.cd-help .wp-menu-image:before {
+content: '\f223';
 }
