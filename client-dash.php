@@ -10,11 +10,8 @@ Author URI: http://realbigmarketing.com/staff/kyle
 // Enqueue stylesheet
 include_once('css/style.php');
 
-// Remove all dashboard widgets
-include_once('widgets/ditch-widgets.php');
-
-// Add new dashboard widgets
-
+// Dashboard widgets
+include_once('widgets/widgets.php');
 
 // Create admin pages
 require_once('admin/admin.php');
