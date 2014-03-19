@@ -1,5 +1,6 @@
 <?php
-include_once('account.php');
-//include_once('help.php');
-//include_once('projects.php');
+// Account page
+include_once('account/account.php');
+// Plugin settings page
+include_once('settings/settings.php');
 ?>
