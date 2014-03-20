@@ -5,6 +5,4 @@ include_once('account/account.php');
 include_once('help/help.php');
 // Plugin settings page
 include_once('settings/settings.php');
-
-// Simpler way to include tabs
 ?>

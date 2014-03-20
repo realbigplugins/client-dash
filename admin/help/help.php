@@ -6,6 +6,12 @@ function cd_help_menu() {
 add_submenu_page('index.php', 'Helpful Information', 'Help', 'edit_others_posts', 'help', 'cd_help_page');
 //add_action('admin_init', 'cd_reg_faq_options');
 }
+// Simpler way to include tabs
+function cd_tab($cd_tab_name){ ?>
+	<table class="form-table cd-<?php echo $cd_tab_name; ?>">
+		<?php include_once($cd_tab_name.'-tab.php'); ?>
+	</table>
+<?php }
 // Fill the page with juicy goodness
 function cd_help_page() {
 if ( !current_user_can( 'edit_others_posts' ) )  {
@@ -26,15 +32,15 @@ if ( !current_user_can( 'edit_others_posts' ) )  {
 	</h2>
 <?php
 if ($active_tab == 'faq') {
-	include_once('faq-tab.php');
+	cd_tab('faq');
 } elseif ($active_tab == 'tutorials') {
-	echo 'tuts tab';
+	cd_tab('tutorials');
 } elseif ($active_tab == 'tickets') {
-	echo 'tickets tab';
+	cd_tab('tickets');
 } elseif ($active_tab == 'forum') {
-	echo 'forum tab';
+	cd_tab('forum');
 } elseif ($active_tab == 'info') {
-	echo 'info tab';
+	cd_tab('info');
 } else {}
 ?>
 </div><!--.wrap-->

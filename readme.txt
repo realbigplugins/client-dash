@@ -1,6 +1,6 @@
 === Client Dash ===
 
-Contributors: BrashRebel
+Contributors: BrashRebel, joelworsham
 
 Tags: client, portal, dashboard, admin, users
 
