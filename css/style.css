@@ -9,16 +9,16 @@
 }
 /* Dashboard widgets */
 .postbox-container a.cd {
-display: block;
-text-align: center;
+  display: block;
+  text-align: center;
 }
 .postbox-container .cd .wp-menu-image:before {
-font-size: 20em;
+  
 }
 /* Assign the icons */
 .cd-account .wp-menu-image:before {
-content: '\f337';
+  content: '\f337';
 }
 .cd-help .wp-menu-image:before {
-content: '\f223';
+  content: '\f223';
 }
