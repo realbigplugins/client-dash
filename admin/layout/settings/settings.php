@@ -1,7 +1,7 @@
 <?php
 // Add the submenu page
 function cd_settings_menu() {
-	add_submenu_page('index.php', 'Settings', 'Settings', 'edit_others_posts', 'settings', 'cd_settings_page');
+	add_submenu_page('options-general.php', 'Client Dash Settings', 'Client Dash', 'activate_plugins', 'client-dash', 'cd_settings_page');
 }
 add_action( 'admin_menu', 'cd_settings_menu' );
 
@@ -20,9 +20,9 @@ function cd_settings_page() {
 		?>
 
 		<h2 class="nav-tab-wrapper">
-			<a href="?page=settings&tab=account" class="nav-tab <?php echo $active_tab == 'account' ? 'nav-tab-active' : ''; ?>">Account</a>
-			<a href="?page=settings&tab=general" class="nav-tab <?php echo $active_tab == 'general' ? 'nav-tab-active' : ''; ?>">General</a>
-			<a href="?page=settings&tab=help" class="nav-tab <?php echo $active_tab == 'help' ? 'nav-tab-active' : ''; ?>">Help</a>
+			<a href="?page=client-dash&tab=account" class="nav-tab <?php echo $active_tab == 'account' ? 'nav-tab-active' : ''; ?>">Account</a>
+			<a href="?page=client-dash&tab=general" class="nav-tab <?php echo $active_tab == 'general' ? 'nav-tab-active' : ''; ?>">General</a>
+			<a href="?page=client-dash&tab=help" class="nav-tab <?php echo $active_tab == 'help' ? 'nav-tab-active' : ''; ?>">Help</a>
 		</h2>
 		<?php cd_get_tab($active_tab, 'settings');	?>
 	</div><!--.wrap-->
