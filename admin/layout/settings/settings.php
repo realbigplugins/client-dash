@@ -1,0 +1,31 @@
+<?php
+// Add the submenu page
+function cd_settings_menu() {
+	add_submenu_page('index.php', 'Settings', 'Settings', 'edit_others_posts', 'settings', 'cd_settings_page');
+}
+add_action( 'admin_menu', 'cd_settings_menu' );
+
+// Construct menu tabulation and get the content
+function cd_settings_page() {
+	if ( !current_user_can( 'edit_others_posts' ) )  {
+		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+	}
+	?>
+	<div class="wrap cd cd-settings">
+
+		<h2 class="wp-menu-image">Settings</h2>
+		<?php settings_errors();
+		// Get the tab query parameter. If none set, stick with first tab
+		$active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'account';
+		?>
+
+		<h2 class="nav-tab-wrapper">
+			<a href="?page=settings&tab=account" class="nav-tab <?php echo $active_tab == 'account' ? 'nav-tab-active' : ''; ?>">Account</a>
+			<a href="?page=settings&tab=general" class="nav-tab <?php echo $active_tab == 'general' ? 'nav-tab-active' : ''; ?>">General</a>
+			<a href="?page=settings&tab=help" class="nav-tab <?php echo $active_tab == 'help' ? 'nav-tab-active' : ''; ?>">Help</a>
+		</h2>
+		<?php cd_get_tab($active_tab, 'settings');	?>
+	</div><!--.wrap-->
+	<?php
+}
+?>
