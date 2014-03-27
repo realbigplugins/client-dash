@@ -22,8 +22,8 @@ function cd_account_page() {
 
 		<h2 class="nav-tab-wrapper">
 			<a href="?page=account&tab=about" class="nav-tab <?php echo $active_tab == 'about' ? 'nav-tab-active' : ''; ?>">About You</a>
-			<a href="?page=account&tab=billing" class="nav-tab <?php echo $active_tab == 'billing' ? 'nav-tab-active' : ''; ?>">Billing</a>
 			<a href="?page=account&tab=sites" class="nav-tab <?php echo $active_tab == 'sites' ? 'nav-tab-active' : ''; ?>">My Sites</a>
+			<?php do_action( 'cd_account_tabs' ); ?>
 		</h2>
 		<?php cd_get_tab($active_tab, 'account');	?>
 	</div><!--.wrap-->
