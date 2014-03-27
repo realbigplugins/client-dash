@@ -1,5 +1,6 @@
 <?php
-// Add the submenu page
+// Add the submenu page under Settings
+// This is where webmaster only settings for the plugin go
 function cd_settings_menu() {
 	add_submenu_page('options-general.php', 'Client Dash Settings', 'Client Dash', 'activate_plugins', 'client-dash', 'cd_settings_page');
 }
@@ -23,6 +24,7 @@ function cd_settings_page() {
 			<a href="?page=client-dash&tab=account" class="nav-tab <?php echo $active_tab == 'account' ? 'nav-tab-active' : ''; ?>">Account</a>
 			<a href="?page=client-dash&tab=general" class="nav-tab <?php echo $active_tab == 'general' ? 'nav-tab-active' : ''; ?>">General</a>
 			<a href="?page=client-dash&tab=help" class="nav-tab <?php echo $active_tab == 'help' ? 'nav-tab-active' : ''; ?>">Help</a>
+			<?php do_action( 'cd_settings_tabs' ); ?>
 		</h2>
 		<?php cd_get_tab($active_tab, 'settings');	?>
 	</div><!--.wrap-->

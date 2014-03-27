@@ -25,6 +25,7 @@ function cd_help_page() {
 			<a href="?page=help&tab=tickets" class="nav-tab <?php echo $active_tab == 'tickets' ? 'nav-tab-active' : ''; ?>">Tickets</a>
 			<a href="?page=help&tab=forum" class="nav-tab <?php echo $active_tab == 'forum' ? 'nav-tab-active' : ''; ?>">Forum</a>
 			<a href="?page=help&tab=info" class="nav-tab <?php echo $active_tab == 'info' ? 'nav-tab-active' : ''; ?>">Site Info</a>
+			<?php do_action( 'cd_help_tabs' ); ?>
 		</h2>
 		<?php cd_get_tab($active_tab, 'help');	?>
 	</div><!--.wrap-->

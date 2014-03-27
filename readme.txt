@@ -8,7 +8,7 @@ Requires at least: 3.0.0
 
 Tested up to: 3.8.1
 
-Stable tag: 0.1
+Stable tag: 0.2
 
 License: GPLv2 or later
 
@@ -42,8 +42,10 @@ Using this plugin is very simple. All you have to do is:
 
 == Changelog ==
 
-= 0.1 =
+= 0.2 =
 
+* Lots of rearranging of files
+* Added some filters and action hooks
 
 = 0.1 =
 
