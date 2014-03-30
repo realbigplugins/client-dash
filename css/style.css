@@ -13,7 +13,7 @@
   text-align: center;
 }
 .postbox-container .cd .wp-menu-image:before {
-  
+  font: 100 20em/1 dashicons;
 }
 /* Assign the icons */
 .cd-account .wp-menu-image:before {

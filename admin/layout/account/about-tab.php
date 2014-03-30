@@ -29,4 +29,8 @@ $cd_userrole = 'STILL NEED THIS FUNCTION';
 		<th scope="row">Your role</th>
 		<td><?php echo $cd_userrole; ?></td>
 	</tr>
+	<tr valign="top">
+		<th scope="row"><a href="<?php site_url(); ?>/wp-admin/profile.php" class="button-primary">Edit your profile</a></th>
+		<td></td>
+	</tr>
 </table>
