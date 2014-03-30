@@ -20,12 +20,9 @@ function cd_help_page() {
 		?>
 
 		<h2 class="nav-tab-wrapper">
-			<a href="?page=help&tab=faq" class="nav-tab <?php echo $active_tab == 'faq' ? 'nav-tab-active' : ''; ?>">FAQs</a>
-			<a href="?page=help&tab=tutorials" class="nav-tab <?php echo $active_tab == 'tutorials' ? 'nav-tab-active' : ''; ?>">Tutorials</a>
-			<a href="?page=help&tab=tickets" class="nav-tab <?php echo $active_tab == 'tickets' ? 'nav-tab-active' : ''; ?>">Tickets</a>
-			<a href="?page=help&tab=forum" class="nav-tab <?php echo $active_tab == 'forum' ? 'nav-tab-active' : ''; ?>">Forum</a>
+			<?php do_action( 'cd_help_tabs_before' ); ?>
 			<a href="?page=help&tab=info" class="nav-tab <?php echo $active_tab == 'info' ? 'nav-tab-active' : ''; ?>">Site Info</a>
-			<?php do_action( 'cd_help_tabs' ); ?>
+			<?php do_action( 'cd_help_tabs_after' ); ?>
 		</h2>
 		<?php cd_get_tab($active_tab, 'help');	?>
 	</div><!--.wrap-->
