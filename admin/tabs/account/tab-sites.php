@@ -5,8 +5,6 @@ $current_user = wp_get_current_user();
 // Get the blogs this current user has access to
 $blogs = get_blogs_of_user( $current_user->ID );
 
-// print_r($blogs);
-
 ?>
 <table class="widefat fixed">
   <tbody>

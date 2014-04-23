@@ -1,13 +1,19 @@
 <?php
+// Get the current user object
 global $current_user;
-get_currentuserinfo();
+
+// Get the user information
 $cd_username = $current_user->user_login;
 $cd_firstname = $current_user->first_name;
 $cd_lastname = $current_user->last_name;
 $cd_useremail = $current_user->user_email;
 $cd_userregistered = $current_user->user_registered;
-$cd_userrole = 'STILL NEED THIS FUNCTION';
+
+// Get current user role
+$user_roles = $current_user->roles;
+$cd_userrole = ucwords(array_shift($user_roles));
 ?>
+
 <table class="form-table">
 	<tr valign="top">
 		<th scope="row">Your username</th>

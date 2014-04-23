@@ -3,8 +3,22 @@
 * Include necessary files
 */
 
-/* Layout necessities */
-include_once('layout/account/account.php');
-include_once('layout/help/help.php');
-include_once('layout/settings/settings.php');
+// Include files
+require_once('submenus.php');
+require_once('includes.php');
+require_once('functions.php');
+
+// Include pages
+require_once('pages/page-account.php');
+require_once('pages/page-help.php');
+require_once('pages/page-webmaster.php');
+require_once('pages/page-reports.php');
+
+// Declare existing pages/tabs
+$cd_existing_pages = array(
+  'account' => array('about', 'sites'),
+  'help' => array('faq', 'forum', 'info', 'tickets', 'tutorials'),
+  'reports' => array('analytics', 'ecommerce', 'seo'),
+  'webmaster' => array('news', 'promotions')
+);
 ?>
