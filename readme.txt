@@ -54,7 +54,7 @@ Using this plugin is very simple. All you have to do is:
 
 == Screenshots ==
 
-1. The wp-admin dashboard as seen by users with the Author role or above.
+1. The wp-admin dashboard as seen by users with the Administrator role. The widgets and pages this plugin creates will be visible by anyone with the Author role and above.
 
 == Changelog ==
 
