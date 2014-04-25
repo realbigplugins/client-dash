@@ -11,9 +11,29 @@ add_action('admin_init', 'client_dash_register_files');
 
 function client_dash_enqueue_files(){
 	if (current_user_can( 'publish_posts' )) {
-  wp_enqueue_script('client-dash');
-  wp_enqueue_style('client-dash');
-}
+	  wp_enqueue_script('client-dash');
+	  wp_enqueue_style('client-dash');
+	}
 }
 add_action('admin_enqueue_scripts', 'client_dash_enqueue_files');
+
+// Dynamic styling based on theme colors
+function client_dash_icon_colors(){
+  $colors = cd_get_color_scheme(null);
+  echo '
+  <style>
+	  .cd-icon{
+	  	color: '.$colors['primary'].';
+	  	-webkit-transition: color 0.3s;
+				 -moz-transition: color 0.3s;
+			     -o-transition: color 0.3s;
+			        transition: color 0.3s;
+	  }
+	  .cd-icon:hover{
+	  	color: '.$colors['secondary'].';
+	  }
+	</style>
+  ';
+}
+add_action('admin_head', 'client_dash_icon_colors');
 ?>

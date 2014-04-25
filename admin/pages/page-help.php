@@ -5,9 +5,9 @@
 
 function cd_help_page(){
   ?>
-  <div class="wrap">
-    <h2>Client Dash - Help</h2>
+  <div class="wrap cd-help">
     <?php
+    cd_the_page_title();
     cd_create_tab_page(array(
       'tabs' => array(
         'Info' => 'info',

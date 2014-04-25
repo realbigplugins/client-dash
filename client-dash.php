@@ -15,4 +15,12 @@ require_once('admin/admin.php');
 
 // Enhance the toolbar
 require_once('toolbar/toolbar.php');
+
+// Store admin color scheme for later
+global $admin_colors; // only needed if colors must be available in classes
+add_action('admin_init', function() {
+  global $_wp_admin_css_colors;
+  global $admin_colors; // only needed if colors must be available in classes
+  $admin_colors = $_wp_admin_css_colors;
+});
 ?>

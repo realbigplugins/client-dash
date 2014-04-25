@@ -26,4 +26,16 @@ $cd_count_users = count_users();
 		<th scope="row">Total registered users</th>
 		<td><?php echo $cd_count_users['total_users']; ?></td>
 	</tr>
+	<tr valign="top">
+		<th scope="row">Total media library size</th>
+		<?php
+		$upload_dir = wp_upload_dir();
+		$dir_info = cd_get_dir_size($upload_dir['basedir']);
+		?>
+		<td><?php echo cd_format_dir_size($dir_info['size']); ?></td>
+	</tr>
+	<tr valign="top">
+		<th scope="row">Total media library files</th>
+		<td><?php echo $dir_info['count']; ?></td>
+	</tr>
 </table>

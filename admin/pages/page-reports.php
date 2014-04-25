@@ -5,9 +5,9 @@
 
 function cd_reports_page(){
   ?>
-  <div class="wrap">
-    <h2>Client Dash - Reports</h2>
+  <div class="wrap cd-reports">
     <?php
+    cd_the_page_title();
     cd_create_tab_page(array(
       'tabs' => array(
         'Site Overview' => 'site',

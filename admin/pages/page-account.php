@@ -5,9 +5,9 @@
 
 function cd_account_page(){
   ?>
-  <div class="wrap">
-    <h2>Client Dash - Account</h2>
+  <div class="wrap cd-account">
     <?php
+    cd_the_page_title();
     cd_create_tab_page(array(
       'tabs' => array(
         'About' => 'about',
