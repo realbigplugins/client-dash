@@ -19,11 +19,11 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 == Description ==
 
 
-<h3>Webmasters rejoice!</h3>
+=Webmasters rejoice!=
 
 At long last, a vastly improved interface for clients has arrived. Client Dash seeks to provide a simplified and intuitive admin user experience for customers who login to WordPress sites which were developed and are managed by an agency/webmaster.
 
-<h4>What does Client Dash do?</h4>
+=What does Client Dash do?=
 
 Upon activation, Client Dash modifies the wp-admin in the following ways:
 
@@ -48,7 +48,7 @@ Using this plugin is very simple. All you have to do is:
 
 1. Upload the `client-dash` folder to the `/wp-content/plugins/` directory
 
-1. Activate the plugin through the 'Plugins' menu in WordPress
+2. Activate the plugin through the 'Plugins' menu in WordPress
 
 
 
