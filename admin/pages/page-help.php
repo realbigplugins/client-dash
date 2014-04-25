@@ -11,7 +11,7 @@ function cd_help_page(){
     cd_create_tab_page(array(
       'tabs' => array(
         'Info' => 'info',
-        //'FAQ' => 'faq',
+        // 'FAQ' => 'faq',
         //'Forum' => 'forum',
         //'Tickets' => 'tickets'
         // 'Tutorials' => 'tutorials'

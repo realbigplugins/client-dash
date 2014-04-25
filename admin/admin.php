@@ -21,4 +21,11 @@ $cd_existing_pages = array(
   'reports' => array('site', 'analytics', 'ecommerce', 'seo'),
   'webmaster' => array('news', 'promotions')
 );
+
+// Add tab files
+foreach ($cd_existing_pages as $page => $tabs):
+	foreach ($tabs as $tab):
+		require_once('tabs/'.$page.'/tab-'.$tab.'.php');
+	endforeach;
+endforeach;
 ?>

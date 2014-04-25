@@ -65,19 +65,8 @@ function cd_create_tab_page($options){
   if (!$active_tab)
     $active_tab = $first_tab;
 
-  // Allow plugins to add content before existing content
-  do_action('cd_before_'.$active_tab.'_tab');
-
-  // Get content from tab file
-  $file_path = plugin_dir_path(__FILE__).'tabs/'.$current_page.'/tab-'.$active_tab.'.php';
-
-  if (file_exists($file_path))
-    include_once(plugin_dir_path(__FILE__).'tabs/'.$current_page.'/tab-'.$active_tab.'.php');
-  else
-    echo '<p class="cd-error">No tab page has been created yet!<br/>Please create a page under "/admin/tabs/{pagename}/tab-{tabname}.php"</p>';
-
-  // Allow plugins to add content after existing content
-  do_action('cd_after_'.$active_tab.'_tab');
+  // Add content via actions
+  do_action('cd_add_to_'.$active_tab.'_tab');
 }
 
 function cd_settings_header($options){
