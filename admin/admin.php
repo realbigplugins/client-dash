@@ -18,7 +18,7 @@ require_once('pages/page-reports.php');
 $cd_existing_pages = array(
   'account' => array('about', 'sites'),
   'help' => array('faq', 'forum', 'info', 'tickets', 'tutorials'),
-  'reports' => array('analytics', 'ecommerce', 'seo'),
+  'reports' => array('site', 'analytics', 'ecommerce', 'seo'),
   'webmaster' => array('news', 'promotions')
 );
 ?>

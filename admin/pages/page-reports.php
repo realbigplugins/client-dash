@@ -10,9 +10,10 @@ function cd_reports_page(){
     <?php
     cd_create_tab_page(array(
       'tabs' => array(
-        'Analytics' => 'analytics',
-        'SEO' => 'seo',
-        'Ecommerce' => 'ecommerce'
+        'Site Overview' => 'site',
+        //'Analytics' => 'analytics',
+        //'SEO' => 'seo',
+        //'Ecommerce' => 'ecommerce'
       )
     ));
     ?>

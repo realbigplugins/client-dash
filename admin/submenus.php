@@ -20,7 +20,7 @@ function cd_add_subpages() {
   endif;
   
   // Webmaster
-  $show_webmaster_page = apply_filters('cd_show_webmaster_page', true);
+  $show_webmaster_page = apply_filters('cd_show_webmaster_page', false);
 
   if ($show_webmaster_page):
     add_submenu_page('index.php', 'Webmaster', 'Webmaster', 'edit_others_posts', 'webmaster', 'cd_webmaster_page');
@@ -34,7 +34,15 @@ function cd_add_subpages() {
   endif;
 
   // Options (not under dashboard)
-  add_submenu_page('options-general.php', 'Client Dash Settings', 'Client Dash', 'activate_plugins', 'client-dash', 'cd_settings_page');
+  // add_submenu_page('options-general.php', 'Client Dash Settings', 'Client Dash', 'activate_plugins', 'client-dash', 'cd_settings_page');
 }
 add_action( 'admin_menu', 'cd_add_subpages' );
+
+// Ditch My Sites submenu un Dashboard in multisite
+function cd_ditch_my_sites_submenu() {
+  if (is_multisite()) {
+    $page = remove_submenu_page('index.php', 'my-sites.php');
+  }
+}
+add_action('admin_menu', 'cd_ditch_my_sites_submenu', 999);
 ?>
