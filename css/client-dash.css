@@ -22,6 +22,9 @@
 .cd-help .wp-menu-image:before {
   content: '\f223';
 }
+.cd-reports .wp-menu-image:before {
+  content: '\f239';
+}
 
 /* CD messages */
 .cd-error{
