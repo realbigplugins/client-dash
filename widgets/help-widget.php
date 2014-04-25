@@ -11,7 +11,9 @@ function cd_help_widget_content(){
 
 // Make it a dashboard widget
 function add_cd_help_widget() {
+	if (current_user_can( 'publish_posts' )) {
 	add_meta_box('cd-help', 'Help', 'cd_help_widget_content', 'dashboard', 'side', 'high');
+}
 }
 add_action('wp_dashboard_setup', 'add_cd_help_widget' );
 ?>

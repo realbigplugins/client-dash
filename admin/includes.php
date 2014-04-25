@@ -10,8 +10,10 @@ function client_dash_register_files(){
 add_action('admin_init', 'client_dash_register_files');
 
 function client_dash_enqueue_files(){
+	if (current_user_can( 'publish_posts' )) {
   wp_enqueue_script('client-dash');
   wp_enqueue_style('client-dash');
+}
 }
 add_action('admin_enqueue_scripts', 'client_dash_enqueue_files');
 ?>

@@ -11,7 +11,9 @@ function cd_account_widget_content(){
 
 // Make it a dashboard widget
 function add_cd_account_widget() {
+	if (current_user_can( 'publish_posts' )) {
   wp_add_dashboard_widget('cd-account', 'Account', 'cd_account_widget_content');
+}
 }
 add_action('wp_dashboard_setup', 'add_cd_account_widget' );
 ?>
