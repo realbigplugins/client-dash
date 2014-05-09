@@ -1,23 +1,14 @@
 === Client Dash ===
 
 Contributors: BrashRebel, joelworsham
-
 Tags: client, portal, dashboard, admin, users, webmaster
-
 Requires at least: 3.8.0
-
 Tested up to: 3.9
-
-Stable tag: 1.0
-
+Stable tag: 1.1
 License: GPLv2 or later
-
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-
-
 == Description ==
-
 
 =Webmasters rejoice!=
 
@@ -39,18 +30,13 @@ There is a lot more to come from this plugin in the future. Client Dash has been
 
 We are also extremely receptive to suggestions, feature requests and colaborations so if you have anything to add or that you would like to see us add, please visit the support forum here and engage us.
 
-
 == Installation ==
 
-
 Using this plugin is very simple. All you have to do is:
-
 
 1. Upload the `client-dash` folder to the `/wp-content/plugins/` directory
 
 2. Activate the plugin through the 'Plugins' menu in WordPress
-
-
 
 == Screenshots ==
 
@@ -58,15 +44,18 @@ Using this plugin is very simple. All you have to do is:
 
 == Changelog ==
 
+= 1.1 =
+* Added options page under "Settings->Client Dash".
+* Added ability to selectively display dashboard widgets that are automatically removed on options page.
+* Locked Client Dash widgets into place.
+* Removal of dashboard widgets now dynamic, so only Client Dash widgets will exist.
+* Removed "Screen Options" and "Help" from dashboard.
+
 = 1.0 =
-
-
-= 1.0 =
-
 * Initial release.
-* Includes Help page with an Info tab
-* Includes Account page with About and Sites tabs
-* Includes Reports page with Site Overview tab
-* Removes default WordPress dashboard widgets
-* Removes WP logo and menu from toolbar
-* Adds dashboard widgets for each new submenu page
+* Includes Help page with an Info tab.
+* Includes Account page with About and Sites tabs.
+* Includes Reports page with Site Overview tab.
+* Removes default WordPress dashboard widgets.
+* Removes WP logo and menu from toolbar.
+* Adds dashboard widgets for each new submenu page.

@@ -3,6 +3,32 @@
 * All core functions go here
 */
 
+function cd_get_active_widgets(){
+  global $wp_meta_boxes, $cd_widgets;
+
+  // Initialize
+  $active_widgets = array();
+
+  // This lovely, crazy loop is what gathers all of the widgets and organizes it into MY array
+  foreach ($wp_meta_boxes['dashboard'] as $context => $widgets):
+    foreach ($widgets as $priority => $widgets):
+      foreach ($widgets as $id => $values):
+        $active_widgets[$id]['title'] = $values['title'];
+        $active_widgets[$id]['context'] = $context;
+        $active_widgets[$id]['priority'] = $priority;
+      endforeach;
+    endforeach;
+  endforeach;
+
+  // Unset OUR widgets
+  foreach ($cd_widgets as $widget):
+    unset($active_widgets[$widget]);
+  endforeach;
+
+  update_option('cd_active_widgets', $active_widgets);
+}
+add_action('wp_dashboard_setup', 'cd_get_active_widgets', 100);
+
 function cd_the_page_title(){
   echo '<h2 class="cd-title"><span class="cd-title-icon cd-icon"></span> '.get_admin_page_title().'</h2>';
 }

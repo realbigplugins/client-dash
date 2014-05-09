@@ -11,7 +11,7 @@ add_action( 'admin_init', 'cd_register_settings' );
 
 // Create page
 function cd_settings_page(){
-  global $cd_remove_widgets;
+  $active_widgets = get_option('cd_active_widgets');
 
   // Make sure user has rights
   if ( !current_user_can('activate_plugins')){
@@ -39,7 +39,7 @@ function cd_settings_page(){
           </th>
           <td>
             <?php
-            foreach ($cd_remove_widgets as $widget => $values):
+            foreach ($active_widgets as $widget => $values):
               echo '<input type="checkbox" name="cd_remove_which_widgets['.$widget.']" id="cd_remove_which_widgets'.$widget.'" value="'.$widget.'" '.(isset($cd_remove_which_widgets[$widget]) ? 'checked' : '').'/><label for="cd_remove_which_widgets'.$widget.'">'.$values['title'].'</label><br/>';
             endforeach;
             ?>

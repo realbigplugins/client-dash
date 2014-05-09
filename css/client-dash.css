@@ -1,7 +1,18 @@
-.cd h2 {
-	font-size: 3em;
-	margin: -5px 0 0 0;
+/*
+* Dashboard ==========================================
+*/
+
+/* Override the default layout */
+#dashboard-widgets-wrap .postbox-container{
+  float: left !important;
 }
+#dashboard-widgets-wrap .hndle{
+  cursor: default !important;
+}
+#dashboard-widgets-wrap .handlediv{
+  display: none !important;
+}
+
 /* Assign the icons */
 .cd-account .wp-menu-image:before, .cd-account .cd-title-icon:before {
   content: '\f337';
@@ -12,7 +23,8 @@
 .cd-reports .wp-menu-image:before, .cd-reports .cd-title-icon:before {
   content: '\f239';
 }
-/* Style dashboard widgets */
+
+/* Style widgets */
 .cd .wp-menu-image:before, .cd-title-icon:before {
   font: 100 55px/1 dashicons;
   speak: none;
@@ -26,43 +38,11 @@
   font: 100 20em/1 dashicons;
 }
 
+/*
+* Page ==========================================
+*/
+
 /* Style the page title icons */
 .cd-title-icon{
   vertical-align: -16px;
-}
-/* CD messages */
-.cd-error{
-  background: #FF6F72;
-  color: #fff;
-  font-weight: bold;
-  padding: 10px;
-  font-size: 120%;
-}
-
-#cd-message{
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 10px 0;
-  background: #fff;
-  margin: 10px 0;
-  font-size: 150%;
-  width: 0%;
-  float: right;
-  margin-right: 70%;
-  overflow: hidden;
-  white-space: nowrap;
-  -webkit-transition: all 1s ease-out;
-     -moz-transition: all 1s ease-out;
-       -o-transition: all 1s ease-out;
-          transition: all 1s ease-out;
-}
-#cd-message.cd-message-open{
-  width: 30%;
-  padding: 10px;
-}
-
-#cd-message.cd-updated{
-  background: #00B90A;
-  color: #fff;
 }
