@@ -2,17 +2,6 @@
 * Dashboard ==========================================
 */
 
-/* Override the default layout */
-#dashboard-widgets-wrap .postbox-container{
-  float: left !important;
-}
-#dashboard-widgets-wrap .hndle{
-  cursor: default !important;
-}
-#dashboard-widgets-wrap .handlediv{
-  display: none !important;
-}
-
 /* Assign the icons */
 .cd-account .wp-menu-image:before, .cd-account .cd-title-icon:before {
   content: '\f337';

@@ -11,9 +11,3 @@ function cd_add_dashboard_widgets() {
   endif;
 }
 add_action('wp_dashboard_setup', 'cd_add_dashboard_widgets' );
-
-// Disable widget dragging
-function disable_drag_metabox() {
-  wp_deregister_script('postbox');
-}
-add_action( 'admin_init', 'disable_drag_metabox' );

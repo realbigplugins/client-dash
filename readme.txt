@@ -47,7 +47,6 @@ Using this plugin is very simple. All you have to do is:
 = 1.1 =
 * Added options page under "Settings->Client Dash".
 * Added ability to selectively display dashboard widgets that are automatically removed on options page.
-* Locked Client Dash widgets into place.
 * Removal of dashboard widgets now dynamic, so only Client Dash widgets will exist.
 * Removed "Screen Options" and "Help" from dashboard.
 
