@@ -34,7 +34,7 @@ function cd_add_subpages() {
   endif;
 
   // Options (not under dashboard)
-  // add_submenu_page('options-general.php', 'Client Dash Settings', 'Client Dash', 'activate_plugins', 'client-dash', 'cd_settings_page');
+  add_options_page( 'Client Dash Settings', 'Client Dash', 'activate_plugins', 'client-dash', 'cd_settings_page' );
 }
 add_action( 'admin_menu', 'cd_add_subpages' );
 
