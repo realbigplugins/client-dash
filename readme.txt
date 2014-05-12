@@ -52,6 +52,7 @@ Using this plugin is very simple. All you have to do is:
 * Added ability to selectively display dashboard widgets that are automatically removed on options page.
 * Removal of dashboard widgets now dynamic, so only Client Dash widgets will exist.
 * Removed "Screen Options" and "Help" from dashboard.
+* Removed dashboard widgets from bbPress and Woocommerce
 
 = 1.0 =
 * Initial release.
@@ -61,3 +62,12 @@ Using this plugin is very simple. All you have to do is:
 * Removes default WordPress dashboard widgets.
 * Removes WP logo and menu from toolbar.
 * Adds dashboard widgets for each new submenu page.
+
+== Upgrade Notice ==
+
+= 1.1 =
+
+* Added admin options for displaying dashboard widgets
+* Removed bbPress and Woocommerce dashboard widgets
+* Hide screen options and help pulldowns from dashboard
+* Other fixes and general improvements
