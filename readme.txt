@@ -4,7 +4,7 @@ Contributors: BrashRebel, joelworsham
 Tags: client, portal, dashboard, admin, users, webmaster
 Requires at least: 3.8.0
 Tested up to: 3.9
-Stable tag: 1.1
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,6 +47,10 @@ Using this plugin is very simple. All you have to do is:
 
 == Changelog ==
 
+= 1.1.1 =
+
+* Fixed fatal error problem
+
 = 1.1 =
 * Added options page under "Settings->Client Dash".
 * Added ability to selectively display dashboard widgets that are automatically removed on options page.
@@ -65,8 +69,9 @@ Using this plugin is very simple. All you have to do is:
 
 == Upgrade Notice ==
 
-= 1.1 =
+= 1.1.1 =
 
+* Fixed fatal error thanks to @bretterer
 * Added admin options for displaying dashboard widgets
 * Removed bbPress and Woocommerce dashboard widgets
 * Hide screen options and help pulldowns from dashboard
