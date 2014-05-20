@@ -3,8 +3,8 @@
 Contributors: BrashRebel, joelworsham
 Tags: client, portal, dashboard, admin, users, webmaster
 Requires at least: 3.8.0
-Tested up to: 3.9
-Stable tag: 1.1.1
+Tested up to: 3.9.1
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,8 +47,10 @@ Using this plugin is very simple. All you have to do is:
 
 == Changelog ==
 
-= 1.1.1 =
+= 1.1.2 =
+* Patch to fix potential fatal error when running on older versions of PHP
 
+= 1.1.1 =
 * Fixed fatal error problem
 
 = 1.1 =
