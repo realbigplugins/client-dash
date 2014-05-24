@@ -47,6 +47,13 @@ Using this plugin is very simple. All you have to do is:
 
 == Changelog ==
 
+= 1.2 =
+* Enqueued `client-dash.js` with `updown` function
+* Added `cd-click` class to `client-dash.css` for `cursor: pointer`
+* Rearranged information on Site tab on Reports page to be more clear
+* Added a few pieces of data to Site tab on Reports page
+# Removed placeholder content from FAQ tab
+
 = 1.1.2 =
 * Patch to fix potential fatal error when running on older versions of PHP
 
