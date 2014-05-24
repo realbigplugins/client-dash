@@ -35,3 +35,10 @@
 .cd-title-icon{
   vertical-align: -16px;
 }
+
+/*
+* Other ==========================================
+*/
+.cd-click {
+  cursor: pointer;
+}

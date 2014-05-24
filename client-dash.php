@@ -24,3 +24,8 @@ function cd_admin_colors(){
   $admin_colors = $_wp_admin_css_colors;
 }
 add_action('admin_init', 'cd_admin_colors');
+
+function cd_scripts() {
+	wp_enqueue_script( 'cd-scripts', plugin_dir_url( __FILE__ ) . 'js/client-dash.js');
+}
+add_action('admin_enqueue_scripts', 'cd_scripts');
