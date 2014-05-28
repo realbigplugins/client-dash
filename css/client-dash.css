@@ -4,31 +4,31 @@
 
 /* Assign the icons */
 .cd-account .wp-menu-image:before, .cd-account .cd-title-icon:before {
-    content: '\f337';
+  content: '\f337';
 }
 
 .cd-help .wp-menu-image:before, .cd-help .cd-title-icon:before {
-    content: '\f223';
+  content: '\f223';
 }
 
 .cd-reports .wp-menu-image:before, .cd-reports .cd-title-icon:before {
-    content: '\f239';
+  content: '\f239';
 }
 
 /* Style widgets */
 .cd .wp-menu-image:before, .cd-title-icon:before {
-    font: 100 55px/1 dashicons;
-    speak: none;
-    display: inline-block;
+  font: 100 55px/1 dashicons;
+  speak: none;
+  display: inline-block;
 }
 
 .postbox-container a.cd {
-    display: block;
-    text-align: center;
+  display: block;
+  text-align: center;
 }
 
 .postbox-container .cd .wp-menu-image:before {
-    font: 100 20em/1 dashicons;
+  font: 100 20em/1 dashicons;
 }
 
 /*
@@ -37,12 +37,12 @@
 
 /* Style the page title icons */
 .cd-title-icon {
-    vertical-align: -16px;
+  vertical-align: -16px;
 }
 
 /*
 * Other ==========================================
 */
 .cd-click {
-    cursor: pointer;
+  cursor: pointer;
 }

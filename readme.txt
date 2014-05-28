@@ -49,6 +49,8 @@ Using this plugin is very simple. All you have to do is:
 
 = 1.2.1 =
 * Fixed php warning
+* Safeguarded require_once occurrences for potential issues
+* Reformatted code
 
 = 1.2 =
 

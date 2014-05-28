@@ -1,4 +1,3 @@
 <?php
-require_once( 'ditch-wp.php' );
-require_once( 'ditch-my-sites.php' );
-?>
+require_once(plugin_dir_path(__FILE__) . 'ditch-wp.php');
+require_once(plugin_dir_path(__FILE__) . 'ditch-my-sites.php');
