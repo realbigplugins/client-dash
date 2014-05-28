@@ -85,11 +85,7 @@ Using this plugin is very simple. All you have to do is:
 
 == Upgrade Notice ==
 
-= 1.1.2 =
+= 1.2 =
 
-* Fixed fatal error thanks to @bretterer
-* Added admin options for displaying dashboard widgets
-* Removed bbPress and Woocommerce dashboard widgets
-* Hide screen options and help pulldowns from dashboard
-* Other fixes and general improvements
-* Removed inline function which causes parse error on older versions of PHP
+* Better extensibility for developers
+* Awesome options for webmasters
