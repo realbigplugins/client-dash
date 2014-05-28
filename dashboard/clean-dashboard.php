@@ -14,9 +14,11 @@ function cd_ditch_dashboard_widgets() {
 
 	// Don't remove selected widgets
 	$dont_remove = get_option( 'cd_remove_which_widgets' );
-	foreach ( $dont_remove as $widget ):
-		unset( $active_widgets[ $widget ] );
-	endforeach;
+	if ( $dont_remove ) {
+		foreach ( $dont_remove as $widget ) {
+			unset( $active_widgets[ $widget ] );
+		}
+	}
 
 	// Allow removing/adding of widgets to ditch externally
 	$active_widgets = apply_filters( 'cd_remove_widgets', $active_widgets );
