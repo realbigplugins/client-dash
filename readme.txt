@@ -4,7 +4,7 @@ Contributors: BrashRebel, joelworsham
 Tags: client, portal, dashboard, admin, users, webmaster
 Requires at least: 3.8.0
 Tested up to: 3.9.1
-Stable tag: 1.1.2
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,11 +48,18 @@ Using this plugin is very simple. All you have to do is:
 == Changelog ==
 
 = 1.2 =
+
 * Enqueued `client-dash.js` with `updown` function
 * Added `cd-click` class to `client-dash.css` for `cursor: pointer`
 * Rearranged information on Site tab on Reports page to be more clear
 * Added a few pieces of data to Site tab on Reports page
-# Removed placeholder content from FAQ tab
+* Removed placeholder content from FAQ tab
+* Allow extensions to add tabs to specific pages
+* Increase extensibility of settings page
+* Added "Webmaster" tab to the settings page
+* Allow user to disable/enable webmaster page
+* Allow user to rename webmaster page/menu-item
+* Allow user to add custom html content to a custom tab on webmaster page
 
 = 1.1.2 =
 * Patch to fix potential fatal error when running on older versions of PHP

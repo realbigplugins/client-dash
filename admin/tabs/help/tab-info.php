@@ -1,9 +1,9 @@
 <?php
-function cd_core_info_tab(){
+function cd_core_info_tab() {
 	// Get the user information
-	$cd_current_theme = get_current_theme();
-	$cd_plugins = get_plugins();
-	$cd_active_plugins = get_option('active_plugins');
+	$cd_current_theme  = get_current_theme();
+	$cd_plugins        = get_plugins();
+	$cd_active_plugins = get_option( 'active_plugins' );
 	global $wp_version;
 
 	?>
@@ -18,20 +18,21 @@ function cd_core_info_tab(){
 		</tr>
 		<tr valign="top">
 			<th scope="row">Active plugins</th>
-			<td><?php foreach ($cd_active_plugins as $key => $value) {
-				$string = explode('/', $value); // Display folder name
-				echo $string[0];
-				echo "<br/>";
-			} ?></td>
+			<td><?php foreach ( $cd_active_plugins as $key => $value ) {
+					$string = explode( '/', $value ); // Display folder name
+					echo $string[0];
+					echo "<br/>";
+				} ?></td>
 		</tr>
 		<tr valign="top">
 			<th scope="row">Installed plugins</th>
-			<td><?php foreach ($cd_plugins as $plugin) {
-				echo $plugin['Name'];
-				echo "<br/>";
-			} ?></td>
+			<td><?php foreach ( $cd_plugins as $plugin ) {
+					echo $plugin['Name'];
+					echo "<br/>";
+				} ?></td>
 		</tr>
 	</table>
-	<?php
+<?php
 }
-add_action('cd_add_to_info_tab', 'cd_core_info_tab');
+
+add_action( 'cd_help_info_tab', 'cd_core_info_tab' );
