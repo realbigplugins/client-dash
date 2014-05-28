@@ -14,7 +14,7 @@ require_once( 'pages/page-account.php' );
 require_once( 'pages/page-help.php' );
 require_once( 'pages/page-webmaster.php' );
 require_once( 'pages/page-reports.php' );
-require_once( 'pages/page-settings.php' );
+//require_once( 'pages/page-settings.php' );
 
 // Add tab files
 foreach ( $cd_existing_pages as $page => $tabs ):

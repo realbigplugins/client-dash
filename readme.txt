@@ -51,6 +51,12 @@ Using this plugin is very simple. All you have to do is:
 * Fixed php warning
 
 = 1.2 =
+
+* Enqueued `client-dash.js` with `updown` function
+* Added `cd-click` class to `client-dash.css` for `cursor: pointer`
+* Rearranged information on Site tab on Reports page to be more clear
+* Added a few pieces of data to Site tab on Reports page
+* Removed placeholder content from FAQ tab
 * Allow extensions to add tabs to specific pages
 * Increase extensibility of settings page
 * Added "Webmaster" tab to the settings page
@@ -82,11 +88,7 @@ Using this plugin is very simple. All you have to do is:
 
 == Upgrade Notice ==
 
-= 1.1.2 =
+= 1.2 =
 
-* Fixed fatal error thanks to @bretterer
-* Added admin options for displaying dashboard widgets
-* Removed bbPress and Woocommerce dashboard widgets
-* Hide screen options and help pulldowns from dashboard
-* Other fixes and general improvements
-* Removed inline function which causes parse error on older versions of PHP
+* Better extensibility for developers
+* Awesome options for webmasters
