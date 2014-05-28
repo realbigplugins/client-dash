@@ -31,12 +31,12 @@ $cd_existing_pages = array(
     //      'SEO' => 'seo'
   ),
   'webmaster' => array(
-    'News'       => 'news',
-    'Promotions' => 'promotions'
+//    'News'       => 'news',
+//    'Promotions' => 'promotions'
   ),
   'settings'  => array(
     'General'   => 'general',
-    'Webmaster' => 'webmaster'
+//    'Webmaster' => 'webmaster'
   )
 );
 
