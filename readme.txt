@@ -91,7 +91,5 @@ Using this plugin is very simple. All you have to do is:
 
 == Upgrade Notice ==
 
-= 1.2 =
-
-* Better extensibility for developers
-* Awesome options for webmasters
+= 1.2.1 =
+* PLEASE UPDATE IMMEDIATELY: Fixed fatal error issue.
