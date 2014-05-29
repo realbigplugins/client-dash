@@ -15,7 +15,7 @@ $cd_option_defaults = array(
 $cd_existing_pages = array(
   'account'   => array(
     'About' => 'about',
-    'Sites' => 'sites'
+//    'Sites' => 'sites'
   ),
   'help'      => array(
     //      'FAQ' => 'faq',
@@ -39,6 +39,10 @@ $cd_existing_pages = array(
 //    'Webmaster' => 'webmaster'
   )
 );
+
+// If multisite, add sites
+if (is_multisite())
+  $cd_existing_pages['account']['Sites'] = 'sites';
 
 // Declare existing CD widgets
 $cd_widgets = array('cd-account', 'cd-help', 'cd-reports');

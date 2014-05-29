@@ -35,7 +35,7 @@ function cd_webmaster_custom_content_tab($tabs) {
 
   // Break if webmaster custom content not set
   if (!get_option('cd_webmaster_custom_content') || !get_option('cd_webmaster_custom_content_tab')) {
-    return;
+    return $tabs;
   }
 
   $tabs['webmaster'][get_option('cd_webmaster_custom_content_tab')] = get_option('cd_webmaster_custom_content_tab_clean');

@@ -52,6 +52,10 @@ Using this plugin is very simple. All you have to do is:
 * Safeguarded require_once occurrences for potential issues.
 * Reformatted code.
 * Added missing files causing fatal error.
+* Fixed dashboard widget broken links.
+* Re-ordered dashboard widgets.
+* Re-ordered menu items.
+* Added conditional to only show sites tab under account if is a multisite.
 
 = 1.2 =
 
@@ -93,3 +97,11 @@ Using this plugin is very simple. All you have to do is:
 
 = 1.2.1 =
 * PLEASE UPDATE IMMEDIATELY: Fixed fatal error issue.
+
+define('DB_NAME', 'joelwors_main');
+
+/** MySQL database username */
+define('DB_USER', 'joelwors_main');
+
+/** MySQL database password */
+define('DB_PASSWORD', '8OheRqya&^9O');

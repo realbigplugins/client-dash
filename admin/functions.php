@@ -202,5 +202,21 @@ function cd_format_dir_size($size) {
 
 // Help functions
 function cd_get_settings_url() {
-  return '/wp-admin/options-general.php?page=cd_settings';
+  return get_admin_url() . 'options-general.php?page=cd_settings';
+}
+
+function cd_get_account_url(){
+  return get_admin_url() . 'index.php?page=cd_account';
+}
+
+function cd_get_help_url(){
+  return get_admin_url() . 'index.php?page=cd_help';
+}
+
+function cd_get_reports_url(){
+  return get_admin_url() . 'index.php?page=cd_reports';
+}
+
+function cd_get_webmaster_url(){
+  return get_admin_url() . 'index.php?page=cd_webmaster';
 }
