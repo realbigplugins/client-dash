@@ -58,7 +58,6 @@ Using this plugin is very simple. All you have to do is:
 * Added conditional to only show sites tab under account if is a multisite.
 
 = 1.2 =
-
 * Enqueued `client-dash.js` with `updown` function.
 * Added `cd-click` class to `client-dash.css` for `cursor: pointer`.
 * Rearranged information on Site tab on Reports page to be more clear.
@@ -97,11 +96,3 @@ Using this plugin is very simple. All you have to do is:
 
 = 1.2.1 =
 * PLEASE UPDATE IMMEDIATELY: Fixed fatal error issue.
-
-define('DB_NAME', 'joelwors_main');
-
-/** MySQL database username */
-define('DB_USER', 'joelwors_main');
-
-/** MySQL database password */
-define('DB_PASSWORD', '8OheRqya&^9O');
