@@ -1,9 +1,8 @@
 <?php
-/*
-* Clean up the dashboard by removing widgets, screen options, and contextual help
-*/
 
-// Remove all widgets dynamically
+/**
+ * Get rid of all existing dashboard widgets dynamically.
+ */
 function cd_ditch_dashboard_widgets() {
   $active_widgets = get_option('cd_active_widgets', null);
 
@@ -35,7 +34,9 @@ add_action('wp_dashboard_setup', 'cd_ditch_dashboard_widgets', 1000);
 // Welcome Panel
 remove_action('welcome_panel', 'wp_welcome_panel');
 
-// Screen Options and Contextual Help
+/**
+ * Remove Screen Options and Help on Dashboard.
+ */
 function cd_remove_screen_options() {
 
   // Help

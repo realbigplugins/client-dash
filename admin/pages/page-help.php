@@ -1,8 +1,8 @@
 <?php
-/*
-* Output for help page
-*/
 
+/**
+ * Outputs Help page.
+ */
 function cd_help_page() {
   ?>
   <div class="wrap cd-help">

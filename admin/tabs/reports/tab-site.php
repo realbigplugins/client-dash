@@ -1,5 +1,9 @@
 <?php
-function cd_core_site_tab() {
+
+/**
+ * Outputs Site tab under Reports page.
+ */
+function cd_core_reports_site_tab() {
   // Get the site information
   $cd_count_posts    = wp_count_posts();
   $cd_count_pages    = wp_count_posts('page');
@@ -52,4 +56,4 @@ function cd_core_site_tab() {
 <?php
 }
 
-add_action('cd_reports_site_tab', 'cd_core_site_tab');
+add_action('cd_reports_site_tab', 'cd_core_reports_site_tab');

@@ -1,4 +1,8 @@
 <?php
+
+/**
+ * Outputs Info tab under Help page.
+ */
 function cd_core_info_tab() {
   // Get the user information
   $cd_current_theme  = get_current_theme();

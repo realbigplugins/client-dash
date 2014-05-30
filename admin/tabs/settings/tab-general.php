@@ -1,5 +1,9 @@
 <?php
-function cd_core_general_tab() {
+
+/**
+ * Outputs General tab under Settings page.
+ */
+function cd_core_settings_general_tab() {
   // Get the active widgets
   $active_widgets = get_option('cd_active_widgets');
 
@@ -25,4 +29,4 @@ function cd_core_general_tab() {
 <?php
 }
 
-add_action('cd_settings_general_tab', 'cd_core_general_tab');
+add_action('cd_settings_general_tab', 'cd_core_settings_general_tab');

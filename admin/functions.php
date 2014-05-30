@@ -1,8 +1,8 @@
 <?php
-/*
-* All core functions go here
-*/
 
+/**
+ * Gets all of the active dashboard widgets.
+ */
 function cd_get_active_widgets() {
   global $wp_meta_boxes, $cd_widgets;
 
@@ -30,11 +30,19 @@ function cd_get_active_widgets() {
 
 add_action('wp_dashboard_setup', 'cd_get_active_widgets', 100);
 
+/**
+ * Outputs the page title with Client Dash standards.
+ */
 function cd_the_page_title() {
   echo '<h2 class="cd-title"><span class="cd-title-icon cd-icon"></span> ' . get_admin_page_title() . '</h2>';
 }
 
-function cd_create_tab_page() {
+/**
+ * The main function for building the CD pages.
+ *
+ * @param array $tabs Associative array of tabs to include.
+ */
+function cd_create_tab_page($tabs = null) {
   global $cd_existing_pages;
 
   $cd_existing_pages = apply_filters('cd_tabs', $cd_existing_pages);
@@ -47,6 +55,13 @@ function cd_create_tab_page() {
   // Get the page for building url
   $current_page = str_replace('cd_', '', $_GET['page']);
 
+  // Gives ability to add more tabs on the fly
+  if ($tabs) {
+    foreach ($tabs as $name => $ID) {
+      $cd_existing_pages[$current_page][$name] = $ID;
+    }
+  }
+
   // If a tab is open, get it
   if (isset($_GET['tab']))
     $active_tab = $_GET['tab'];
@@ -56,29 +71,22 @@ function cd_create_tab_page() {
   ?>
 
   <h2 class="nav-tab-wrapper">
-    <?php $i = 0;
-    foreach ($cd_existing_pages as $page => $data) {
+    <?php
+    $i = 0;
+    foreach ($cd_existing_pages[$current_page] as $name => $ID) {
+      $i++;
+      if ($i == 1)
+        $first_tab = $ID;
 
-      // If not current page, bail
-      if ($current_page != $page)
-        continue;
+      // If active tab, set class
+      if ($active_tab == $ID || !$active_tab && $i == 1)
+        $active = 'nav-tab-active';
+      else
+        $active = '';
 
-      $i = 0;
-      foreach ($data as $name => $ID) {
-        $i++;
-
-        if ($i == 1)
-          $first_tab = $ID;
-
-        // If active tab, set class
-        if ($active_tab == $ID || !$active_tab && $i == 1)
-          $active = 'nav-tab-active';
-        else
-          $active = '';
-
-        echo '<a href="?page=cd_' . $current_page . '&tab=' . $ID . '" class="nav-tab ' . $active . '">' . $name . '</a>';
-      }
-    } ?>
+      echo '<a href="?page=cd_' . $current_page . '&tab=' . $ID . '" class="nav-tab ' . $active . '">' . $name . '</a>';
+    }
+    ?>
   </h2>
   <?php
 
@@ -91,39 +99,11 @@ function cd_create_tab_page() {
   do_action('cd_' . $current_page . '_' . $active_tab . '_tab');
 }
 
-function cd_settings_header($options) {
-  extract($options);
-
-  global $cd_fields;
-
-  if (isset($_POST["update_settings"])) {
-    foreach ($fields as $field) {
-      $var = esc_attr($_POST[$field]);
-      update_option($field, $var);
-    }
-    ?>
-    <div id="cd-message" class="cd-updated cd-message-closed">Settings saved!</div>
-  <?php
-  }
-
-  foreach ($fields as $field) {
-    $cd_fields[$field] = get_option($field);
-  }
-
-  echo '<form method="POST" action=""><table class="form-table">';
-}
-
-function cd_settings_footer() {
-  echo '
-  </table>
-  <p>
-    <input type="submit" value="Save cd_settings" class="button-primary"/>
-  </p>
-  <input type="hidden" name="update_settings" value="Y" />
-  </form>
-  ';
-}
-
+/**
+ * @param $which_color
+ *
+ * @return array Current color scheme
+ */
 function cd_get_color_scheme($which_color) {
   global $admin_colors;
   $current_color = get_user_option('admin_color');
@@ -148,7 +128,15 @@ function cd_get_color_scheme($which_color) {
     return $output['tertiary'];
 }
 
-// Functions for getting directory information (by pradeep)
+/**
+ * Gets the size of a directory on the server.
+ *
+ * @author Predeep
+ *
+ * @param $path
+ *
+ * @return mixed
+ */
 function cd_get_dir_size($path) {
   $totalsize  = 0;
   $totalcount = 0;
@@ -179,6 +167,15 @@ function cd_get_dir_size($path) {
   return $total;
 }
 
+/**
+ * Correctly formats the bytes size into a more readable size.
+ *
+ * @since 1.1
+ *
+ * @param int $size Size in bytes
+ *
+ * @return string
+ */
 function cd_format_dir_size($size) {
   if ($size < 1024) {
     return $size . " bytes";
@@ -201,22 +198,58 @@ function cd_format_dir_size($size) {
 }
 
 // Help functions
+
+/**
+ * Returns the settings url.
+ *
+ * @since 1.2.0
+ *
+ * @return string
+ */
 function cd_get_settings_url() {
   return get_admin_url() . 'options-general.php?page=cd_settings';
 }
 
-function cd_get_account_url(){
+/**
+ * Returns the account url.
+ *
+ * @since 1.2.0
+ *
+ * @return string
+ */
+function cd_get_account_url() {
   return get_admin_url() . 'index.php?page=cd_account';
 }
 
-function cd_get_help_url(){
+/**
+ * Returns the help url.
+ *
+ * @since 1.2.0
+ *
+ * @return string
+ */
+function cd_get_help_url() {
   return get_admin_url() . 'index.php?page=cd_help';
 }
 
-function cd_get_reports_url(){
+/**
+ * Returns the reports url.
+ *
+ * @since 1.2.0
+ *
+ * @return string
+ */
+function cd_get_reports_url() {
   return get_admin_url() . 'index.php?page=cd_reports';
 }
 
-function cd_get_webmaster_url(){
+/**
+ * Returns the webmaster url.
+ *
+ * @since 1.2.0
+ *
+ * @return string
+ */
+function cd_get_webmaster_url() {
   return get_admin_url() . 'index.php?page=cd_webmaster';
 }

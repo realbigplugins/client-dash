@@ -1,8 +1,8 @@
 <?php
-/*
-* Output for account page
-*/
 
+/**
+ * Outputs Account page.
+ */
 function cd_account_page() {
   ?>
   <div class="wrap cd-account">

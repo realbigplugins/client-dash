@@ -1,9 +1,8 @@
 <?php
-/*
-* Creates submenu pages
-*/
 
-// Add subpages
+/**
+ * Adds all Client Dash submenu pages.
+ */
 function cd_add_subpages() {
   global $cd_option_defaults;
 
@@ -22,7 +21,7 @@ function cd_add_subpages() {
   // Webmaster
   $show_webmaster_page = false;
   if (get_option('cd_webmaster_enable', $cd_option_defaults['webmaster_enable']) == '1')
-    $show_webmaster_page = apply_filters('cd_show_webmaster_page', $show_webmaster_page);
+    $show_webmaster_page = apply_filters('cd_show_webmaster_page', true);
 
   if ($show_webmaster_page)
     add_submenu_page('index.php', get_option('cd_webmaster_name', $cd_option_defaults['webmaster_name']), get_option('cd_webmaster_name', $cd_option_defaults['webmaster_name']), 'publish_posts', 'cd_webmaster', 'cd_webmaster_page');
@@ -39,7 +38,9 @@ function cd_add_subpages() {
 
 add_action('admin_menu', 'cd_add_subpages');
 
-// Ditch My Sites submenu un Dashboard in multisite
+/**
+ * Gets rid of "my sites" if in multisite environment.
+ */
 function cd_ditch_my_sites_submenu() {
   if (is_multisite()) {
     $page = remove_submenu_page('index.php', 'my-sites.php');

@@ -1,7 +1,4 @@
 <?php
-/*
-* Include necessary files
-*/
 
 // Include files
 require_once(plugin_dir_path(__FILE__) . 'globals.php');

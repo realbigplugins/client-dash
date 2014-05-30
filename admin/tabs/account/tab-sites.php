@@ -1,5 +1,9 @@
 <?php
-function cd_core_sites_tab() {
+
+/**
+ * Outputs Sites tab under Account page.
+ */
+function cd_core_account_sites_tab() {
   // Set up current user information
   $current_user = wp_get_current_user();
 
@@ -36,4 +40,4 @@ function cd_core_sites_tab() {
 <?php
 }
 
-add_action('cd_account_sites_tab', 'cd_core_sites_tab');
+add_action('cd_account_sites_tab', 'cd_core_account_sites_tab');

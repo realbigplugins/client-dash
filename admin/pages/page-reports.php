@@ -1,8 +1,8 @@
 <?php
-/*
-* Output for reports page
-*/
 
+/**
+ * Outputs Reports page.
+ */
 function cd_reports_page() {
   ?>
   <div class="wrap cd-reports">

@@ -1,9 +1,20 @@
 <?php
-/*
-* Output for Real Big page
-*/
 
+/**
+ * Outputs Webmaster page.
+ */
 function cd_webmaster_page() {
+  global $cd_option_defaults;
+
+  // Modify accordingly for webmaster settings
+  $webmaster_tab = get_option('cd_webmaster_custom_content_tab', $cd_option_defaults['webmaster_custom_content_tab']);
+  if ($webmaster_tab)
+    add_filter('cd_tabs', 'cd_change_webmaster_custom_tab');
+
+  $enable_feed = get_option('cd_webmaster_feed', false);
+  if (!$enable_feed)
+    add_filter('cd_tabs', 'cd_remove_feed_tab');
+
   ?>
   <div class="wrap cd-webmaster">
     <?php
@@ -14,33 +25,36 @@ function cd_webmaster_page() {
 <?php
 }
 
-// If custom content exists, add it
-function cd_webmaster_custom_content() {
-  global $cd_option_defaults;
+/**
+ * Changes the name of the custom webmaster tab.
+ *
+ * @param array $tabs All existing tabs
+ *
+ * @return array
+ */
+function  cd_change_webmaster_custom_tab($tabs) {
+  // Get new tab name and set it
+  $webmaster_tab = get_option('cd_webmaster_custom_content_tab', $cd_option_defaults['webmaster_custom_content_tab']);
 
-  // Break if webmaster custom content not set
-  if (!get_option('cd_webmaster_custom_content') || !get_option('cd_webmaster_custom_content_tab')) {
-    return;
-  }
+  $tabs['webmaster'][$webmaster_tab] = $tabs['webmaster']['Main'];
+  unset($tabs['webmaster']['Main']);
 
-  $content = get_option('cd_webmaster_custom_content', $cd_option_defaults['webmaster_custom_content']);
-
-  echo wpautop($content);
-}
-
-add_action('cd_webmaster_' . get_option('cd_webmaster_custom_content_tab_clean') . '_tab', 'cd_webmaster_custom_content');
-
-function cd_webmaster_custom_content_tab($tabs) {
-  global $cd_option_defaults;
-
-  // Break if webmaster custom content not set
-  if (!get_option('cd_webmaster_custom_content') || !get_option('cd_webmaster_custom_content_tab')) {
-    return $tabs;
-  }
-
-  $tabs['webmaster'][get_option('cd_webmaster_custom_content_tab')] = get_option('cd_webmaster_custom_content_tab_clean');
+  // Reset feeds tab so it appears after
+  unset($tabs['webmaster']['Feed']);
+  $tabs['webmaster']['Feed'] = 'feed';
 
   return $tabs;
 }
 
-add_filter('cd_tabs', 'cd_webmaster_custom_content_tab');
+/**
+ * Removes "Feed" tab from webmaster page.
+ *
+ * @param array $tabs All existing tabs
+ *
+ * @return array
+ */
+function cd_remove_feed_tab($tabs) {
+  unset($tabs['webmaster']['Feed']);
+
+  return $tabs;
+}

@@ -7,7 +7,7 @@
 $cd_option_defaults = array(
   'webmaster_name'               => 'Webmaster',
   'webmaster_enable'             => false,
-  'webmaster_custom_content_tab' => '',
+  'webmaster_custom_content_tab' => 'Main',
   'webmaster_custom_content'     => ''
 );
 
@@ -15,7 +15,7 @@ $cd_option_defaults = array(
 $cd_existing_pages = array(
   'account'   => array(
     'About' => 'about',
-//    'Sites' => 'sites'
+    //    'Sites' => 'sites'
   ),
   'help'      => array(
     //      'FAQ' => 'faq',
@@ -31,12 +31,12 @@ $cd_existing_pages = array(
     //      'SEO' => 'seo'
   ),
   'webmaster' => array(
-//    'News'       => 'news',
-//    'Promotions' => 'promotions'
+    'Main' => 'main',
+    'Feed' => 'feed'
   ),
   'settings'  => array(
     'General'   => 'general',
-//    'Webmaster' => 'webmaster'
+    'Webmaster' => 'webmaster'
   )
 );
 
