@@ -4,7 +4,7 @@ Contributors: BrashRebel, joelworsham
 Tags: client, portal, dashboard, admin, users, webmaster
 Requires at least: 3.8.0
 Tested up to: 3.9.1
-Stable tag: 1.1.2
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,25 +47,35 @@ Using this plugin is very simple. All you have to do is:
 
 == Changelog ==
 
-= 1.2 =
+= 1.2.1 =
+* Fixed php warning.
+* Safeguarded require_once occurrences for potential issues.
+* Reformatted code.
+* Added missing files causing fatal error.
+* Fixed dashboard widget broken links.
+* Re-ordered dashboard widgets.
+* Re-ordered menu items.
+* Added conditional to only show sites tab under account if is a multisite.
+* Removed Webmaster functionality (will be in future release)
 
-* Enqueued `client-dash.js` with `updown` function
-* Added `cd-click` class to `client-dash.css` for `cursor: pointer`
-* Rearranged information on Site tab on Reports page to be more clear
-* Added a few pieces of data to Site tab on Reports page
-* Removed placeholder content from FAQ tab
-* Allow extensions to add tabs to specific pages
-* Increase extensibility of settings page
-* Added "Webmaster" tab to the settings page
-* Allow user to disable/enable webmaster page
-* Allow user to rename webmaster page/menu-item
-* Allow user to add custom html content to a custom tab on webmaster page
+= 1.2 =
+* Enqueued `client-dash.js` with `updown` function.
+* Added `cd-click` class to `client-dash.css` for `cursor: pointer`.
+* Rearranged information on Site tab on Reports page to be more clear.
+* Added a few pieces of data to Site tab on Reports page.
+* Removed placeholder content from FAQ tab.
+* Allow extensions to add tabs to specific pages.
+* Increase extensibility of settings page.
+* Added "Webmaster" tab to the settings page.
+* Allow user to disable/enable webmaster page.
+* Allow user to rename webmaster page/menu-item.
+* Allow user to add custom html content to a custom tab on webmaster page.
 
 = 1.1.2 =
-* Patch to fix potential fatal error when running on older versions of PHP
+* Patch to fix potential fatal error when running on older versions of PHP.
 
 = 1.1.1 =
-* Fixed fatal error problem
+* Fixed fatal error problem.
 
 = 1.1 =
 * Added options page under "Settings->Client Dash".
@@ -85,7 +95,5 @@ Using this plugin is very simple. All you have to do is:
 
 == Upgrade Notice ==
 
-= 1.2 =
-
-* Better extensibility for developers
-* Awesome options for webmasters
+= 1.2.1 =
+* PLEASE UPDATE IMMEDIATELY: Fixed fatal error issue.
