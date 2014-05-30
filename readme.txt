@@ -4,7 +4,7 @@ Contributors: BrashRebel, joelworsham
 Tags: client, portal, dashboard, admin, users, webmaster
 Requires at least: 3.8.0
 Tested up to: 3.9.1
-Stable tag: 1.1.2
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -56,6 +56,8 @@ Using this plugin is very simple. All you have to do is:
 * Re-ordered dashboard widgets.
 * Re-ordered menu items.
 * Added conditional to only show sites tab under account if is a multisite.
+* Removed Webmaster functionality (will be in future release)
+* Corrected link for Reports dashboard widget
 
 = 1.2 =
 * Enqueued `client-dash.js` with `updown` function.
