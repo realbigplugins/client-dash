@@ -57,6 +57,7 @@ Using this plugin is very simple. All you have to do is:
 * Re-ordered menu items.
 * Added conditional to only show sites tab under account if is a multisite.
 * Removed Webmaster functionality (will be in future release)
+* Corrected link for Reports dashboard widget
 
 = 1.2 =
 * Enqueued `client-dash.js` with `updown` function.
