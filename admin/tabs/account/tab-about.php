@@ -15,8 +15,8 @@ function cd_core_account_about_tab() {
   $cd_userregistered = $current_user->user_registered;
 
   // Get current user role
-  $user_roles  = $current_user->roles;
-  $cd_userrole = ucwords(array_shift($user_roles));
+  global $wp_roles;
+  $cd_userrole = $wp_roles->role_names[$current_user->roles[0]];
   ?>
 
   <table class="form-table">
