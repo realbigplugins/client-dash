@@ -4,7 +4,7 @@ Contributors: BrashRebel, joelworsham
 Tags: client, portal, dashboard, admin, users, webmaster
 Requires at least: 3.8.0
 Tested up to: 3.9.1
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,6 +46,11 @@ Using this plugin is very simple. All you have to do is:
 1. The wp-admin dashboard as seen by users with the Administrator role. The widgets and pages this plugin creates will be visible by anyone with the Author role and above (Version 1.0).
 
 == Changelog ==
+
+= 1.2.2 =
+* Changed `get_current_theme()` to `wp_get_theme()` since the former is deprecated (thanks to @sethalling)
+* Modified method for getting role name (thanks @sethalling)
+* Added `cd_(WIDGET NAME)_widget` filter on contents of current dashboard widgets
 
 = 1.2.1 =
 * Fixed php warning.
