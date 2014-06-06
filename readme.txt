@@ -29,7 +29,7 @@ Upon activation, Client Dash modifies the wp-admin in the following ways:
 
 There is a lot more to come from this plugin in the future. Client Dash has been designed from day 1 to be as flexible as possible so if you are a developer you will absolutely love it. In the near future we will be publishing detailed documentation on how this plugin can be modified and extended. We will also be releasing numerous extensions of our own which will integrate with a variety of useful external tools to help you provide even more value to your customers.
 
-We are also extremely receptive to suggestions, feature requests and colaborations so if you have anything to add or that you would like to see us add, please visit the support forum here and engage us. Also stay tuned as we are working on lots of new updates to this plugin and are also actively developing some exciting add-ons.
+We are also extremely receptive to suggestions, feature requests and collaborations so if you have anything to add or that you would like to see included in Client Dash, please visit the support forum here and engage us. Also, stay tuned as we are working on lots of new updates to this plugin and are also actively developing some exciting add-ons.
 
 == Installation ==
 
