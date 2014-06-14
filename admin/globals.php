@@ -36,7 +36,8 @@ $cd_existing_pages = array(
   ),
   'settings'  => array(
     'General'   => 'general',
-    'Webmaster' => 'webmaster'
+    'Webmaster' => 'webmaster',
+    'Addons'    => 'addons'
   )
 );
 
