@@ -5,9 +5,7 @@
  */
 function cd_core_settings_addons_tab() {
   $addons = array(
-    'Client Dash WP Help Addon' => 'http://wordpress.org/plugins/client-dash-wp-help-add-on/',
-    'another' => 'test',
-    'one more' => 'fun'
+    'Client Dash WP Help Addon' => 'http://wordpress.org/plugins/client-dash-wp-help-add-on/'
     );
   ?>
 

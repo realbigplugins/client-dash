@@ -56,7 +56,13 @@
   font: 100 12em/1 dashicons;
 }
 .cd-addon span:before {
+  content: '\f132';
+}
+.cd-addon a[href*="wp-help"] span:before {
   content: '\f223';
+}
+.cd-addon h4 {
+  margin: 0 0 20px;
 }
 @media screen and (max-width: 566px) {
 .cd-addon {
