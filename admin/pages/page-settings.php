@@ -33,8 +33,9 @@ function cd_settings_page() {
 
       cd_the_page_title();
       cd_create_tab_page();
-
+      if ($_GET['tab'] != 'addons') {
       submit_button();
+      }
       ?>
     </form>
   </div>
