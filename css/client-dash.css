@@ -20,6 +20,11 @@
 }
 
 /* Style widgets */
+.cd .wp-menu-image:before, .cd-title-icon:before {
+  font: 100 55px/1 dashicons;
+  speak: none;
+  display: inline-block;
+}
 
 .postbox-container a.cd-dashboard-widget {
   display: block;
@@ -47,6 +52,36 @@
   vertical-align: middle;
 }
 
+/*
+* Addons ========================================
+*/
+.cd-addon {
+  width: 30%;
+  float: left;
+  background-color: rgba(255,255,255,0.5);
+  margin: 0 15px 15px 0;
+  text-align: center;
+}
+.cd-addon a {
+  text-decoration: none;
+}
+.cd-addon span {
+  font: 100 12em/1 dashicons;
+}
+.cd-addon span:before {
+  content: '\f132';
+}
+.cd-addon a[href*="wp-help"] span:before {
+  content: '\f223';
+}
+.cd-addon h4 {
+  margin: 0 0 20px;
+}
+@media screen and (max-width: 566px) {
+.cd-addon {
+  width: 90%;
+}
+}
 /*
 * Dashicons page
 */
@@ -90,15 +125,4 @@
 */
 .cd-click {
   cursor: pointer;
-}
-
-.cd-col-four{
-  width: 25%;
-  display: inline-block;
-  margin-right: -4px !important;
-}
-.cd-col-three{
-  width: 33.3333%;
-  display: inline-block;
-  margin-right: -4px !important;
 }

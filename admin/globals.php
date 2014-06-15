@@ -19,32 +19,33 @@ $cd_option_defaults = array(
 
 // Declare existing pages/tabs
 $cd_existing_pages = array(
-	'account'   => array(
-		'About' => 'about',
-		//    'Sites' => 'sites'
-	),
-	'help'      => array(
-		//      'FAQ' => 'faq',
-		//      'Forum' => 'forum',
-		'Info' => 'info',
-		//      'Tickets' => 'tickets',
-		//      'Tutorials' => 'tutorials'
-	),
-	'reports'   => array(
-		'Site' => 'site',
-		//      'Analytics' =>'analytics',
-		//      'Ecommerce' => 'ecommerce',
-		//      'SEO' => 'seo'
-	),
-	'webmaster' => array(
-		'Main' => 'main',
-		'Feed' => 'feed'
-	),
-	'settings'  => array(
-		'General'   => 'general',
-		'Dashicons' => 'dashicons',
-		'Webmaster' => 'webmaster'
-	)
+  'account'   => array(
+    'About' => 'about',
+    //    'Sites' => 'sites'
+  ),
+  'help'      => array(
+    //      'FAQ' => 'faq',
+    //      'Forum' => 'forum',
+    'Info' => 'info',
+    //      'Tickets' => 'tickets',
+    //      'Tutorials' => 'tutorials'
+  ),
+  'reports'   => array(
+    'Site' => 'site',
+    //      'Analytics' =>'analytics',
+    //      'Ecommerce' => 'ecommerce',
+    //      'SEO' => 'seo'
+  ),
+  'webmaster' => array(
+    'Main' => 'main',
+    'Feed' => 'feed'
+  ),
+  'settings'  => array(
+    'General'   => 'general',
+	'Dashicons' => 'dashicons',
+    'Webmaster' => 'webmaster',
+	'Addons'    => 'addons'
+  )
 );
 
 // If multisite, add sites

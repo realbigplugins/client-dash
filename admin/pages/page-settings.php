@@ -38,16 +38,18 @@ function cd_settings_page() {
 		<form method="post" action="options.php">
 			<?php
 			$tab = $_GET['tab'];
-
+			
 			// Prepare cd_settings
 			settings_fields( 'cd_options_' . $tab );
+			
+      cd_the_page_title();
+      cd_create_tab_page();
 
-			cd_the_page_title();
-			cd_create_tab_page();
-
-			submit_button();
-			?>
-		</form>
-	</div>
+      if ($tab != 'addons') {
+          submit_button();
+      }
+      ?>
+    </form>
+  </div>
 <?php
 }
