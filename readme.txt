@@ -4,7 +4,7 @@ Contributors: BrashRebel, joelworsham
 Tags: client, portal, dashboard, admin, users, webmaster
 Requires at least: 3.8.0
 Tested up to: 3.9.1
-Stable tag: 1.2.2
+Stable tag: 1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,10 +47,19 @@ Using this plugin is very simple. All you have to do is:
 
 == Changelog ==
 
+= 1.3 =
+* Added Dashicons customization in Settings.
+* Added Addons page for browsing available addons.
+* Added alert for empty Webmaster tab.
+* Added ability to change number of feed entries pulled.
+* Added webmaster dashboard widget.
+* Re-worded media-library size under reports.
+* Added error catching for feeds.
+
 = 1.2.2 =
-* Changed `get_current_theme()` to `wp_get_theme()` since the former is deprecated (thanks to @sethalling)
-* Modified method for getting role name (thanks @sethalling)
-* Added `cd_(WIDGET NAME)_widget` filter on contents of current dashboard widgets
+* Changed `get_current_theme()` to `wp_get_theme()` since the former is deprecated (thanks to @sethalling).
+* Modified method for getting role name (thanks @sethalling).
+* Added `cd_(WIDGET NAME)_widget` filter on contents of current dashboard widgets.
 
 = 1.2.1 =
 * Fixed php warning.
@@ -61,7 +70,7 @@ Using this plugin is very simple. All you have to do is:
 * Re-ordered dashboard widgets.
 * Re-ordered menu items.
 * Added conditional to only show sites tab under account if is a multisite.
-* Removed Webmaster functionality (will be in future release)
+* Removed Webmaster functionality (will be in future release).
 * Corrected link for Reports dashboard widget
 
 = 1.2 =

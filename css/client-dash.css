@@ -2,32 +2,31 @@
 * Dashboard ==========================================
 */
 
-/* Assign the icons */
-.cd-account .wp-menu-image:before, .cd-account .cd-title-icon:before {
-  content: '\f337';
+.cd-icon {
+  -webkit-transition: color 0.3s;
+  -moz-transition: color 0.3s;
+  -o-transition: color 0.3s;
+  transition: color 0.3s;
 }
 
-.cd-help .wp-menu-image:before, .cd-help .cd-title-icon:before {
-  content: '\f223';
+.cd-dashboard-widget .cd-icon {
+  width: auto;
+  height: auto;
+  font-size: 260px;
 }
 
-.cd-reports .wp-menu-image:before, .cd-reports .cd-title-icon:before {
-  content: '\f239';
+.cd-icon:before {
+  font-size: inherit !important;
 }
 
 /* Style widgets */
-.cd .wp-menu-image:before, .cd-title-icon:before {
-  font: 100 55px/1 dashicons;
-  speak: none;
-  display: inline-block;
-}
 
-.postbox-container a.cd {
+.postbox-container a.cd-dashboard-widget {
   display: block;
   text-align: center;
 }
 
-.postbox-container .cd .wp-menu-image:before {
+.postbox-container .cd-dashboard-widget .wp-menu-image:before {
   font: 100 20em/1 dashicons;
 }
 
@@ -35,9 +34,55 @@
 * Page ==========================================
 */
 
-/* Style the page title icons */
-.cd-title-icon {
-  vertical-align: -16px;
+.cd-title .cd-icon {
+  width: auto;
+  height: auto;
+  line-height: normal;
+  font-size: 50px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.cd-title .cd-title-text {
+  vertical-align: middle;
+}
+
+/*
+* Dashicons page
+*/
+#cd-dashicons-selections{
+  text-align: center;
+}
+#cd-dashicons-selections .dashicons{
+  font-size: 70px;
+  height: auto;
+  width: auto;
+  margin: 10px 0;
+}
+#cd-dashicons-selections .cd-dashicons-title{
+  margin: 0;
+  font-size: 150%;
+}
+
+.cd-dashicons-grid-item{
+  display: inline-block;
+  width: 25%;
+  text-align: center;
+  padding: 0 10px;
+  margin: 10px -4px 10px 0;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.cd-dashicons-grid-item .container{
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  padding: 10px 0;
+}
+.cd-dashicons-grid-item .dashicons{
+  font-size: 50px !important;
+  height: auto;
+  width: auto;
 }
 
 /*
@@ -45,4 +90,15 @@
 */
 .cd-click {
   cursor: pointer;
+}
+
+.cd-col-four{
+  width: 25%;
+  display: inline-block;
+  margin-right: -4px !important;
+}
+.cd-col-three{
+  width: 33.3333%;
+  display: inline-block;
+  margin-right: -4px !important;
 }
