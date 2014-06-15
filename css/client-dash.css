@@ -34,12 +34,35 @@
 /*
 * Page ==========================================
 */
-
 /* Style the page title icons */
 .cd-title-icon {
   vertical-align: -16px;
 }
 
+/*
+* Addons ========================================
+*/
+.cd-addon {
+  width: 30%;
+  float: left;
+  background-color: rgba(255,255,255,0.5);
+  margin: 0 15px 15px 0;
+  text-align: center;
+}
+.cd-addon a {
+  text-decoration: none;
+}
+.cd-addon span {
+  font: 100 12em/1 dashicons;
+}
+.cd-addon span:before {
+  content: '\f223';
+}
+@media screen and (max-width: 566px) {
+.cd-addon {
+  width: 90%;
+}
+}
 /*
 * Other ==========================================
 */

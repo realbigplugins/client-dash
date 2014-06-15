@@ -5,26 +5,20 @@
  */
 function cd_core_settings_addons_tab() {
   $addons = array(
-    'test' => array(
-      'name' => 'bust',
-      'link' => 'smash'
-      ),
-    'another' => array(
-      'name' => 'smack',
-      'link' => 'smush'
-      )
+    'Client Dash WP Help Addon' => 'http://wordpress.org/plugins/client-dash-wp-help-add-on/',
+    'another' => 'test',
+    'one more' => 'fun'
     );
   ?>
 
   <h3>Available Client Dash Addons</h3>
   <div>
     <?php
-    foreach ($addons as $key => $value) {
-      echo '<p>'.$key;
-        foreach($value as $val){
-        echo $val;
-        }
-      echo '</p>';
+    foreach ( $addons as $key => $value ) {
+      echo '<div class="cd-addon">';
+      echo '<a href="'. $value .'"><span></span>';
+      echo '<h4>'. $key .'</h4></a>';
+      echo '</div>';
     }
     ?>
   </div>
