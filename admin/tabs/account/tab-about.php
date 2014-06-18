@@ -4,8 +4,8 @@
  * Outputs About tab for Account page.
  */
 function cd_core_account_about_tab() {
-  // Get the current user object
-  global $current_user;
+	// Get the current user object
+	global $current_user;
 
   // Get the user information
   $cd_username       = $current_user->user_login;
@@ -81,4 +81,4 @@ function cd_core_account_about_tab() {
 <?php
 }
 
-add_action('cd_account_about_tab', 'cd_core_account_about_tab');
+add_action( 'cd_account_about_tab', 'cd_core_account_about_tab' );

@@ -5,10 +5,16 @@
 
 // Option defaults
 $cd_option_defaults = array(
-  'webmaster_name'               => 'Webmaster',
-  'webmaster_enable'             => false,
-  'webmaster_custom_content_tab' => 'Main',
-  'webmaster_custom_content'     => ''
+	'webmaster_name'               => 'Webmaster',
+	'webmaster_enable'             => false,
+	'webmaster_custom_content_tab' => 'Main',
+	'webmaster_custom_content'     => '',
+	'webmaster_feed_count'         => 5,
+
+	'dashicon_account'             => 'dashicons-id-alt',
+	'dashicon_reports'             => 'dashicons-chart-area',
+	'dashicon_help'                => 'dashicons-editor-help',
+	'dashicon_webmaster'           => 'dashicons-businessman'
 );
 
 // Declare existing pages/tabs
@@ -36,14 +42,16 @@ $cd_existing_pages = array(
   ),
   'settings'  => array(
     'General'   => 'general',
+	'Dashicons' => 'dashicons',
     'Webmaster' => 'webmaster',
-    'Addons'    => 'addons'
+	'Addons'    => 'addons'
   )
 );
 
 // If multisite, add sites
-if (is_multisite())
-  $cd_existing_pages['account']['Sites'] = 'sites';
+if ( is_multisite() ) {
+	$cd_existing_pages['account']['Sites'] = 'sites';
+}
 
 // Declare existing CD widgets
-$cd_widgets = array('cd-account', 'cd-help', 'cd-reports');
+$cd_widgets = array( 'cd-account', 'cd-help', 'cd-reports', 'cd-webmaster' );
