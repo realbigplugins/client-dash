@@ -72,6 +72,9 @@
 /*
 * Other ==========================================
 */
+.cd-caps {
+  color: blue;
+}
 .cd-click {
   cursor: pointer;
 }

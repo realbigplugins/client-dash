@@ -12,11 +12,13 @@ function cd_core_account_about_tab() {
   $cd_firstname      = $current_user->first_name;
   $cd_lastname       = $current_user->last_name;
   $cd_useremail      = $current_user->user_email;
+  $cd_url            = $current_user->user_url;
   $cd_userregistered = $current_user->user_registered;
 
   // Get current user role
   global $wp_roles;
   $cd_userrole = $wp_roles->role_names[$current_user->roles[0]];
+  $cd_usercaps = $current_user->allcaps;
   ?>
 
   <table class="form-table">
@@ -33,12 +35,42 @@ function cd_core_account_about_tab() {
       <td><?php echo $cd_useremail; ?></td>
     </tr>
     <tr valign="top">
+      <th scope="row">Your URL</th>
+      <td><?php echo $cd_url; ?></td>
+    </tr>
+    <tr valign="top">
       <th scope="row">When you first joined this site</th>
       <td><?php echo $cd_userregistered; ?></td>
     </tr>
     <tr valign="top">
       <th scope="row">Your role</th>
-      <td><?php echo $cd_userrole; ?></td>
+      <td><?php echo $cd_userrole; ?>
+        <span class="cd-caps cd-click" onclick="cd_updown('cd-caps');"> [?]</span>
+        <span id="cd-caps" style="display: none;">
+          <h4><?php echo $cd_userrole; ?>s are able to:</h4>
+          <?php 
+          if (!empty($cd_usercaps)) {
+              unset(
+                $cd_usercaps['level_0'],
+                $cd_usercaps['level_1'],
+                $cd_usercaps['level_2'],
+                $cd_usercaps['level_3'],
+                $cd_usercaps['level_4'],
+                $cd_usercaps['level_5'],
+                $cd_usercaps['level_6'],
+                $cd_usercaps['level_7'],
+                $cd_usercaps['level_8'],
+                $cd_usercaps['level_9'],
+                $cd_usercaps['level_10']
+                );
+            echo '<ul>';
+            foreach ( $cd_usercaps as $key => $value ) {
+              echo '<li>'. $key .'</li>';
+            }
+            echo '</ul>';
+          } ?>
+        </span>
+      </td>
     </tr>
     <tr valign="top">
       <th scope="row"><a href="<?php site_url(); ?>/wp-admin/profile.php" class="button-primary">Edit your
