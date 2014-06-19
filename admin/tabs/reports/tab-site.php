@@ -45,12 +45,13 @@ function cd_core_reports_site_tab() {
 		<tr valign="top">
 			<th scope="row">Media</th>
 			<?php
-			$upload_dir = wp_upload_dir();
-			$dir_info   = cd_get_dir_size( $upload_dir['basedir'] );
-			$attachments = wp_count_posts('attachment');
+			$upload_dir  = wp_upload_dir();
+			$dir_info    = cd_get_dir_size( $upload_dir['basedir'] );
+			$attachments = wp_count_posts( 'attachment' );
 			?>
 			<td><?php echo $attachments->inherit; ?> total media items<br/>
-				<?php echo cd_format_dir_size( $dir_info['size'] ); ?> total media library size (<?php echo $dir_info['count']; ?> files)
+				<?php echo cd_format_dir_size( $dir_info['size'] ); ?> total media library size
+				(<?php echo $dir_info['count']; ?> files)
 			</td>
 		</tr>
 	</table>

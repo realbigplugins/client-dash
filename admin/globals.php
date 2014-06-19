@@ -10,7 +10,6 @@ $cd_option_defaults = array(
 	'webmaster_custom_content_tab' => 'Main',
 	'webmaster_custom_content'     => '',
 	'webmaster_feed_count'         => 5,
-
 	'dashicon_account'             => 'dashicons-id-alt',
 	'dashicon_reports'             => 'dashicons-chart-area',
 	'dashicon_help'                => 'dashicons-editor-help',
@@ -19,33 +18,33 @@ $cd_option_defaults = array(
 
 // Declare existing pages/tabs
 $cd_existing_pages = array(
-  'account'   => array(
-    'About' => 'about',
-    //    'Sites' => 'sites'
-  ),
-  'help'      => array(
-    //      'FAQ' => 'faq',
-    //      'Forum' => 'forum',
-    'Info' => 'info',
-    //      'Tickets' => 'tickets',
-    //      'Tutorials' => 'tutorials'
-  ),
-  'reports'   => array(
-    'Site' => 'site',
-    //      'Analytics' =>'analytics',
-    //      'Ecommerce' => 'ecommerce',
-    //      'SEO' => 'seo'
-  ),
-  'webmaster' => array(
-    'Main' => 'main',
-    'Feed' => 'feed'
-  ),
-  'settings'  => array(
-    'General'   => 'general',
-	'Dashicons' => 'dashicons',
-    'Webmaster' => 'webmaster',
-	'Addons'    => 'addons'
-  )
+	'account'   => array(
+		'About' => 'about',
+		//    'Sites' => 'sites'
+	),
+	'help'      => array(
+		//      'FAQ' => 'faq',
+		//      'Forum' => 'forum',
+		'Info' => 'info',
+		//      'Tickets' => 'tickets',
+		//      'Tutorials' => 'tutorials'
+	),
+	'reports'   => array(
+		'Site' => 'site',
+		//      'Analytics' =>'analytics',
+		//      'Ecommerce' => 'ecommerce',
+		//      'SEO' => 'seo'
+	),
+	'webmaster' => array(
+		'Main' => 'main',
+		'Feed' => 'feed'
+	),
+	'settings'  => array(
+		'General'   => 'general',
+		'Dashicons' => 'dashicons',
+		'Webmaster' => 'webmaster',
+		'Addons'    => 'addons'
+	)
 );
 
 // If multisite, add sites

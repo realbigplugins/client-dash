@@ -19,7 +19,7 @@ function cd_register_settings() {
 	register_setting( 'cd_options_dashicons', 'cd_dashicon_help' );
 	register_setting( 'cd_options_dashicons', 'cd_dashicon_webmaster' );
 
-	do_action('cd_register_settings');
+	do_action( 'cd_register_settings' );
 }
 
 add_action( 'admin_init', 'cd_register_settings' );
@@ -37,19 +37,23 @@ function cd_settings_page() {
 
 		<form method="post" action="options.php">
 			<?php
-			$tab = $_GET['tab'];
-			
+			// Get the current tab, if set
+			if ( isset( $_GET['tab'] ) )
+				$tab = $_GET['tab'];
+			else
+				$tab = 'general';
+
 			// Prepare cd_settings
 			settings_fields( 'cd_options_' . $tab );
-			
-      cd_the_page_title();
-      cd_create_tab_page();
 
-      if ($tab != 'addons') {
-          submit_button();
-      }
-      ?>
-    </form>
-  </div>
+			cd_the_page_title();
+			cd_create_tab_page();
+
+			// Can turn off submit button with this filter
+			// EG: add_filter( 'cd_submit', '__return_false' );
+			if ( apply_filters( 'cd_submit', true) ) submit_button();
+			?>
+		</form>
+	</div>
 <?php
 }

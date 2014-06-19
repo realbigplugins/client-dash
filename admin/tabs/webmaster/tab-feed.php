@@ -7,7 +7,7 @@ function cd_core_webmaster_feed_tab() {
 	global $cd_option_defaults;
 
 	// Get the feed options
-	$feed_url   = get_option( 'cd_webmaster_feed_url', null );
+	$feed_url = get_option( 'cd_webmaster_feed_url', null );
 
 	// Check if url exists
 	if ( empty( $feed_url ) ) {
@@ -19,10 +19,10 @@ function cd_core_webmaster_feed_tab() {
 	$feed_count = get_option( 'cd_webmaster_feed_count', $cd_option_defaults['webmaster_feed_count'] );
 
 	// Get the feed items
-	$feed       = fetch_feed( $feed_url );
+	$feed = fetch_feed( $feed_url );
 
 	// Check for an error if there's no RSS feed
-	if ( is_wp_error($feed) ) {
+	if ( is_wp_error( $feed ) ) {
 		echo '<div class="settings-error error"><p>ISSUE: Invalid URL.</p></div>';
 
 		return;

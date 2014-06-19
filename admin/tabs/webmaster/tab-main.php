@@ -10,7 +10,7 @@ function cd_core_webmaster_main_tab() {
 	if ( $content ) {
 		echo $content;
 	} else {
-		echo '<div class="settings-error error"><p>This tab has no content. Please set content under Client Dash settings.w</p></div>';
+		echo '<div class="settings-error error"><p>This tab has no content. Please set content under Client Dash settings.</p></div>';
 	}
 }
 

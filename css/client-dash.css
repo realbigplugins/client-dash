@@ -58,48 +58,57 @@
 .cd-addon {
   width: 30%;
   float: left;
-  background-color: rgba(255,255,255,0.5);
+  background-color: rgba(255, 255, 255, 0.5);
   margin: 0 15px 15px 0;
   text-align: center;
 }
+
 .cd-addon a {
   text-decoration: none;
 }
+
 .cd-addon span {
   font: 100 12em/1 dashicons;
 }
+
 .cd-addon span:before {
   content: '\f132';
 }
+
 .cd-addon a[href*="wp-help"] span:before {
   content: '\f223';
 }
+
 .cd-addon h4 {
   margin: 0 0 20px;
 }
+
 @media screen and (max-width: 566px) {
-.cd-addon {
-  width: 90%;
+  .cd-addon {
+    width: 90%;
+  }
 }
-}
+
 /*
 * Dashicons page
 */
-#cd-dashicons-selections{
+#cd-dashicons-selections {
   text-align: center;
 }
-#cd-dashicons-selections .dashicons{
+
+#cd-dashicons-selections .dashicons {
   font-size: 70px;
   height: auto;
   width: auto;
   margin: 10px 0;
 }
-#cd-dashicons-selections .cd-dashicons-title{
+
+#cd-dashicons-selections .cd-dashicons-title {
   margin: 0;
   font-size: 150%;
 }
 
-.cd-dashicons-grid-item{
+.cd-dashicons-grid-item {
   display: inline-block;
   width: 25%;
   text-align: center;
@@ -109,12 +118,14 @@
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
-.cd-dashicons-grid-item .container{
+
+.cd-dashicons-grid-item .container {
   border: 1px solid #aaa;
   border-radius: 3px;
   padding: 10px 0;
 }
-.cd-dashicons-grid-item .dashicons{
+
+.cd-dashicons-grid-item .dashicons {
   font-size: 50px !important;
   height: auto;
   width: auto;
@@ -124,8 +135,21 @@
 * Other ==========================================
 */
 .cd-caps {
-  color: blue;
+  color: #00f;
 }
+
 .cd-click {
   cursor: pointer;
+}
+
+.cd-col-four {
+  display: inline-block;
+  width: 25%;
+  margin-right: -4px !important;
+}
+
+.cd-col-three {
+  display: inline-block;
+  width: 33.3333%;
+  margin-right: -4px !important;
 }

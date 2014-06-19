@@ -35,11 +35,11 @@ add_action( 'wp_dashboard_setup', 'cd_get_active_widgets', 100 );
  *
  * @param string $page The page we're on. Default 'account'.
  */
-function cd_the_page_title($page = 'account') {
+function cd_the_page_title( $page = 'account' ) {
 	global $cd_option_defaults;
 
 	// Get the current dashicon
-	$dashicon = get_option('cd_dashicon_' . $page, $cd_option_defaults['dashicon_' . $page]);
+	$dashicon = get_option( 'cd_dashicon_' . $page, $cd_option_defaults[ 'dashicon_' . $page ] );
 
 	echo '<h2 class="cd-title"><span class="dashicons ' . $dashicon . ' cd-icon"></span><span class="cd-title-text">' . get_admin_page_title() . '</span></h2>';
 }
@@ -202,17 +202,6 @@ function cd_format_dir_size( $size ) {
 
 		return $size . " GB";
 	}
-}
-
-/**
- * Returns false. For use with filters.
- *
- * @param mixed $content Supplied by filter
- *
- * @return bool
- */
-function cd_return_false( $content ) {
-	return false;
 }
 
 // Help functions

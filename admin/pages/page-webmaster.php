@@ -17,7 +17,7 @@ function cd_webmaster_page() {
 	?>
 	<div class="wrap cd-webmaster">
 		<?php
-		cd_the_page_title('webmaster');
+		cd_the_page_title( 'webmaster' );
 		cd_create_tab_page();
 		?>
 	</div><!--.wrap-->
@@ -38,7 +38,7 @@ function  cd_change_webmaster_custom_tab( $tabs ) {
 	$webmaster_tab = get_option( 'cd_webmaster_custom_content_tab', $cd_option_defaults['webmaster_custom_content_tab'] );
 
 	// If tab has been re-named, set it accordingly
-	if ( $webmaster_tab != 'Main' ) {
+	if ( $webmaster_tab != 'Main' && $webmaster_tab ) {
 		$tabs['webmaster'][ $webmaster_tab ] = $tabs['webmaster']['Main'];
 		unset( $tabs['webmaster']['Main'] );
 	}

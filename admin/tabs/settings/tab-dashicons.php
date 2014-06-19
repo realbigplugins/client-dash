@@ -6,10 +6,10 @@
 function cd_core_settings_dashicons_tab() {
 	global $cd_option_defaults;
 
-	$account_dashicon = get_option('cd_dashicon_account', $cd_option_defaults['dashicon_account']);
-	$reports_dashicon = get_option('cd_dashicon_reports', $cd_option_defaults['dashicon_reports']);
-	$help_dashicon = get_option('cd_dashicon_help', $cd_option_defaults['dashicon_help']);
-	$webmaster_dashicon = get_option('cd_dashicon_webmaster', $cd_option_defaults['dashicon_webmaster']);
+	$account_dashicon   = get_option( 'cd_dashicon_account', $cd_option_defaults['dashicon_account'] );
+	$reports_dashicon   = get_option( 'cd_dashicon_reports', $cd_option_defaults['dashicon_reports'] );
+	$help_dashicon      = get_option( 'cd_dashicon_help', $cd_option_defaults['dashicon_help'] );
+	$webmaster_dashicon = get_option( 'cd_dashicon_webmaster', $cd_option_defaults['dashicon_webmaster'] );
 
 	// Set existing dashicons
 	$dashicons = array(
@@ -218,20 +218,22 @@ function cd_core_settings_dashicons_tab() {
 		'dashicons-smiley'
 	);
 
-	$class_grid = get_option('cd_webmaster_enable', false) ? 'cd-col-four' : 'cd-col-three';
+	$class_grid = get_option( 'cd_webmaster_enable', false ) ? 'cd-col-four' : 'cd-col-three';
 
 	?>
 
-	<input type="hidden" id="cd_dashicon_account" name="cd_dashicon_account" value="<?php echo $account_dashicon;?>" />
-	<input type="hidden" id="cd_dashicon_reports" name="cd_dashicon_reports" value="<?php echo $reports_dashicon;?>" />
-	<input type="hidden" id="cd_dashicon_help" name="cd_dashicon_help" value="<?php echo $help_dashicon;?>" />
-	<input type="hidden" id="cd_dashicon_webmaster" name="cd_dashicon_webmaster" value="<?php echo $webmaster_dashicon;?>" />
+	<input type="hidden" id="cd_dashicon_account" name="cd_dashicon_account" value="<?php echo $account_dashicon; ?>"/>
+	<input type="hidden" id="cd_dashicon_reports" name="cd_dashicon_reports" value="<?php echo $reports_dashicon; ?>"/>
+	<input type="hidden" id="cd_dashicon_help" name="cd_dashicon_help" value="<?php echo $help_dashicon; ?>"/>
+	<input type="hidden" id="cd_dashicon_webmaster" name="cd_dashicon_webmaster"
+	       value="<?php echo $webmaster_dashicon; ?>"/>
 
 	<div id="cd-dashicons-selections">
 		<div class="<?php echo $class_grid; ?> cd-account" onclick="cd_dashicons_selected('account');">
 			<p class="dashicons <?php echo $account_dashicon; ?> active"
 			   data-dashicon="<?php echo $account_dashicon; ?>"
 			   data-widget="account"></p>
+
 			<p class="cd-dashicons-title">Account</p>
 		</div>
 
@@ -239,6 +241,7 @@ function cd_core_settings_dashicons_tab() {
 			<p class="dashicons  <?php echo $reports_dashicon; ?>"
 			   data-dashicon="<?php echo $reports_dashicon; ?>"
 			   data-widget="reports"></p>
+
 			<p class="cd-dashicons-title">Reports</p>
 		</div>
 
@@ -246,37 +249,39 @@ function cd_core_settings_dashicons_tab() {
 			<p class="dashicons  <?php echo $help_dashicon; ?>"
 			   data-dashicon="<?php echo $help_dashicon; ?>"
 			   data-widget="help"></p>
+
 			<p class="cd-dashicons-title">Help</p>
 		</div>
 
-		<?php if (get_option('cd_webmaster_enable', false)): ?>
+		<?php if ( get_option( 'cd_webmaster_enable', false ) ): ?>
 			<div class="<?php echo $class_grid; ?> cd-webmaster" onclick="cd_dashicons_selected('webmaster');">
 				<p class="dashicons  <?php echo $webmaster_dashicon; ?>"
 				   data-dashicon="<?php echo $webmaster_dashicon; ?>"
 				   data-widget="webmaster"></p>
+
 				<p class="cd-dashicons-title">
-					<?php echo get_option('cd_webmaster_name', $cd_option_defaults['webmaster_name']); ?>
+					<?php echo get_option( 'cd_webmaster_name', $cd_option_defaults['webmaster_name'] ); ?>
 				</p>
 			</div>
 		<?php endif; ?>
 	</div>
 
 	<p class="submit" style="text-align:center;">
-		<?php submit_button(null, 'primary', null, false); ?>
+		<?php submit_button( null, 'primary', null, false ); ?>
 	</p>
 
 	<?php
 	// Begin grid
 	echo '<ul id="cd-dashicons-grid">';
 
-	foreach ($dashicons as $dashicon){
+	foreach ( $dashicons as $dashicon ) {
 		?>
 		<li class="cd-dashicons-grid-item <?php echo $account_dashicon == $dashicon ? 'active' : ''; ?>">
 			<div class="container" onclick="cd_dashicons_change('<?php echo $dashicon; ?>', this)">
 				<span class="dashicons <?php echo $dashicon; ?>"></span>
 			</div>
 		</li>
-		<?php
+	<?php
 	}
 
 	// Close grid

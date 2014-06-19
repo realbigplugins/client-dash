@@ -57,6 +57,8 @@ Using this plugin is very simple. All you have to do is:
 * Added error catching for feeds.
 * Added current user URL to Account- >About.
 * Now displays help dropdown for user role to output capabilities on Account- >About.
+* Added filter to hide submit button when desired.
+* Added conditionals for displaying account information on About tab of Account.
 
 = 1.2.2 =
 * Changed `get_current_theme()` to `wp_get_theme()` since the former is deprecated (thanks to @sethalling).
