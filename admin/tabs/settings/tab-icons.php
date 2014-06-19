@@ -3,7 +3,7 @@
 /**
  * Outputs General tab under Settings page.
  */
-function cd_core_settings_dashicons_tab() {
+function cd_core_settings_icons_tab() {
 	global $cd_option_defaults;
 
 	$account_dashicon   = get_option( 'cd_dashicon_account', $cd_option_defaults['dashicon_account'] );
@@ -288,4 +288,4 @@ function cd_core_settings_dashicons_tab() {
 	echo '</ul>';
 }
 
-add_action( 'cd_settings_dashicons_tab', 'cd_core_settings_dashicons_tab' );
+add_action( 'cd_settings_icons_tab', 'cd_core_settings_icons_tab' );

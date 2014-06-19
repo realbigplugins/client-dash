@@ -41,7 +41,7 @@ $cd_existing_pages = array(
 	),
 	'settings'  => array(
 		'General'   => 'general',
-		'Dashicons' => 'dashicons',
+		'Icons'     => 'icons',
 		'Webmaster' => 'webmaster',
 		'Addons'    => 'addons'
 	)
