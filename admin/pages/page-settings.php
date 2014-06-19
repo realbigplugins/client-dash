@@ -5,6 +5,9 @@
  */
 function cd_register_settings() {
 	register_setting( 'cd_options_general', 'cd_remove_which_widgets' );
+	register_setting( 'cd_options_general', 'cd_hide_page_account' );
+	register_setting( 'cd_options_general', 'cd_hide_page_reports' );
+	register_setting( 'cd_options_general', 'cd_hide_page_help' );
 
 	register_setting( 'cd_options_webmaster', 'cd_webmaster_name', 'sanitize_text_field' );
 	register_setting( 'cd_options_webmaster', 'cd_webmaster_enable' );

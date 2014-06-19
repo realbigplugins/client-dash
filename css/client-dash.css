@@ -56,10 +56,7 @@
 * Addons ========================================
 */
 .cd-addon {
-  width: 30%;
-  float: left;
   background-color: rgba(255, 255, 255, 0.5);
-  margin: 0 15px 15px 0;
   text-align: center;
 }
 
@@ -68,15 +65,9 @@
 }
 
 .cd-addon span {
-  font: 100 12em/1 dashicons;
-}
-
-.cd-addon span:before {
-  content: '\f132';
-}
-
-.cd-addon a[href*="wp-help"] span:before {
-  content: '\f223';
+  font-size: 130px;
+  height: auto;
+  width: auto;
 }
 
 .cd-addon h4 {
@@ -90,7 +81,7 @@
 }
 
 /*
-* Dashicons page
+* Icons page
 */
 #cd-dashicons-selections {
   text-align: center;
