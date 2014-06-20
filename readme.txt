@@ -4,7 +4,7 @@ Contributors: BrashRebel, joelworsham
 Tags: client, portal, dashboard, admin, users, webmaster
 Requires at least: 3.8.0
 Tested up to: 3.9.1
-Stable tag: 1.3
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,6 +46,10 @@ Using this plugin is very simple. All you have to do is:
 1. The wp-admin dashboard as seen by users with the Administrator role. The widgets and pages this plugin creates will be visible by anyone with the Author role and above (Version 1.0).
 
 == Changelog ==
+
+= 1.3.1 =
+* Fixed save button issue on Icons page.
+* Added install/activate/deactivate button on addons page.
 
 = 1.3 =
 * Added Dashicons customization in Settings.
@@ -114,5 +118,5 @@ Using this plugin is very simple. All you have to do is:
 
 == Upgrade Notice ==
 
-= 1.2.1 =
-* PLEASE UPDATE IMMEDIATELY: Fixed fatal error issue.
+= 1.3.1 =
+* PLEASE UPDATE IMMEDIATELY: Fixed issue with broken save button on Icons page.

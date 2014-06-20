@@ -17,10 +17,10 @@ function cd_register_settings() {
 	register_setting( 'cd_options_webmaster', 'cd_webmaster_feed_url', 'esc_url' );
 	register_setting( 'cd_options_webmaster', 'cd_webmaster_feed_count' );
 
-	register_setting( 'cd_options_dashicons', 'cd_dashicon_account' );
-	register_setting( 'cd_options_dashicons', 'cd_dashicon_reports' );
-	register_setting( 'cd_options_dashicons', 'cd_dashicon_help' );
-	register_setting( 'cd_options_dashicons', 'cd_dashicon_webmaster' );
+	register_setting( 'cd_options_icons', 'cd_dashicon_account' );
+	register_setting( 'cd_options_icons', 'cd_dashicon_reports' );
+	register_setting( 'cd_options_icons', 'cd_dashicon_help' );
+	register_setting( 'cd_options_icons', 'cd_dashicon_webmaster' );
 
 	do_action( 'cd_register_settings' );
 }
