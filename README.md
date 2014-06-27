@@ -33,6 +33,9 @@ Using this plugin is very simple. All you have to do is:
 
 ## Changelog
 
+### [1.3.2](https://github.com/brashrebel/client-dash/releases/tag/v1.3.2)
+* Fixed php error on settings page for widgets.
+
 ### [1.3.1](https://github.com/brashrebel/client-dash/releases/tag/v1.3.1)
 * Fixed save button issue on Icons page.
 * Added install/activate/deactivate button on addons page.

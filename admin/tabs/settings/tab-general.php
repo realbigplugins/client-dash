@@ -5,7 +5,7 @@
  */
 function cd_core_settings_general_tab() {
 	// Get options
-	$active_widgets = get_option( 'cd_active_widgets' );
+	$active_widgets = get_option( 'cd_active_widgets', null);
 
 	// Get options
 	$cd_remove_which_widgets = get_option( 'cd_remove_which_widgets' );
@@ -22,8 +22,12 @@ function cd_core_settings_general_tab() {
 			</th>
 			<td>
 				<?php
-				foreach ( $active_widgets as $widget => $values ) {
-					echo '<input type="checkbox" name="cd_remove_which_widgets[' . $widget . ']" id="cd_remove_which_widgets' . $widget . '" value="' . $widget . '" ' . ( isset( $cd_remove_which_widgets[ $widget ] ) ? 'checked' : '' ) . '/><label for="cd_remove_which_widgets' . $widget . '">' . $values['title'] . '</label><br/>';
+				if( !empty( $active_widgets ) ) {
+					foreach ( $active_widgets as $widget => $values ) {
+						echo '<input type="checkbox" name="cd_remove_which_widgets[' . $widget . ']" id="cd_remove_which_widgets' . $widget . '" value="' . $widget . '" ' . ( isset( $cd_remove_which_widgets[ $widget ] ) ? 'checked' : '' ) . '/><label for="cd_remove_which_widgets' . $widget . '">' . $values['title'] . '</label><br/>';
+					}
+				} else {
+					echo '<div class="settings-error error"><p>Please visit the <a href="/wp-admin/index.php">dashboard</a> once for "Widgets to not Remove" settings to appear.</p></div>';
 				}
 				?>
 			</td>
