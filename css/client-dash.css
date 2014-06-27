@@ -144,3 +144,8 @@
   width: 33.3333%;
   margin-right: -4px !important;
 }
+.cd-col-two {
+  display: inline-block;
+  width: 50%;
+  margin-right: -4px;
+}
