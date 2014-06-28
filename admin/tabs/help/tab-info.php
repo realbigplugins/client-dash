@@ -7,7 +7,7 @@ function cd_core_info_tab() {
 	// Get the user information
 	$cd_current_theme  = wp_get_theme();
 	$cd_plugins        = get_plugins();
-	$cd_active_plugins = get_option( 'active_plugins' );
+	$cd_active_plugins = str_replace( '-', ' ', get_option( 'active_plugins' ) );
 	global $wp_version;
 
 	?>
@@ -22,7 +22,7 @@ function cd_core_info_tab() {
 		</tr>
 		<tr valign="top">
 			<th scope="row">Active plugins</th>
-			<td><?php foreach ( $cd_active_plugins as $key => $value ) {
+			<td class="cd-capitalize"><?php foreach ( $cd_active_plugins as $key => $value ) {
 					$string = explode( '/', $value ); // Display folder name
 					echo $string[0];
 					echo "<br/>";

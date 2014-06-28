@@ -129,6 +129,10 @@
   color: #00f;
 }
 
+.cd-capitalize {
+  text-transform: capitalize;
+}
+
 .cd-click {
   cursor: pointer;
 }
