@@ -79,4 +79,4 @@ function cd_core_account_about_tab() {
 <?php
 }
 
-add_action( 'cd_account_about_tab', 'cd_core_account_about_tab' );
+cd_content_block( 'Core Account Basic', 'account', 'about', 'cd_core_account_about_tab' );

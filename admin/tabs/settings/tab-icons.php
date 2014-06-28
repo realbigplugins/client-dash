@@ -288,4 +288,4 @@ function cd_core_settings_icons_tab() {
 	echo '</ul>';
 }
 
-add_action( 'cd_settings_icons_tab', 'cd_core_settings_icons_tab' );
+cd_content_block( 'Core Settings Icons', 'settings', 'icons', 'cd_core_settings_icons_tab' );

@@ -39,4 +39,4 @@ function cd_core_info_tab() {
 <?php
 }
 
-add_action( 'cd_help_info_tab', 'cd_core_info_tab' );
+cd_content_block( 'Core Help Basic', 'help', 'info', 'cd_core_info_tab' );

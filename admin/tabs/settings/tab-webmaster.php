@@ -103,4 +103,4 @@ function cd_core_settings_webmaster() {
 <?php
 }
 
-add_action( 'cd_settings_webmaster_tab', 'cd_core_settings_webmaster' );
+cd_content_block( 'Core Settings Webmaster', 'settings', 'webmaster', 'cd_core_settings_webmaster' );

@@ -10,8 +10,8 @@ function cd_core_webmaster_main_tab() {
 	if ( $content ) {
 		echo $content;
 	} else {
-		echo '<div class="settings-error error"><p>This tab has no content. Please set content under Client Dash settings.</p></div>';
+		cd_error( 'This tab has no content. Please set content under Client Dash settings.' );
 	}
 }
 
-add_action( 'cd_webmaster_main_tab', 'cd_core_webmaster_main_tab' );
+cd_content_block( 'Core Webmaster Main', 'webmaster', 'main', 'cd_core_webmaster_main_tab' );

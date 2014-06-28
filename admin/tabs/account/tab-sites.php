@@ -39,4 +39,5 @@ function cd_core_account_sites_tab() {
 <?php
 }
 
-add_action( 'cd_account_sites_tab', 'cd_core_account_sites_tab' );
+if( is_multisite() )
+	cd_content_block( 'Core Account Sites', 'account', 'sites', 'cd_core_account_sites_tab' );

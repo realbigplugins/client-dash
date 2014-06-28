@@ -27,7 +27,7 @@ function cd_core_settings_general_tab() {
 						echo '<input type="checkbox" name="cd_remove_which_widgets[' . $widget . ']" id="cd_remove_which_widgets' . $widget . '" value="' . $widget . '" ' . ( isset( $cd_remove_which_widgets[ $widget ] ) ? 'checked' : '' ) . '/><label for="cd_remove_which_widgets' . $widget . '">' . $values['title'] . '</label><br/>';
 					}
 				} else {
-					echo '<div class="settings-error error"><p>Please visit the <a href="/wp-admin/index.php">dashboard</a> once for "Widgets to not Remove" settings to appear.</p></div>';
+					cd_error( 'Please visit the <a href="/wp-admin/index.php">dashboard</a> once for "Widgets to not Remove" settings to appear.' );
 				}
 				?>
 			</td>
@@ -61,4 +61,4 @@ function cd_core_settings_general_tab() {
 <?php
 }
 
-add_action( 'cd_settings_general_tab', 'cd_core_settings_general_tab' );
+cd_content_block( 'Core Settings General', 'settings', 'general', 'cd_core_settings_general_tab' );

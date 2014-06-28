@@ -53,4 +53,4 @@ function cd_core_settings_addons_tab() {
 <?php
 }
 
-add_action( 'cd_settings_addons_tab', 'cd_core_settings_addons_tab' );
+cd_content_block( 'Core Settings Addons', 'settings', 'addons', 'cd_core_settings_addons_tab' );

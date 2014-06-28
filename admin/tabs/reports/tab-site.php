@@ -58,4 +58,4 @@ function cd_core_reports_site_tab() {
 <?php
 }
 
-add_action( 'cd_reports_site_tab', 'cd_core_reports_site_tab' );
+cd_content_block( 'Core Reports Site', 'reports', 'site', 'cd_core_reports_site_tab' );
