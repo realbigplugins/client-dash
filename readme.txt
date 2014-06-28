@@ -49,6 +49,7 @@ Using this plugin is very simple. All you have to do is:
 
 = 1.3.2 =
 * Fixed php error on settings page for widgets.
+* Added `.cd-col-two` CSS class for two column layouts.
 
 = 1.3.1 =
 * Fixed save button issue on Icons page.

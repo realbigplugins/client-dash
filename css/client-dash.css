@@ -129,6 +129,10 @@
   color: #00f;
 }
 
+.cd-capitalize {
+  text-transform: capitalize;
+}
+
 .cd-click {
   cursor: pointer;
 }
@@ -143,4 +147,9 @@
   display: inline-block;
   width: 33.3333%;
   margin-right: -4px !important;
+}
+.cd-col-two {
+  display: inline-block;
+  width: 50%;
+  margin-right: -4px;
 }
