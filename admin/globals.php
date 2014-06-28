@@ -27,7 +27,8 @@ $cd_existing_pages = array(
 		//      'Forum' => 'forum',
 		'Info' => 'info',
 		//      'Tickets' => 'tickets',
-		//      'Tutorials' => 'tutorials'
+		//      'Tutorials' => 'tutorials',
+		'Domain' => 'domain'
 	),
 	'reports'   => array(
 		'Site' => 'site',
