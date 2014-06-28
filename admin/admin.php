@@ -16,24 +16,25 @@ require_once( plugin_dir_path( __FILE__ ) . 'pages/page-settings.php' );
 // Add tab files
 $cd_existing_pages = array(
 	'account'   => array(
-		'About' => 'about',
-		'Sites' => 'sites'
+		'about',
+		'sites'
 	),
 	'help'      => array(
-		'Info' => 'info'
+		'info'
 	),
 	'reports'   => array(
-		'Site' => 'site'
+		'site'
 	),
 	'webmaster' => array(
-		'Main' => 'main',
-		'Feed' => 'feed'
+		'main',
+		'feed'
 	),
 	'settings'  => array(
-		'General'   => 'general',
-		'Icons'     => 'icons',
-		'Webmaster' => 'webmaster',
-		'Addons'    => 'addons'
+		'general',
+		'icons',
+		'webmaster',
+		'roles',
+		'addons'
 	)
 );
 foreach ( $cd_existing_pages as $page => $tabs ) {

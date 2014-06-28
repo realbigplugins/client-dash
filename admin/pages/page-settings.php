@@ -4,11 +4,19 @@
  * Register all settings for Client Dash.
  */
 function cd_register_settings() {
+	// General Tab
 	register_setting( 'cd_options_general', 'cd_remove_which_widgets' );
 	register_setting( 'cd_options_general', 'cd_hide_page_account' );
 	register_setting( 'cd_options_general', 'cd_hide_page_reports' );
 	register_setting( 'cd_options_general', 'cd_hide_page_help' );
 
+	// Icons Tab
+	register_setting( 'cd_options_icons', 'cd_dashicon_account' );
+	register_setting( 'cd_options_icons', 'cd_dashicon_reports' );
+	register_setting( 'cd_options_icons', 'cd_dashicon_help' );
+	register_setting( 'cd_options_icons', 'cd_dashicon_webmaster' );
+
+	// Webmaster Tab
 	register_setting( 'cd_options_webmaster', 'cd_webmaster_name', 'sanitize_text_field' );
 	register_setting( 'cd_options_webmaster', 'cd_webmaster_enable' );
 	register_setting( 'cd_options_webmaster', 'cd_webmaster_custom_content_tab' );
@@ -17,10 +25,8 @@ function cd_register_settings() {
 	register_setting( 'cd_options_webmaster', 'cd_webmaster_feed_url', 'esc_url' );
 	register_setting( 'cd_options_webmaster', 'cd_webmaster_feed_count' );
 
-	register_setting( 'cd_options_icons', 'cd_dashicon_account' );
-	register_setting( 'cd_options_icons', 'cd_dashicon_reports' );
-	register_setting( 'cd_options_icons', 'cd_dashicon_help' );
-	register_setting( 'cd_options_icons', 'cd_dashicon_webmaster' );
+	// Roles Tab
+	register_setting( 'cd_options_roles', 'cd_content_blocks_roles' );
 
 	do_action( 'cd_register_settings' );
 }

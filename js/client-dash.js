@@ -1,9 +1,28 @@
+/**
+ * Hides/shows element with given ID.
+ *
+ * @param id The ID of the element to hide/show.
+ */
 function cd_updown(id) {
   var e = document.getElementById(id);
   if (e.style.display == 'block')
     e.style.display = 'none';
   else
     e.style.display = 'block';
+}
+
+/**
+ * Hides/shows nearest div element.
+ */
+function cd_updown_target(e_self, e_target, e_parent) {
+  // Toggle self
+  if(jQuery(e_self).hasClass('open'))
+    jQuery(e_self).addClass('closed').removeClass('open');
+  else
+    jQuery(e_self).addClass('open').removeClass('closed');
+
+  // Toggle target
+  jQuery(e_self).closest(e_parent).find(e_target).toggleClass('hidden');
 }
 
 function cd_dashicons_selected(id) {

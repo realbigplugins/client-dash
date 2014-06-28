@@ -50,14 +50,10 @@ function cd_the_page_title( $page = 'account' ) {
  * @param array $tabs Associative array of tabs to include.
  */
 function cd_create_tab_page( $tabs = null ) {
-	global $cd_existing_pages, $cd_content_blocks;
-
-//	$cd_existing_pages = apply_filters( 'cd_tabs', $cd_existing_pages );
+	global $cd_content_blocks;
 
 	// Declare static variable
 	$first_tab = '';
-
-	/* Create Tab Menu */
 
 	// Get the page for building url
 	$current_page = str_replace( 'cd_', '', $_GET['page'] );
@@ -135,14 +131,43 @@ function cd_content_block( $name = null, $page = null, $tab = null, $callback = 
 	// Generate the content block ID
 	$ID = strtolower( str_replace( array( ' ', '-' ), '_', $name) );
 
-	// Add to the content blocks
-	$cd_content_blocks[$page][$tab] = array(
-		'ID'   => $ID,
-		'name' => $name
+	$cd_content_blocks[$page][$tab][$ID] = array(
+		'name'     => $name,
+		'callback' => $callback
 	);
 
 	add_action( 'cd_' . $page . '_' . $tab . '_tab', $callback, $priority );
 }
+
+function cd_disable_content_for_role() {
+	global $cd_content_blocks, $current_user, $wp_roles;
+
+	// Get current user role
+	$current_role = strtolower( $wp_roles->role_names[ $current_user->roles[0] ] );
+
+	// Get the disabled blocks
+	$cd_content_blocks_roles = get_option( 'cd_content_blocks_roles' );
+
+	// Bail if no roles have disabled content
+	if( empty( $cd_content_blocks_roles ) ) return;
+
+	// Unset any block ID's that are inside the disable array
+	foreach( $cd_content_blocks_roles as $unset_block_ID => $roles ) {
+		if( !array_key_exists( $current_role, $roles ) ) continue;
+
+		foreach( $cd_content_blocks as $page => $tabs) {
+			foreach( $tabs as $tab => $blocks ) {
+				// If content block doesn't exist in this tab, skip
+				if( empty( $cd_content_blocks[$page][$tab][$unset_block_ID] ) ) continue;
+
+				// Unset the action that added this content block
+				remove_action( 'cd_' . $page . '_' . $tab . '_tab', $cd_content_blocks[$page][$tab][$unset_block_ID]['callback']);
+			}
+		}
+	}
+}
+
+add_action( 'init', 'cd_disable_content_for_role' );
 
 /**
  * @param $which_color
@@ -180,7 +205,6 @@ function cd_get_color_scheme( $which_color ) {
  * @author Predeep
  *
  * @param $path
- *
  * @return mixed
  */
 function cd_get_dir_size( $path ) {
@@ -218,7 +242,6 @@ function cd_get_dir_size( $path ) {
  * @since 1.1
  *
  * @param int $size Size in bytes
- *
  * @return string
  */
 function cd_format_dir_size( $size ) {
@@ -237,6 +260,16 @@ function cd_format_dir_size( $size ) {
 
 		return $size . " GB";
 	}
+}
+
+/**
+ * Get's the current user's role.
+ *
+ * @since 1.4
+ *
+ * @return mixed The role.
+ */
+function cd_get_user_role() {
 }
 
 /**

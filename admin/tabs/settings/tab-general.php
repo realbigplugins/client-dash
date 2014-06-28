@@ -6,8 +6,6 @@
 function cd_core_settings_general_tab() {
 	// Get options
 	$active_widgets = get_option( 'cd_active_widgets', null);
-
-	// Get options
 	$cd_remove_which_widgets = get_option( 'cd_remove_which_widgets' );
 	$cd_hide_page_account = get_option( 'cd_hide_page_account' );
 	$cd_hide_page_reports = get_option( 'cd_hide_page_reports' );
