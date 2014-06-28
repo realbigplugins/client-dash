@@ -8,6 +8,8 @@ function cd_core_info_tab() {
 	$cd_current_theme  = wp_get_theme();
 	$cd_plugins        = get_plugins();
 	$cd_active_plugins = str_replace( '-', ' ', get_option( 'active_plugins' ) );
+	$cd_theme_uri = $cd_current_theme->get( 'ThemeURI' );
+	$cd_author_uri = $cd_current_theme->get( 'AuthorURI' );
 	global $wp_version;
 
 	?>
@@ -18,7 +20,22 @@ function cd_core_info_tab() {
 		</tr>
 		<tr valign="top">
 			<th scope="row">Current theme</th>
-			<td><?php echo $cd_current_theme; ?></td>
+			<td><?php if ( !empty( $cd_theme_uri ) ) { ?>
+				<a href="<?php echo $cd_theme_uri; ?>">
+				<?php 
+				echo $cd_current_theme.'</a>';
+				} elseif ( !empty( $cd_author_uri ) && empty( $cd_theme_uri ) ) { ?>
+				<a href="<?php echo $cd_author_uri; ?>">
+				<?php 
+				echo $cd_current_theme.'</a>';	
+				} else {
+					echo $cd_current_theme;
+				}
+				?>
+				<?php if ( is_child_theme() ) { 
+					echo '(child of <span class="cd-capitalize">'. str_replace( '-', ' ', $cd_current_theme->get( 'Template' ) ) .'</span>)';
+				} ?>
+			</td>
 		</tr>
 		<tr valign="top">
 			<th scope="row">Active plugins</th>
