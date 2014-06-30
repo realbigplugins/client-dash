@@ -55,7 +55,7 @@ function cd_settings_page() {
 			// Prepare cd_settings
 			settings_fields( 'cd_options_' . $tab );
 
-			cd_the_page_title();
+			cd_the_page_title( 'settings' );
 			cd_create_tab_page();
 
 			// Can turn off submit button with this filter

@@ -13,7 +13,8 @@ $cd_option_defaults = array(
 	'dashicon_account'             => 'dashicons-id-alt',
 	'dashicon_reports'             => 'dashicons-chart-area',
 	'dashicon_help'                => 'dashicons-editor-help',
-	'dashicon_webmaster'           => 'dashicons-businessman'
+	'dashicon_webmaster'           => 'dashicons-businessman',
+	'dashicon_settings'            => 'dashicons-admin-settings'
 );
 
 // Declare existing CD widgets

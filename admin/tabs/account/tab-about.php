@@ -79,4 +79,9 @@ function cd_core_account_about_tab() {
 <?php
 }
 
+function test(){
+	echo 'test content';
+}
 cd_content_block( 'Core Account Basic', 'account', 'about', 'cd_core_account_about_tab' );
+
+cd_content_block( 'Test Extension Basic Info', 'account', 'about', 'test' );
