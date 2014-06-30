@@ -5,10 +5,7 @@
  */
 function cd_core_reports_site_tab() {
 	// Get the site information
-	$args = array(
-	'public' => true
-	//'_builtin' => false
-	);
+	$args = array( 'public' => true );
 	$cd_count_posts    = wp_count_posts();
 	$cd_count_pages    = wp_count_posts( 'page' );
 	$cd_count_comments = wp_count_comments();
@@ -47,8 +44,12 @@ function cd_core_reports_site_tab() {
 				Comments
 				</a>
 			</th>
-			<td><?php echo $cd_count_comments->approved; ?> approved<br/>
-				<?php echo $cd_count_comments->spam; ?> spam
+			<td>
+				<ul>
+					<li><a href="<?php echo get_admin_url() .'edit-comments.php?comment_status=approved'; ?>"><?php echo $cd_count_comments->approved; ?> approved</a></li>
+					<li><a href="<?php echo get_admin_url() .'edit-comments.php?comment_status=moderated'; ?>"><?php echo $cd_count_comments->moderated; ?> pending</a></li>
+					<li><a href="<?php echo get_admin_url() .'edit-comments.php?comment_status=spam'; ?>"><?php echo $cd_count_comments->spam; ?> spam</a></li>
+				</ul>
 			</td>
 		</tr>
 		<tr valign="top">
@@ -81,13 +82,6 @@ function cd_core_reports_site_tab() {
 		</tr>
 	</table>
 <?php
-$args = array(
-	'public' => true
-	//'_builtin' => false
-	);
-echo '<pre>';
-print_r(get_post_types( $args, 'objects' ));
-echo '</pre>';
 }
 
 cd_content_block( 'Core Reports Site', 'reports', 'site', 'cd_core_reports_site_tab' );
