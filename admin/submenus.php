@@ -7,17 +7,17 @@ function cd_add_subpages() {
 	global $cd_option_defaults;
 
 	// Account
-	if ( apply_filters( 'cd_show_account_page', true) && !get_option( 'cd_hide_page_account' ) ) {
+	if ( apply_filters( 'cd_show_account_page', true ) && ! get_option( 'cd_hide_page_account' ) ) {
 		add_submenu_page( 'index.php', 'Account Information', 'Account', 'publish_posts', 'cd_account', 'cd_account_page' );
 	}
 
 	// Reports
-	if ( apply_filters( 'cd_show_reports_page', true ) && !get_option( 'cd_hide_page_reports' )  ) {
+	if ( apply_filters( 'cd_show_reports_page', true ) && ! get_option( 'cd_hide_page_reports' ) ) {
 		add_submenu_page( 'index.php', 'Reports', 'Reports', 'publish_posts', 'cd_reports', 'cd_reports_page' );
 	}
 
 	// Help
-	if ( apply_filters( 'cd_show_help_page', true ) && !get_option( 'cd_hide_page_help' )  ) {
+	if ( apply_filters( 'cd_show_help_page', true ) && ! get_option( 'cd_hide_page_help' ) ) {
 		add_submenu_page( 'index.php', 'Helpful Information', 'Help', 'publish_posts', 'cd_help', 'cd_help_page' );
 	}
 

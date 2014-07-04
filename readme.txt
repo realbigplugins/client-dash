@@ -122,5 +122,5 @@ Using this plugin is very simple. All you have to do is:
 
 == Upgrade Notice ==
 
-= 1.3.2 =
-* Please update to avoid an issue in the Settings->General page.
+= 1.3.1 =
+* PLEASE UPDATE IMMEDIATELY: Fixed issue with broken save button on Icons page.

@@ -5,7 +5,8 @@
  */
 function cd_core_settings_roles_tab() {
 	?>
-	<p>Use this page to disable specific content for specific roles. Do so by checking roles on content you do not want them to see.</p>
+	<p>Use this page to disable specific content for specific roles. Do so by checking roles on content you do not want
+		them to see.</p>
 	<?php
 	global $cd_content_blocks;
 
@@ -63,10 +64,10 @@ function cd_core_settings_roles_tab() {
 				foreach ( $roles as $role_ID => $props ) {
 					echo '<span class="cd-roles-grid-checkbox">';
 					echo '<input type="checkbox"
-					             name=cd_content_blocks_roles[' . $block_ID . '][' . $role_ID . ']
-					             value="1" ';
-					if( !empty( $cd_content_blocks_roles ) ) {
-						checked( $cd_content_blocks_roles[$block_ID][$role_ID], '1' );
+					             name=cd_content_blocks_roles[' . $role_ID . '][' . $block_ID . '][' . $page . ']
+					             value="' . $tab . '" ';
+					if ( ! empty( $cd_content_blocks_roles ) ) {
+						checked( $cd_content_blocks_roles[ $role_ID ][ $block_ID ][ $page ], $tab );
 					}
 					echo '/>'; // Close off checkbox
 					echo '<label>' . $props['name'] . '</label>';

@@ -64,25 +64,28 @@ function cd_create_tab_page( $tabs = null ) {
 	} else {
 		$active_tab = null;
 	}
-	?>
 
-	<?php
+	cd_unset_content_blocks();
+
 	// If no content on this page, show error and bail
-	if( empty( $cd_content_blocks[$current_page] ) ) {
+	if ( empty( $cd_content_blocks[ $current_page ] ) ) {
 		cd_error( 'This page has no content' );
+
 		return;
 	}
 	?>
 	<h2 class="nav-tab-wrapper">
 		<?php
 		$i = 0;
-		foreach ( $cd_content_blocks[$current_page] as $tab_ID => $block ) {
+		foreach ( $cd_content_blocks[ $current_page ] as $tab_ID => $block ) {
 			$i ++;
 
 			// Translate the tab ID into the tab name
 			$tab_name = ucwords( str_replace( '_', ' ', $tab_ID ) );
 
-			if( empty( $cd_content_blocks[$current_page][$tab_ID] ) ) continue;
+			if ( empty( $cd_content_blocks[ $current_page ][ $tab_ID ] ) ) {
+				continue;
+			}
 
 			if ( $i == 1 ) {
 				$first_tab = $tab_ID;
@@ -129,9 +132,9 @@ function cd_content_block( $name = null, $page = null, $tab = null, $callback = 
 	global $cd_content_blocks;
 
 	// Generate the content block ID
-	$ID = strtolower( str_replace( array( ' ', '-' ), '_', $name) );
+	$ID = strtolower( str_replace( array( ' ', '-' ), '_', $name ) );
 
-	$cd_content_blocks[$page][$tab][$ID] = array(
+	$cd_content_blocks[ $page ][ $tab ][ $ID ] = array(
 		'name'     => $name,
 		'callback' => $callback
 	);
@@ -139,35 +142,37 @@ function cd_content_block( $name = null, $page = null, $tab = null, $callback = 
 	add_action( 'cd_' . $page . '_' . $tab . '_tab', $callback, $priority );
 }
 
-function cd_disable_content_for_role() {
-	global $cd_content_blocks, $current_user, $wp_roles;
+/**
+ * Unsets any content blocks that are disbaled for current role.
+ *
+ * @since 1.4
+ */
+function cd_unset_content_blocks() {
+	global $cd_content_blocks;
 
-	// Get current user role
-	$current_role = strtolower( $wp_roles->role_names[ $current_user->roles[0] ] );
-
-	// Get the disabled blocks
+	// Check against disabled roles
 	$cd_content_blocks_roles = get_option( 'cd_content_blocks_roles' );
+	$current_role = cd_get_user_role();
 
-	// Bail if no roles have disabled content
-	if( empty( $cd_content_blocks_roles ) ) return;
+	// Cycle through all and unset matching content blocks
+	if( ! empty( $cd_content_blocks_roles ) ) {
+		foreach ( $cd_content_blocks_roles as $role => $blocks ) {
+			if( $role != $current_role ) continue;
 
-	// Unset any block ID's that are inside the disable array
-	foreach( $cd_content_blocks_roles as $unset_block_ID => $roles ) {
-		if( !array_key_exists( $current_role, $roles ) ) continue;
+			foreach( $blocks as $block => $info ) {
+				foreach ( $info as $page => $tab ) {
+					unset( $cd_content_blocks[$page][$tab][$block] );
 
-		foreach( $cd_content_blocks as $page => $tabs) {
-			foreach( $tabs as $tab => $blocks ) {
-				// If content block doesn't exist in this tab, skip
-				if( empty( $cd_content_blocks[$page][$tab][$unset_block_ID] ) ) continue;
-
-				// Unset the action that added this content block
-				remove_action( 'cd_' . $page . '_' . $tab . '_tab', $cd_content_blocks[$page][$tab][$unset_block_ID]['callback']);
+					// If tab now empty, unset it
+					if( empty( $cd_content_blocks[$page][$tab] ) )
+						unset( $cd_content_blocks[$page][$tab] );
+				}
 			}
 		}
 	}
 }
 
-add_action( 'init', 'cd_disable_content_for_role' );
+//add_action( 'init', 'cd_disable_content_for_role' );
 
 /**
  * @param $which_color
@@ -205,6 +210,7 @@ function cd_get_color_scheme( $which_color ) {
  * @author Predeep
  *
  * @param $path
+ *
  * @return mixed
  */
 function cd_get_dir_size( $path ) {
@@ -242,6 +248,7 @@ function cd_get_dir_size( $path ) {
  * @since 1.1
  *
  * @param int $size Size in bytes
+ *
  * @return string
  */
 function cd_format_dir_size( $size ) {
@@ -270,6 +277,12 @@ function cd_format_dir_size( $size ) {
  * @return mixed The role.
  */
 function cd_get_user_role() {
+	global $current_user;
+
+	$user_roles = $current_user->roles;
+	$user_role = array_shift($user_roles);
+
+	return $user_role;
 }
 
 /**
@@ -278,6 +291,7 @@ function cd_get_user_role() {
  * @since 1.4
  *
  * @param $plugin string Plugin path/Plugin file-name
+ *
  * @return null
  */
 function cd_activate_plugin( $plugin ) {
