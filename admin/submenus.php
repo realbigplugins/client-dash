@@ -4,30 +4,46 @@
  * Adds all Client Dash submenu pages.
  */
 function cd_add_subpages() {
-	global $cd_option_defaults;
+	global $cd_option_defaults, $cd_content_blocks;
+
+	// Unset content blocks if disabled for current role
+	cd_unset_content_blocks();
+
+	// This next section will check 3 things before adding the page:
+	//   1) Is there content in it?
+	//   2) Is there a filter disabling it?
+	//   3) Is the "hide page" option turned on?
 
 	// Account
-	if ( apply_filters( 'cd_show_account_page', true) && !get_option( 'cd_hide_page_account' ) ) {
+	if ( ! empty( $cd_content_blocks['account'] )
+	     && apply_filters( 'cd_show_account_page', true )
+	     && ! get_option( 'cd_hide_page_account' )
+	) {
 		add_submenu_page( 'index.php', 'Account Information', 'Account', 'publish_posts', 'cd_account', 'cd_account_page' );
 	}
 
 	// Reports
-	if ( apply_filters( 'cd_show_reports_page', true ) && !get_option( 'cd_hide_page_reports' )  ) {
+	if ( ! empty( $cd_content_blocks['reports'] )
+	     && apply_filters( 'cd_show_reports_page', true )
+	     && ! get_option( 'cd_hide_page_reports' )
+	) {
 		add_submenu_page( 'index.php', 'Reports', 'Reports', 'publish_posts', 'cd_reports', 'cd_reports_page' );
 	}
 
 	// Help
-	if ( apply_filters( 'cd_show_help_page', true ) && !get_option( 'cd_hide_page_help' )  ) {
+	if ( ! empty( $cd_content_blocks['help'] )
+	     && apply_filters( 'cd_show_help_page', true )
+	     && ! get_option( 'cd_hide_page_help' )
+	) {
 		add_submenu_page( 'index.php', 'Helpful Information', 'Help', 'publish_posts', 'cd_help', 'cd_help_page' );
 	}
 
 	// Webmaster
-	$show_webmaster_page = false;
-	if ( get_option( 'cd_webmaster_enable', $cd_option_defaults['webmaster_enable'] ) == '1' ) {
-		$show_webmaster_page = apply_filters( 'cd_show_webmaster_page', true );
-	}
-
-	if ( $show_webmaster_page ) {
+	if ( apply_filters( 'cd_show_webmaster_page', true )
+	     && ! get_option( 'cd_hide_page_webmaster' )
+	     && get_option( 'cd_webmaster_enable', false ) == '1'
+	     && ! empty( $cd_content_blocks['webmaster'] )
+	) {
 		add_submenu_page( 'index.php', get_option( 'cd_webmaster_name', $cd_option_defaults['webmaster_name'] ), get_option( 'cd_webmaster_name', $cd_option_defaults['webmaster_name'] ), 'publish_posts', 'cd_webmaster', 'cd_webmaster_page' );
 	}
 

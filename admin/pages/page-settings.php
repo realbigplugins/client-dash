@@ -47,10 +47,11 @@ function cd_settings_page() {
 		<form method="post" action="options.php">
 			<?php
 			// Get the current tab, if set
-			if ( isset( $_GET['tab'] ) )
+			if ( isset( $_GET['tab'] ) ) {
 				$tab = $_GET['tab'];
-			else
+			} else {
 				$tab = 'general';
+			}
 
 			// Prepare cd_settings
 			settings_fields( 'cd_options_' . $tab );
@@ -60,7 +61,9 @@ function cd_settings_page() {
 
 			// Can turn off submit button with this filter
 			// EG: add_filter( 'cd_submit', '__return_false' );
-			if ( apply_filters( 'cd_submit', true) ) submit_button();
+			if ( apply_filters( 'cd_submit', true ) ) {
+				submit_button();
+			}
 			?>
 		</form>
 	</div>
