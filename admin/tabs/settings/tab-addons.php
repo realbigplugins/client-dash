@@ -8,13 +8,11 @@ function cd_core_settings_addons_tab() {
 	add_filter( 'cd_submit', '__return_false' );
 
 	// Activate/Deactivate plugins
-	if ( isset( $_GET['cd_activate'] ) ) {
+	if( isset( $_GET['cd_activate'] ) )
 		activate_plugin( $_GET['cd_activate'] );
-	}
 
-	if ( isset( $_GET['cd_deactivate'] ) ) {
+	if( isset( $_GET['cd_deactivate'] ) )
 		deactivate_plugins( $_GET['cd_deactivate'] );
-	}
 
 	// Declare addons
 	$addons = array(
@@ -33,21 +31,20 @@ function cd_core_settings_addons_tab() {
 		<?php
 		foreach ( $addons as $name => $props ) {
 			// Set up activate/deactivate urls
-			$url            = remove_query_arg( array( 'cd_deactivate', 'cd_activate' ) );
-			$activate_url   = add_query_arg( array( 'cd_activate' => $props['activate-slug'] ), $url );
+			$url = remove_query_arg( array( 'cd_deactivate', 'cd_activate' ) );
+			$activate_url = add_query_arg( array( 'cd_activate' => $props['activate-slug'] ), $url );
 			$deactivate_url = add_query_arg( array( 'cd_deactivate' => $props['activate-slug'] ), $url );
 
 			echo '<div class="cd-addon cd-col-three">';
 			echo '<a href="' . $props['url'] . '"><span class="dashicons dashicons-editor-help"></span>';
 			echo '<h4>' . $name . '</h4></a>';
 
-			if ( $props['active'] ) {
+			if( $props['active'] )
 				echo '<a href="' . $deactivate_url . '" class="button">Deactivate</a>';
-			} elseif ( $props['installed'] && ! $props['active'] ) {
+			elseif( $props['installed'] && !$props['active'] )
 				echo '<a href="' . $activate_url . '" class="button">Activate</a>';
-			} elseif ( ! $props['installed'] ) {
+			elseif( !$props['installed'] )
 				echo '<a href="' . $props['install-url'] . '" class="button">Install</a>';
-			}
 
 			echo '</div>';
 		}

@@ -47,9 +47,9 @@ function cd_the_page_title( $page = 'account' ) {
 /**
  * The main function for building the CD pages.
  *
- * @since Client Dash 1.0
+ * @param array $tabs Associative array of tabs to include.
  */
-function cd_create_tab_page() {
+function cd_create_tab_page( $tabs = null ) {
 	global $cd_content_blocks;
 
 	// Declare static variable
@@ -64,26 +64,25 @@ function cd_create_tab_page() {
 	} else {
 		$active_tab = null;
 	}
+	?>
 
+	<?php
 	// If no content on this page, show error and bail
-	if ( empty( $cd_content_blocks[ $current_page ] ) ) {
+	if( empty( $cd_content_blocks[$current_page] ) ) {
 		cd_error( 'This page has no content' );
-
 		return;
 	}
 	?>
 	<h2 class="nav-tab-wrapper">
 		<?php
 		$i = 0;
-		foreach ( $cd_content_blocks[ $current_page ] as $tab_ID => $block ) {
+		foreach ( $cd_content_blocks[$current_page] as $tab_ID => $block ) {
 			$i ++;
-
-			if ( empty( $cd_content_blocks[ $current_page ][ $tab_ID ] ) ) {
-				continue;
-			}
 
 			// Translate the tab ID into the tab name
 			$tab_name = ucwords( str_replace( '_', ' ', $tab_ID ) );
+
+			if( empty( $cd_content_blocks[$current_page][$tab_ID] ) ) continue;
 
 			if ( $i == 1 ) {
 				$first_tab = $tab_ID;
@@ -118,7 +117,7 @@ function cd_create_tab_page() {
  * This function creates a content block for Client Dash. It can be set to
  * go into a specific tab in a specific tab.
  *
- * @since Client Dash 1.4
+ * @since 1.4
  *
  * @param string $name The name of the content block.
  * @param string $page On which page the content block should show.
@@ -130,12 +129,9 @@ function cd_content_block( $name = null, $page = null, $tab = null, $callback = 
 	global $cd_content_blocks;
 
 	// Generate the content block ID
-	$ID = strtolower( str_replace( array( ' ', '-' ), '_', $name ) );
+	$ID = strtolower( str_replace( array( ' ', '-' ), '_', $name) );
 
-	// Fix up the tab name (to allow spaces and such)
-	$tab = strtolower( str_replace( array( ' ', '-' ), '_', $tab ) );
-
-	$cd_content_blocks[ $page ][ $tab ][ $ID ] = array(
+	$cd_content_blocks[$page][$tab][$ID] = array(
 		'name'     => $name,
 		'callback' => $callback
 	);
@@ -143,42 +139,37 @@ function cd_content_block( $name = null, $page = null, $tab = null, $callback = 
 	add_action( 'cd_' . $page . '_' . $tab . '_tab', $callback, $priority );
 }
 
-/**
- * Unsets any content blocks that are disabled for current role.
- *
- * @since Client Dash 1.4
- */
-function cd_unset_content_blocks() {
-	global $cd_content_blocks;
+function cd_disable_content_for_role() {
+	global $cd_content_blocks, $current_user, $wp_roles;
 
-	// Check against disabled roles
+	// Get current user role
+	$current_role = strtolower( $wp_roles->role_names[ $current_user->roles[0] ] );
+
+	// Get the disabled blocks
 	$cd_content_blocks_roles = get_option( 'cd_content_blocks_roles' );
-	$current_role = cd_get_user_role();
 
-	// Cycle through all and unset matching content blocks
-	if( ! empty( $cd_content_blocks_roles ) ) {
-		foreach ( $cd_content_blocks_roles as $role => $blocks ) {
-			if( $role != $current_role ) continue;
+	// Bail if no roles have disabled content
+	if( empty( $cd_content_blocks_roles ) ) return;
 
-			foreach( $blocks as $block => $info ) {
-				foreach ( $info as $page => $tab ) {
-					// Remove the action as well
-					remove_action( 'cd_' . $page . '_' . $tab . '_tab', $cd_content_blocks[$page][$tab][$block]['callback'] );
+	// Unset any block ID's that are inside the disable array
+	foreach( $cd_content_blocks_roles as $unset_block_ID => $roles ) {
+		if( !array_key_exists( $current_role, $roles ) ) continue;
 
-					unset( $cd_content_blocks[$page][$tab][$block] );
+		foreach( $cd_content_blocks as $page => $tabs) {
+			foreach( $tabs as $tab => $blocks ) {
+				// If content block doesn't exist in this tab, skip
+				if( empty( $cd_content_blocks[$page][$tab][$unset_block_ID] ) ) continue;
 
-					// If tab now empty, unset it
-					if( empty( $cd_content_blocks[$page][$tab] ) )
-						unset( $cd_content_blocks[$page][$tab] );
-				}
+				// Unset the action that added this content block
+				remove_action( 'cd_' . $page . '_' . $tab . '_tab', $cd_content_blocks[$page][$tab][$unset_block_ID]['callback']);
 			}
 		}
 	}
 }
 
+add_action( 'init', 'cd_disable_content_for_role' );
+
 /**
- * Gets the current color scheme.
- *
  * @param $which_color
  *
  * @return array Current color scheme
@@ -214,7 +205,6 @@ function cd_get_color_scheme( $which_color ) {
  * @author Predeep
  *
  * @param $path
- *
  * @return mixed
  */
 function cd_get_dir_size( $path ) {
@@ -249,10 +239,9 @@ function cd_get_dir_size( $path ) {
 /**
  * Correctly formats the bytes size into a more readable size.
  *
- * @since Client Dash 1.1
+ * @since 1.1
  *
  * @param int $size Size in bytes
- *
  * @return string
  */
 function cd_format_dir_size( $size ) {
@@ -276,26 +265,19 @@ function cd_format_dir_size( $size ) {
 /**
  * Get's the current user's role.
  *
- * @since Client Dash 1.4
+ * @since 1.4
  *
  * @return mixed The role.
  */
 function cd_get_user_role() {
-	global $current_user;
-
-	$user_roles = $current_user->roles;
-	$user_role = array_shift($user_roles);
-
-	return $user_role;
 }
 
 /**
  * Activates a plugin.
  *
- * @since Client Dash 1.4
+ * @since 1.4
  *
  * @param $plugin string Plugin path/Plugin file-name
- *
  * @return null
  */
 function cd_activate_plugin( $plugin ) {
@@ -317,9 +299,9 @@ function cd_activate_plugin( $plugin ) {
 // Helper functions
 
 /**
- * Displays a WordPress error nag.
+ * Displays a WordPress nag.
  *
- * @since Client Dash 1.4
+ * @since 1.4
  *
  * @param $message string The message to show.
  */
@@ -330,7 +312,7 @@ function cd_error( $message ) {
 /**
  * Returns the settings url.
  *
- * @since Client Dash 1.2
+ * @since 1.2.0
  *
  * @return string
  */
@@ -341,7 +323,7 @@ function cd_get_settings_url() {
 /**
  * Returns the account url.
  *
- * @since Client Dash 1.2
+ * @since 1.2.0
  *
  * @return string
  */
@@ -352,7 +334,7 @@ function cd_get_account_url() {
 /**
  * Returns the help url.
  *
- * @since Client Dash 1.2
+ * @since 1.2.0
  *
  * @return string
  */
@@ -363,7 +345,7 @@ function cd_get_help_url() {
 /**
  * Returns the reports url.
  *
- * @since Client Dash 1.2
+ * @since 1.2.0
  *
  * @return string
  */
@@ -374,7 +356,7 @@ function cd_get_reports_url() {
 /**
  * Returns the webmaster url.
  *
- * @since Client Dash 1.2
+ * @since 1.2.0
  *
  * @return string
  */

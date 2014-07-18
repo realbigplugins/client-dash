@@ -27,7 +27,7 @@ function cd_core_account_about_tab() {
 			<td><?php echo $cd_username; ?></td>
 		</tr>
 
-		<?php if ( $cd_firstname || $cd_lastname ): ?>
+		<?php if( $cd_firstname || $cd_lastname ): ?>
 			<tr valign="top">
 				<th scope="row">Your name</th>
 				<td><?php echo $cd_firstname . ' ' . $cd_lastname; ?></td>
@@ -39,7 +39,7 @@ function cd_core_account_about_tab() {
 			<td><?php echo $cd_useremail; ?></td>
 		</tr>
 
-		<?php if ( $cd_url ): ?>
+		<?php if( $cd_url ): ?>
 			<tr valign="top">
 				<th scope="row">Your URL</th>
 				<td><a href="<?php echo $cd_url; ?>" target="_blank"><?php echo $cd_url; ?></a></td>
@@ -79,10 +79,9 @@ function cd_core_account_about_tab() {
 <?php
 }
 
-cd_content_block( 'Core Account Basic', 'account', 'About Us', 'cd_core_account_about_tab' );
-
-function test() {
-	echo 'stuff';
+function test(){
+	echo 'test content';
 }
+cd_content_block( 'Core Account Basic', 'account', 'about', 'cd_core_account_about_tab' );
 
-cd_content_block( 'Core Account Test', 'account', 'About Us', 'test' );
+cd_content_block( 'Test Extension Basic Info', 'account', 'about', 'test' );
