@@ -23,7 +23,16 @@ function cd_core_settings_addons_tab() {
 			'install-url'   => '/wp-admin/plugin-install.php?tab=search&s=client+dash+wp+help+add+on&plugin-search-input=Search+Plugins',
 			'activate-slug' => 'client-dash-wp-help-add-on/client-dash-wp-help.php',
 			'installed'     => ( get_plugins( '/client-dash-wp-help-add-on' ) ? true : false ),
-			'active'        => ( is_plugin_active( 'client-dash-wp-help-add-on/client-dash-wp-help.php' ) ? true : false )
+			'active'        => ( is_plugin_active( 'client-dash-wp-help-add-on/client-dash-wp-help.php' ) ? true : false ),
+			'icon'			=> 'editor-help'
+		),
+		'Client Dash Extension Boilerplate' => array(
+			'url'           => 'https://github.com/brashrebel/client-dash-extension-boilerplate',
+			'install-url'   => 'https://github.com/brashrebel/client-dash-extension-boilerplate/archive/master.zip',
+			'activate-slug' => 'client-dash-extension-boilerplate/client-dash-extension-boilerplate.php',
+			'installed'     => ( get_plugins( '/client-dash-extension-boilerplate' ) ? true : false ),
+			'active'        => ( is_plugin_active( 'client-dash-extension-boilerplate/client-dash-extension-boilerplate.php' ) ? true : false ),
+			'icon'			=> 'admin-tools'
 		)
 	);
 	?>
@@ -38,7 +47,7 @@ function cd_core_settings_addons_tab() {
 			$deactivate_url = add_query_arg( array( 'cd_deactivate' => $props['activate-slug'] ), $url );
 
 			echo '<div class="cd-addon cd-col-three">';
-			echo '<a href="' . $props['url'] . '"><span class="dashicons dashicons-editor-help"></span>';
+			echo '<a href="' . $props['url'] . '"><span class="dashicons dashicons-' . $props['icon'] . '"></span>';
 			echo '<h4>' . $name . '</h4></a>';
 
 			if ( $props['active'] ) {
