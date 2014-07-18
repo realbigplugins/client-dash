@@ -10,7 +10,11 @@ function cd_core_webmaster_main_tab() {
 	if ( $content ) {
 		echo $content;
 	} else {
-		cd_error( 'This tab has no content. Please set content under Client Dash settings.' );
+		// Show different message for Admin
+		if ( current_user_can( 'manage_options' ) )
+			cd_error( 'This tab has no content. Please set content under Client Dash <a href="/wp-admin/options-general.php?page=cd_settings&tab=webmaster">settings</a>.' );
+		else
+			cd_error( 'This tab has no content. If you believe this to be an error, please contact your system administrator.' );
 	}
 }
 

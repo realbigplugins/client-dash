@@ -20,7 +20,8 @@ $cd_existing_pages = array(
 		'sites'
 	),
 	'help'      => array(
-		'info'
+		'info',
+		'domain'
 	),
 	'reports'   => array(
 		'site'

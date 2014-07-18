@@ -38,7 +38,7 @@ function cd_core_settings_roles_tab() {
 		// Page box
 		echo '<div class="cd-roles-grid-page">';
 		echo '<p class="cd-roles-grid-title">';
-		echo ucwords( $page );
+		echo ucwords( str_replace( '_', ' ', $page ) );
 		echo '<span class="cd-roles-grid-toggle closed" onclick="cd_updown_target(this, \'.cd-roles-grid-tab\', \'.cd-roles-grid-item\')"></span>';
 		echo '</p>';
 		echo '</div>'; // .cd-roles-grid-page
@@ -48,29 +48,34 @@ function cd_core_settings_roles_tab() {
 			// Tab Box
 			echo '<div class="cd-roles-grid-tab hidden">';
 			echo '<p class="cd-roles-grid-title">';
-			echo ucwords( $tab );
+			echo ucwords( str_replace( '_', ' ', $tab ) );
 			echo '<span class="cd-roles-grid-toggle closed" onclick="cd_updown_target(this, \'.cd-roles-grid-block\', \'.cd-roles-grid-tab\')"></span>';
 			echo '</p>';
 
-			foreach ( $blocks as $block_ID => $props ) {
+			foreach ( $blocks as $block_ID => $props_block ) {
 
 				// Content Box
 				echo '<div class="cd-roles-grid-block hidden">';
-				echo '<p class="cd-roles-grid-title">' . $props['name'] . '</p>';
+				echo '<p class="cd-roles-grid-title">' . $props_block['name'] . '</p>';
 				echo '<p class="description">Check all who should <strong>not</strong> see this content.</p>';
 				echo '<p class="cd-roles-grid-list">';
 
 				// Create checkboxes for all roles
-				foreach ( $roles as $role_ID => $props ) {
+				foreach ( $roles as $role_ID => $props_role ) {
+					// If the current checkbox being generated is the current user (which
+					// should always be admin), skip it
+					$current_role = cd_get_user_role();
+					if ( strtolower( $current_role ) == strtolower(( $props_role['name'] ) ) ) continue;
+
 					echo '<span class="cd-roles-grid-checkbox">';
 					echo '<input type="checkbox"
 					             name=cd_content_blocks_roles[' . $role_ID . '][' . $block_ID . '][' . $page . ']
 					             value="' . $tab . '" ';
-					if ( ! empty( $cd_content_blocks_roles ) ) {
+					if ( ! empty( $cd_content_blocks_roles[ $role_ID ][ $block_ID ][ $page ] ) ) {
 						checked( $cd_content_blocks_roles[ $role_ID ][ $block_ID ][ $page ], $tab );
 					}
 					echo '/>'; // Close off checkbox
-					echo '<label>' . $props['name'] . '</label>';
+					echo '<label>' . $props_role['name'] . '</label>';
 					echo '</span>';
 				}
 				echo '</p>'; // .cd-roles-grid-list
