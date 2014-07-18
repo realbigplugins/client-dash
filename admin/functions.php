@@ -1,6 +1,27 @@
 <?php
 
 /**
+ * Force dashboard widgets to one column.
+ *
+ * @since Client Dash 1.4
+ */
+function shapeSpace_screen_layout_columns($columns) {
+	$columns['dashboard'] = 1;
+	return $columns;
+}
+add_filter('screen_layout_columns', 'shapeSpace_screen_layout_columns');
+
+/**
+ * Force dashboard widgets to one column.
+ *
+ * @since Client Dash 1.4
+ */
+function shapeSpace_screen_layout_dashboard() {
+	return 1;
+}
+add_filter('get_user_option_screen_layout_dashboard', 'shapeSpace_screen_layout_dashboard');
+
+/**
  * Gets all of the active dashboard widgets.
  */
 function cd_get_active_widgets() {
