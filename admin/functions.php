@@ -1,6 +1,27 @@
 <?php
 
 /**
+ * Force dashboard widgets to one column.
+ *
+ * @since Client Dash 1.4
+ */
+function shapeSpace_screen_layout_columns($columns) {
+	$columns['dashboard'] = 1;
+	return $columns;
+}
+add_filter('screen_layout_columns', 'shapeSpace_screen_layout_columns');
+
+/**
+ * Force dashboard widgets to one column.
+ *
+ * @since Client Dash 1.4
+ */
+function shapeSpace_screen_layout_dashboard() {
+	return 1;
+}
+add_filter('get_user_option_screen_layout_dashboard', 'shapeSpace_screen_layout_dashboard');
+
+/**
  * Gets all of the active dashboard widgets.
  */
 function cd_get_active_widgets() {
@@ -47,9 +68,9 @@ function cd_the_page_title( $page = 'account' ) {
 /**
  * The main function for building the CD pages.
  *
- * @param array $tabs Associative array of tabs to include.
+ * @since Client Dash 1.0
  */
-function cd_create_tab_page( $tabs = null ) {
+function cd_create_tab_page() {
 	global $cd_content_blocks;
 
 	// Declare static variable
@@ -65,8 +86,6 @@ function cd_create_tab_page( $tabs = null ) {
 		$active_tab = null;
 	}
 
-	cd_unset_content_blocks();
-
 	// If no content on this page, show error and bail
 	if ( empty( $cd_content_blocks[ $current_page ] ) ) {
 		cd_error( 'This page has no content' );
@@ -80,12 +99,12 @@ function cd_create_tab_page( $tabs = null ) {
 		foreach ( $cd_content_blocks[ $current_page ] as $tab_ID => $block ) {
 			$i ++;
 
-			// Translate the tab ID into the tab name
-			$tab_name = ucwords( str_replace( '_', ' ', $tab_ID ) );
-
 			if ( empty( $cd_content_blocks[ $current_page ][ $tab_ID ] ) ) {
 				continue;
 			}
+
+			// Translate the tab ID into the tab name
+			$tab_name = ucwords( str_replace( '_', ' ', $tab_ID ) );
 
 			if ( $i == 1 ) {
 				$first_tab = $tab_ID;
@@ -120,7 +139,7 @@ function cd_create_tab_page( $tabs = null ) {
  * This function creates a content block for Client Dash. It can be set to
  * go into a specific tab in a specific tab.
  *
- * @since 1.4
+ * @since Client Dash 1.4
  *
  * @param string $name The name of the content block.
  * @param string $page On which page the content block should show.
@@ -134,6 +153,9 @@ function cd_content_block( $name = null, $page = null, $tab = null, $callback = 
 	// Generate the content block ID
 	$ID = strtolower( str_replace( array( ' ', '-' ), '_', $name ) );
 
+	// Fix up the tab name (to allow spaces and such)
+	$tab = strtolower( str_replace( array( ' ', '-' ), '_', $tab ) );
+
 	$cd_content_blocks[ $page ][ $tab ][ $ID ] = array(
 		'name'     => $name,
 		'callback' => $callback
@@ -143,9 +165,9 @@ function cd_content_block( $name = null, $page = null, $tab = null, $callback = 
 }
 
 /**
- * Unsets any content blocks that are disbaled for current role.
+ * Unsets any content blocks that are disabled for current role.
  *
- * @since 1.4
+ * @since Client Dash 1.4
  */
 function cd_unset_content_blocks() {
 	global $cd_content_blocks;
@@ -161,6 +183,9 @@ function cd_unset_content_blocks() {
 
 			foreach( $blocks as $block => $info ) {
 				foreach ( $info as $page => $tab ) {
+					// Remove the action as well
+					remove_action( 'cd_' . $page . '_' . $tab . '_tab', $cd_content_blocks[$page][$tab][$block]['callback'] );
+
 					unset( $cd_content_blocks[$page][$tab][$block] );
 
 					// If tab now empty, unset it
@@ -172,9 +197,9 @@ function cd_unset_content_blocks() {
 	}
 }
 
-//add_action( 'init', 'cd_disable_content_for_role' );
-
 /**
+ * Gets the current color scheme.
+ *
  * @param $which_color
  *
  * @return array Current color scheme
@@ -245,7 +270,7 @@ function cd_get_dir_size( $path ) {
 /**
  * Correctly formats the bytes size into a more readable size.
  *
- * @since 1.1
+ * @since Client Dash 1.1
  *
  * @param int $size Size in bytes
  *
@@ -272,7 +297,7 @@ function cd_format_dir_size( $size ) {
 /**
  * Get's the current user's role.
  *
- * @since 1.4
+ * @since Client Dash 1.4
  *
  * @return mixed The role.
  */
@@ -288,7 +313,7 @@ function cd_get_user_role() {
 /**
  * Activates a plugin.
  *
- * @since 1.4
+ * @since Client Dash 1.4
  *
  * @param $plugin string Plugin path/Plugin file-name
  *
@@ -313,9 +338,9 @@ function cd_activate_plugin( $plugin ) {
 // Helper functions
 
 /**
- * Displays a WordPress nag.
+ * Displays a WordPress error nag.
  *
- * @since 1.4
+ * @since Client Dash 1.4
  *
  * @param $message string The message to show.
  */
@@ -326,7 +351,7 @@ function cd_error( $message ) {
 /**
  * Returns the settings url.
  *
- * @since 1.2.0
+ * @since Client Dash 1.2
  *
  * @return string
  */
@@ -337,7 +362,7 @@ function cd_get_settings_url() {
 /**
  * Returns the account url.
  *
- * @since 1.2.0
+ * @since Client Dash 1.2
  *
  * @return string
  */
@@ -348,7 +373,7 @@ function cd_get_account_url() {
 /**
  * Returns the help url.
  *
- * @since 1.2.0
+ * @since Client Dash 1.2
  *
  * @return string
  */
@@ -359,7 +384,7 @@ function cd_get_help_url() {
 /**
  * Returns the reports url.
  *
- * @since 1.2.0
+ * @since Client Dash 1.2
  *
  * @return string
  */
@@ -370,7 +395,7 @@ function cd_get_reports_url() {
 /**
  * Returns the webmaster url.
  *
- * @since 1.2.0
+ * @since Client Dash 1.2
  *
  * @return string
  */

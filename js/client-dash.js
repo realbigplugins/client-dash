@@ -1,3 +1,8 @@
+// On ready functions
+jQuery(function() {
+    cd_disable_drag();
+});
+
 /**
  * Hides/shows element with given ID.
  *
@@ -59,4 +64,18 @@ function cd_dashicons_change(dashicon, e) {
 
   // Add the active class to the new active option
   jQuery(e).closest('.cd-dashicons-grid-item').addClass('active');
+}
+
+/**
+ * Disable the ability to drag dashboard widgets.
+ *
+ * @since Client Dash 1.4
+ */
+function cd_disable_drag() {
+    var dash_widgets = jQuery('#dashboard-widgets');
+    // Only use on dashboard
+    if ( ! dash_widgets.length ) return;
+
+    // Disable being able to drag widgets
+    dash_widgets.find('.ui-sortable').sortable('destroy');
 }

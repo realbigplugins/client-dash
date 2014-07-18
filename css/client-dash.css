@@ -19,6 +19,35 @@
   font-size: inherit !important;
 }
 
+#dashboard-widgets .postbox {
+    float: left;
+    width: 50%;
+    padding: 13px;
+    margin: 0;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    min-height: 300px;
+}
+#dashboard-widgets .postbox .hndle {
+    cursor: default !important;
+}
+#dashboard-widgets .postbox .handlediv {
+    display: none !important;
+}
+#dashboard-widgets .postbox .inside {
+    display: block !important;
+}
+#dashboard-widgets .postbox h3 {
+    border-bottom: 1px solid #eee !important;
+}
+
+@media screen and (max-width: 600px) {
+    #dashboard-widgets .postbox {
+        width: 100%;
+    }
+}
+
 /* Style widgets */
 .cd .wp-menu-image:before, .cd-title-icon:before {
   font: 100 55px/1 dashicons;
