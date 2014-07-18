@@ -3,7 +3,7 @@
 /**
  * Outputs Domain tab under Help page.
  */
-function cd_core_help_domain_tab() {
+function cd_core_domain_tab() {
 	// Get the current site's domain
 	$cd_domain = str_replace( 'http://', '', get_site_url() );
 	$cd_ip     = gethostbyname( $cd_domain );
@@ -70,4 +70,4 @@ function cd_core_help_domain_tab() {
 <?php
 }
 
-cd_content_block( 'Core Help Domain', 'help', 'domain', 'cd_core_help_domain_tab' );
+add_action( 'cd_help_domain_tab', 'cd_core_domain_tab' );

@@ -3,7 +3,7 @@
 /**
  * Registers all Client Dash files.
  *
- * Client Dash @since 0.1
+ * @since 0.1
  */
 function client_dash_register_files() {
 	wp_register_script( 'client-dash', plugins_url( '../js/client-dash.js', __FILE__ ), array( 'jquery' ), null, true );
@@ -17,7 +17,7 @@ add_action( 'admin_init', 'client_dash_register_files' );
  *
  * Only does so if user meets privileges.
  *
- * Client Dash @since 0.1
+ * @since 0.1
  */
 function client_dash_enqueue_files() {
 	if ( current_user_can( 'publish_posts' ) ) {
