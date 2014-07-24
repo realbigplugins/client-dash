@@ -23,7 +23,32 @@ function cd_core_settings_addons_tab() {
 			'install-url'   => '/wp-admin/plugin-install.php?tab=search&s=client+dash+wp+help+add+on&plugin-search-input=Search+Plugins',
 			'activate-slug' => 'client-dash-wp-help-add-on/client-dash-wp-help.php',
 			'installed'     => ( get_plugins( '/client-dash-wp-help-add-on' ) ? true : false ),
-			'active'        => ( is_plugin_active( 'client-dash-wp-help-add-on/client-dash-wp-help.php' ) ? true : false )
+			'active'        => ( is_plugin_active( 'client-dash-wp-help-add-on/client-dash-wp-help.php' ) ? true : false ),
+			'icon'			=> 'editor-help'
+		),
+		'Client Dash Extension Boilerplate' => array(
+			'url'           => 'https://github.com/brashrebel/client-dash-extension-boilerplate',
+			'install-url'   => 'https://github.com/brashrebel/client-dash-extension-boilerplate/archive/master.zip',
+			'activate-slug' => 'client-dash-extension-boilerplate/client-dash-extension-boilerplate.php',
+			'installed'     => ( get_plugins( '/client-dash-extension-boilerplate' ) ? true : false ),
+			'active'        => ( is_plugin_active( 'client-dash-extension-boilerplate/client-dash-extension-boilerplate.php' ) ? true : false ),
+			'icon'			=> 'admin-tools'
+		),
+		'Client Dash Status Cake Addon' => array(
+			'url'           => 'https://wordpress.org/plugins/client-dash-status-cake-add-on/',
+			'install-url'   => '/wp-admin/plugin-install.php?tab=search&s=client+dash+status+cake+add+on&plugin-search-input=Search+Plugins',
+			'activate-slug' => 'client-dash-status-cake/client-dash-status-cake.php',
+			'installed'     => ( get_plugins( '/client-dash-status-cake' ) ? true : false ),
+			'active'        => ( is_plugin_active( 'client-dash-status-cake/client-dash-status-cake.php' ) ? true : false ),
+			'icon'			=> 'smiley'
+		),
+		'Client Dash BackupBuddy Addon' => array(
+			'url'           => 'https://wordpress.org/plugins/client-dash-backup-buddy/',
+			'install-url'   => '/wp-admin/plugin-install.php?tab=search&s=client+dash+backup+buddy+add+on&plugin-search-input=Search+Plugins',
+			'activate-slug' => 'client-dash-backup-buddy/client-dash-backup-buddy.php',
+			'installed'     => ( get_plugins( '/client-dash-backup-buddy' ) ? true : false ),
+			'active'        => ( is_plugin_active( 'client-dash-backup-buddy/client-dash-backup-buddy.php' ) ? true : false ),
+			'icon'			=> 'backup'
 		)
 	);
 	?>

@@ -89,10 +89,8 @@
 * Addons ========================================
 */
 .cd-addon {
-    padding: 10px;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
+  background-color: rgba(255, 255, 255, 0.5);
+  text-align: center;
 }
 
 .cd-addon-container {
