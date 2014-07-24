@@ -36,10 +36,10 @@ function cd_core_settings_roles_tab() {
 		echo '<li class="cd-roles-grid-item">';
 
 		// Page box
-		echo '<div class="cd-roles-grid-page">';
+		echo '<div class="cd-roles-grid-page" onclick="cd_toggle_roles_page(this)">';
 		echo '<p class="cd-roles-grid-title">';
 		echo ucwords( str_replace( '_', ' ', $page ) );
-		echo '<span class="cd-roles-grid-toggle closed" onclick="cd_updown_target(this, \'.cd-roles-grid-tab\', \'.cd-roles-grid-item\')"></span>';
+		echo '<span class="cd-roles-grid-toggle closed"></span>';
 		echo '</p>';
 		echo '</div>'; // .cd-roles-grid-page
 
@@ -47,9 +47,9 @@ function cd_core_settings_roles_tab() {
 
 			// Tab Box
 			echo '<div class="cd-roles-grid-tab hidden">';
-			echo '<p class="cd-roles-grid-title">';
+			echo '<p class="cd-roles-grid-title" onclick="cd_toggle_roles_tab(this)">';
 			echo ucwords( str_replace( '_', ' ', $tab ) );
-			echo '<span class="cd-roles-grid-toggle closed" onclick="cd_updown_target(this, \'.cd-roles-grid-block\', \'.cd-roles-grid-tab\')"></span>';
+			echo '<span class="cd-roles-grid-toggle closed"></span>';
 			echo '</p>';
 
 			foreach ( $blocks as $block_ID => $props_block ) {
@@ -70,12 +70,13 @@ function cd_core_settings_roles_tab() {
 					echo '<span class="cd-roles-grid-checkbox">';
 					echo '<input type="checkbox"
 					             name=cd_content_blocks_roles[' . $role_ID . '][' . $block_ID . '][' . $page . ']
-					             value="' . $tab . '" ';
+					             value="' . $tab . '"
+					             id="' . $page . '-' . $tab . '-' . $role_ID . '" ';
 					if ( ! empty( $cd_content_blocks_roles[ $role_ID ][ $block_ID ][ $page ] ) ) {
 						checked( $cd_content_blocks_roles[ $role_ID ][ $block_ID ][ $page ], $tab );
 					}
 					echo '/>'; // Close off checkbox
-					echo '<label>' . $props_role['name'] . '</label>';
+					echo '<label for="' . $page . '-' . $tab . '-' . $role_ID . '">' . $props_role['name'] . '</label>';
 					echo '</span>';
 				}
 				echo '</p>'; // .cd-roles-grid-list

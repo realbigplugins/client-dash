@@ -57,4 +57,9 @@ function cd_core_info_tab() {
 <?php
 }
 
-cd_content_block( 'Core Help Basic', 'help', 'info', 'cd_core_info_tab' );
+cd_content_block(
+	'Core Help Basic',
+	'help',
+	'info',
+	'cd_core_info_tab'
+);

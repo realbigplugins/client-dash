@@ -11,7 +11,8 @@ function cd_core_webmaster_feed_tab() {
 
 	// Check if url exists
 	if ( empty( $feed_url ) ) {
-		cd_error( 'ISSUE: Feed URL must be supplied to use this tab.' );
+		cd_error( 'ISSUE: Feed URL must be supplied to use this tab.', 'manage_options' );
+		cd_error( 'The feed tab has not yet been set up. If you believe this to be an error, please contact your system administrator' );
 
 		return;
 	}
@@ -58,4 +59,9 @@ function cd_core_webmaster_feed_tab() {
 <?php
 }
 
-cd_content_block( 'Core Webmaster Feed', 'webmaster', 'feed', 'cd_core_webmaster_feed_tab' );
+cd_content_block(
+	'Core Webmaster Feed',
+	'webmaster',
+	'feed',
+	'cd_core_webmaster_feed_tab'
+);

@@ -54,7 +54,9 @@ function cd_core_account_about_tab() {
 		<tr valign="top">
 			<th scope="row">Your role</th>
 			<td><?php echo $cd_userrole; ?>
-				<span class="cd-caps cd-click" onclick="cd_updown('cd-caps');"> [?]</span>
+				<span class="cd-caps cd-click dashicons dashicons-info"
+				      onclick="cd_updown('cd-caps');"
+				      style="color:<?php echo cd_get_color_scheme( 'secondary' ); ?>"></span>
 	        <span id="cd-caps" style="display: none;">
 	          <h4><?php echo $cd_userrole; ?>s are able to:</h4>
 		        <?php
@@ -79,10 +81,9 @@ function cd_core_account_about_tab() {
 <?php
 }
 
-cd_content_block( 'Core Account Basic', 'account', 'About Us', 'cd_core_account_about_tab' );
-
-function test() {
-	echo 'stuff';
-}
-
-cd_content_block( 'Core Account Test', 'account', 'About Us', 'test' );
+cd_content_block(
+	'Core Account Basic',
+	'account',
+	'About You',
+	'cd_core_account_about_tab'
+);

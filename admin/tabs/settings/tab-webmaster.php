@@ -7,13 +7,13 @@ function cd_core_settings_webmaster() {
 	global $cd_option_defaults;
 
 	// Get the options
-	$webmaster_enable             = get_option( 'cd_webmaster_enable', $cd_option_defaults['webmaster_enable'] );
-	$webmaster_name               = get_option( 'cd_webmaster_name', $cd_option_defaults['webmaster_name'] );
-	$webmaster_custom_content     = get_option( 'cd_webmaster_custom_content', $cd_option_defaults['webmaster_custom_content'] );
-	$webmaster_custom_content_tab = get_option( 'cd_webmaster_custom_content_tab', $cd_option_defaults['webmaster_custom_content_tab'] );
-	$webmaster_feed               = get_option( 'cd_webmaster_feed', false );
-	$webmaster_feed_url           = get_option( 'cd_webmaster_feed_url', null );
-	$webmaster_feed_count         = get_option( 'cd_webmaster_feed_count', $cd_option_defaults['webmaster_feed_count'] );
+	$webmaster_enable           = get_option( 'cd_webmaster_enable', $cd_option_defaults['webmaster_enable'] );
+	$webmaster_name             = get_option( 'cd_webmaster_name', $cd_option_defaults['webmaster_name'] );
+	$webmaster_main_tab_content = get_option( 'cd_webmaster_main_tab_content' );
+	$webmaster_main_tab_name    = get_option( 'cd_webmaster_main_tab_name', $cd_option_defaults['webmaster_main_tab_name'] );
+	$webmaster_feed             = get_option( 'cd_webmaster_feed', false );
+	$webmaster_feed_url         = get_option( 'cd_webmaster_feed_url', null );
+	$webmaster_feed_count       = get_option( 'cd_webmaster_feed_count', $cd_option_defaults['webmaster_feed_count'] );
 
 	// If empty, delete
 	if ( ! $webmaster_name ) {
@@ -47,20 +47,20 @@ function cd_core_settings_webmaster() {
 	<table class="form-table">
 		<tr valign="top">
 			<th scope="row">
-				<label for="cd_webmaster_custom_content_tab">Tab Name</label>
+				<label for="cd_webmaster_main_tab_name">Tab Name</label>
 			</th>
 			<td>
-				<input type="text" id="cd_webmaster_custom_content_tab" name="cd_webmaster_custom_content_tab"
+				<input type="text" id="cd_webmaster_main_tab_name" name="cd_webmaster_main_tab_name"
 				       class="regular-text"
-				       value="<?php echo $webmaster_custom_content_tab; ?>"/>
+				       value="<?php echo $webmaster_main_tab_name; ?>"/>
 			</td>
 		</tr>
 		<tr valign="top">
 			<th scope="row">
-				<label for="cd_webmaster_custom_content">Content</label>
+				<label for="cd_webmaster_main_tab_content">Content</label>
 			</th>
 			<td>
-				<?php wp_editor( $webmaster_custom_content, 'cd_webmaster_custom_content' ); ?>
+				<?php wp_editor( $webmaster_main_tab_content, 'cd_webmaster_main_tab_content' ); ?>
 			</td>
 		</tr>
 	</table>
@@ -103,4 +103,9 @@ function cd_core_settings_webmaster() {
 <?php
 }
 
-cd_content_block( 'Core Settings Webmaster', 'settings', 'webmaster', 'cd_core_settings_webmaster' );
+cd_content_block(
+	'Core Settings Webmaster',
+	'settings',
+	'webmaster',
+	'cd_core_settings_webmaster'
+);

@@ -19,8 +19,8 @@ function cd_register_settings() {
 	// Webmaster Tab
 	register_setting( 'cd_options_webmaster', 'cd_webmaster_name', 'sanitize_text_field' );
 	register_setting( 'cd_options_webmaster', 'cd_webmaster_enable' );
-	register_setting( 'cd_options_webmaster', 'cd_webmaster_custom_content_tab' );
-	register_setting( 'cd_options_webmaster', 'cd_webmaster_custom_content' );
+	register_setting( 'cd_options_webmaster', 'cd_webmaster_main_tab_name' );
+	register_setting( 'cd_options_webmaster', 'cd_webmaster_main_tab_content' );
 	register_setting( 'cd_options_webmaster', 'cd_webmaster_feed' );
 	register_setting( 'cd_options_webmaster', 'cd_webmaster_feed_url', 'esc_url' );
 	register_setting( 'cd_options_webmaster', 'cd_webmaster_feed_count' );

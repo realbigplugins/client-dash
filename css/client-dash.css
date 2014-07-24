@@ -3,36 +3,36 @@
 */
 
 .cd-icon {
-  -webkit-transition: color 0.3s;
-  -moz-transition: color 0.3s;
-  -o-transition: color 0.3s;
-  transition: color 0.3s;
+    -webkit-transition: color 0.3s;
+    -moz-transition: color 0.3s;
+    -o-transition: color 0.3s;
+    transition: color 0.3s;
 }
 
 .cd-dashboard-widget .cd-icon {
-  width: auto;
-  height: auto;
-  font-size: 260px;
+    width: auto;
+    height: auto;
+    font-size: 260px;
 }
 
 .cd-icon:before {
-  font-size: inherit !important;
+    font-size: inherit !important;
 }
 
 /* Style widgets */
 .cd .wp-menu-image:before, .cd-title-icon:before {
-  font: 100 55px/1 dashicons;
-  speak: none;
-  display: inline-block;
+    font: 100 55px/1 dashicons;
+    speak: none;
+    display: inline-block;
 }
 
 .postbox-container a.cd-dashboard-widget {
-  display: block;
-  text-align: center;
+    display: block;
+    text-align: center;
 }
 
 .postbox-container .cd-dashboard-widget .wp-menu-image:before {
-  font: 100 20em/1 dashicons;
+    font: 100 20em/1 dashicons;
 }
 
 #dashboard-widgets .postbox {
@@ -45,15 +45,19 @@
     box-sizing: border-box;
     min-height: 300px;
 }
+
 #dashboard-widgets .postbox .hndle {
     cursor: default !important;
 }
+
 #dashboard-widgets .postbox .handlediv {
     display: none !important;
 }
+
 #dashboard-widgets .postbox .inside {
     display: block !important;
 }
+
 #dashboard-widgets .postbox h3 {
     border-bottom: 1px solid #eee !important;
 }
@@ -63,196 +67,268 @@
         width: 100%;
     }
 }
+
 /*
 * Page ==========================================
 */
 
 .cd-title .cd-icon {
-  width: auto;
-  height: auto;
-  line-height: normal;
-  font-size: 50px;
-  vertical-align: middle;
-  margin-right: 5px;
+    width: auto;
+    height: auto;
+    line-height: normal;
+    font-size: 50px;
+    vertical-align: middle;
+    margin-right: 5px;
 }
 
 .cd-title .cd-title-text {
-  vertical-align: middle;
+    vertical-align: middle;
 }
 
 /*
 * Addons ========================================
 */
 .cd-addon {
-  background-color: rgba(255, 255, 255, 0.5);
-  text-align: center;
+    padding: 10px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.cd-addon-container {
+    background-color: #fff;
+    text-align: center;
+    padding: 10px;
 }
 
 .cd-addon a {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 .cd-addon span {
-  font-size: 130px;
-  height: auto;
-  width: auto;
+    font-size: 130px;
+    height: auto;
+    width: auto;
 }
 
 .cd-addon h4 {
-  margin: 0 0 20px;
+    margin: 0 0 20px;
 }
 
-@media screen and (max-width: 566px) {
-  .cd-addon {
-    width: 90%;
-  }
+@media screen and (max-width: 700px) {
+    .cd-addon {
+        width: 50% !important;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .cd-addon {
+        width: 100% !important;
+    }
 }
 
 /*
 * Icons page ========================================
 */
 #cd-dashicons-selections {
-  text-align: center;
+    text-align: center;
 }
 
 #cd-dashicons-selections .dashicons {
-  font-size: 70px;
-  height: auto;
-  width: auto;
-  margin: 10px 0;
+    font-size: 70px;
+    height: auto;
+    width: auto;
+    margin: 10px 0;
 }
 
 #cd-dashicons-selections .cd-dashicons-title {
-  margin: 0;
-  font-size: 150%;
+    margin: 0;
+    font-size: 150%;
 }
 
 .cd-dashicons-grid-item {
-  display: inline-block;
-  width: 25%;
-  text-align: center;
-  padding: 0 10px;
-  margin: 10px -4px 10px 0;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
+    display: inline-block;
+    width: 5%;
+    text-align: center;
+    padding: 0 10px;
+    margin: 10px -4px 10px 0;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .cd-dashicons-grid-item .container {
-  border: 1px solid #aaa;
-  border-radius: 3px;
-  padding: 10px 0;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    padding: 10px 0;
 }
 
 .cd-dashicons-grid-item .dashicons {
-  font-size: 50px !important;
-  height: auto;
-  width: auto;
+    font-size: 50px !important;
+    height: auto;
+    width: auto;
+}
+
+@media screen and (max-width: 1800px) {
+    .cd-dashicons-grid-item {
+        width: 10%;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .cd-dashicons-grid-item {
+        width: 16.6666%;
+    }
+}
+@media screen and (max-width: 600px) {
+    .cd-dashicons-grid-item {
+        width: 20%;
+    }
+}
+@media screen and (max-width: 450px) {
+    .cd-dashicons-grid-item {
+        width: 25%;
+    }
+}
+@media screen and (max-width: 375px) {
+    .cd-dashicons-grid-item {
+        width: 33.3333%;
+    }
 }
 
 /*
 * Roles ========================================
 */
 .cd-roles-grid-item {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.cd-roles-grid-item, .cd-roles-grid-item * {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .cd-roles-grid-page {
-  padding: 20px;
-  margin: 0;
-  border: 1px solid #ddd;
-  /*box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);*/
-  background: rgba(255, 255, 255, 0.4);
+    padding: 20px;
+    margin: 0;
+    border: 1px solid #ddd;
+    background: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
 }
+
 .cd-roles-grid-page:hover {
-  border-color: #ccc;
+    border-color: #bbb;
 }
 
 .cd-roles-grid-tab {
-  background: #fff;
-  margin: 0;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-top: none;
+    background: #fff;
+    margin: 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-top: none;
 }
 
 .cd-roles-grid-block {
-  border-color: rgba(0,0,0,0.3);
+    border-color: rgba(0, 0, 0, 0.3);
 }
 
 .cd-roles-grid-title {
-  font-size: 20px;
-  font-weight: bold;
-  margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+    cursor: pointer;
+}
+
+.cd-roles-grid-page > .cd-roles-grid-title:after {
+    content: "page";
+    margin-left: 10px;
+    font-size: 65%;
+    font-weight: normal;
+    vertical-align: text-bottom;
 }
 
 .cd-roles-grid-tab > .cd-roles-grid-title {
-  border-bottom: 2px dashed rgba(0,0,0,0.1);
-  font-size: 18px;
-  margin-bottom: 10px;
+    border-bottom: 2px dashed #ddd;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.cd-roles-grid-tab > .cd-roles-grid-title:after {
+    content: "tab";
+    margin-left: 10px;
+    font-size: 65%;
+    font-weight: normal;
+    vertical-align: text-bottom;
+}
+
+.cd-roles-grid-tab > .cd-roles-grid-title:hover {
+    border-color: #bbb;
 }
 
 .cd-roles-grid-block > .cd-roles-grid-title {
-  font-size: 16px;
-  font-weight: normal;
+    font-size: 16px;
+    font-weight: normal;
 }
 
 .cd-roles-grid-toggle {
-  float: right;
-  cursor: pointer;
+    float: right;
 }
-.cd-roles-grid-toggle:after {
-  content: "";
-  display: inline-block;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
 
-  -webkit-transition: all 200ms;
-  -moz-transition: all 200ms;
-  -ms-transition: all 200ms;
-  -o-transition: all 200ms;
-  transition: all 200ms;
+.cd-roles-grid-toggle:after {
+    content: "";
+    display: inline-block;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+
+    -webkit-transition: all 200ms;
+    -moz-transition: all 200ms;
+    -ms-transition: all 200ms;
+    -o-transition: all 200ms;
+    transition: all 200ms;
 }
-.cd-roles-grid-toggle.closed:after {
-  border-top: 15px solid rgba(0,0,0,0.2);
+
+.cd-roles-grid-toggle:after {
+    border-top: 15px solid rgba(0, 0, 0, 0.2);
 }
+
 .cd-roles-grid-toggle.open:after {
-  border-bottom: 15px solid rgba(0,0,0,0.2);
+    border-top: none;
+    border-bottom: 15px solid rgba(0, 0, 0, 0.2);
 }
 
 .cd-roles-grid-checkbox {
-  margin-right: 20px;
+    margin-right: 20px;
 }
-
 
 /*
 * Other ==========================================
 */
-.cd-caps {
-  color: #00f;
-}
 
 .cd-capitalize {
-  text-transform: capitalize;
+    text-transform: capitalize;
 }
 
 .cd-click {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .cd-col-four {
-  display: inline-block;
-  width: 25%;
-  margin-right: -4px !important;
+    display: inline-block;
+    width: 25%;
+    margin-right: -4px !important;
 }
 
 .cd-col-three {
-  display: inline-block;
-  width: 33.3333%;
-  margin-right: -4px !important;
+    display: inline-block;
+    width: 33.3333%;
+    margin-right: -4px !important;
 }
+
 .cd-col-two {
-  display: inline-block;
-  width: 50%;
-  margin-right: -4px;
+    display: inline-block;
+    width: 50%;
+    margin-right: -4px;
 }

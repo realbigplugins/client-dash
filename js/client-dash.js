@@ -19,15 +19,32 @@ function cd_updown(id) {
 /**
  * Hides/shows nearest div element.
  */
-function cd_updown_target(e_self, e_target, e_parent) {
-    // Toggle self
-    if(jQuery(e_self).hasClass('open'))
-        jQuery(e_self).addClass('closed').removeClass('open');
-    else
-        jQuery(e_self).addClass('open').removeClass('closed');
+function cd_toggle_roles_page(e_self) {
+    var e_target = jQuery(e_self).siblings('.cd-roles-grid-tab'),
+        e_toggle = jQuery(e_self).find('.cd-roles-grid-toggle'),
+        e_child_target = e_target.find('.cd-roles-grid-block'),
+        e_child_toggle = e_target.find('.cd-roles-grid-toggle');
+
+    // Toggle arrow up and down
+    e_toggle.toggleClass('open');
+
+    // Open/collapse target
+    e_target.toggleClass('hidden');
+
+    // Collapse children
+    e_child_toggle.removeClass('open');
+    e_child_target.addClass('hidden');
+}
+
+function cd_toggle_roles_tab(e_self) {
+    var e_target = jQuery(e_self).siblings('.cd-roles-grid-block'),
+        e_toggle = jQuery(e_self).find('.cd-roles-grid-toggle');
+
+    // Toggle
+    e_toggle.toggleClass('open');
 
     // Toggle target
-    jQuery(e_self).closest(e_parent).find(e_target).toggleClass('hidden');
+    e_target.toggleClass('hidden');
 }
 
 function cd_dashicons_selected(id) {

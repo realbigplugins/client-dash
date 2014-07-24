@@ -4,14 +4,13 @@
  * Outputs Webmaster page.
  */
 function cd_webmaster_page() {
-	global $cd_option_defaults;
+	global $cd_content_blocks;
 
-	// Modify accordingly for webmaster settings
-	add_filter( 'cd_tabs', 'cd_change_webmaster_custom_tab' );
-
+	// Normally the feed is disabled. Remove the feed content block
+	// unless this has been set to true in Settings
 	$enable_feed = get_option( 'cd_webmaster_feed', false );
 	if ( ! $enable_feed ) {
-		add_filter( 'cd_tabs', 'cd_remove_feed_tab' );
+		unset( $cd_content_blocks['webmaster']['feed'] );
 	}
 
 	?>
@@ -22,43 +21,4 @@ function cd_webmaster_page() {
 		?>
 	</div><!--.wrap-->
 <?php
-}
-
-/**
- * Changes the name of the custom webmaster tab.
- *
- * @param array $tabs All existing tabs
- *
- * @return array
- */
-function  cd_change_webmaster_custom_tab( $tabs ) {
-	global $cd_option_defaults;
-
-	// Get new tab name and set it
-	$webmaster_tab = get_option( 'cd_webmaster_custom_content_tab', $cd_option_defaults['webmaster_custom_content_tab'] );
-
-	// If tab has been re-named, set it accordingly
-	if ( $webmaster_tab != 'Main' && $webmaster_tab ) {
-		$tabs['webmaster'][ $webmaster_tab ] = $tabs['webmaster']['Main'];
-		unset( $tabs['webmaster']['Main'] );
-	}
-
-	// Reset feeds tab so it appears after
-	unset( $tabs['webmaster']['Feed'] );
-	$tabs['webmaster']['Feed'] = 'feed';
-
-	return $tabs;
-}
-
-/**
- * Removes "Feed" tab from webmaster page.
- *
- * @param array $tabs All existing tabs
- *
- * @return array
- */
-function cd_remove_feed_tab( $tabs ) {
-	unset( $tabs['webmaster']['Feed'] );
-
-	return $tabs;
 }

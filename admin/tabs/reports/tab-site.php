@@ -84,4 +84,9 @@ function cd_core_reports_site_tab() {
 <?php
 }
 
-cd_content_block( 'Core Reports Site', 'reports', 'site', 'cd_core_reports_site_tab' );
+cd_content_block(
+	'Core Reports Site',
+	'reports',
+	'site',
+	'cd_core_reports_site_tab'
+);

@@ -59,4 +59,9 @@ function cd_core_settings_general_tab() {
 <?php
 }
 
-cd_content_block( 'Core Settings General', 'settings', 'general', 'cd_core_settings_general_tab' );
+cd_content_block(
+	'Core Settings General',
+	'settings',
+	'general',
+	'cd_core_settings_general_tab'
+);

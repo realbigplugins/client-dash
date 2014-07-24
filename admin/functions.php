@@ -5,11 +5,13 @@
  *
  * @since Client Dash 1.4
  */
-function shapeSpace_screen_layout_columns($columns) {
+function shapeSpace_screen_layout_columns( $columns ) {
 	$columns['dashboard'] = 1;
+
 	return $columns;
 }
-add_filter('screen_layout_columns', 'shapeSpace_screen_layout_columns');
+
+add_filter( 'screen_layout_columns', 'shapeSpace_screen_layout_columns' );
 
 /**
  * Force dashboard widgets to one column.
@@ -19,7 +21,8 @@ add_filter('screen_layout_columns', 'shapeSpace_screen_layout_columns');
 function shapeSpace_screen_layout_dashboard() {
 	return 1;
 }
-add_filter('get_user_option_screen_layout_dashboard', 'shapeSpace_screen_layout_dashboard');
+
+add_filter( 'get_user_option_screen_layout_dashboard', 'shapeSpace_screen_layout_dashboard' );
 
 /**
  * Gets all of the active dashboard widgets.
@@ -174,23 +177,26 @@ function cd_unset_content_blocks() {
 
 	// Check against disabled roles
 	$cd_content_blocks_roles = get_option( 'cd_content_blocks_roles' );
-	$current_role = cd_get_user_role();
+	$current_role            = cd_get_user_role();
 
 	// Cycle through all and unset matching content blocks
-	if( ! empty( $cd_content_blocks_roles ) ) {
+	if ( ! empty( $cd_content_blocks_roles ) ) {
 		foreach ( $cd_content_blocks_roles as $role => $blocks ) {
-			if( $role != $current_role ) continue;
+			if ( $role != $current_role ) {
+				continue;
+			}
 
-			foreach( $blocks as $block => $info ) {
+			foreach ( $blocks as $block => $info ) {
 				foreach ( $info as $page => $tab ) {
 					// Remove the action as well
-					remove_action( 'cd_' . $page . '_' . $tab . '_tab', $cd_content_blocks[$page][$tab][$block]['callback'] );
+					remove_action( 'cd_' . $page . '_' . $tab . '_tab', $cd_content_blocks[ $page ][ $tab ][ $block ]['callback'] );
 
-					unset( $cd_content_blocks[$page][$tab][$block] );
+					unset( $cd_content_blocks[ $page ][ $tab ][ $block ] );
 
 					// If tab now empty, unset it
-					if( empty( $cd_content_blocks[$page][$tab] ) )
-						unset( $cd_content_blocks[$page][$tab] );
+					if ( empty( $cd_content_blocks[ $page ][ $tab ] ) ) {
+						unset( $cd_content_blocks[ $page ][ $tab ] );
+					}
 				}
 			}
 		}
@@ -232,7 +238,7 @@ function cd_get_color_scheme( $which_color ) {
 /**
  * Gets the size of a directory on the server.
  *
- * @author Predeep
+ * @since ClientDash 1.1
  *
  * @param $path
  *
@@ -305,7 +311,7 @@ function cd_get_user_role() {
 	global $current_user;
 
 	$user_roles = $current_user->roles;
-	$user_role = array_shift($user_roles);
+	$user_role  = array_shift( $user_roles );
 
 	return $user_role;
 }
@@ -340,12 +346,20 @@ function cd_activate_plugin( $plugin ) {
 /**
  * Displays a WordPress error nag.
  *
+ * The nag will only show if the current user has the capabilities that
+ * are defined by the second parameter. This defaults to allowing
+ * everybody to see the message.
+ *
  * @since Client Dash 1.4
  *
- * @param $message string The message to show.
+ * @param string $message The message to show.
+ * @param string $caps . Optional. A WordPress recognized capability. Default
+ * is 'read'.
  */
-function cd_error( $message ) {
-	echo '<div class="settings-error error"><p>' . $message . '</p></div>';
+function cd_error( $message, $caps = 'read' ) {
+	if ( current_user_can( $caps ) ) {
+		echo '<div class="settings-error error"><p>' . $message . '</p></div>';
+	}
 }
 
 /**
