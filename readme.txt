@@ -47,6 +47,12 @@ Using this plugin is very simple. All you have to do is:
 
 == Changelog ==
 
+= 1.4 =
+* Added Roles capability.
+* Overall cleanup of plugin visuals.
+* Added some new nags for specific users.
+* Added new "content block" system for added customization.
+
 = 1.3.2 =
 * Fixed php error on settings page for widgets.
 * Added `.cd-col-two` CSS class for two column layouts.
@@ -123,4 +129,5 @@ Using this plugin is very simple. All you have to do is:
 == Upgrade Notice ==
 
 = 1.3.1 =
-* PLEASE UPDATE IMMEDIATELY: Fixed issue with broken save button on Icons page.
+* Please update, as we have added some great new features..
+* Also extensions will not be compatible with versions prior to 1.4.

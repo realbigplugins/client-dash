@@ -33,6 +33,12 @@ Using this plugin is very simple. All you have to do is:
 
 ## Changelog
 
+### [1.4](https://github.com/brashrebel/client-dash/releases/tag/v1.4)
+* Added Roles capability.
+* Overall cleanup of plugin visuals.
+* Added some new nags for specific users.
+* Added new "content block" system for added customization.
+
 ### [1.3.2](https://github.com/brashrebel/client-dash/releases/tag/v1.3.2)
 * Fixed php error on settings page for widgets.
 
