@@ -22,8 +22,8 @@ function cd_core_settings_addons_tab() {
 			'url'           => 'http://wordpress.org/plugins/client-dash-wp-help-add-on/',
 			'install-url'   => '/wp-admin/plugin-install.php?tab=search&s=client+dash+wp+help+add+on&plugin-search-input=Search+Plugins',
 			'activate-slug' => 'client-dash-wp-help-add-on/client-dash-wp-help.php',
-			'installed'     => ( get_plugins( '/client-dash-wp-help-add-on' ) ? true : false ),
-			'active'        => ( is_plugin_active( 'client-dash-wp-help-add-on/client-dash-wp-help.php' ) ? true : false ),
+			'installed'     => ( get_plugins( '/client-dash-wp-help' ) ? true : false ),
+			'active'        => ( is_plugin_active( 'client-dash-wp-help/client-dash-wp-help.php' ) ? true : false ),
 			'icon'			=> 'editor-help'
 		),
 		'Client Dash Extension Boilerplate' => array(
