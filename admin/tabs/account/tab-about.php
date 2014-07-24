@@ -79,10 +79,4 @@ function cd_core_account_about_tab() {
 <?php
 }
 
-cd_content_block( 'Core Account Basic', 'account', 'About Us', 'cd_core_account_about_tab' );
-
-function test() {
-	echo 'stuff';
-}
-
-cd_content_block( 'Core Account Test', 'account', 'About Us', 'test' );
+cd_content_block( 'Core Account Basic', 'account', 'About You', 'cd_core_account_about_tab' );
