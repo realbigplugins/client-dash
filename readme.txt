@@ -4,7 +4,7 @@ Contributors: BrashRebel, joelworsham
 Tags: client, portal, dashboard, admin, users, webmaster
 Requires at least: 3.8.0
 Tested up to: 3.9.1
-Stable tag: 1.3.2
+Stable tag: 1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,10 +48,15 @@ Using this plugin is very simple. All you have to do is:
 == Changelog ==
 
 = 1.4 =
-* Added Roles capability.
+* Added Roles customization settings.
 * Overall cleanup of plugin visuals.
 * Added some new nags for specific users.
 * Added new "content block" system for added customization.
+* Added references to three exciting new extensions on the addons tab.
+* Created new Domain tab on Help page.
+* Added support for custom post types in lists on Reports - >Site.
+* Added link to view current role capabilities on Account - >About You.
+* Created some handy CSS classes.
 
 = 1.3.2 =
 * Fixed php error on settings page for widgets.
@@ -128,6 +133,6 @@ Using this plugin is very simple. All you have to do is:
 
 == Upgrade Notice ==
 
-= 1.3.1 =
+= 1.4 =
 * Please update, as we have added some great new features..
 * Also extensions will not be compatible with versions prior to 1.4.

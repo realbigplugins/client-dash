@@ -34,10 +34,15 @@ Using this plugin is very simple. All you have to do is:
 ## Changelog
 
 ### [1.4](https://github.com/brashrebel/client-dash/releases/tag/v1.4)
-* Added Roles capability.
+* Added Roles customization settings.
 * Overall cleanup of plugin visuals.
 * Added some new nags for specific users.
 * Added new "content block" system for added customization.
+* Added references to three exciting new extensions on the addons tab.
+* Created new Domain tab on Help page.
+* Added support for custom post types in lists on Reports - >Site.
+* Added link to view current role capabilities on Account - >About You.
+* Created some handy CSS classes.
 
 ### [1.3.2](https://github.com/brashrebel/client-dash/releases/tag/v1.3.2)
 * Fixed php error on settings page for widgets.
