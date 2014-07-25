@@ -1,0 +1,347 @@
+/*
+* Dashboard ==========================================
+*/
+
+.cd-icon {
+    -webkit-transition: color 0.3s;
+    -moz-transition: color 0.3s;
+    -o-transition: color 0.3s;
+    transition: color 0.3s;
+}
+
+.cd-dashboard-widget .cd-icon {
+    width: auto;
+    height: auto;
+    font-size: 260px;
+}
+
+.cd-icon:before {
+    font-size: inherit !important;
+}
+
+/* Style widgets */
+.cd .wp-menu-image:before, .cd-title-icon:before {
+    font: 100 55px/1 dashicons;
+    speak: none;
+    display: inline-block;
+}
+
+.postbox-container a.cd-dashboard-widget {
+    display: block;
+    text-align: center;
+}
+
+.postbox-container .cd-dashboard-widget .wp-menu-image:before {
+    font: 100 20em/1 dashicons;
+}
+
+#dashboard-widgets .postbox {
+    float: left;
+    width: 50%;
+    padding: 13px;
+    margin: 0;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    min-height: 300px;
+}
+
+#dashboard-widgets .postbox .hndle {
+    cursor: default !important;
+    font-size: 20px;
+    text-align: center;
+}
+
+#dashboard-widgets .postbox .handlediv {
+    display: none !important;
+}
+
+#dashboard-widgets .postbox .inside {
+    display: block !important;
+}
+
+#dashboard-widgets .postbox h3 {
+    border-bottom: 1px solid #eee !important;
+}
+
+@media screen and (max-width: 600px) {
+    #dashboard-widgets .postbox {
+        width: 100%;
+    }
+}
+
+/*
+* Page ==========================================
+*/
+
+.cd-title .cd-icon {
+    width: auto;
+    height: auto;
+    line-height: normal;
+    font-size: 50px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.cd-title .cd-title-text {
+    vertical-align: middle;
+}
+
+/*
+* Addons ========================================
+*/
+.cd-addon {
+    text-align: center;
+    padding: 10px;
+}
+
+.cd-addon-container {
+    background-color: #fff;
+    text-align: center;
+    padding: 10px;
+    min-height: 223px;
+}
+
+.cd-addon a {
+    text-decoration: none;
+}
+
+.cd-addon span {
+    font-size: 130px;
+    height: auto;
+    width: auto;
+}
+
+.cd-addon h4 {
+    margin: 0 0 20px;
+}
+
+@media screen and (max-width: 700px) {
+    .cd-addon {
+        width: 50% !important;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .cd-addon {
+        width: 100% !important;
+    }
+}
+
+/*
+* Icons page ========================================
+*/
+#cd-dashicons-selections {
+    text-align: center;
+}
+
+#cd-dashicons-selections .dashicons {
+    font-size: 70px;
+    height: auto;
+    width: auto;
+    margin: 10px 0;
+}
+
+#cd-dashicons-selections .cd-dashicons-title {
+    margin: 0;
+    font-size: 150%;
+}
+
+.cd-dashicons-grid-item {
+    display: inline-block;
+    width: 5%;
+    text-align: center;
+    padding: 0 10px;
+    margin: 10px -4px 10px 0;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.cd-dashicons-grid-item .container {
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    padding: 10px 0;
+}
+
+.cd-dashicons-grid-item .dashicons {
+    font-size: 50px !important;
+    height: auto;
+    width: auto;
+}
+
+@media screen and (max-width: 1800px) {
+    .cd-dashicons-grid-item {
+        width: 10%;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .cd-dashicons-grid-item {
+        width: 16.6666%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .cd-dashicons-grid-item {
+        width: 20%;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .cd-dashicons-grid-item {
+        width: 25%;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    .cd-dashicons-grid-item {
+        width: 33.3333%;
+    }
+}
+
+/*
+* Roles ========================================
+*/
+.cd-roles-grid-item {
+    margin-bottom: 10px;
+}
+
+.cd-roles-grid-item, .cd-roles-grid-item * {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.cd-roles-grid-page {
+    padding: 20px;
+    margin: 0;
+    border: 1px solid #ddd;
+    background: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+}
+
+.cd-roles-grid-page:hover {
+    border-color: #bbb;
+}
+
+.cd-roles-grid-tab {
+    background: #fff;
+    margin: 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-top: none;
+}
+
+.cd-roles-grid-block {
+    border-color: rgba(0, 0, 0, 0.3);
+}
+
+.cd-roles-grid-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+    cursor: pointer;
+}
+
+.cd-roles-grid-page > .cd-roles-grid-title:after {
+    content: "page";
+    margin-left: 10px;
+    font-size: 65%;
+    font-weight: normal;
+    vertical-align: text-bottom;
+}
+
+.cd-roles-grid-tab > .cd-roles-grid-title {
+    border-bottom: 2px dashed #ddd;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.cd-roles-grid-tab > .cd-roles-grid-title:after {
+    content: "tab";
+    margin-left: 10px;
+    font-size: 65%;
+    font-weight: normal;
+    vertical-align: text-bottom;
+}
+
+.cd-roles-grid-tab > .cd-roles-grid-title:hover {
+    border-color: #bbb;
+}
+
+.cd-roles-grid-block > .cd-roles-grid-title {
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.cd-roles-grid-toggle {
+    float: right;
+}
+
+.cd-roles-grid-toggle:after {
+    content: "";
+    display: inline-block;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+
+    -webkit-transition: all 200ms;
+    -moz-transition: all 200ms;
+    -ms-transition: all 200ms;
+    -o-transition: all 200ms;
+    transition: all 200ms;
+}
+
+.cd-roles-grid-toggle:after {
+    border-top: 15px solid rgba(0, 0, 0, 0.2);
+}
+
+.cd-roles-grid-toggle.open:after {
+    border-top: none;
+    border-bottom: 15px solid rgba(0, 0, 0, 0.2);
+}
+
+.cd-roles-grid-checkbox {
+    margin-right: 20px;
+}
+
+/*
+* Structuring ===================================
+*/
+
+[class^="cd-col-"], [class*=" cd-col-"] {
+    display: inline-block;
+    margin-right: -4px !important;
+    vertical-align: top;
+
+    /* Natural box layout */
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.cd-col-four {
+    width: 25%;
+}
+
+.cd-col-three {
+    width: 33.3333%;
+}
+
+.cd-col-two {
+    width: 50%;
+}
+
+/*
+* Other ==========================================
+*/
+
+.cd-capitalize {
+    text-transform: capitalize;
+}
+
+.cd-click {
+    cursor: pointer;
+}
