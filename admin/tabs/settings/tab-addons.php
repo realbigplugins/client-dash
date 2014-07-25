@@ -63,7 +63,7 @@ function cd_core_settings_addons_tab() {
 
 		echo '<div class="cd-addon cd-col-three">';
 		echo '<div class="cd-addon-container">';
-		echo '<a href="' . $props['url'] . '"><span class="dashicons dashicons-editor-help"></span>';
+		echo '<a href="' . $props['url'] . '"><span class="dashicons dashicons-' . $props['icon'] . '"></span>';
 		echo '<h4>' . $name . '</h4></a>';
 
 		if ( $props['active'] ) {
