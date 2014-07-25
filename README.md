@@ -35,6 +35,9 @@ Using this plugin is very simple. All you have to do is:
 
 ## Changelog
 
+## [1.4.1](https://github.com/brashrebel/client-dash/releases/tag/v1.4.1)
+* Fixed styling issue on Settings -> Addons.
+
 ### [1.4](https://github.com/brashrebel/client-dash/releases/tag/v1.4)
 * Added Roles customization settings.
 * Overall cleanup of plugin visuals.
