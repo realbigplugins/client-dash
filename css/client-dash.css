@@ -89,14 +89,15 @@
 * Addons ========================================
 */
 .cd-addon {
-  background-color: rgba(255, 255, 255, 0.5);
-  text-align: center;
+    text-align: center;
+    padding: 10px;
 }
 
 .cd-addon-container {
     background-color: #fff;
     text-align: center;
     padding: 10px;
+    min-height: 223px;
 }
 
 .cd-addon a {
@@ -178,16 +179,19 @@
         width: 16.6666%;
     }
 }
+
 @media screen and (max-width: 600px) {
     .cd-dashicons-grid-item {
         width: 20%;
     }
 }
+
 @media screen and (max-width: 450px) {
     .cd-dashicons-grid-item {
         width: 25%;
     }
 }
+
 @media screen and (max-width: 375px) {
     .cd-dashicons-grid-item {
         width: 33.3333%;
@@ -302,6 +306,33 @@
 }
 
 /*
+* Structuring ===================================
+*/
+
+[class^="cd-col-"], [class*=" cd-col-"] {
+    display: inline-block;
+    margin-right: -4px !important;
+    vertical-align: top;
+
+    /* Natural box layout */
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.cd-col-four {
+    width: 25%;
+}
+
+.cd-col-three {
+    width: 33.3333%;
+}
+
+.cd-col-two {
+    width: 50%;
+}
+
+/*
 * Other ==========================================
 */
 
@@ -311,22 +342,4 @@
 
 .cd-click {
     cursor: pointer;
-}
-
-.cd-col-four {
-    display: inline-block;
-    width: 25%;
-    margin-right: -4px !important;
-}
-
-.cd-col-three {
-    display: inline-block;
-    width: 33.3333%;
-    margin-right: -4px !important;
-}
-
-.cd-col-two {
-    display: inline-block;
-    width: 50%;
-    margin-right: -4px;
 }
