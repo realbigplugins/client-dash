@@ -30,7 +30,9 @@ class ClientDash_Widget_Help extends ClientDash {
 	public function add_widget() {
 		global $ClientDash;
 
-		if ( get_option( 'cd_hide_page_help' ) == "0" && ! empty( $ClientDash->content_blocks['help'] ) ) {
+		$disabled = get_option( 'cd_hide_page_help' );
+
+		if ( empty( $disabled ) && ! empty( $ClientDash->content_sections['help'] ) ) {
 			add_meta_box(
 				'cd-help',
 				'Help',

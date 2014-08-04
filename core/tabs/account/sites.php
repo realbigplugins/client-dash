@@ -3,7 +3,7 @@
 /**
  * Class ClientDash_Page_Account_Tab_Sites
  *
- * Adds the core content block for Account -> Sites.
+ * Adds the core content section for Account -> Sites.
  *
  * @package WordPress
  * @subpackage Client Dash
@@ -18,17 +18,17 @@ class ClientDash_Core_Page_Account_Tab_Sites extends ClientDash {
 	 */
 	function __construct() {
 		if ( is_multisite() ) {
-			$this->add_content_block(
-				'Core Account Sites',
-				'account',
-				'Sites',
-				array( $this, 'block_output' )
-			);
+			$this->add_content_section( array(
+				'name' => 'List of Sites',
+				'page' => 'Account',
+				'tab' => 'Sites',
+				'callback' => array( $this, 'block_output' )
+			));
 		}
 	}
 
 	/**
-	 * The content for the content block.
+	 * The content for the content section.
 	 *
 	 * @since Client Dash 1.4
 	 */

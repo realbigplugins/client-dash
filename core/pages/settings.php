@@ -29,11 +29,8 @@ class ClientDash_Page_Settings extends ClientDash {
 	 * @since Client Dash 1.2
 	 */
 	public function register_settings() {
-		// General Tab
-		register_setting( 'cd_options_general', 'cd_remove_which_widgets' );
-		register_setting( 'cd_options_general', 'cd_hide_page_account' );
-		register_setting( 'cd_options_general', 'cd_hide_page_reports' );
-		register_setting( 'cd_options_general', 'cd_hide_page_help' );
+		// Widgets Tab
+		register_setting( 'cd_options_widgets', 'cd_remove_which_widgets' );
 
 		// Icons Tab
 		register_setting( 'cd_options_icons', 'cd_dashicon_account' );
@@ -51,7 +48,11 @@ class ClientDash_Page_Settings extends ClientDash {
 		register_setting( 'cd_options_webmaster', 'cd_webmaster_feed_count' );
 
 		// Roles Tab
-		register_setting( 'cd_options_roles', 'cd_content_blocks_roles' );
+		register_setting( 'cd_options_display', 'cd_content_sections_roles' );
+		register_setting( 'cd_options_display', 'cd_hide_page_account' );
+		register_setting( 'cd_options_display', 'cd_hide_page_reports' );
+		register_setting( 'cd_options_display', 'cd_hide_page_help' );
+		register_setting( 'cd_options_display', 'cd_hide_page_webmaster' );
 
 		do_action( 'cd_register_settings' );
 	}
@@ -64,7 +65,7 @@ class ClientDash_Page_Settings extends ClientDash {
 	public function add_submenu_page() {
 		add_submenu_page(
 			'options-general.php',
-			'Settings Information',
+			'Client Dash Settings',
 			'Client Dash',
 			'publish_posts',
 			'cd_settings',
@@ -82,29 +83,28 @@ class ClientDash_Page_Settings extends ClientDash {
 		if ( ! current_user_can( 'activate_plugins' ) ) {
 			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 		}
+
+		// Get the current tab, if set
+		if ( isset( $_GET['tab'] ) ) {
+			$tab = $_GET['tab'];
+		} else {
+			$tab = 'display';
+		}
 		?>
 		<div class="wrap cd-settings">
 
 			<form method="post" action="options.php">
 				<?php
-				// Get the current tab, if set
-				if ( isset( $_GET['tab'] ) ) {
-					$tab = $_GET['tab'];
-				} else {
-					$tab = 'general';
-				}
-
 				// Prepare cd_settings
 				settings_fields( 'cd_options_' . $tab );
 
 				$this->the_page_title( 'settings' );
 				$this->create_tab_page();
 
-				// Can turn off submit button with this filter
+				// Can modify submit button with this filter
 				// EG: add_filter( 'cd_submit', '__return_false' );
-				if ( apply_filters( 'cd_submit', true ) ) {
-					submit_button();
-				}
+				$submit = '<input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">';
+				echo apply_filters( 'cd_submit', $submit );
 				?>
 			</form>
 		</div>

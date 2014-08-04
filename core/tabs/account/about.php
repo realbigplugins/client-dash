@@ -3,7 +3,7 @@
 /**
  * Class ClientDash_Page_Account_Tab_About
  *
- * Adds the core content block for Account -> About.
+ * Adds the core content section for Account -> About.
  *
  * @package WordPress
  * @subpackage Client Dash
@@ -17,16 +17,16 @@ class ClientDash_Core_Page_Account_Tab_About extends ClientDash {
 	 * @since Client Dash 1.5
 	 */
 	function __construct() {
-		$this->add_content_block(
-			'Core Account About',
-			'account',
-			'About You',
-			array( $this, 'block_output' )
-		);
+		$this->add_content_section( array(
+			'name' => 'Basic Information',
+			'page' => 'Account',
+			'tab' => 'About You',
+			'callback' => array( $this, 'block_output' )
+		));
 	}
 
 	/**
-	 * The content for the content block.
+	 * The content for the content section.
 	 *
 	 * @since Client Dash 1.4
 	 */

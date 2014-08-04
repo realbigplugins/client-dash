@@ -3,7 +3,7 @@
 /**
  * Class ClientDash_Page_Settings_Tab_Webmaster
  *
- * Adds the core content block for Settings -> Webmaster.
+ * Adds the core content section for Settings -> Webmaster.
  *
  * @package WordPress
  * @subpackage Client Dash
@@ -11,36 +11,38 @@
  * @since Client Dash 1.5
  */
 class ClientDash_Core_Page_Settings_Tab_Webmaster extends ClientDash {
+
 	/**
 	 * The main construct function.
 	 *
 	 * @since Client Dash 1.5
 	 */
 	function __construct() {
-		$this->add_content_block(
-			'Core Settings Webmaster',
-			'settings',
-			'Webmaster',
-			array( $this, 'block_output' )
-		);
+
+		$this->add_content_section( array(
+			'name'     => 'Core Settings Webmaster',
+			'page'     => 'Settings',
+			'tab'      => 'Webmaster',
+			'callback' => array( $this, 'block_output' )
+		) );
 	}
 
 	/**
-	 * The content for the content block.
+	 * The content for the content section.
 	 *
 	 * @since Client Dash 1.4
 	 */
 	public function block_output() {
-		global $cd_option_defaults;
+
+		global $ClientDash;
 
 		// Get the options
-		$webmaster_enable           = get_option( 'cd_webmaster_enable', $cd_option_defaults['webmaster_enable'] );
-		$webmaster_name             = get_option( 'cd_webmaster_name', $cd_option_defaults['webmaster_name'] );
+		$webmaster_name             = get_option( 'cd_webmaster_name', $ClientDash->option_defaults['webmaster_name'] );
 		$webmaster_main_tab_content = get_option( 'cd_webmaster_main_tab_content' );
-		$webmaster_main_tab_name    = get_option( 'cd_webmaster_main_tab_name', $cd_option_defaults['webmaster_main_tab_name'] );
-		$webmaster_feed             = get_option( 'cd_webmaster_feed', false );
+		$webmaster_main_tab_name    = get_option( 'cd_webmaster_main_tab_name', $ClientDash->option_defaults['webmaster_main_tab_name'] );
+		$webmaster_feed             = get_option( 'cd_webmaster_feed', $ClientDash->option_defaults['webmaster_feed'] );
 		$webmaster_feed_url         = get_option( 'cd_webmaster_feed_url', null );
-		$webmaster_feed_count       = get_option( 'cd_webmaster_feed_count', $cd_option_defaults['webmaster_feed_count'] );
+		$webmaster_feed_count       = get_option( 'cd_webmaster_feed_count', $ClientDash->option_defaults['webmaster_feed_count'] );
 
 		// If empty, delete
 		if ( ! $webmaster_name ) {
@@ -51,12 +53,18 @@ class ClientDash_Core_Page_Settings_Tab_Webmaster extends ClientDash {
 		<table class="form-table">
 			<tr valign="top">
 				<th scope="row">
-					<label for="cd_webmaster_enable">Show Webmaster Page</label>
+					<label for="cd_webmaster_enable">Webmaster Page Status</label>
 				</th>
 				<td>
-					<input type="hidden" name="cd_webmaster_enable" value="0"/>
-					<input type="checkbox" id="cd_webmaster_enable" name="cd_webmaster_enable"
-					       value="1" <?php checked( $webmaster_enable, '1' ); ?> />
+					<?php
+					if ( get_option( 'cd_hide_page_webmaster' ) ) {
+						echo '<span class="cd-webmaster-off">OFF</span>';
+					} else {
+						echo '<span class="cd-webmaster-on">ON</span>';
+					}
+					?>
+					This is turned on and off in the <a href="<?php echo $this->get_settings_url( 'display' ); ?>">Display
+						Tab</a>
 				</td>
 			</tr>
 			<tr valign="top">
@@ -87,7 +95,9 @@ class ClientDash_Core_Page_Settings_Tab_Webmaster extends ClientDash {
 					<label for="cd_webmaster_main_tab_content">Content</label>
 				</th>
 				<td>
-					<?php wp_editor( $webmaster_main_tab_content, 'cd_webmaster_main_tab_content' ); ?>
+					<div style="max-width:625px">
+						<?php wp_editor( $webmaster_main_tab_content, 'cd_webmaster_main_tab_content' ); ?>
+					</div>
 				</td>
 			</tr>
 		</table>
@@ -96,12 +106,14 @@ class ClientDash_Core_Page_Settings_Tab_Webmaster extends ClientDash {
 		<table class="form-table">
 			<tr valign="top">
 				<th scope="row">
-					<label for="cd_webmaster_feed">Show Blog Feed</label>
+					<label>Show Blog Feed</label>
 				</th>
 				<td>
-					<input type="hidden" name="cd_webmaster_feed" value="0"/>
-					<input type="checkbox" id="cd_webmaster_feed" name="cd_webmaster_feed"
-					       value="1" <?php checked( $webmaster_feed, '1' ); ?> />
+					<?php
+					echo '<span class="cd-toggle-switch ' . ( ! empty( $webmaster_feed ) ? 'on' : 'off' ) . '">';
+					echo '<input type="hidden" name="cd_webmaster_feed" value="1" ' . ( empty( $webmaster_feed ) ? 'disabled' : '' ) . '/>';
+					echo '</span>';
+					?>
 				</td>
 			</tr>
 			<tr valign="top">
@@ -109,7 +121,7 @@ class ClientDash_Core_Page_Settings_Tab_Webmaster extends ClientDash {
 					<label for="cd_webmaster_feed_url">Feed URL</label>
 				</th>
 				<td>
-					<input type="text" id="cd_webmaster_feed_url" name="cd_webmaster_feed_url" class="widefat"
+					<input type="text" id="cd_webmaster_feed_url" name="cd_webmaster_feed_url" class="regular-text"
 					       value="<?php echo $webmaster_feed_url; ?>"/>
 
 					<p class="description">This should be a link to the RSS feed you want to pull from.</p>

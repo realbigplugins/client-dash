@@ -30,10 +30,14 @@ class ClientDash_Widget_Webmaster extends ClientDash {
 	public function add_widget() {
 		global $ClientDash;
 
-		if ( get_option( 'cd_hide_page_webmaster' ) == "0" && ! empty( $ClientDash->content_blocks['webmaster'] ) ) {
+		$webmaster = get_option( 'cd_webmaster_name', $ClientDash->option_defaults['webmaster_name'] );
+
+		$disabled = get_option( 'cd_hide_page_webmaster' );
+
+		if ( empty( $disabled ) && ! empty( $ClientDash->content_sections['webmaster'] ) ) {
 			add_meta_box(
 				'cd-webmaster',
-				'Webmaster',
+				$webmaster,
 				array( $this, 'widget_content' ),
 				'dashboard',
 				'normal',

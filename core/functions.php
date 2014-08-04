@@ -13,6 +13,21 @@
 
 abstract class ClientDash_Functions {
 	/**
+	 * Outputs a helpful tip that can be closed.
+	 *
+	 * @since Client Dash 1.5
+	 *
+	 * @param string $content The content of the tip.
+	 * @param string $position The position of the tip. (left or right)
+	 * @param string $classes A string containing all the classes to add to the tip.
+	 *
+	 * @return string The tip.
+	 */
+	public function tip( $content, $position = 'left', $classes = null ) {
+		return "<span class='cd-tip cd-tip-hidden cd-tip-$position $classes'>$content<span class='cd-tip-close'>X</span></span>";
+	}
+
+	/**
 	 * Outputs the page title with Client Dash standards.
 	 *
 	 * @since Client Dash 1.2
@@ -20,10 +35,10 @@ abstract class ClientDash_Functions {
 	 * @param string $page The page we're on. Default 'account'.
 	 */
 	public function the_page_title( $page = 'account' ) {
-		global $cd_option_defaults;
+		global $ClientDash;
 
 		// Get the current dashicon
-		$dashicon = get_option( 'cd_dashicon_' . $page, $cd_option_defaults[ 'dashicon_' . $page ] );
+		$dashicon = get_option( 'cd_dashicon_' . $page, $ClientDash->option_defaults[ 'dashicon_' . $page ] );
 
 		echo '<h2 class="cd-title"><span class="dashicons ' . $dashicon . ' cd-icon"></span><span class="cd-title-text">' . get_admin_page_title() . '</span></h2>';
 	}
@@ -36,8 +51,9 @@ abstract class ClientDash_Functions {
 	public function create_tab_page() {
 		global $ClientDash;
 
-		// Declare static variable
+		// Initialize variables
 		$first_tab = '';
+		$first_section = '';
 
 		// Get the page for building url
 		$current_page = str_replace( 'cd_', '', $_GET['page'] );
@@ -49,29 +65,27 @@ abstract class ClientDash_Functions {
 			$active_tab = null;
 		}
 
+		// If a section is open, get it
+		if ( isset( $_GET['section'] ) ) {
+			$active_section = $_GET['section'];
+		} else {
+			$active_section = null;
+		}
+
 		// If no content on this page, show error and bail
-		if ( empty( $ClientDash->content_blocks[ $current_page ] ) ) {
+		if ( empty( $ClientDash->content_sections[ $current_page ] ) ) {
 			$this->error_nag( 'This page has no content' );
 
 			return;
 		}
-		?>
-		<h2 class="nav-tab-wrapper">
-			<?php
-			$i = 0;
-			foreach ( $ClientDash->content_blocks[ $current_page ] as $tab_ID => $block ) {
-				$i ++;
-
-				if ( empty( $ClientDash->content_blocks[ $current_page ][ $tab_ID ] ) ) {
-					continue;
-				}
+		// Cycle through all tabs and output the menu
+		echo '<h2 class="nav-tab-wrapper">';
+		$i = 0;
+			foreach ( $ClientDash->content_sections[ $current_page ] as $tab_ID => $block ) {
+				$i++;
 
 				// Translate the tab ID into the tab name
 				$tab_name = ucwords( str_replace( '_', ' ', $tab_ID ) );
-
-				if ( $i == 1 ) {
-					$first_tab = $tab_ID;
-				}
 
 				// If active tab, set class
 				if ( $active_tab == $tab_ID || ! $active_tab && $i == 1 ) {
@@ -80,87 +94,110 @@ abstract class ClientDash_Functions {
 					$active = '';
 				}
 
+				// Output the tab menu item
 				echo '<a href="?page=cd_' . $current_page . '&tab=' . $tab_ID . '" class="nav-tab ' . $active . '">' . $tab_name . '</a>';
 			}
 			?>
 		</h2>
 		<?php
 
-		/* Output Tab Content */
-
+		// If no active tab was set, take the first one
 		if ( ! $active_tab ) {
-			$active_tab = $first_tab;
+			reset( $ClientDash->content_sections[ $current_page ] );
+			$active_tab = key( $ClientDash->content_sections[ $current_page ] );
 		}
 
-		// Add content via actions
-		do_action( 'cd_' . $current_page . '_' . $active_tab . '_tab' );
+		// Cycle through all sections and output the menu
+		// Skip if total is only 1
+		$total = count( $ClientDash->content_sections[$current_page][$active_tab] );
+		if ( $total > 1 ) {
+			echo '<ul class="subsubsub cd-sections-menu">';
+
+			$i = 0;
+			foreach ( $ClientDash->content_sections[ $current_page ][ $active_tab ] as $section_ID => $props ) {
+				$i ++;
+
+				echo '<li>';
+
+				// If active section, set class
+				if ( $active_section == $section_ID || ! $active_section && $i == 1 ) {
+					$active = 'current';
+				} else {
+					$active = '';
+				}
+
+				// Add on a pipe if not the last item
+				$output_text = $props['name'] . ( $i < $total ? ' |' : '' );
+
+				// Output the section menu item
+				echo "<a href=\"?page=cd_$current_page&tab=$active_tab&section=$section_ID\" class=\"$active\">$output_text</a>";
+
+				echo '</li>';
+			}
+			echo '</ul>';
+		}
+
+		// If no active section was set, take the first one
+		if ( ! $active_section ) {
+			reset( $ClientDash->content_sections[ $current_page ][ $active_tab ] );
+			$active_section = key( $ClientDash->content_sections[ $current_page ][ $active_tab ] );
+		}
+
+		// Get our current section
+		$section_output = $ClientDash->content_sections[$current_page][$active_tab][$active_section];
+
+		// This calls the dynamic class and dynamic callback function
+		echo '<div class="cd-content-section">';
+		$section_output['callback'][0]->$section_output['callback'][1]();
+		echo '</div>';
 	}
 
 	/**
-	 * Creates content blocks.
+	 * Creates content sections.
 	 *
-	 * This function creates a content block for Client Dash. It can be set to
+	 * This function creates a content section for Client Dash. It can be set to
 	 * go into a specific tab in a specific tab.
 	 *
 	 * @since Client Dash 1.4
 	 *
-	 * @param string $name The name of the content block.
-	 * @param string $page On which page the content block should show.
-	 * @param string $tab On which tab the content block should show.
-	 * @param string $callback The callback function that contains the content.
-	 * @param int $priority The priority of the action hook.
+	 * @param array $args All of the arguments for the function.
 	 */
-	public function add_content_block( $name = null, $page = null, $tab = null, $callback = null, $priority = 10 ) {
+	public function add_content_section( $args ) {
 		global $ClientDash;
 
-		// Generate the content block ID
+		extract( $args );
+
+		// Set up defaults
+		if ( ! isset( $name ) ) {
+			$name = null;
+		}
+		if ( ! isset( $page ) ) {
+			$page = null;
+		}
+		if ( ! isset( $tab ) ) {
+			$tab = null;
+		}
+		if ( ! isset( $callback ) ) {
+			$callback = null;
+		}
+		if ( ! isset( $priority ) ) {
+			$priority = 10;
+		}
+
+		// Generate the content section ID
 		$ID = strtolower( str_replace( array( ' ', '-' ), '_', $name ) );
 
 		// Fix up the tab name (to allow spaces and such)
 		$tab = strtolower( str_replace( array( ' ', '-' ), '_', $tab ) );
 
-		$ClientDash->content_blocks[ $page ][ $tab ][ $ID ] = array(
+		// Fix up the page name (to allow spaces and such)
+		$page = strtolower( str_replace( array( ' ', '-' ), '_', $page ) );
+
+		$ClientDash->content_sections[ $page ][ $tab ][ $ID ] = array(
 			'name'     => $name,
-			'callback' => $callback
+			'callback' => $callback,
+			'priority' => $priority
 		);
-
-		add_action( 'cd_' . $page . '_' . $tab . '_tab', $callback, $priority );
-	}
-
-	/**
-	 * Unsets any content blocks that are disabled for current role.
-	 *
-	 * @since Client Dash 1.4
-	 */
-	public static function unset_content_blocks() {
-		global $cd_content_blocks;
-
-		// Check against disabled roles
-		$cd_content_blocks_roles = get_option( 'cd_content_blocks_roles' );
-		$current_role            = cd_get_user_role();
-
-		// Cycle through all and unset matching content blocks
-		if ( ! empty( $cd_content_blocks_roles ) ) {
-			foreach ( $cd_content_blocks_roles as $role => $blocks ) {
-				if ( $role != $current_role ) {
-					continue;
-				}
-
-				foreach ( $blocks as $block => $info ) {
-					foreach ( $info as $page => $tab ) {
-						// Remove the action as well
-						remove_action( 'cd_' . $page . '_' . $tab . '_tab', $ClientDash->content_blocks[ $page ][ $tab ][ $block ]['callback'] );
-
-						unset( $ClientDash->content_blocks[ $page ][ $tab ][ $block ] );
-
-						// If tab now empty, unset it
-						if ( empty( $ClientDash->content_blocks[ $page ][ $tab ] ) ) {
-							unset( $ClientDash->content_blocks[ $page ][ $tab ] );
-						}
-					}
-				}
-			}
-		}
 	}
 
 	/**
@@ -330,8 +367,8 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string
 	 */
-	public function get_settings_url() {
-		return get_admin_url() . 'options-general.php?page=cd_settings';
+	public function get_settings_url( $tab = null, $section = null ) {
+		return get_admin_url() . 'options-general.php?page=cd_settings' . ( $tab ? "&tab=$tab" : '') . ( $section ? "&section=$section" : '');
 	}
 
 	/**
@@ -341,8 +378,8 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string
 	 */
-	public function get_account_url() {
-		return get_admin_url() . 'index.php?page=cd_account';
+	public function get_account_url( $tab = null, $section = null ) {
+		return get_admin_url() . 'index.php?page=cd_account' . ( $tab ? "&tab=$tab" : '') . ( $section ? "&section=$section" : '');
 	}
 
 	/**
@@ -352,8 +389,8 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string
 	 */
-	public function get_help_url() {
-		return get_admin_url() . 'index.php?page=cd_help';
+	public function get_help_url( $tab = null, $section = null ) {
+		return get_admin_url() . 'index.php?page=cd_help' . ( $tab ? "&tab=$tab" : '') . ( $section ? "&section=$section" : '');
 	}
 
 	/**
@@ -363,8 +400,8 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string
 	 */
-	public function get_reports_url() {
-		return get_admin_url() . 'index.php?page=cd_reports';
+	public function get_reports_url( $tab = null, $section = null ) {
+		return get_admin_url() . 'index.php?page=cd_reports' . ( $tab ? "&tab=$tab" : '') . ( $section ? "&section=$section" : '');
 	}
 
 	/**
@@ -374,8 +411,8 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string
 	 */
-	public function get_webmaster_url() {
-		return get_admin_url() . 'index.php?page=cd_webmaster';
+	public function get_webmaster_url( $tab = null, $section = null ) {
+		return get_admin_url() . 'index.php?page=cd_webmaster' . ( $tab ? "&tab=$tab" : '') . ( $section ? "&section=$section" : '');
 	}
 
 	/**

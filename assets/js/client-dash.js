@@ -1,6 +1,23 @@
 // On ready functions
-jQuery(function() {
+jQuery(function () {
     cd_disable_drag();
+
+    jQuery('.cd-toggle-switch').click(function (e) {
+        e.stopPropagation();
+        cd_toggle_switch(jQuery(this));
+    });
+
+    jQuery('.cd-tip-close').click(function (e) {
+        e.stopPropagation();
+        cd_close_tip(jQuery(this));
+    });
+
+    cd_tips_stop_propogation();
+});
+
+// On load functions
+jQuery(window).load(function(){
+    setTimeout( cd_show_tips, 1000 );
 });
 
 /**
@@ -124,8 +141,67 @@ function cd_disable_drag() {
     var dash_widgets = jQuery('#dashboard-widgets');
 
     // Only use on dashboard
-    if ( ! dash_widgets.length ) return;
+    if (!dash_widgets.length) return;
 
     // Disable being able to drag widgets
-    dash_widgets.find('.meta-box-sortables').sortable({disabled:true});
+    dash_widgets.find('.meta-box-sortables').sortable({disabled: true});
+}
+
+/**
+ * Toggles the on/off switches on the Roles page.
+ *
+ * @since Client Dash 1.5
+ *
+ * @param e The supplied object.
+ */
+function cd_toggle_switch(e) {
+    e.toggleClass('on').toggleClass('off');
+
+    var toggle;
+
+    if (e.attr('data-inverse')) {
+        if(e.hasClass('on')) {
+            e.find('input').prop('disabled', true);
+        } else {
+            e.find('input').prop('disabled', false);
+        }
+    } else {
+        if(e.hasClass('on')) {
+            e.find('input').prop('disabled', false);
+        } else {
+            e.find('input').prop('disabled', true);
+        }
+    }
+}
+/**
+ * Cycles through all tips and shows them on page load.
+ *
+ * @since Client Dash 1.5
+ */
+function cd_show_tips() {
+    jQuery('.cd-tip').each(function(){
+        jQuery(this).removeClass('cd-tip-hidden');
+    });
+}
+
+/**
+ * Closes the help tip.
+ *
+ * @since Client Dash 1.5
+ *
+ * @param e The supplied object.
+ */
+function cd_close_tip(e) {
+    e.closest('.cd-tip').addClass('cd-tip-hidden');
+}
+
+/**
+ * Make sure clicking on items inside tops don't propogate up the DOM tree.
+ *
+ * @since Client Dash 1.5
+ */
+function cd_tips_stop_propogation() {
+    jQuery('.cd-tip *').click(function(e){
+        e.stopPropagation();
+    });
 }

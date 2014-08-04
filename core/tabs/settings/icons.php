@@ -3,7 +3,7 @@
 /**
  * Class ClientDash_Page_Settings_Tab_Icons
  *
- * Adds the core content block for Settings -> Icons.
+ * Adds the core content section for Settings -> Icons.
  *
  * @package WordPress
  * @subpackage Client Dash
@@ -17,26 +17,24 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 	 * @since Client Dash 1.5
 	 */
 	function __construct() {
-		$this->add_content_block(
-			'Core Settings Icons',
-			'settings',
-			'Icons',
-			array( $this, 'block_output' )
-		);
+		$this->add_content_section( array(
+			'name' => 'Core Settings Icons',
+			'page' => 'Settings',
+			'tab' => 'Icons',
+			'callback' => array( $this, 'block_output' )
+		));
 	}
 
 	/**
-	 * The content for the content block.
+	 * The content for the content section.
 	 *
 	 * @since Client Dash 1.4
 	 */
 	public function block_output() {
-		global $cd_option_defaults;
-
-		$account_dashicon   = get_option( 'cd_dashicon_account', $cd_option_defaults['dashicon_account'] );
-		$reports_dashicon   = get_option( 'cd_dashicon_reports', $cd_option_defaults['dashicon_reports'] );
-		$help_dashicon      = get_option( 'cd_dashicon_help', $cd_option_defaults['dashicon_help'] );
-		$webmaster_dashicon = get_option( 'cd_dashicon_webmaster', $cd_option_defaults['dashicon_webmaster'] );
+		$account_dashicon   = get_option( 'cd_dashicon_account', $this->option_defaults['dashicon_account'] );
+		$reports_dashicon   = get_option( 'cd_dashicon_reports', $this->option_defaults['dashicon_reports'] );
+		$help_dashicon      = get_option( 'cd_dashicon_help', $this->option_defaults['dashicon_help'] );
+		$webmaster_dashicon = get_option( 'cd_dashicon_webmaster', $this->option_defaults['dashicon_webmaster'] );
 
 		// Set existing dashicons
 		$dashicons = array(
@@ -287,7 +285,7 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 					   data-widget="webmaster"></p>
 
 					<p class="cd-dashicons-title">
-						<?php echo get_option( 'cd_webmaster_name', $cd_option_defaults['webmaster_name'] ); ?>
+						<?php echo get_option( 'cd_webmaster_name', $this->option_defaults['webmaster_name'] ); ?>
 					</p>
 				</div>
 			<?php endif; ?>

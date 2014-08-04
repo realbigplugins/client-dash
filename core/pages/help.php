@@ -28,9 +28,9 @@ class ClientDash_Page_Help extends ClientDash {
 	public function add_submenu_page() {
 		global $ClientDash;
 
-		// Check to make sure there is a content block set, there aren't any filters disabling
+		// Check to make sure there is a content section set, there aren't any filters disabling
 		// the page, and the page isn't disabled in Settings
-		if ( ! empty( $ClientDash->content_blocks['help'] )
+		if ( ! empty( $ClientDash->content_sections['help'] )
 		     && apply_filters( 'cd_show_help_page', true )
 		     && ! get_option( 'cd_hide_page_help' )
 		) {

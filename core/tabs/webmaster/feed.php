@@ -3,7 +3,7 @@
 /**
  * Class ClientDash_Page_Webmaster_Tab_Feed
  *
- * Adds the core content block for Webmaster -> Feed.
+ * Adds the core content section for Webmaster -> Feed.
  *
  * @package WordPress
  * @subpackage Client Dash
@@ -17,34 +17,35 @@ class ClientDash_Core_Page_Webmaster_Tab_Feed extends ClientDash {
 	 * @since Client Dash 1.5
 	 */
 	function __construct() {
-		$this->add_content_block(
-			'Core Webmaster Feed',
-			'webmaster',
-			'Feed',
-			array( $this, 'block_output' )
-		);
+		// Only show if enabled
+		if ( get_option( 'cd_webmaster_feed', $this->option_defaults['webmaster_feed'] ) ) {
+			$this->add_content_section( array(
+				'name'     => 'Feed',
+				'page'     => 'Webmaster',
+				'tab'      => 'Feed',
+				'callback' => array( $this, 'block_output' )
+			) );
+		}
 	}
 
 	/**
-	 * The content for the content block.
+	 * The content for the content section.
 	 *
 	 * @since Client Dash 1.4
 	 */
 	public function block_output() {
-		global $cd_option_defaults;
-
 		// Get the feed options
 		$feed_url = get_option( 'cd_webmaster_feed_url', null );
 
 		// Check if url exists
 		if ( empty( $feed_url ) ) {
-			$this->error_nag( 'ISSUE: Feed URL must be supplied to use this tab.', 'manage_options' );
+			$this->error_nag( 'Please set feed url under Client Dash <a href="' . $this->get_settings_url( 'webmaster' ) . '">settings</a>.', 'manage_options' );
 			$this->error_nag( 'The feed tab has not yet been set up. If you believe this to be an error, please contact your system administrator' );
 
 			return;
 		}
 
-		$feed_count = get_option( 'cd_webmaster_feed_count', $cd_option_defaults['webmaster_feed_count'] );
+		$feed_count = get_option( 'cd_webmaster_feed_count', $this->option_defaults['webmaster_feed_count'] );
 
 		// Get the feed items
 		$feed = fetch_feed( $feed_url );

@@ -3,7 +3,7 @@
 /**
  * Class ClientDash_Page_Reports_Tab_Site
  *
- * Adds the core content block for Reports -> Site.
+ * Adds the core content section for Reports -> Site.
  *
  * @package WordPress
  * @subpackage Client Dash
@@ -17,16 +17,16 @@ class ClientDash_Core_Page_Reports_Tab_Site extends ClientDash {
 	 * @since Client Dash 1.5
 	 */
 	function __construct() {
-		$this->add_content_block(
-			'Core Reports Site',
-			'reports',
-			'Site',
-			array( $this, 'block_output' )
-		);
+		$this->add_content_section( array(
+			'name' => 'Basic Information',
+			'page' => 'Reports',
+			'tab' => 'Site',
+			'callback' => array( $this, 'block_output' )
+		));
 	}
 
 	/**
-	 * The content for the content block.
+	 * The content for the content section.
 	 *
 	 * @since Client Dash 1.4
 	 */

@@ -18,15 +18,16 @@ class ClientDash_Page_Webmaster extends ClientDash {
 	public function add_submenu_page() {
 		global $ClientDash;
 
+		$webmaster = get_option( 'cd_webmaster_name', $ClientDash->option_defaults['webmaster_name'] );
+
 		if ( apply_filters( 'cd_show_webmaster_page', true )
 		     && ! get_option( 'cd_hide_page_webmaster' )
-		     && get_option( 'cd_webmaster_enable', false ) == '1'
-		     && ! empty( $ClientDash->content_blocks['webmaster'] )
+		     && ! empty( $ClientDash->content_sections['webmaster'] )
 		) {
 			add_submenu_page(
 				'index.php',
-				'Webmaster Information',
-				'Webmaster',
+				$webmaster,
+				$webmaster,
 				'publish_posts',
 				'cd_webmaster',
 				array( $this, 'page_output' )

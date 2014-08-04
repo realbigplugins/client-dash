@@ -30,7 +30,9 @@ class ClientDash_Widget_Account extends ClientDash {
 	public function add_widget() {
 		global $ClientDash;
 
-		if ( get_option( 'cd_hide_page_account' ) == "0" && ! empty( $ClientDash->content_blocks['account'] ) ) {
+		$disabled = get_option( 'cd_hide_page_account' );
+
+		if ( empty( $disabled ) && ! empty( $ClientDash->content_sections['account'] ) ) {
 			add_meta_box(
 				'cd-account',
 				'Account',

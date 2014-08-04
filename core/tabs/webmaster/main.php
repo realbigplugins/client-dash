@@ -3,7 +3,7 @@
 /**
  * Class ClientDash_Page_Webmaster_Tab_Main
  *
- * Adds the core content block for Webmaster -> Main.
+ * Adds the core content section for Webmaster -> Main.
  *
  * @package WordPress
  * @subpackage Client Dash
@@ -25,16 +25,16 @@ class ClientDash_Core_Page_Webmaster_Tab_Main extends ClientDash {
 			$tab_name = $this->option_defaults['webmaster_main_tab_name'];
 		}
 
-		$this->add_content_block(
-			'Core Webmaster Main',
-			'webmaster',
-			$tab_name,
-			array( $this, 'block_output' )
-		);
+		$this->add_content_section( array(
+			'name' => 'Main',
+			'page' => 'Webmaster',
+			'tab' => $tab_name,
+			'callback' => array( $this, 'block_output' )
+		));
 	}
 
 	/**
-	 * The content for the content block.
+	 * The content for the content section.
 	 *
 	 * @since Client Dash 1.4
 	 */
@@ -45,7 +45,7 @@ class ClientDash_Core_Page_Webmaster_Tab_Main extends ClientDash {
 		if ( ! empty( $content ) ) {
 			echo $content;
 		} else {
-			$this->error_nag( 'Please set content under Client Dash <a href="/wp-admin/options-general.php?page=cd_settings&tab=webmaster">settings</a>.', 'manage_options' );
+			$this->error_nag( 'Please set content under Client Dash <a href="' . $this->get_settings_url( 'webmaster' ) . '">settings</a>.', 'manage_options' );
 			$this->error_nag( 'This tab has no content. If you believe this to be an error, please contact your system administrator.' );
 		}
 	}

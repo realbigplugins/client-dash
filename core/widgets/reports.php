@@ -30,7 +30,9 @@ class ClientDash_Widget_Reports extends ClientDash {
 	public function add_widget() {
 		global $ClientDash;
 
-		if ( get_option( 'cd_hide_page_reports' ) == "0" && ! empty( $ClientDash->content_blocks['reports'] ) ) {
+		$disabled = get_option( 'cd_hide_page_reports' );
+
+		if ( empty( $disabled ) && ! empty( $ClientDash->content_sections['reports'] ) ) {
 			add_meta_box(
 				'cd-reports',
 				'Reports',

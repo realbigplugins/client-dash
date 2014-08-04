@@ -3,7 +3,7 @@
 /**
  * Class ClientDash_Page_Settings_Tab_Addons
  *
- * Adds the core content block for Settings -> Addons.
+ * Adds the core content section for Settings -> Addons.
  *
  * @package WordPress
  * @subpackage Client Dash
@@ -17,16 +17,16 @@ class ClientDash_Core_Page_Settings_Tab_Addons extends ClientDash {
 	 * @since Client Dash 1.5
 	 */
 	function __construct() {
-		$this->add_content_block(
-			'Core Settings Addons',
-			'settings',
-			'Addons',
-			array( $this, 'block_output' )
-		);
+		$this->add_content_section( array(
+			'name' => 'Core Settings Addons',
+			'page' => 'Settings',
+			'tab' => 'Addons',
+			'callback' => array( $this, 'block_output' )
+		));
 	}
 
 	/**
-	 * The content for the content block.
+	 * The content for the content section.
 	 *
 	 * @since Client Dash 1.4
 	 */

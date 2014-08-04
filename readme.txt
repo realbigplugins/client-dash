@@ -47,11 +47,21 @@ Using this plugin is very simple. All you have to do is:
 
 == Changelog ==
 
+= 1.5 =
+* Added defaults to Roles settings.
+* Reversed checkbox logic for Roles settings.
+* Added ability to strip out any dashboard widget settings that may be set.
+* Added cd-tips.
+* Added toggle switches for disabling entire pages within the Roles settings.
+* Renamed "Roles" tab in "Settings" to "Display".
+* Changed content "block" system to a content "section" system and separated them out with menus under the tabs.
+* Improved some setting visuals.
+
 = 1.4 =
 * Added Roles customization settings.
 * Overall cleanup of plugin visuals.
 * Added some new nags for specific users.
-* Added new "content block" system for added customization.
+* Added new "content section" system for added customization.
 * Added references to three exciting new extensions on the addons tab.
 * Created new Domain tab on Help page.
 * Added support for custom post types in lists on Reports - >Site.
