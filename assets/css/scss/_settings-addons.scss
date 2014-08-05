@@ -1,0 +1,37 @@
+.cd-addon {
+  text-align: center;
+  padding: 10px;
+}
+
+.cd-addon-container {
+  background-color: #fff;
+  text-align: center;
+  padding: 10px;
+  min-height: 223px;
+}
+
+.cd-addon a {
+  text-decoration: none;
+}
+
+.cd-addon span {
+  font-size: 130px;
+  height: auto;
+  width: auto;
+}
+
+.cd-addon h4 {
+  margin: 0 0 20px;
+}
+
+@media screen and (max-width: 700px) {
+  .cd-addon {
+    width: 50% !important;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .cd-addon {
+    width: 100% !important;
+  }
+}

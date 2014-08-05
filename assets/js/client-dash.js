@@ -16,8 +16,8 @@ jQuery(function () {
 });
 
 // On load functions
-jQuery(window).load(function(){
-    setTimeout( cd_show_tips, 1000 );
+jQuery(window).load(function () {
+    setTimeout(cd_show_tips, 1000);
 });
 
 /**
@@ -44,9 +44,9 @@ function cd_updown(id) {
  */
 function cd_toggle_roles_page(e_self) {
     var e_target = jQuery(e_self).siblings('.cd-roles-grid-tab'),
-        e_toggle = jQuery(e_self).find('.cd-roles-grid-toggle'),
+        e_toggle = jQuery(e_self).find('.cd-up-down'),
         e_child_target = e_target.find('.cd-roles-grid-block'),
-        e_child_toggle = e_target.find('.cd-roles-grid-toggle');
+        e_child_toggle = e_target.find('.cd-up-down');
 
     // Toggle arrow up and down
     e_toggle.toggleClass('open');
@@ -68,7 +68,7 @@ function cd_toggle_roles_page(e_self) {
  */
 function cd_toggle_roles_tab(e_self) {
     var e_target = jQuery(e_self).siblings('.cd-roles-grid-block'),
-        e_toggle = jQuery(e_self).find('.cd-roles-grid-toggle');
+        e_toggle = jQuery(e_self).find('.cd-up-down');
 
     // Toggle
     e_toggle.toggleClass('open');
@@ -160,13 +160,13 @@ function cd_toggle_switch(e) {
     var toggle;
 
     if (e.attr('data-inverse')) {
-        if(e.hasClass('on')) {
+        if (e.hasClass('on')) {
             e.find('input').prop('disabled', true);
         } else {
             e.find('input').prop('disabled', false);
         }
     } else {
-        if(e.hasClass('on')) {
+        if (e.hasClass('on')) {
             e.find('input').prop('disabled', false);
         } else {
             e.find('input').prop('disabled', true);
@@ -179,7 +179,7 @@ function cd_toggle_switch(e) {
  * @since Client Dash 1.5
  */
 function cd_show_tips() {
-    jQuery('.cd-tip').each(function(){
+    jQuery('.cd-tip').each(function () {
         jQuery(this).removeClass('cd-tip-hidden');
     });
 }
@@ -201,7 +201,7 @@ function cd_close_tip(e) {
  * @since Client Dash 1.5
  */
 function cd_tips_stop_propogation() {
-    jQuery('.cd-tip *').click(function(e){
+    jQuery('.cd-tip *').click(function (e) {
         e.stopPropagation();
     });
 }

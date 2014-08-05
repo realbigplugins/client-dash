@@ -18,30 +18,11 @@ class ClientDash_Widget_Help extends ClientDash {
 	 * @since Client Dash 1.5
 	 */
 	public function __construct() {
-		// Adds the widget to the dashboard
-		add_action( 'wp_dashboard_setup', array( $this, 'add_widget' ) );
-	}
-
-	/**
-	 * Adds the widget to the dashboard.
-	 *
-	 * @since Client Dash 1.2
-	 */
-	public function add_widget() {
-		global $ClientDash;
-
-		$disabled = get_option( 'cd_hide_page_help' );
-
-		if ( empty( $disabled ) && ! empty( $ClientDash->content_sections['help'] ) ) {
-			add_meta_box(
-				'cd-help',
-				'Help',
-				array( $this, 'widget_content' ),
-				'dashboard',
-				'normal',
-				'core'
-			);
-		}
+		$this->add_widget( array(
+			'title'    => 'Help',
+			'description' => 'The core Help widget',
+			'callback' => array( $this, 'widget_content' )
+		) );
 	}
 
 	/**

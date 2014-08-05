@@ -31,28 +31,32 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	 * @since Client Dash 1.4
 	 */
 	public function block_output() {
-		// Get options
-		$active_widgets          = get_option( 'cd_active_widgets', null );
+		global $ClientDash;
 		?>
+		<div id="cd-dash-widgets-left">
+			<h3>Available Dashboard Widgets</h3>
+			<p class="description">
+				To activate a dashboard widget, simply drag it into the dashboard area. To delete, click on the "X".
+			</p>
 
-		<table class="form-table">
-			<tr valign="top">
-				<th scope="row">
-					<label for="cd_remove_which_widgets">Widgets to not Remove</label>
-				</th>
-				<td>
-					<?php
-					if ( ! empty( $active_widgets ) ) {
-						foreach ( $active_widgets as $widget => $values ) {
-							echo '<input type="checkbox" name="cd_remove_which_widgets[' . $widget . ']" id="cd_remove_which_widgets' . $widget . '" value="' . $widget . '" ' . ( isset( $cd_remove_which_widgets[ $widget ] ) ? 'checked' : '' ) . '/><label for="cd_remove_which_widgets' . $widget . '">' . $values['title'] . '</label><br/>';
-						}
-					} else {
-						cd_error( 'Please visit the <a href="/wp-admin/index.php">dashboard</a> once for "Widgets to not Remove" settings to appear.' );
-					}
-					?>
-				</td>
-			</tr>
-		</table>
+			<ul class="cd-dash-widgets-container">
+				<?php foreach( $ClientDash->widgets as $widget ) { ?>
+					<li class="cd-dash-widget">
+						<h4 class="cd-dash-widget-title ui-draggable"><?php echo $widget['title']; ?></h4>
+						<p><?php echo $widget['description']; ?></p>
+					</li>
+				<?php } ?>
+			</ul>
+		</div>
+
+		<div id="cd-dash-widgets-right">
+			<h3>Dashboard</h3>
+
+			<ul id="cd-dash-widgets-droppable" class="cd-dash-widgets-container">
+			</ul>
+		</div>
+
+		<div class="clear"></div>
 	<?php
 	}
 }

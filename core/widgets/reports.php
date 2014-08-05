@@ -18,30 +18,11 @@ class ClientDash_Widget_Reports extends ClientDash {
 	 * @since Client Dash 1.5
 	 */
 	public function __construct() {
-		// Adds the widget to the dashboard
-		add_action( 'wp_dashboard_setup', array( $this, 'add_widget' ) );
-	}
-
-	/**
-	 * Adds the widget to the dashboard.
-	 *
-	 * @since Client Dash 1.2
-	 */
-	public function add_widget() {
-		global $ClientDash;
-
-		$disabled = get_option( 'cd_hide_page_reports' );
-
-		if ( empty( $disabled ) && ! empty( $ClientDash->content_sections['reports'] ) ) {
-			add_meta_box(
-				'cd-reports',
-				'Reports',
-				array( $this, 'widget_content' ),
-				'dashboard',
-				'normal',
-				'core'
-			);
-		}
+		$this->add_widget( array(
+			'title'    => 'Reports',
+			'description' => 'The core Reports widget',
+			'callback' => array( $this, 'widget_content' )
+		) );
 	}
 
 	/**

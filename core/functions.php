@@ -51,10 +51,6 @@ abstract class ClientDash_Functions {
 	public function create_tab_page() {
 		global $ClientDash;
 
-		// Initialize variables
-		$first_tab = '';
-		$first_section = '';
-
 		// Get the page for building url
 		$current_page = str_replace( 'cd_', '', $_GET['page'] );
 
@@ -198,6 +194,39 @@ abstract class ClientDash_Functions {
 			'callback' => $callback,
 			'priority' => $priority
 		);
+	}
+
+	public function add_widget( $args ) {
+		global $ClientDash;
+
+		extract( $args );
+
+		// Set up defaults
+		if ( ! isset( $title ) ) {
+			$title = null;
+		}
+		if ( ! isset( $callback ) ) {
+			$callback = null;
+		}
+		if ( ! isset( $edit_callback ) ) {
+			$edit_callback = null;
+		}
+		if ( ! isset( $description ) ) {
+			$description = null;
+		}
+
+		// Generate the widget ID
+		$ID = 'cd_' . strtolower( str_replace( array( ' ', '-' ), '_', $title ) );
+
+		$widget = array(
+			'ID' => $ID,
+			'title' => $title,
+			'callback' => $callback,
+			'edit_callback' => $edit_callback,
+			'description' => $description
+		);
+
+		array_push( $ClientDash->widgets, $widget );
 	}
 
 	/**

@@ -115,6 +115,15 @@ class ClientDash extends ClientDash_Functions {
 		'dashicon_webmaster'         => 'dashicons-businessman',
 		'dashicon_settings'          => 'dashicons-admin-settings',
 		//
+		// Default widgets
+		'widgets' => array(
+			array(
+				'ID' => 'cd-account',
+				'title'    => 'Account',
+				'callback' => array( 'ClientDash_Widget_Account', 'widget_content' )
+			)
+		),
+		//
 		// This one is big. It's the default visibility of core
 		// content sections by role. "0" is showing and "1" is hidden.
 		// It is VERY important that these names all match EXACTLY
@@ -192,9 +201,19 @@ class ClientDash extends ClientDash_Functions {
 	 * This property will be populated with ALL content. It allows extensions
 	 * to add content with little effort.
 	 *
-	 * @since Client Dash 1.4
+	 * @since Client Dash 1.5
 	 */
-	public $content_sections;
+	public $content_sections = array();
+
+	/**
+	 * The semi-magical widget property.
+	 *
+	 * This property will be populated with ALL widgets. It allows extensions
+	 * to add widgets with little effort.
+	 *
+	 * @since Client Dash 1.5
+	 */
+	public $widgets = array();
 
 	/**
 	 * Constructs the class.
@@ -246,6 +265,9 @@ class ClientDash extends ClientDash_Functions {
 		// NOTE: this is intentionally not "admin_init". This needs to fire before "admin_menu",
 		// but unfortunately "admin_init" fires after "admin_menu". Which is dumb.
 		add_action( 'init', array( $this, 'content_sections_init' ) );
+
+		// Initializes the dashboard widgets
+		add_action( 'wp_dashboard_setup', array( $this, 'widgets_init' ), 1001 );
 	}
 
 	/**
@@ -259,7 +281,7 @@ class ClientDash extends ClientDash_Functions {
 		wp_register_script(
 			'cd-main',
 			plugin_dir_url( __FILE__ ) . 'assets/js/client-dash.js',
-			array( 'jquery', 'jquery-ui-sortable' )
+			array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable' )
 		);
 
 		// The main script for Client Dash
@@ -267,6 +289,13 @@ class ClientDash extends ClientDash_Functions {
 			'cd-ajax',
 			plugin_dir_url( __FILE__ ) . 'assets/js/client-dash-ajax.js',
 			array( 'jquery' )
+		);
+
+		// The script for dealing with the Widgets tab under Settings
+		wp_register_script(
+			'cd-widgets',
+			plugin_dir_url( __FILE__ ) . 'assets/js/cd.widgets.js',
+			array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable' )
 		);
 
 		// The main stylesheet for Client Dash
@@ -288,6 +317,11 @@ class ClientDash extends ClientDash_Functions {
 		wp_enqueue_script( 'cd-main' );
 		wp_enqueue_script( 'cd-ajax' );
 		wp_enqueue_style( 'cd-main' );
+
+		// Include widgets.js only on widgets page
+		if ( isset( $_GET['tab'] ) && $_GET['tab'] == 'widgets' ) {
+			wp_enqueue_script( 'cd-widgets' );
+		}
 	}
 
 	/**
@@ -416,6 +450,10 @@ class ClientDash extends ClientDash_Functions {
 
 		global $wp_meta_boxes;
 
+		echo '<pre>';
+		print_r($wp_meta_boxes);
+		echo '</pre>';
+
 		// Initialize
 		$active_widgets = array();
 
@@ -535,6 +573,26 @@ class ClientDash extends ClientDash_Functions {
 					}
 				}
 			}
+		}
+	}
+
+	/**
+	 * Adds our widgets to the dashboard.
+	 *
+	 * @since Client Dash 1.5
+	 */
+	public function widgets_init() {
+		$widgets = get_option( 'cd_widgets', $this->option_defaults['widgets'] );
+
+		foreach ( $widgets as $widget ) {
+			add_meta_box(
+				$widget['ID'],
+				$widget['title'],
+				$widget['callback'],
+				'dashboard',
+				'normal',
+				'core'
+			);
 		}
 	}
 }

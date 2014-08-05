@@ -18,32 +18,15 @@ class ClientDash_Widget_Webmaster extends ClientDash {
 	 * @since Client Dash 1.5
 	 */
 	public function __construct() {
-		// Adds the widget to the dashboard
-		add_action( 'wp_dashboard_setup', array( $this, 'add_widget' ) );
-	}
-
-	/**
-	 * Adds the widget to the dashboard.
-	 *
-	 * @since Client Dash 1.2
-	 */
-	public function add_widget() {
 		global $ClientDash;
 
 		$webmaster = get_option( 'cd_webmaster_name', $ClientDash->option_defaults['webmaster_name'] );
 
-		$disabled = get_option( 'cd_hide_page_webmaster' );
-
-		if ( empty( $disabled ) && ! empty( $ClientDash->content_sections['webmaster'] ) ) {
-			add_meta_box(
-				'cd-webmaster',
-				$webmaster,
-				array( $this, 'widget_content' ),
-				'dashboard',
-				'normal',
-				'core'
-			);
-		}
+		$this->add_widget( array(
+			'title'    => $webmaster,
+			'description' => 'The core Webmaster widget',
+			'callback' => array( $this, 'widget_content' )
+		) );
 	}
 
 	/**
