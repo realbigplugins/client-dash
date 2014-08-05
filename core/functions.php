@@ -10,8 +10,8 @@
  *
  * @since Client Dash 1.5
  */
-
 abstract class ClientDash_Functions {
+
 	/**
 	 * Outputs a helpful tip that can be closed.
 	 *
@@ -24,6 +24,7 @@ abstract class ClientDash_Functions {
 	 * @return string The tip.
 	 */
 	public function tip( $content, $position = 'left', $classes = null ) {
+
 		return "<span class='cd-tip cd-tip-hidden cd-tip-$position $classes'>$content<span class='cd-tip-close'>X</span></span>";
 	}
 
@@ -35,6 +36,7 @@ abstract class ClientDash_Functions {
 	 * @param string $page The page we're on. Default 'account'.
 	 */
 	public function the_page_title( $page = 'account' ) {
+
 		global $ClientDash;
 
 		// Get the current dashicon
@@ -49,6 +51,7 @@ abstract class ClientDash_Functions {
 	 * @since Client Dash 1.0
 	 */
 	public function create_tab_page() {
+
 		global $ClientDash;
 
 		// Get the page for building url
@@ -77,23 +80,23 @@ abstract class ClientDash_Functions {
 		// Cycle through all tabs and output the menu
 		echo '<h2 class="nav-tab-wrapper">';
 		$i = 0;
-			foreach ( $ClientDash->content_sections[ $current_page ] as $tab_ID => $block ) {
-				$i++;
+		foreach ( $ClientDash->content_sections[ $current_page ] as $tab_ID => $block ) {
+			$i ++;
 
-				// Translate the tab ID into the tab name
-				$tab_name = ucwords( str_replace( '_', ' ', $tab_ID ) );
+			// Translate the tab ID into the tab name
+			$tab_name = ucwords( str_replace( '_', ' ', $tab_ID ) );
 
-				// If active tab, set class
-				if ( $active_tab == $tab_ID || ! $active_tab && $i == 1 ) {
-					$active = 'nav-tab-active';
-				} else {
-					$active = '';
-				}
-
-				// Output the tab menu item
-				echo '<a href="?page=cd_' . $current_page . '&tab=' . $tab_ID . '" class="nav-tab ' . $active . '">' . $tab_name . '</a>';
+			// If active tab, set class
+			if ( $active_tab == $tab_ID || ! $active_tab && $i == 1 ) {
+				$active = 'nav-tab-active';
+			} else {
+				$active = '';
 			}
-			?>
+
+			// Output the tab menu item
+			echo '<a href="?page=cd_' . $current_page . '&tab=' . $tab_ID . '" class="nav-tab ' . $active . '">' . $tab_name . '</a>';
+		}
+		?>
 		</h2>
 		<?php
 
@@ -105,7 +108,7 @@ abstract class ClientDash_Functions {
 
 		// Cycle through all sections and output the menu
 		// Skip if total is only 1
-		$total = count( $ClientDash->content_sections[$current_page][$active_tab] );
+		$total = count( $ClientDash->content_sections[ $current_page ][ $active_tab ] );
 		if ( $total > 1 ) {
 			echo '<ul class="subsubsub cd-sections-menu">';
 
@@ -140,7 +143,7 @@ abstract class ClientDash_Functions {
 		}
 
 		// Get our current section
-		$section_output = $ClientDash->content_sections[$current_page][$active_tab][$active_section];
+		$section_output = $ClientDash->content_sections[ $current_page ][ $active_tab ][ $active_section ];
 
 		// This calls the dynamic class and dynamic callback function
 		echo '<div class="cd-content-section">';
@@ -159,6 +162,7 @@ abstract class ClientDash_Functions {
 	 * @param array $args All of the arguments for the function.
 	 */
 	public function add_content_section( $args ) {
+
 		global $ClientDash;
 
 		extract( $args );
@@ -197,6 +201,7 @@ abstract class ClientDash_Functions {
 	}
 
 	public function add_widget( $args ) {
+
 		global $ClientDash;
 
 		extract( $args );
@@ -219,14 +224,81 @@ abstract class ClientDash_Functions {
 		$ID = 'cd_' . strtolower( str_replace( array( ' ', '-' ), '_', $title ) );
 
 		$widget = array(
-			'ID' => $ID,
-			'title' => $title,
-			'callback' => $callback,
+			'ID'            => $ID,
+			'title'         => $title,
+			'callback'      => $callback,
 			'edit_callback' => $edit_callback,
-			'description' => $description
+			'description'   => $description
 		);
 
 		array_push( $ClientDash->widgets, $widget );
+	}
+
+	public function widget_loop( $widgets, $disabled = false ) {
+
+		$i = - 1;
+		foreach ( $widgets as $widget ) {
+			$i ++;
+
+			// Defaults
+			$title         = null;
+			$ID            = null;
+			$description   = null;
+			$callback      = null;
+			$edit_callback = null;
+
+			extract( $widget );
+
+			if ( empty( $ID ) ) {
+				$ID = 'cd_' . strtolower( str_replace( array( ' ', '-' ), '_', $title ) );
+			}
+			?>
+			<li class="cd-dash-widget ui-draggable">
+				<h4 class="cd-dash-widget-title">
+					<?php echo $title; ?>
+					<span class="cd-up-down open"></span>
+				</h4>
+
+				<div class="cd-dash-widget-settings">
+					<?php
+					if ( $edit_callback ) {
+						$edit_callback[0]::$edit_callback[1]();
+					} else {
+						echo 'No settings';
+					}
+					?>
+
+					<div class="cd-dash-widget-footer">
+						<a href="#" class="cd-dash-widget-delete"
+						   onclick="cdWidgets.remove(this); return false;">
+							Delete
+						</a>
+					</div>
+				</div>
+
+				<p class="cd-dash-widget-description">
+					<?php echo $description; ?>
+				</p>
+
+				<?php
+				if ( ! empty ( $disabled ) ) {
+					echo "<input type='hidden' name='cd_widgets[$i][ID]' value='" . $ID . "' " . ( $disabled ? 'disabled' : '' ) . "/>";
+				}
+				if ( ! empty ( $title ) ) {
+					echo "<input type='hidden' name='cd_widgets[$i][title]' value='" . $title . "' " . ( $disabled ? 'disabled' : '' ) . "/>";
+				}
+				if ( ! empty ( $callback ) ) {
+					echo "<input type='hidden' name='cd_widgets[$i][callback][0]' value='" . $callback[0] . "' " . ( $disabled ? 'disabled' : '' ) . "/>";
+					echo "<input type='hidden' name='cd_widgets[$i][callback][1]' value='" . $callback[1] . "' " . ( $disabled ? 'disabled' : '' ) . "/>";
+				}
+				if ( ! empty ( $edit_callback ) ) {
+					echo "<input type='hidden' name='cd_widgets[$i][edit_callback][0]' value='" . $edit_callback[0] . "' " . ( $disabled ? 'disabled' : '' ) . "/>";
+					echo "<input type='hidden' name='cd_widgets[$i][edit_callback][1]' value='" . $edit_callback[1] . "' " . ( $disabled ? 'disabled' : '' ) . "/>";
+				}
+				?>
+			</li>
+		<?php
+		}
 	}
 
 	/**
@@ -238,7 +310,11 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return array Current color scheme
 	 */
-	public function get_color_scheme( $which_color = null ) {
+	public
+	function get_color_scheme(
+		$which_color = null
+	) {
+
 		global $ClientDash;
 
 		$current_color = get_user_option( 'admin_color' );
@@ -273,7 +349,11 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return mixed
 	 */
-	public function get_dir_size( $path ) {
+	public
+	function get_dir_size(
+		$path
+	) {
+
 		$totalsize  = 0;
 		$totalcount = 0;
 		$dircount   = 0;
@@ -311,7 +391,11 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string
 	 */
-	public function format_dir_size( $size ) {
+	public
+	function format_dir_size(
+		$size
+	) {
+
 		if ( $size < 1024 ) {
 			return $size . " bytes";
 		} else if ( $size < ( 1024 * 1024 ) ) {
@@ -336,7 +420,9 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return mixed The role.
 	 */
-	public function get_user_role() {
+	public
+	function get_user_role() {
+
 		global $current_user;
 
 		$user_roles = $current_user->roles;
@@ -354,7 +440,11 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return null
 	 */
-	public function activate_plugin( $plugin ) {
+	public
+	function activate_plugin(
+		$plugin
+	) {
+
 		$current = get_option( 'active_plugins' );
 		$plugin  = plugin_basename( trim( $plugin ) );
 
@@ -383,9 +473,13 @@ abstract class ClientDash_Functions {
 	 * @param string $caps . Optional. A WordPress recognized capability. Default
 	 * is 'read'.
 	 */
-	public function error_nag( $message, $caps = 'read' ) {
+	public
+	function error_nag(
+		$message, $caps = 'read'
+	) {
+
 		if ( current_user_can( $caps ) ) {
-			echo '<div class="settings-error error"><p>' . $message . '</p></div>';
+			echo "<div class='settings-error error'><p>$message</p></div>";
 		}
 	}
 
@@ -396,8 +490,12 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string
 	 */
-	public function get_settings_url( $tab = null, $section = null ) {
-		return get_admin_url() . 'options-general.php?page=cd_settings' . ( $tab ? "&tab=$tab" : '') . ( $section ? "&section=$section" : '');
+	public
+	function get_settings_url(
+		$tab = null, $section = null
+	) {
+
+		return get_admin_url() . 'options-general.php?page=cd_settings' . ( $tab ? "&tab=$tab" : '' ) . ( $section ? "&section=$section" : '' );
 	}
 
 	/**
@@ -407,8 +505,12 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string
 	 */
-	public function get_account_url( $tab = null, $section = null ) {
-		return get_admin_url() . 'index.php?page=cd_account' . ( $tab ? "&tab=$tab" : '') . ( $section ? "&section=$section" : '');
+	public
+	function get_account_url(
+		$tab = null, $section = null
+	) {
+
+		return get_admin_url() . 'index.php?page=cd_account' . ( $tab ? "&tab=$tab" : '' ) . ( $section ? "&section=$section" : '' );
 	}
 
 	/**
@@ -418,8 +520,12 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string
 	 */
-	public function get_help_url( $tab = null, $section = null ) {
-		return get_admin_url() . 'index.php?page=cd_help' . ( $tab ? "&tab=$tab" : '') . ( $section ? "&section=$section" : '');
+	public
+	function get_help_url(
+		$tab = null, $section = null
+	) {
+
+		return get_admin_url() . 'index.php?page=cd_help' . ( $tab ? "&tab=$tab" : '' ) . ( $section ? "&section=$section" : '' );
 	}
 
 	/**
@@ -429,8 +535,12 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string
 	 */
-	public function get_reports_url( $tab = null, $section = null ) {
-		return get_admin_url() . 'index.php?page=cd_reports' . ( $tab ? "&tab=$tab" : '') . ( $section ? "&section=$section" : '');
+	public
+	function get_reports_url(
+		$tab = null, $section = null
+	) {
+
+		return get_admin_url() . 'index.php?page=cd_reports' . ( $tab ? "&tab=$tab" : '' ) . ( $section ? "&section=$section" : '' );
 	}
 
 	/**
@@ -440,8 +550,12 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string
 	 */
-	public function get_webmaster_url( $tab = null, $section = null ) {
-		return get_admin_url() . 'index.php?page=cd_webmaster' . ( $tab ? "&tab=$tab" : '') . ( $section ? "&section=$section" : '');
+	public
+	function get_webmaster_url(
+		$tab = null, $section = null
+	) {
+
+		return get_admin_url() . 'index.php?page=cd_webmaster' . ( $tab ? "&tab=$tab" : '' ) . ( $section ? "&section=$section" : '' );
 	}
 
 	/**
@@ -451,7 +565,9 @@ abstract class ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.5
 	 */
-	public function return_1() {
+	public
+	function return_1() {
+
 		return 1;
 	}
 }

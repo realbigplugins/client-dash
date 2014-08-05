@@ -47,12 +47,15 @@ class ClientDash_Page_Settings extends ClientDash {
 		register_setting( 'cd_options_webmaster', 'cd_webmaster_feed_url', 'esc_url' );
 		register_setting( 'cd_options_webmaster', 'cd_webmaster_feed_count' );
 
-		// Roles Tab
+		// Display Tab
 		register_setting( 'cd_options_display', 'cd_content_sections_roles' );
 		register_setting( 'cd_options_display', 'cd_hide_page_account' );
 		register_setting( 'cd_options_display', 'cd_hide_page_reports' );
 		register_setting( 'cd_options_display', 'cd_hide_page_help' );
 		register_setting( 'cd_options_display', 'cd_hide_page_webmaster' );
+
+		// Widgets Tab
+		register_setting( 'cd_options_widgets', 'cd_widgets' );
 
 		do_action( 'cd_register_settings' );
 	}

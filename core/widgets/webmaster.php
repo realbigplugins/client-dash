@@ -25,7 +25,8 @@ class ClientDash_Widget_Webmaster extends ClientDash {
 		$this->add_widget( array(
 			'title'    => $webmaster,
 			'description' => 'The core Webmaster widget',
-			'callback' => array( $this, 'widget_content' )
+			'callback' => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
+			'edit_callback' => false
 		) );
 	}
 
@@ -34,11 +35,13 @@ class ClientDash_Widget_Webmaster extends ClientDash {
 	 *
 	 * @since Client Dash 1.2
 	 */
-	public function widget_content() {
-		// Get the set dashicon
-		$dashicon = get_option( 'cd_dashicon_webmaster', $this->option_defaults['dashicon_webmaster'] );
+	public static function widget_content() {
+		global $ClientDash;
 
-		$widget = '<a href="' . $this->get_webmaster_url() . '" class="cd-dashboard-widget cd-webmaster">
+		// Get the set dashicon
+		$dashicon = get_option( 'cd_dashicon_webmaster', $ClientDash->option_defaults['dashicon_webmaster'] );
+
+		$widget = '<a href="' . $ClientDash->get_webmaster_url() . '" class="cd-dashboard-widget cd-webmaster">
     <span class="dashicons ' . $dashicon . ' cd-icon cd-title-icon"></span>
   </a>';
 		echo apply_filters( 'cd_webmaster_widget', $widget );

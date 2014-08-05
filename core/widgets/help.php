@@ -21,7 +21,8 @@ class ClientDash_Widget_Help extends ClientDash {
 		$this->add_widget( array(
 			'title'    => 'Help',
 			'description' => 'The core Help widget',
-			'callback' => array( $this, 'widget_content' )
+			'callback' => array( 'ClientDash_Widget_Help', 'widget_content' ),
+			'edit_callback' => false
 		) );
 	}
 
@@ -30,11 +31,13 @@ class ClientDash_Widget_Help extends ClientDash {
 	 *
 	 * @since Client Dash 1.2
 	 */
-	public function widget_content() {
-		// Get the set dashicon
-		$dashicon = get_option( 'cd_dashicon_help', $this->option_defaults['dashicon_help'] );
+	public static function widget_content() {
+		global $ClientDash;
 
-		$widget = '<a href="' . $this->get_help_url() . '" class="cd-dashboard-widget cd-help">
+		// Get the set dashicon
+		$dashicon = get_option( 'cd_dashicon_help', $ClientDash->option_defaults['dashicon_help'] );
+
+		$widget = '<a href="' . $ClientDash->get_help_url() . '" class="cd-dashboard-widget cd-help">
 	      <span class="dashicons ' . $dashicon . ' cd-icon cd-title-icon"></span>
 	    </a>';
 

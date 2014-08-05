@@ -21,7 +21,8 @@ class ClientDash_Widget_Reports extends ClientDash {
 		$this->add_widget( array(
 			'title'    => 'Reports',
 			'description' => 'The core Reports widget',
-			'callback' => array( $this, 'widget_content' )
+			'callback' => array( 'ClientDash_Widget_Reports', 'widget_content' ),
+			'edit_callback' => false
 		) );
 	}
 
@@ -30,11 +31,13 @@ class ClientDash_Widget_Reports extends ClientDash {
 	 *
 	 * @since Client Dash 1.2
 	 */
-	public function widget_content() {
-		// Get the set dashicon
-		$dashicon = get_option( 'cd_dashicon_reports', $this->option_defaults['dashicon_reports'] );
+	public static function widget_content() {
+		global $ClientDash;
 
-		$widget = '<a href="' . $this->get_reports_url() . '" class="cd-dashboard-widget cd-reports">
+		// Get the set dashicon
+		$dashicon = get_option( 'cd_dashicon_reports', $ClientDash->option_defaults['dashicon_reports'] );
+
+		$widget = '<a href="' . $ClientDash->get_reports_url() . '" class="cd-dashboard-widget cd-reports">
       <span class="dashicons ' . $dashicon . ' cd-icon cd-title-icon"></span>
     </a>';
 		echo apply_filters( 'cd_reports_widget', $widget );

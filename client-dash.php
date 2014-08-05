@@ -120,7 +120,26 @@ class ClientDash extends ClientDash_Functions {
 			array(
 				'ID' => 'cd-account',
 				'title'    => 'Account',
-				'callback' => array( 'ClientDash_Widget_Account', 'widget_content' )
+				'callback' => array( 'ClientDash_Widget_Account', 'widget_content' ),
+				'edit_callback' => false
+			),
+			array(
+				'ID' => 'cd-reports',
+				'title'    => 'Reports',
+				'callback' => array( 'ClientDash_Widget_Reports', 'widget_content' ),
+				'edit_callback' => false
+			),
+			array(
+				'ID' => 'cd-help',
+				'title'    => 'Help',
+				'callback' => array( 'ClientDash_Widget_Help', 'widget_content' ),
+				'edit_callback' => false
+			),
+			array(
+				'ID' => 'cd-webmaster',
+				'title'    => 'Webmaster',
+				'callback' => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
+				'edit_callback' => false
 			)
 		),
 		//
@@ -448,11 +467,16 @@ class ClientDash extends ClientDash_Functions {
 	 */
 	public function get_active_widgets() {
 
+		// Bail if not admin
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
 		global $wp_meta_boxes;
 
-		echo '<pre>';
-		print_r($wp_meta_boxes);
-		echo '</pre>';
+		// For use on widgets page
+		$active_plugins = get_option( 'active_plugins' );
+		update_option( 'cd_active_plugins', $active_plugins );
 
 		// Initialize
 		$active_widgets = array();
@@ -464,6 +488,7 @@ class ClientDash extends ClientDash_Functions {
 					$active_widgets[ $id ]['title']    = $values['title'];
 					$active_widgets[ $id ]['context']  = $context;
 					$active_widgets[ $id ]['priority'] = $priority;
+					$active_widgets[ $id ]['callback'] = $values['callback'];
 				}
 			}
 		}

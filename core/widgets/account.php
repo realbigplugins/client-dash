@@ -22,7 +22,7 @@ class ClientDash_Widget_Account extends ClientDash {
 			'title'    => 'Account',
 			'description' => 'The core Account widget.',
 			'callback' => array( 'ClientDash_Widget_Account', 'widget_content' ),
-			'edit_callback' => array( 'ClientDash_Widget_Account', 'edit_widget' )
+			'edit_callback' => false
 		) );
 	}
 
@@ -42,9 +42,5 @@ class ClientDash_Widget_Account extends ClientDash {
 	    </a>';
 
 		echo apply_filters( 'cd_account_widget', $widget );
-	}
-
-	public static function edit_widget() {
-		echo 'HAY';
 	}
 }

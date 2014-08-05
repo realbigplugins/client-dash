@@ -6,23 +6,21 @@ var cdWidgets;
                 placeholder: 'ui-state-highlight',
                 revert: true,
                 items: 'li',
+                containment: 'document',
                 start: function (event, ui) {
                     ui.item.find('.cd-up-down').removeClass('open');
-                    ui.item.find('.c,d-dash-widget-settings').removeClass('open');
+                    ui.item.find('.cd-dash-widget-settings').removeClass('open');
                     
                     // Prevent up-down while dragging
                     ui.item.data('dragging', true);
                 },
                 stop: function (event, ui) {
                     if (ui.item.hasClass('ui-draggable')) {
-                        ui.item.removeClass('ui-draggable')
-                            .append('<span class="cd-up-down"></span>')
-                            .wrap('<li class="cd-dash-widget">')
-                            .closest('.cd-dash-widget')
-                            .append('<div class="cd-dash-widget-settings">Test</div>');
+                        ui.item.removeClass('ui-draggable');
+                        ui.item.find('input').prop('disabled', false);
 
                         console.log(ui.item);
-                        cdWidgets.drag_init(ui.item);
+                        cdWidgets.toggle_init(ui.item);
                     }
 
                     // Allow clicking now that we've stopped
@@ -30,15 +28,18 @@ var cdWidgets;
                 }
             });
 
-            $('.cd-dash-widget-title.ui-draggable').draggable({
+            $('#cd-dash-widgets-left').find('.ui-draggable').draggable({
                 connectToSortable: '.ui-sortable',
-                helper: 'clone'
+                helper: 'clone',
+                containment: 'document',
+                start: function (event, ui) {
+                    ui.helper.find('.cd-dash-widget-description').remove();
+                }
             });
         },
-        drag_init: function (e) {
+        toggle_init: function (e) {
             e.on('click', function () {
                 if ($(this).data('dragging')) {
-                    console.log('NOCLICKING');
                     return;
                 }
 
@@ -46,11 +47,18 @@ var cdWidgets;
                     .closest('.cd-dash-widget-title')
                     .siblings('.cd-dash-widget-settings').toggleClass('open');
             });
+        },
+        remove: function (e) {
+            $(e).closest('.cd-dash-widget').remove();
         }
     };
 
     $(function () {
         cdWidgets.init();
+
+        $('#cd-dash-widgets-droppable').find('.cd-dash-widget-title').each(function() {
+            cdWidgets.toggle_init($(this));
+        });
     });
 
 })(jQuery);
