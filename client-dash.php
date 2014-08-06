@@ -107,6 +107,7 @@ class ClientDash extends ClientDash_Functions {
 		'hide_page_reports'          => null,
 		'hide_page_help'             => null,
 		'hide_page_webmaster'        => '1',
+		'hide_page_settings'         => null,
 		//
 		// The default dashicons for everything
 		'dashicon_account'           => 'dashicons-id-alt',
@@ -122,28 +123,32 @@ class ClientDash extends ClientDash_Functions {
 				'cd_core' => true,
 				'title'    => 'Account',
 				'callback' => array( 'ClientDash_Widget_Account', 'widget_content' ),
-				'edit_callback' => false
+				'edit_callback' => false,
+				'cd_page' => 'account'
 			),
 			array(
 				'ID' => 'cd_reports',
 				'cd_core' => true,
 				'title'    => 'Reports',
 				'callback' => array( 'ClientDash_Widget_Reports', 'widget_content' ),
-				'edit_callback' => false
+				'edit_callback' => false,
+				'cd_page' => 'reports'
 			),
 			array(
 				'ID' => 'cd_help',
 				'cd_core' => true,
 				'title'    => 'Help',
 				'callback' => array( 'ClientDash_Widget_Help', 'widget_content' ),
-				'edit_callback' => false
+				'edit_callback' => false,
+				'cd_page' => 'help'
 			),
 			array(
 				'ID' => 'cd_core',
 				'cd_core' => true,
 				'title'    => 'Webmaster',
 				'callback' => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
-				'edit_callback' => false
+				'edit_callback' => false,
+				'cd_page' => 'webmaster'
 			)
 		),
 		//
@@ -227,6 +232,13 @@ class ClientDash extends ClientDash_Functions {
 	 * @since Client Dash 1.5
 	 */
 	public $content_sections = array();
+
+	/**
+	 * A duplicate of content sections that is NOT filtered.
+	 *
+	 * @since Client Dash 1.5
+	 */
+	public $content_sections_unmodified = array();
 
 	/**
 	 * The semi-magical widget property.
@@ -407,6 +419,10 @@ class ClientDash extends ClientDash_Functions {
 	 * Force dashboard widgets to one column.
 	 *
 	 * @since Client Dash 1.4
+	 *
+	 * @param array $columns The supplied columns.
+	 *
+	 * @return array The altered columns.
 	 */
 	public function alter_dashboard_columns( $columns ) {
 
@@ -486,8 +502,8 @@ class ClientDash extends ClientDash_Functions {
 		$active_widgets = array();
 
 		// This lovely, crazy loop is what gathers all of the widgets and organizes it into MY array
-		foreach ( $wp_meta_boxes['dashboard'] as $context => $widgets ) {
-			foreach ( $widgets as $priority => $widgets ) {
+		foreach ( $wp_meta_boxes['dashboard'] as $context => $priorities ) {
+			foreach ( $priorities as $priority => $widgets ) {
 				foreach ( $widgets as $id => $values ) {
 					$active_widgets[ $id ]['title']    = $values['title'];
 					$active_widgets[ $id ]['context']  = $context;
@@ -584,6 +600,11 @@ class ClientDash extends ClientDash_Functions {
 
 		// Cycles through all content sections to see if they're disabled
 		foreach ( $this->content_sections as $page => $tabs ) {
+			$disable_page = get_option( "cd_hide_page_$page", $this->option_defaults["hide_page_$page"] );
+			if ( $disable_page ) {
+				unset( $this->content_sections[ $page ] );
+				continue;
+			}
 			foreach ( $tabs as $tab => $blocks ) {
 				foreach ( $blocks as $name => $info ) {
 					if ( ! empty( $content_sections_roles[ $page ][ $tab ][ $name ][ $current_role ] )
@@ -617,6 +638,13 @@ class ClientDash extends ClientDash_Functions {
 
 		if ( ! empty( $widgets ) ) {
 			foreach ( $widgets as $ID => $widget ) {
+				// Client Dash core widgets conditional visibility
+				if ( isset( $widget['cd_core'] ) && $widget['cd_core'] ) {
+					if ( ! isset( $this->content_sections[ $widget['cd_page'] ] ) ) {
+						continue;
+					}
+				}
+
 				add_meta_box(
 					$ID,
 					$widget['title'],

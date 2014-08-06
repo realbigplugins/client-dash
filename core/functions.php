@@ -96,9 +96,7 @@ abstract class ClientDash_Functions {
 			// Output the tab menu item
 			echo '<a href="?page=cd_' . $current_page . '&tab=' . $tab_ID . '" class="nav-tab ' . $active . '">' . $tab_name . '</a>';
 		}
-		?>
-		</h2>
-		<?php
+		echo '</h2>';
 
 		// If no active tab was set, take the first one
 		if ( ! $active_tab ) {
@@ -159,44 +157,36 @@ abstract class ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.4
 	 *
-	 * @param array $args All of the arguments for the function.
+	 * @param array $content_section All of the arguments for the function.
 	 */
-	public function add_content_section( $args ) {
+	public function add_content_section( $content_section ) {
 
 		global $ClientDash;
 
-		extract( $args );
-
-		// Set up defaults
-		if ( ! isset( $name ) ) {
-			$name = null;
-		}
-		if ( ! isset( $page ) ) {
-			$page = null;
-		}
-		if ( ! isset( $tab ) ) {
-			$tab = null;
-		}
-		if ( ! isset( $callback ) ) {
-			$callback = null;
-		}
-		if ( ! isset( $priority ) ) {
-			$priority = 10;
+		if ( ! isset( $content_section['priority'] ) ) {
+			$content_section['priority'] = 10;
 		}
 
 		// Generate the content section ID
-		$ID = strtolower( str_replace( array( ' ', '-' ), '_', $name ) );
+		$ID = strtolower( str_replace( array( ' ', '-' ), '_', $content_section['name'] ) );
 
 		// Fix up the tab name (to allow spaces and such)
-		$tab = strtolower( str_replace( array( ' ', '-' ), '_', $tab ) );
+		$tab = strtolower( str_replace( array( ' ', '-' ), '_', $content_section['tab'] ) );
 
 		// Fix up the page name (to allow spaces and such)
-		$page = strtolower( str_replace( array( ' ', '-' ), '_', $page ) );
+		$page = strtolower( str_replace( array( ' ', '-' ), '_', $content_section['page'] ) );
 
 		$ClientDash->content_sections[ $page ][ $tab ][ $ID ] = array(
-			'name'     => $name,
-			'callback' => $callback,
-			'priority' => $priority
+			'name'     => $content_section['name'],
+			'callback' => $content_section['callback'],
+			'priority' => $content_section['priority']
+		);
+
+		// Also add for the unmodified version
+		$ClientDash->content_sections_unmodified[ $page ][ $tab ][ $ID ] = array(
+			'name'     => $content_section['name'],
+			'callback' => $content_section['callback'],
+			'priority' => $content_section['priority']
 		);
 	}
 
@@ -277,10 +267,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return array Current color scheme
 	 */
-	public
-	function get_color_scheme(
-		$which_color = null
-	) {
+	public function get_color_scheme( $which_color = null ) {
 
 		global $ClientDash;
 
@@ -304,6 +291,8 @@ abstract class ClientDash_Functions {
 			return $output['secondary'];
 		} elseif ( $which_color == 'tertiary' ) {
 			return $output['tertiary'];
+		} else {
+			return false;
 		}
 	}
 
@@ -316,10 +305,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return mixed
 	 */
-	public
-	function get_dir_size(
-		$path
-	) {
+	public function get_dir_size( $path ) {
 
 		$totalsize  = 0;
 		$totalcount = 0;
@@ -358,10 +344,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string
 	 */
-	public
-	function format_dir_size(
-		$size
-	) {
+	public function format_dir_size( $size ) {
 
 		if ( $size < 1024 ) {
 			return $size . " bytes";
@@ -387,11 +370,9 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return mixed The role.
 	 */
-	public
-	function get_user_role() {
+	public function get_user_role() {
 
 		global $current_user;
-
 		$user_roles = $current_user->roles;
 		$user_role  = array_shift( $user_roles );
 
@@ -407,10 +388,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return null
 	 */
-	public
-	function activate_plugin(
-		$plugin
-	) {
+	public function activate_plugin( $plugin ) {
 
 		$current = get_option( 'active_plugins' );
 		$plugin  = plugin_basename( trim( $plugin ) );
@@ -440,10 +418,7 @@ abstract class ClientDash_Functions {
 	 * @param string $caps . Optional. A WordPress recognized capability. Default
 	 * is 'read'.
 	 */
-	public
-	function error_nag(
-		$message, $caps = 'read'
-	) {
+	public function error_nag( $message, $caps = 'read' ) {
 
 		if ( current_user_can( $caps ) ) {
 			echo "<div class='settings-error error'><p>$message</p></div>";
@@ -455,12 +430,12 @@ abstract class ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.2
 	 *
+	 * @param string $tab The tab to link to.
+	 * @param string $section The content section to link to.
+	 *
 	 * @return string
 	 */
-	public
-	function get_settings_url(
-		$tab = null, $section = null
-	) {
+	public function get_settings_url( $tab = null, $section = null ) {
 
 		return get_admin_url() . 'options-general.php?page=cd_settings' . ( $tab ? "&tab=$tab" : '' ) . ( $section ? "&section=$section" : '' );
 	}
@@ -470,12 +445,12 @@ abstract class ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.2
 	 *
+	 * @param string $tab The tab to link to.
+	 * @param string $section The content section to link to.
+	 *
 	 * @return string
 	 */
-	public
-	function get_account_url(
-		$tab = null, $section = null
-	) {
+	public function get_account_url( $tab = null, $section = null ) {
 
 		return get_admin_url() . 'index.php?page=cd_account' . ( $tab ? "&tab=$tab" : '' ) . ( $section ? "&section=$section" : '' );
 	}
@@ -485,12 +460,12 @@ abstract class ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.2
 	 *
+	 * @param string $tab The tab to link to.
+	 * @param string $section The content section to link to.
+	 *
 	 * @return string
 	 */
-	public
-	function get_help_url(
-		$tab = null, $section = null
-	) {
+	public function get_help_url( $tab = null, $section = null ) {
 
 		return get_admin_url() . 'index.php?page=cd_help' . ( $tab ? "&tab=$tab" : '' ) . ( $section ? "&section=$section" : '' );
 	}
@@ -500,12 +475,12 @@ abstract class ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.2
 	 *
+	 * @param string $tab The tab to link to.
+	 * @param string $section The content section to link to.
+	 *
 	 * @return string
 	 */
-	public
-	function get_reports_url(
-		$tab = null, $section = null
-	) {
+	public function get_reports_url( $tab = null, $section = null ) {
 
 		return get_admin_url() . 'index.php?page=cd_reports' . ( $tab ? "&tab=$tab" : '' ) . ( $section ? "&section=$section" : '' );
 	}
@@ -515,12 +490,12 @@ abstract class ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.2
 	 *
+	 * @param string $tab The tab to link to.
+	 * @param string $section The content section to link to.
+	 *
 	 * @return string
 	 */
-	public
-	function get_webmaster_url(
-		$tab = null, $section = null
-	) {
+	public function get_webmaster_url( $tab = null, $section = null ) {
 
 		return get_admin_url() . 'index.php?page=cd_webmaster' . ( $tab ? "&tab=$tab" : '' ) . ( $section ? "&section=$section" : '' );
 	}
@@ -532,8 +507,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.5
 	 */
-	public
-	function return_1() {
+	public function return_1() {
 
 		return 1;
 	}

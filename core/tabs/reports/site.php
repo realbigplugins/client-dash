@@ -33,8 +33,6 @@ class ClientDash_Core_Page_Reports_Tab_Site extends ClientDash {
 	public function block_output() {
 		// Get the site information
 		$args = array( 'public' => true );
-		$cd_count_posts    = wp_count_posts();
-		$cd_count_pages    = wp_count_posts( 'page' );
 		$cd_count_comments = wp_count_comments();
 		$cd_count_users    = count_users();
 		$cd_post_types	   = get_post_types( $args, 'objects' )
