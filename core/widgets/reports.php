@@ -23,7 +23,8 @@ class ClientDash_Widget_Reports extends ClientDash {
 			'title'    => 'Reports',
 			'description' => 'The core Reports widget',
 			'callback' => array( 'ClientDash_Widget_Reports', 'widget_content' ),
-			'edit_callback' => false
+			'edit_callback' => false,
+			'cd_page' => 'reports'
 		) );
 	}
 

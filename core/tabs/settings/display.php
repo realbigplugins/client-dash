@@ -62,7 +62,7 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 		echo '<ul id="cd-roles-grid">';
 
 		// Cycle through all content sections and output accordingly
-		foreach ( $ClientDash->content_sections as $page => $tabs ) {
+		foreach ( $ClientDash->content_sections_unmodified as $page => $tabs ) {
 			$disabled = get_option( "cd_hide_page_$page" );
 
 			// Find out if all roles have been unchecked

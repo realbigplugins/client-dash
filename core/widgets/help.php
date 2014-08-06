@@ -23,7 +23,8 @@ class ClientDash_Widget_Help extends ClientDash {
 			'title'    => 'Help',
 			'description' => 'The core Help widget',
 			'callback' => array( 'ClientDash_Widget_Help', 'widget_content' ),
-			'edit_callback' => false
+			'edit_callback' => false,
+			'cd_page' => 'help'
 		) );
 	}
 

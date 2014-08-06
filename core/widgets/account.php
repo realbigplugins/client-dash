@@ -23,7 +23,8 @@ class ClientDash_Widget_Account extends ClientDash {
 			'title'    => 'Account',
 			'description' => 'The core Account widget.',
 			'callback' => array( 'ClientDash_Widget_Account', 'widget_content' ),
-			'edit_callback' => false
+			'edit_callback' => false,
+			'cd_page' => 'account'
 		) );
 	}
 

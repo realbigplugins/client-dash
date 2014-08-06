@@ -32,7 +32,8 @@ class ClientDash_Widget_Webmaster extends ClientDash {
 			'title'         => $webmaster,
 			'description'   => 'The core Webmaster widget',
 			'callback'      => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
-			'edit_callback' => false
+			'edit_callback' => false,
+			'cd_page' => 'webmaster'
 		) );
 	}
 

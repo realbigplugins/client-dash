@@ -20,10 +20,7 @@ class ClientDash_Page_Webmaster extends ClientDash {
 
 		$webmaster = get_option( 'cd_webmaster_name', $ClientDash->option_defaults['webmaster_name'] );
 
-		if ( apply_filters( 'cd_show_webmaster_page', true )
-		     && ! get_option( 'cd_hide_page_webmaster' )
-		     && ! empty( $ClientDash->content_sections['webmaster'] )
-		) {
+		if ( ! empty( $ClientDash->content_sections['webmaster'] ) ) {
 			add_submenu_page(
 				'index.php',
 				$webmaster,

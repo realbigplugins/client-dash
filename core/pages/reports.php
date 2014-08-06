@@ -30,10 +30,7 @@ class ClientDash_Page_Reports extends ClientDash {
 
 		// Check to make sure there is a content section set, there aren't any filters disabling
 		// the page, and the page isn't disabled in Settings
-		if ( ! empty( $ClientDash->content_sections['reports'] )
-		     && apply_filters( 'cd_show_reports_page', true )
-		     && ! get_option( 'cd_hide_page_reports' )
-		) {
+		if ( ! empty( $ClientDash->content_sections['reports'] ) ) {
 			add_submenu_page(
 				'index.php',
 				'Reports Information',
