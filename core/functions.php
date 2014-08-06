@@ -200,69 +200,41 @@ abstract class ClientDash_Functions {
 		);
 	}
 
-	public function add_widget( $args ) {
+	public function add_widget( $widget ) {
 
 		global $ClientDash;
 
-		extract( $args );
-
-		// Set up defaults
-		if ( ! isset( $title ) ) {
-			$title = null;
-		}
-		if ( ! isset( $callback ) ) {
-			$callback = null;
-		}
-		if ( ! isset( $edit_callback ) ) {
-			$edit_callback = null;
-		}
-		if ( ! isset( $description ) ) {
-			$description = null;
-		}
-
-		// Generate the widget ID
-		$ID = 'cd_' . strtolower( str_replace( array( ' ', '-' ), '_', $title ) );
-
-		$widget = array(
-			'ID'            => $ID,
-			'title'         => $title,
-			'callback'      => $callback,
-			'edit_callback' => $edit_callback,
-			'description'   => $description
+		$widgets = array(
+			'ID'            => 'cd_' . $widget['ID'],
+			'title'         => $widget['title'],
+			'callback'      => $widget['callback'],
+			'edit_callback' => $widget['edit_callback'],
+			'description'   => $widget['description']
 		);
 
-		array_push( $ClientDash->widgets, $widget );
+		array_push( $ClientDash->widgets, $widgets );
 	}
 
-	public function widget_loop( $widgets, $disabled = false ) {
+	public function widget_loop( $widgets, $disabled = false, $draggable = false ) {
 
 		$i = - 1;
 		foreach ( $widgets as $widget ) {
 			$i ++;
 
-			// Defaults
-			$title         = null;
-			$ID            = null;
-			$description   = null;
-			$callback      = null;
-			$edit_callback = null;
-
-			extract( $widget );
-
-			if ( empty( $ID ) ) {
-				$ID = 'cd_' . strtolower( str_replace( array( ' ', '-' ), '_', $title ) );
+			if ( ! isset( $widget['ID'] ) ) {
+				$widget['ID'] = strtolower( strip_tags( str_replace( array( ' ', '-' ), '_', $widget['title'] ) ) );
 			}
 			?>
-			<li class="cd-dash-widget ui-draggable">
+			<li class="cd-dash-widget <?php echo $draggable ? 'ui-draggable' : ''; ?>">
 				<h4 class="cd-dash-widget-title">
-					<?php echo $title; ?>
-					<span class="cd-up-down open"></span>
+					<?php echo $widget['title']; ?>
+					<span class="cd-up-down"></span>
 				</h4>
 
 				<div class="cd-dash-widget-settings">
 					<?php
-					if ( $edit_callback ) {
-						$edit_callback[0]::$edit_callback[1]();
+					if ( isset( $widget['edit_callback'] ) && $widget['edit_callback'] ) {
+						$widget['edit_callback'][0]::$widget['edit_callback'][1]();
 					} else {
 						echo 'No settings';
 					}
@@ -277,23 +249,18 @@ abstract class ClientDash_Functions {
 				</div>
 
 				<p class="cd-dash-widget-description">
-					<?php echo $description; ?>
+					<?php echo isset( $widget['description'] ) ? $widget['description'] : ''; ?>
 				</p>
 
 				<?php
-				if ( ! empty ( $disabled ) ) {
-					echo "<input type='hidden' name='cd_widgets[$i][ID]' value='" . $ID . "' " . ( $disabled ? 'disabled' : '' ) . "/>";
-				}
-				if ( ! empty ( $title ) ) {
-					echo "<input type='hidden' name='cd_widgets[$i][title]' value='" . $title . "' " . ( $disabled ? 'disabled' : '' ) . "/>";
-				}
-				if ( ! empty ( $callback ) ) {
-					echo "<input type='hidden' name='cd_widgets[$i][callback][0]' value='" . $callback[0] . "' " . ( $disabled ? 'disabled' : '' ) . "/>";
-					echo "<input type='hidden' name='cd_widgets[$i][callback][1]' value='" . $callback[1] . "' " . ( $disabled ? 'disabled' : '' ) . "/>";
-				}
-				if ( ! empty ( $edit_callback ) ) {
-					echo "<input type='hidden' name='cd_widgets[$i][edit_callback][0]' value='" . $edit_callback[0] . "' " . ( $disabled ? 'disabled' : '' ) . "/>";
-					echo "<input type='hidden' name='cd_widgets[$i][edit_callback][1]' value='" . $edit_callback[1] . "' " . ( $disabled ? 'disabled' : '' ) . "/>";
+				foreach ( $widget as $name => $value ) {
+					$disabled = $disabled ? 'disabled' : '';
+					if ( is_array( $value ) ) {
+						echo "<input type='hidden' name='cd_widgets[$i][$name][0]' value='$value[0]' $disabled />";
+						echo "<input type='hidden' name='cd_widgets[$i][$name][1]' value='$value[1]' $disabled />";
+					} else {
+						echo "<input type='hidden' name='cd_widgets[$i][$name]' value='$value' $disabled />";
+					}
 				}
 				?>
 			</li>

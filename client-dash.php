@@ -118,25 +118,29 @@ class ClientDash extends ClientDash_Functions {
 		// Default widgets
 		'widgets' => array(
 			array(
-				'ID' => 'cd-account',
+				'ID' => 'cd_account',
+				'cd_core' => true,
 				'title'    => 'Account',
 				'callback' => array( 'ClientDash_Widget_Account', 'widget_content' ),
 				'edit_callback' => false
 			),
 			array(
-				'ID' => 'cd-reports',
+				'ID' => 'cd_reports',
+				'cd_core' => true,
 				'title'    => 'Reports',
 				'callback' => array( 'ClientDash_Widget_Reports', 'widget_content' ),
 				'edit_callback' => false
 			),
 			array(
-				'ID' => 'cd-help',
+				'ID' => 'cd_help',
+				'cd_core' => true,
 				'title'    => 'Help',
 				'callback' => array( 'ClientDash_Widget_Help', 'widget_content' ),
 				'edit_callback' => false
 			),
 			array(
-				'ID' => 'cd-webmaster',
+				'ID' => 'cd_core',
+				'cd_core' => true,
 				'title'    => 'Webmaster',
 				'callback' => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
 				'edit_callback' => false
@@ -286,7 +290,7 @@ class ClientDash extends ClientDash_Functions {
 		add_action( 'init', array( $this, 'content_sections_init' ) );
 
 		// Initializes the dashboard widgets
-		add_action( 'wp_dashboard_setup', array( $this, 'widgets_init' ), 1001 );
+		add_action( 'wp_dashboard_setup', array( $this, 'widgets_init' ), 1010 );
 	}
 
 	/**
@@ -507,6 +511,7 @@ class ClientDash extends ClientDash_Functions {
 	 * @since Client Dash 1.1
 	 */
 	public function remove_default_dashboard_widgets() {
+		global $wp_meta_boxes;
 
 		$active_widgets = get_option( 'cd_active_widgets', null );
 
@@ -529,6 +534,7 @@ class ClientDash extends ClientDash_Functions {
 		foreach ( $active_widgets as $widget => $values ) {
 			remove_meta_box( $widget, 'dashboard', $values['context'] );
 		}
+		 $wp_meta_boxes = null;
 	}
 
 	/**
@@ -609,15 +615,17 @@ class ClientDash extends ClientDash_Functions {
 	public function widgets_init() {
 		$widgets = get_option( 'cd_widgets', $this->option_defaults['widgets'] );
 
-		foreach ( $widgets as $widget ) {
-			add_meta_box(
-				$widget['ID'],
-				$widget['title'],
-				$widget['callback'],
-				'dashboard',
-				'normal',
-				'core'
-			);
+		if ( ! empty( $widgets ) ) {
+			foreach ( $widgets as $ID => $widget ) {
+				add_meta_box(
+					$ID,
+					$widget['title'],
+					$widget['callback'],
+					'dashboard',
+					'normal',
+					'core'
+				);
+			}
 		}
 	}
 }

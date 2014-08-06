@@ -19,6 +19,7 @@ class ClientDash_Widget_Help extends ClientDash {
 	 */
 	public function __construct() {
 		$this->add_widget( array(
+			'ID' => 'help',
 			'title'    => 'Help',
 			'description' => 'The core Help widget',
 			'callback' => array( 'ClientDash_Widget_Help', 'widget_content' ),

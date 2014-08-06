@@ -12,20 +12,26 @@
  * @since Client Dash 1.5
  */
 class ClientDash_Widget_Webmaster extends ClientDash {
+
 	/**
 	 * The main construct function.
 	 *
 	 * @since Client Dash 1.5
 	 */
 	public function __construct() {
+
 		global $ClientDash;
 
 		$webmaster = get_option( 'cd_webmaster_name', $ClientDash->option_defaults['webmaster_name'] );
 
+		// Generate the ID
+		$ID = strtolower( str_replace( array( ' ', '-' ), '_', $webmaster ) );
+
 		$this->add_widget( array(
-			'title'    => $webmaster,
-			'description' => 'The core Webmaster widget',
-			'callback' => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
+			'ID'            => $ID,
+			'title'         => $webmaster,
+			'description'   => 'The core Webmaster widget',
+			'callback'      => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
 			'edit_callback' => false
 		) );
 	}
@@ -36,6 +42,7 @@ class ClientDash_Widget_Webmaster extends ClientDash {
 	 * @since Client Dash 1.2
 	 */
 	public static function widget_content() {
+
 		global $ClientDash;
 
 		// Get the set dashicon

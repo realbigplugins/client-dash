@@ -19,6 +19,7 @@ class ClientDash_Widget_Reports extends ClientDash {
 	 */
 	public function __construct() {
 		$this->add_widget( array(
+			'ID' => 'reports',
 			'title'    => 'Reports',
 			'description' => 'The core Reports widget',
 			'callback' => array( 'ClientDash_Widget_Reports', 'widget_content' ),

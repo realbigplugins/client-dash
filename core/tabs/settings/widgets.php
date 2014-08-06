@@ -68,7 +68,11 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 			</p>
 
 			<ul class="cd-dash-widgets-container">
-				<?php $this->widget_loop( $all_widgets, true ); ?>
+				<?php
+				if ( ! empty( $all_widgets ) ) {
+					$this->widget_loop( $all_widgets, true, true );
+				}
+				?>
 			</ul>
 		</div>
 
@@ -76,7 +80,11 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 			<h3>Dashboard</h3>
 
 			<ul id="cd-dash-widgets-droppable" class="cd-dash-widgets-container">
-				<?php $this->widget_loop( $active_widgets ); ?>
+				<?php
+				if ( ! empty( $active_widgets ) ) {
+					$this->widget_loop( $active_widgets );
+				}
+				?>
 			</ul>
 		</div>
 

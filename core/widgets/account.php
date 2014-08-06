@@ -19,6 +19,7 @@ class ClientDash_Widget_Account extends ClientDash {
 	 */
 	public function __construct() {
 		$this->add_widget( array(
+			'ID' => 'account',
 			'title'    => 'Account',
 			'description' => 'The core Account widget.',
 			'callback' => array( 'ClientDash_Widget_Account', 'widget_content' ),

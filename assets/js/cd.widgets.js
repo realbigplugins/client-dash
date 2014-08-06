@@ -2,11 +2,12 @@ var cdWidgets;
 (function ($) {
     cdWidgets = {
         init: function () {
+            // Sortable list
             $('#cd-dash-widgets-droppable').sortable({
                 placeholder: 'ui-state-highlight',
-                revert: true,
                 items: 'li',
                 containment: 'document',
+                delay: 100,
                 start: function (event, ui) {
                     ui.item.find('.cd-up-down').removeClass('open');
                     ui.item.find('.cd-dash-widget-settings').removeClass('open');
@@ -19,19 +20,22 @@ var cdWidgets;
                         ui.item.removeClass('ui-draggable');
                         ui.item.find('input').prop('disabled', false);
 
-                        console.log(ui.item);
                         cdWidgets.toggle_init(ui.item);
                     }
+
+                    cdWidgets.update_numbers();
 
                     // Allow clicking now that we've stopped
                     ui.item.data('dragging', false);
                 }
             });
 
+            // Draggable list
             $('#cd-dash-widgets-left').find('.ui-draggable').draggable({
                 connectToSortable: '.ui-sortable',
                 helper: 'clone',
                 containment: 'document',
+                handle: '.cd-dash-widget-title',
                 start: function (event, ui) {
                     ui.helper.find('.cd-dash-widget-description').remove();
                 }
@@ -48,6 +52,17 @@ var cdWidgets;
                     .siblings('.cd-dash-widget-settings').toggleClass('open');
             });
         },
+        update_numbers: function () {
+            $('#cd-dash-widgets-droppable').find('.cd-dash-widget').each(function () {
+                $(this).find('input').each(function () {
+                    var index = $(this).closest('.cd-dash-widget').index(),
+                        name_old = $(this).attr('name'),
+                        name_new = name_old.replace(/(cd_widgets\[)(\d+)/g, 'cd_widgets[' + index);
+
+                    $(this).attr('name', name_new);
+                });
+            });
+        },
         remove: function (e) {
             $(e).closest('.cd-dash-widget').remove();
         }
@@ -56,7 +71,7 @@ var cdWidgets;
     $(function () {
         cdWidgets.init();
 
-        $('#cd-dash-widgets-droppable').find('.cd-dash-widget-title').each(function() {
+        $('#cd-dash-widgets-droppable').find('.cd-dash-widget').each(function() {
             cdWidgets.toggle_init($(this));
         });
     });
