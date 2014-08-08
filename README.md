@@ -36,6 +36,10 @@ Using this plugin is very simple. All you have to do is:
 ## Changelog
 
 ### [1.5](https://github.com/brashrebel/client-dash/releases/tag/v1.5)
+* Added dashboard widget customization.
+* Added Settings -> Widgets for dashboard widget customization.
+* Added Settings -> Tools.
+* Added a global setting reset button under the new Tools tab.
 * Added defaults to Roles settings.
 * Reversed checkbox logic for Roles settings.
 * Added ability to strip out any dashboard widget settings that may be set.
