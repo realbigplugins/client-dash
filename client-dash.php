@@ -658,6 +658,9 @@ class ClientDash extends ClientDash_Functions {
 
 		if ( ! empty( $widgets ) ) {
 			foreach ( $widgets as $widget ) {
+				// Remove old value
+				unset( $new_ID );
+
 				// Client Dash core widgets conditional visibility
 				if ( isset( $widget['cd_core'] ) && $widget['cd_core'] ) {
 					if ( ! isset( $this->content_sections[ $widget['cd_page'] ] ) ) {

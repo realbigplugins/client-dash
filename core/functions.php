@@ -168,13 +168,13 @@ abstract class ClientDash_Functions {
 		}
 
 		// Generate the content section ID
-		$ID = strtolower( str_replace( array( ' ', '-' ), '_', $content_section['name'] ) );
+		$ID = $this->translate_name_to_id( $content_section['name'] );
 
 		// Fix up the tab name (to allow spaces and such)
-		$tab = strtolower( str_replace( array( ' ', '-' ), '_', $content_section['tab'] ) );
+		$tab = $this->translate_name_to_id( $content_section['tab'] );
 
 		// Fix up the page name (to allow spaces and such)
-		$page = strtolower( str_replace( array( ' ', '-' ), '_', $content_section['page'] ) );
+		$page = $this->translate_name_to_id( $content_section['page'] );
 
 		$ClientDash->content_sections[ $page ][ $tab ][ $ID ] = array(
 			'name'     => $content_section['name'],
@@ -215,7 +215,7 @@ abstract class ClientDash_Functions {
 
 			if ( ! isset( $widget['ID'] ) ) {
 				if ( isset( $widget['cd_core'] ) && $widget['cd_core'] ) {
-					$widget['ID'] = strtolower( strip_tags( str_replace( array( ' ', '-' ), '_', $widget['title'] ) ) );
+					$widget['ID'] = $this->translate_name_to_id( $widget['title'] );
 				} else {
 					$widget['ID'] = $key;
 				}
@@ -262,6 +262,18 @@ abstract class ClientDash_Functions {
 			</li>
 		<?php
 		}
+	}
+
+	/**
+	 * Strips out spaces and dashes and replaces them with underscores. Also
+	 * translates to lowercase.
+	 *
+	 * @param string $name The name to be translated.
+	 *
+	 * @return string Translated ID.
+	 */
+	public function translate_name_to_id( $name ) {
+		return strtolower( str_replace( array( ' ', '-' ), '_', $name ) );
 	}
 
 	/**
