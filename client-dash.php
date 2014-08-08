@@ -680,14 +680,22 @@ class ClientDash extends ClientDash_Functions {
 					// we use a prep_replace_callback to replace the "_duplicate_{n}" with
 					// "_duplicate_{n+1}". Otherwise, just add on the "_duplicate_1" to the
 					// end
-					if ( preg_match( '/(_duplicate_)(\d+)/', $widget['ID'] ) ) {
-						$new_ID = preg_replace_callback(
-							'/(_duplicate_)(\d+)/',
-							array( $this, 'replace_count' ),
-							$widget['ID']
-						);
-					} else {
-						$new_ID = $widget['ID'] . '_duplicate_1';
+					foreach ( $wp_meta_boxes['dashboard'] as $context ) {
+						foreach ( $context as $priority ) {
+							foreach ( $priority as $ID => $wp_widget ) {
+								if ( strpos( $ID, $widget['ID'] ) !== false ) {
+									if ( preg_match( '/(_duplicate_)(\d+)/', $ID ) ) {
+										$new_ID = preg_replace_callback(
+											'/(_duplicate_)(\d+)/',
+											array( $this, 'replace_count' ),
+											$ID
+										);
+									} else {
+										$new_ID = $widget['ID'] . '_duplicate_1';
+									}
+								}
+							}
+						}
 					}
 				}
 
