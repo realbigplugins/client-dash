@@ -120,34 +120,34 @@ class ClientDash extends ClientDash_Functions {
 		'widgets' => array(
 			array(
 				'ID' => 'cd_account',
-				'cd_core' => true,
 				'title'    => 'Account',
 				'callback' => array( 'ClientDash_Widget_Account', 'widget_content' ),
 				'edit_callback' => false,
+				'cd_core' => true,
 				'cd_page' => 'account'
 			),
 			array(
 				'ID' => 'cd_reports',
-				'cd_core' => true,
 				'title'    => 'Reports',
 				'callback' => array( 'ClientDash_Widget_Reports', 'widget_content' ),
 				'edit_callback' => false,
+				'cd_core' => true,
 				'cd_page' => 'reports'
 			),
 			array(
 				'ID' => 'cd_help',
-				'cd_core' => true,
 				'title'    => 'Help',
 				'callback' => array( 'ClientDash_Widget_Help', 'widget_content' ),
 				'edit_callback' => false,
+				'cd_core' => true,
 				'cd_page' => 'help'
 			),
 			array(
 				'ID' => 'cd_core',
-				'cd_core' => true,
 				'title'    => 'Webmaster',
 				'callback' => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
 				'edit_callback' => false,
+				'cd_core' => true,
 				'cd_page' => 'webmaster'
 			)
 		),
@@ -224,6 +224,22 @@ class ClientDash extends ClientDash_Functions {
 	);
 
 	/**
+	 * Items to remove from the WP admin bar by default.
+	 *
+	 * @since Client Dash 1.5
+	 */
+	public $remove_menu_items = array(
+		'menu' => array(
+		),
+		'submenu' => array(
+			array(
+				'menu_slug' => 'index.php',
+				'submenu_slug' => 'my-sites.php'
+			)
+		)
+	);
+
+	/**
 	 * The magical content section property.
 	 *
 	 * This property will be populated with ALL content. It allows extensions
@@ -275,8 +291,8 @@ class ClientDash extends ClientDash_Functions {
 		// Remove any dashboard settings that may have been previously set
 		add_action( 'admin_init', array( $this, 'remove_dashboard_settings' ) );
 
-		// Remove my sites from admin bar
-		add_action( 'admin_bar_menu', array( $this, 'remove_my_sites' ), 999 );
+		// Remove items from admin bar
+		add_action( 'admin_menu', array( $this, 'remove_admin_bar_menus' ), 999 );
 
 		// Remove the WP logo
 		add_action( 'wp_before_admin_bar_render', array( $this, 'remove_wp_logo' ), 0 );
@@ -446,16 +462,19 @@ class ClientDash extends ClientDash_Functions {
 	}
 
 	/**
-	 * Gets rid of "my sites" if in multi-site environment.
+	 * Removes some default admin items.
 	 *
 	 * @since Client Dash 1.0
 	 *
 	 * @param mixed $wp_admin_bar The supplied admin bar object.
 	 */
-	public function remove_my_sites( $wp_admin_bar ) {
+	public function remove_admin_bar_menus() {
+		foreach( $this->remove_menu_items['menu'] as $item ) {
+			remove_menu_page( $item );
+		}
 
-		if ( ! current_user_can( 'manage_network' ) ) {
-			$wp_admin_bar->remove_node( 'my-sites' );
+		foreach( $this->remove_menu_items['submenu'] as $item ) {
+			remove_submenu_page( $item['menu_slug'], $item['submenu_slug'] );
 		}
 	}
 
@@ -486,17 +505,7 @@ class ClientDash extends ClientDash_Functions {
 	 * @since Client Dash 1.1
 	 */
 	public function get_active_widgets() {
-
-		// Bail if not admin
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return;
-		}
-
 		global $wp_meta_boxes;
-
-		// For use on widgets page
-		$active_plugins = get_option( 'active_plugins' );
-		update_option( 'cd_active_plugins', $active_plugins );
 
 		// Initialize
 		$active_widgets = array();
@@ -518,7 +527,18 @@ class ClientDash extends ClientDash_Functions {
 			unset( $active_widgets[ 'cd-' . $widget ] );
 		}
 
-		update_option( 'cd_active_widgets', $active_widgets );
+		// Save visible widgets for the current user
+		update_user_meta( get_current_user_id(), 'cd_visible_widgets', $active_widgets );
+
+		// Only update for Admin
+		if ( current_user_can( 'manage_options' ) ) {
+			// For use on widgets page
+			$active_plugins = get_option( 'active_plugins' );
+			update_option( 'cd_active_plugins', $active_plugins );
+
+			update_option( 'cd_active_widgets', $active_widgets );
+		}
+
 	}
 
 	/**
@@ -637,7 +657,7 @@ class ClientDash extends ClientDash_Functions {
 		$widgets = get_option( 'cd_widgets', $this->option_defaults['widgets'] );
 
 		if ( ! empty( $widgets ) ) {
-			foreach ( $widgets as $ID => $widget ) {
+			foreach ( $widgets as $widget ) {
 				// Client Dash core widgets conditional visibility
 				if ( isset( $widget['cd_core'] ) && $widget['cd_core'] ) {
 					if ( ! isset( $this->content_sections[ $widget['cd_page'] ] ) ) {
@@ -645,16 +665,49 @@ class ClientDash extends ClientDash_Functions {
 					}
 				}
 
-				add_meta_box(
-					$ID,
-					$widget['title'],
-					$widget['callback'],
-					'dashboard',
-					'normal',
-					'core'
-				);
+				// Get user meta for which widgets should show.
+				// Some users don't have privileges to see widgets. So in order to keep it this way
+				// for WP core and other plugin widgets, I've stored the shown widgets before they
+				// were erased, and now I'm comparing that against what's about to show. If anything
+				// that is about to show does not exist in our stored data, don't show it.
+				$user_visible_widgets = get_user_meta( get_current_user_id(), 'cd_visible_widgets', true );
+
+				global $wp_meta_boxes;
+
+				// If this ID already exists, change the ID to something new
+				if ( ! empty( $wp_meta_boxes ) && $this->array_key_exists_r( $widget['ID'], $wp_meta_boxes ) ) {
+					// If the ID contains "_duplicate_{n}", then we need another new ID, so
+					// we use a prep_replace_callback to replace the "_duplicate_{n}" with
+					// "_duplicate_{n+1}". Otherwise, just add on the "_duplicate_1" to the
+					// end
+					if ( preg_match( '/(_duplicate_)(\d+)/', $widget['ID'] ) ) {
+						$new_ID = preg_replace_callback(
+							'/(_duplicate_)(\d+)/',
+							array( $this, 'replace_count' ),
+							$widget['ID']
+						);
+					} else {
+						$new_ID = $widget['ID'] . '_duplicate_1';
+					}
+				}
+
+				if ( array_key_exists( $widget['ID'], $user_visible_widgets ) || $widget['cd_core'] ) {
+					add_meta_box(
+						isset( $new_ID ) ? $new_ID : $widget['ID'],
+						$widget['title'],
+						$widget['callback'],
+						'dashboard',
+						'normal',
+						'core'
+					);
+				}
 			}
 		}
+	}
+
+	public function replace_count( $matches ) {
+		$n = intval( $matches[2] ) + 1;
+		return $matches[1] . $n;
 	}
 }
 

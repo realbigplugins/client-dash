@@ -63,7 +63,7 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 
 		// Cycle through all content sections and output accordingly
 		foreach ( $ClientDash->content_sections_unmodified as $page => $tabs ) {
-			$disabled = get_option( "cd_hide_page_$page" );
+			$disabled = get_option( "cd_hide_page_$page", $this->option_defaults["hide_page_$page"] );
 
 			// Find out if all roles have been unchecked
 			$all_disabled = true;

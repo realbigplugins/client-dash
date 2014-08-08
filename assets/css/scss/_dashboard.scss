@@ -1,3 +1,8 @@
+// Override WP default media queries
+.postbox-container {
+  width: 100% !important;
+}
+
 .cd-icon {
   -webkit-transition: color 0.3s;
   -moz-transition: color 0.3s;

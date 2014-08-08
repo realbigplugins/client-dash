@@ -64,7 +64,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 			<h3>Available Dashboard Widgets</h3>
 
 			<p class="description">
-				To activate a dashboard widget, simply drag it into the dashboard area. To delete, click on the "X".
+				To activate a dashboard widget, simply drag it into the dashboard area. To delete, click "delete".
 			</p>
 
 			<ul class="cd-dash-widgets-container">
@@ -79,7 +79,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 		<div id="cd-dash-widgets-right">
 			<h3>Dashboard</h3>
 
-			<ul id="cd-dash-widgets-droppable" class="cd-dash-widgets-container">
+			<ul id="cd-dash-widgets-sortable" class="cd-dash-widgets-container">
 				<?php
 				if ( ! empty( $active_widgets ) ) {
 					$this->widget_loop( $active_widgets );

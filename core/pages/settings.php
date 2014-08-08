@@ -70,7 +70,7 @@ class ClientDash_Page_Settings extends ClientDash {
 			'options-general.php',
 			'Client Dash Settings',
 			'Client Dash',
-			'publish_posts',
+			'manage_options',
 			'cd_settings',
 			array( $this, 'page_output' )
 		);

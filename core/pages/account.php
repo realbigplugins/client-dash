@@ -36,7 +36,7 @@ class ClientDash_Page_Account extends ClientDash {
 				'index.php',
 				'Account Information',
 				'Account',
-				'publish_posts',
+				'read',
 				'cd_account',
 				array( $this, 'page_output' )
 			);

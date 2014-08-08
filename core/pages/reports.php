@@ -35,7 +35,7 @@ class ClientDash_Page_Reports extends ClientDash {
 				'index.php',
 				'Reports Information',
 				'Reports',
-				'publish_posts',
+				'read',
 				'cd_reports',
 				array( $this, 'page_output' )
 			);

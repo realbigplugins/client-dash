@@ -199,7 +199,9 @@ abstract class ClientDash_Functions {
 			'title'         => $widget['title'],
 			'callback'      => $widget['callback'],
 			'edit_callback' => $widget['edit_callback'],
-			'description'   => $widget['description']
+			'description'   => $widget['description'],
+			'cd_core'       => true,
+			'cd_page'       => $widget['cd_page']
 		);
 
 		array_push( $ClientDash->widgets, $widgets );
@@ -208,11 +210,15 @@ abstract class ClientDash_Functions {
 	public function widget_loop( $widgets, $disabled = false, $draggable = false ) {
 
 		$i = - 1;
-		foreach ( $widgets as $widget ) {
+		foreach ( $widgets as $key => $widget ) {
 			$i ++;
 
 			if ( ! isset( $widget['ID'] ) ) {
-				$widget['ID'] = strtolower( strip_tags( str_replace( array( ' ', '-' ), '_', $widget['title'] ) ) );
+				if ( isset( $widget['cd_core'] ) && $widget['cd_core'] ) {
+					$widget['ID'] = strtolower( strip_tags( str_replace( array( ' ', '-' ), '_', $widget['title'] ) ) );
+				} else {
+					$widget['ID'] = $key;
+				}
 			}
 			?>
 			<li class="cd-dash-widget <?php echo $draggable ? 'ui-draggable' : ''; ?>">
@@ -361,6 +367,34 @@ abstract class ClientDash_Functions {
 
 			return $size . " GB";
 		}
+	}
+
+	/**
+	 * This allows us to use array_key_exists recursively.
+	 *
+	 * @since Client Dash 1.5
+	 *
+	 * @param string $needle The array key to search for.
+	 * @param array $haystack The array to search in.
+	 *
+	 * @return bool The result.
+	 */
+	public function array_key_exists_r( $needle, $haystack ) {
+
+		$result = array_key_exists( $needle, $haystack );
+		if ( $result ) {
+			return $result;
+		}
+		foreach ( $haystack as $v ) {
+			if ( is_array( $v ) ) {
+				$result = $this->array_key_exists_r( $needle, $v );
+			}
+			if ( $result ) {
+				return $result;
+			}
+		}
+
+		return $result;
 	}
 
 	/**

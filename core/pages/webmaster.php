@@ -25,7 +25,7 @@ class ClientDash_Page_Webmaster extends ClientDash {
 				'index.php',
 				$webmaster,
 				$webmaster,
-				'publish_posts',
+				'read',
 				'cd_webmaster',
 				array( $this, 'page_output' )
 			);

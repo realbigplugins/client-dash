@@ -35,7 +35,7 @@ class ClientDash_Page_Help extends ClientDash {
 				'index.php',
 				'Help Information',
 				'Help',
-				'publish_posts',
+				'read',
 				'cd_help',
 				array( $this, 'page_output' )
 			);
