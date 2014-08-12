@@ -63,7 +63,7 @@ class ClientDash_Core_Page_Settings_Tab_Addons extends ClientDash {
 			),
 			'Client Dash Status Cake Addon' => array(
 				'url'           => 'https://wordpress.org/plugins/client-dash-status-cake-add-on/',
-				'install-url'   => network_admin_url( 'plugin-install.php' ) . '/plugin-install.php?tab=search&s=client+dash+status+cake+add+on&plugin-search-input=Search+Plugins',
+				'install-url'   => network_admin_url( 'plugin-install.php' ) . '?tab=search&s=client+dash+status+cake&plugin-search-input=Search+Plugins',
 				'activate-slug' => 'client-dash-status-cake/client-dash-status-cake.php',
 				'installed'     => ( get_plugins( '/client-dash-status-cake' ) ? true : false ),
 				'active'        => ( is_plugin_active( 'client-dash-status-cake/client-dash-status-cake.php' ) ? true : false ),
@@ -71,7 +71,7 @@ class ClientDash_Core_Page_Settings_Tab_Addons extends ClientDash {
 			),
 			'Client Dash BackupBuddy Addon' => array(
 				'url'           => 'https://wordpress.org/plugins/client-dash-backup-buddy/',
-				'install-url'   => network_admin_url( 'plugin-install.php' ) . '/plugin-install.php?tab=search&s=client+dash+backup+buddy+add+on&plugin-search-input=Search+Plugins',
+				'install-url'   => network_admin_url( 'plugin-install.php' ) . '?tab=search&s=client+dash+backup+buddy&plugin-search-input=Search+Plugins',
 				'activate-slug' => 'client-dash-backup-buddy/client-dash-backup-buddy.php',
 				'installed'     => ( get_plugins( '/client-dash-backup-buddy' ) ? true : false ),
 				'active'        => ( is_plugin_active( 'client-dash-backup-buddy/client-dash-backup-buddy.php' ) ? true : false ),
