@@ -19,10 +19,7 @@ class ClientDash_Widget_Webmaster extends ClientDash {
 	 * @since Client Dash 1.5
 	 */
 	public function __construct() {
-
-		global $ClientDash;
-
-		$webmaster = get_option( 'cd_webmaster_name', $ClientDash->option_defaults['webmaster_name'] );
+		$webmaster = get_option( 'cd_webmaster_name', $this->option_defaults['webmaster_name'] );
 
 		// Generate the ID
 		$ID = strtolower( str_replace( array( ' ', '-' ), '_', $webmaster ) );

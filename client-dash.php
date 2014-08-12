@@ -625,16 +625,16 @@ class ClientDash extends ClientDash_Functions {
 				unset( $this->content_sections[ $page ] );
 				continue;
 			}
-			foreach ( $tabs as $tab => $blocks ) {
-				foreach ( $blocks as $name => $info ) {
-					if ( ! empty( $content_sections_roles[ $page ][ $tab ][ $name ][ $current_role ] )
-					     && $content_sections_roles[ $page ][ $tab ][ $name ][ $current_role ] != '0'
+			foreach ( $tabs as $tab => $props ) {
+				foreach ( $props['content-sections'] as $ID => $info ) {
+					if ( ! empty( $content_sections_roles[ $page ][ $tab ][ $ID ][ $current_role ] )
+					     && $content_sections_roles[ $page ][ $tab ][ $ID ][ $current_role ] != '0'
 					) {
 						// If they are disabled, unset it and then remove tab and page if necessary
-						unset( $this->content_sections[ $page ][ $tab ][ $name ] );
+						unset( $this->content_sections[ $page ][ $tab ]['content-sections'][ $ID ] );
 
 						// Remove tab
-						if ( empty( $this->content_sections[ $page ][ $tab ] ) ) {
+						if ( empty( $this->content_sections[ $page ][ $tab ]['content-sections'] ) ) {
 							unset( $this->content_sections[ $page ][ $tab ] );
 						}
 

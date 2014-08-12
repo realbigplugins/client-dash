@@ -111,16 +111,16 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 			echo '</p>';
 			echo '</div>'; // .cd-roles-grid-page
 
-			foreach ( $tabs as $tab => $blocks ) {
+			foreach ( $tabs as $tab => $props ) {
 
 				// Tab Box
 				echo '<div class="cd-roles-grid-tab hidden">';
 				echo '<p class="cd-roles-grid-title" onclick="cd_toggle_roles_tab(this)">';
-				echo ucwords( str_replace( '_', ' ', $tab ) );
+				echo $props['name'];
 				echo '<span class="cd-up-down"></span>';
 				echo '</p>';
 
-				foreach ( $blocks as $block_ID => $props_block ) {
+				foreach ( $props['content-sections'] as $block_ID => $props_block ) {
 
 					// Content Box
 					echo '<div class="cd-roles-grid-block hidden">';

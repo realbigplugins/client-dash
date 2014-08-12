@@ -80,7 +80,7 @@ abstract class ClientDash_Functions {
 		// Cycle through all tabs and output the menu
 		echo '<h2 class="nav-tab-wrapper">';
 		$i = 0;
-		foreach ( $ClientDash->content_sections[ $current_page ] as $tab_ID => $block ) {
+		foreach ( $ClientDash->content_sections[ $current_page ] as $tab_ID => $props ) {
 			$i ++;
 
 			// Translate the tab ID into the tab name
@@ -94,7 +94,7 @@ abstract class ClientDash_Functions {
 			}
 
 			// Output the tab menu item
-			echo '<a href="?page=cd_' . $current_page . '&tab=' . $tab_ID . '" class="nav-tab ' . $active . '">' . $tab_name . '</a>';
+			echo '<a href="?page=cd_' . $current_page . '&tab=' . $tab_ID . '" class="nav-tab ' . $active . '">' . $props['name'] . '</a>';
 		}
 		echo '</h2>';
 
@@ -106,12 +106,12 @@ abstract class ClientDash_Functions {
 
 		// Cycle through all sections and output the menu
 		// Skip if total is only 1
-		$total = count( $ClientDash->content_sections[ $current_page ][ $active_tab ] );
+		$total = count( $ClientDash->content_sections[ $current_page ][ $active_tab ]['content-sections'] );
 		if ( $total > 1 ) {
 			echo '<ul class="subsubsub cd-sections-menu">';
 
 			$i = 0;
-			foreach ( $ClientDash->content_sections[ $current_page ][ $active_tab ] as $section_ID => $props ) {
+			foreach ( $ClientDash->content_sections[ $current_page ][ $active_tab ]['content-sections'] as $section_ID => $props ) {
 				$i ++;
 
 				echo '<li>';
@@ -136,12 +136,12 @@ abstract class ClientDash_Functions {
 
 		// If no active section was set, take the first one
 		if ( ! $active_section ) {
-			reset( $ClientDash->content_sections[ $current_page ][ $active_tab ] );
-			$active_section = key( $ClientDash->content_sections[ $current_page ][ $active_tab ] );
+			reset( $ClientDash->content_sections[ $current_page ][ $active_tab ]['content-sections'] );
+			$active_section = key( $ClientDash->content_sections[ $current_page ][ $active_tab ]['content-sections'] );
 		}
 
 		// Get our current section
-		$section_output = $ClientDash->content_sections[ $current_page ][ $active_tab ][ $active_section ];
+		$section_output = $ClientDash->content_sections[ $current_page ][ $active_tab ]['content-sections'][ $active_section ];
 
 		// This calls the dynamic class and dynamic callback function
 		echo '<div class="cd-content-section">';
@@ -171,25 +171,42 @@ abstract class ClientDash_Functions {
 		$ID = $this->translate_name_to_id( $content_section['name'] );
 
 		// Fix up the tab name (to allow spaces and such)
-		$tab = $this->translate_name_to_id( $content_section['tab'] );
+		$tab_ID = $this->translate_name_to_id( $content_section['tab'] );
 
 		// Fix up the page name (to allow spaces and such)
 		$page = $this->translate_name_to_id( $content_section['page'] );
 
-		$ClientDash->content_sections[ $page ][ $tab ][ $ID ] = array(
-			'name'     => $content_section['name'],
-			'callback' => $content_section['callback'],
-			'priority' => $content_section['priority']
+		$ClientDash->content_sections[ $page ][ $tab_ID ] = array(
+			'name' => $content_section['tab'],
+			'content-sections' => array(
+				$ID => array(
+					'name'     => $content_section['name'],
+					'callback' => $content_section['callback'],
+					'priority' => $content_section['priority']
+				)
+			)
 		);
 
 		// Also add for the unmodified version
-		$ClientDash->content_sections_unmodified[ $page ][ $tab ][ $ID ] = array(
-			'name'     => $content_section['name'],
-			'callback' => $content_section['callback'],
-			'priority' => $content_section['priority']
+		$ClientDash->content_sections_unmodified[ $page ][ $tab_ID ] = array(
+			'name' => $content_section['tab'],
+			'content-sections' => array(
+				$ID => array(
+					'name'     => $content_section['name'],
+					'callback' => $content_section['callback'],
+					'priority' => $content_section['priority']
+				)
+			)
 		);
 	}
 
+	/**
+	 * Adds a widget to be available under Settings -> Widgets.
+	 *
+	 * @since Client Dash 1.5
+	 *
+	 * @param array $widget The new widget to add.
+	 */
 	public function add_widget( $widget ) {
 
 		global $ClientDash;
@@ -204,6 +221,10 @@ abstract class ClientDash_Functions {
 			'cd_page'       => $widget['cd_page']
 		);
 
+		// Make sure something is there!
+		if ( empty( $ClientDash->widgets ) ) {
+			$ClientDash->widgets = array();
+		}
 		array_push( $ClientDash->widgets, $widgets );
 	}
 
