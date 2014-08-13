@@ -57,7 +57,7 @@ class ClientDash_Core_Page_Settings_Tab_Webmaster extends ClientDash {
 				</th>
 				<td>
 					<?php
-					if ( get_option( 'cd_hide_page_webmaster' ) ) {
+					if ( get_option( 'cd_hide_page_webmaster', $this->option_defaults['hide_page_webmaster'] ) ) {
 						echo '<span class="cd-webmaster-off">OFF</span>';
 					} else {
 						echo '<span class="cd-webmaster-on">ON</span>';

@@ -243,7 +243,7 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 			'dashicons-smiley'
 		);
 
-		$class_grid = get_option( 'cd_webmaster_enable', false ) ? 'cd-col-four' : 'cd-col-three';
+		$class_grid = get_option( 'cd_hide_page_webmaster', $this->option_defaults['hide_page_webmaster'] ) != '1' ? 'cd-col-four' : 'cd-col-three';
 
 		?>
 
@@ -278,7 +278,7 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 				<p class="cd-dashicons-title">Help</p>
 			</div>
 
-			<?php if ( get_option( 'cd_webmaster_enable', false ) ): ?>
+			<?php if ( get_option( 'cd_hide_page_webmaster', $this->option_defaults['hide_page_webmaster'] ) != '1' ) : ?>
 				<div class="<?php echo $class_grid; ?> cd-webmaster" onclick="cd_dashicons_selected('webmaster');">
 					<p class="dashicons  <?php echo $webmaster_dashicon; ?>"
 					   data-dashicon="<?php echo $webmaster_dashicon; ?>"
