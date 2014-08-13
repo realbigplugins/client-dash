@@ -41,23 +41,28 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 		$cd_active_plugins = get_option( 'cd_active_plugins' );
 
 		if ( $active_plugins != $cd_active_plugins ) {
-			$this->error_nag( 'One or more plugins as been activated / deactivated. Please visit the dashboard again to refresh widgets' );
+			$dashboard_link = get_admin_url();
+			$dashboard_link = add_query_arg( 'cd_update_dash', 'true', $dashboard_link );
+			$dashboard_link = "<a href='$dashboard_link'>Dashboard</a>";
+			$this->error_nag( "Hate to bother you, but one or more plugins has been activated / deactivated. Could you please visit the $dashboard_link to refresh them?" );
+			add_filter( 'cd_submit', '__return_false' );
+			return;
 		}
 
 		// Widgets added by plugins and WP Core
-		$plugin_widgets = get_option( 'cd_active_widgets' );
+		$active_widgets = get_option( 'cd_active_widgets' );
 
 		// Widgets added by Client Dash
-		$cd_widgets = $ClientDash->widgets;
+		$cd_available_widgets = $ClientDash->widgets;
 
 		// Get our active widgets
-		$active_widgets = get_option( 'cd_widgets', $this->option_defaults['widgets'] );
+		$cd_widgets = get_option( 'cd_widgets', $this->option_defaults['widgets'] );
 
 		// All widgets to use
-		if ( ! empty( $plugin_widgets ) ) {
-			$all_widgets = array_merge( $cd_widgets, $plugin_widgets );
+		if ( ! empty( $active_widgets ) ) {
+			$all_widgets = array_merge( $cd_available_widgets, $active_widgets );
 		} else {
-			$all_widgets = $cd_widgets;
+			$all_widgets = $cd_available_widgets;
 		}
 		?>
 		<div id="cd-dash-widgets-left">
@@ -81,8 +86,8 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 
 			<ul id="cd-dash-widgets-sortable" class="cd-dash-widgets-container">
 				<?php
-				if ( ! empty( $active_widgets ) ) {
-					$this->widget_loop( $active_widgets );
+				if ( ! empty( $cd_widgets ) ) {
+					$this->widget_loop( $cd_widgets );
 				}
 				?>
 			</ul>

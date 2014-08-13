@@ -177,7 +177,7 @@ abstract class ClientDash_Functions {
 		$page = $this->translate_name_to_id( $content_section['page'] );
 
 		$ClientDash->content_sections[ $page ][ $tab_ID ] = array(
-			'name' => $content_section['tab'],
+			'name'             => $content_section['tab'],
 			'content-sections' => array(
 				$ID => array(
 					'name'     => $content_section['name'],
@@ -189,7 +189,7 @@ abstract class ClientDash_Functions {
 
 		// Also add for the unmodified version
 		$ClientDash->content_sections_unmodified[ $page ][ $tab_ID ] = array(
-			'name' => $content_section['tab'],
+			'name'             => $content_section['tab'],
 			'content-sections' => array(
 				$ID => array(
 					'name'     => $content_section['name'],
@@ -228,6 +228,19 @@ abstract class ClientDash_Functions {
 		array_push( $ClientDash->widgets, $widgets );
 	}
 
+	/**
+	 * Displays widgets for Settings -> Widgets.
+	 *
+	 * Loops through all widgets supplied and outputs them accordingly. This is
+	 * used for the Settings -> Widgets page for both the "Available Dashboard Widgets"
+	 * and "Dashboard" sections.
+	 *
+	 * @since Client Dash 1.5
+	 *
+	 * @param array $widgets All widgets to display.
+	 * @param bool $disabled Whether or not the inputs should be disabled.
+	 * @param bool $draggable Whether or not these should be draggable.
+	 */
 	public function widget_loop( $widgets, $disabled = false, $draggable = false ) {
 
 		$i = - 1;
@@ -235,14 +248,14 @@ abstract class ClientDash_Functions {
 			$i ++;
 
 			if ( ! isset( $widget['ID'] ) ) {
-				if ( isset( $widget['cd_core'] ) && $widget['cd_core'] ) {
+				if ( isset( $widget['cd_core'] ) ) {
 					$widget['ID'] = $this->translate_name_to_id( $widget['title'] );
 				} else {
 					$widget['ID'] = $key;
 				}
 			}
 			?>
-			<li class="cd-dash-widget <?php echo $draggable ? 'ui-draggable' : ''; ?>">
+			<li class="cd-dash-widget<?php echo $draggable ? ' ui-draggable' : ''; echo isset( $widget['deactivated'] ) ? ' deactivated' : ''; ?>">
 				<h4 class="cd-dash-widget-title">
 					<?php echo $widget['title']; ?>
 					<span class="cd-up-down"></span>
@@ -272,8 +285,24 @@ abstract class ClientDash_Functions {
 				<?php
 				foreach ( $widget as $name => $value ) {
 					$disabled = $disabled ? 'disabled' : '';
+
+					// This is account for the callback value, which is an array
 					if ( is_array( $value ) ) {
-						echo "<input type='hidden' name='cd_widgets[$i][$name][0]' value='$value[0]' $disabled />";
+
+						// Sometimes an object gets saved instead of the class name, this
+						// accounts for that possibility
+						if ( is_object( $value[0] ) ) {
+							echo "<input type='hidden' name='cd_widgets[$i][$name][0]' value='" . get_class( $value[0] ) . "' $disabled />";
+							echo "<input type='hidden' name='cd_widgets[$i][is_object]' value='1' $disabled/>";
+						} else {
+							// If the plugin is deactivated, we will get an incomplete class error
+							if ( ! is_object( $value[0] ) && gettype( $value[0] ) == 'object' ) {
+								continue;
+							}
+
+							echo "<input type='hidden' name='cd_widgets[$i][$name][0]' value='$value[0]' $disabled />";
+						}
+
 						echo "<input type='hidden' name='cd_widgets[$i][$name][1]' value='$value[1]' $disabled />";
 					} else {
 						echo "<input type='hidden' name='cd_widgets[$i][$name]' value='$value' $disabled />";
@@ -294,6 +323,7 @@ abstract class ClientDash_Functions {
 	 * @return string Translated ID.
 	 */
 	public function translate_name_to_id( $name ) {
+
 		return strtolower( str_replace( array( ' ', '-' ), '_', $name ) );
 	}
 
@@ -488,7 +518,7 @@ abstract class ClientDash_Functions {
 	public function error_nag( $message, $caps = 'read' ) {
 
 		if ( current_user_can( $caps ) ) {
-			echo "<div class='settings-error error'><p>$message</p></div>";
+			echo "<div class='error'><p>$message</p></div>";
 		}
 	}
 
@@ -577,5 +607,19 @@ abstract class ClientDash_Functions {
 	public function return_1() {
 
 		return 1;
+	}
+
+	/**
+	 * Used in widgets_init.
+	 *
+	 * @since Client Dash 1.5
+	 *
+	 * @param mixed $matches Matches from a preg_replace_callback.
+	 *
+	 * @return string Upped count.
+	 */
+	public function replace_count( $matches ) {
+		$n = intval( $matches[2] ) + 1;
+		return $matches[1] . $n;
 	}
 }

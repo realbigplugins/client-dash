@@ -117,38 +117,38 @@ class ClientDash extends ClientDash_Functions {
 		'dashicon_settings'          => 'dashicons-admin-settings',
 		//
 		// Default widgets
-		'widgets' => array(
+		'widgets'                    => array(
 			array(
-				'ID' => 'cd_account',
-				'title'    => 'Account',
-				'callback' => array( 'ClientDash_Widget_Account', 'widget_content' ),
+				'ID'            => 'cd_account',
+				'title'         => 'Account',
+				'callback'      => array( 'ClientDash_Widget_Account', 'widget_content' ),
 				'edit_callback' => false,
-				'cd_core' => true,
-				'cd_page' => 'account'
+				'cd_core'       => true,
+				'cd_page'       => 'account'
 			),
 			array(
-				'ID' => 'cd_reports',
-				'title'    => 'Reports',
-				'callback' => array( 'ClientDash_Widget_Reports', 'widget_content' ),
+				'ID'            => 'cd_reports',
+				'title'         => 'Reports',
+				'callback'      => array( 'ClientDash_Widget_Reports', 'widget_content' ),
 				'edit_callback' => false,
-				'cd_core' => true,
-				'cd_page' => 'reports'
+				'cd_core'       => true,
+				'cd_page'       => 'reports'
 			),
 			array(
-				'ID' => 'cd_help',
-				'title'    => 'Help',
-				'callback' => array( 'ClientDash_Widget_Help', 'widget_content' ),
+				'ID'            => 'cd_help',
+				'title'         => 'Help',
+				'callback'      => array( 'ClientDash_Widget_Help', 'widget_content' ),
 				'edit_callback' => false,
-				'cd_core' => true,
-				'cd_page' => 'help'
+				'cd_core'       => true,
+				'cd_page'       => 'help'
 			),
 			array(
-				'ID' => 'cd_core',
-				'title'    => 'Webmaster',
-				'callback' => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
+				'ID'            => 'cd_core',
+				'title'         => 'Webmaster',
+				'callback'      => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
 				'edit_callback' => false,
-				'cd_core' => true,
-				'cd_page' => 'webmaster'
+				'cd_core'       => true,
+				'cd_page'       => 'webmaster'
 			)
 		),
 		//
@@ -229,11 +229,10 @@ class ClientDash extends ClientDash_Functions {
 	 * @since Client Dash 1.5
 	 */
 	public $remove_menu_items = array(
-		'menu' => array(
-		),
+		'menu'    => array(),
 		'submenu' => array(
 			array(
-				'menu_slug' => 'index.php',
+				'menu_slug'    => 'index.php',
 				'submenu_slug' => 'my-sites.php'
 			)
 		)
@@ -319,6 +318,9 @@ class ClientDash extends ClientDash_Functions {
 
 		// Initializes the dashboard widgets
 		add_action( 'wp_dashboard_setup', array( $this, 'widgets_init' ), 1010 );
+
+		// Shows any admin notices
+		$this->admin_notices();
 	}
 
 	/**
@@ -469,11 +471,12 @@ class ClientDash extends ClientDash_Functions {
 	 * @param mixed $wp_admin_bar The supplied admin bar object.
 	 */
 	public function remove_admin_bar_menus() {
-		foreach( $this->remove_menu_items['menu'] as $item ) {
+
+		foreach ( $this->remove_menu_items['menu'] as $item ) {
 			remove_menu_page( $item );
 		}
 
-		foreach( $this->remove_menu_items['submenu'] as $item ) {
+		foreach ( $this->remove_menu_items['submenu'] as $item ) {
 			remove_submenu_page( $item['menu_slug'], $item['submenu_slug'] );
 		}
 	}
@@ -505,6 +508,7 @@ class ClientDash extends ClientDash_Functions {
 	 * @since Client Dash 1.1
 	 */
 	public function get_active_widgets() {
+
 		global $wp_meta_boxes;
 
 		// Initialize
@@ -537,6 +541,32 @@ class ClientDash extends ClientDash_Functions {
 			update_option( 'cd_active_plugins', $active_plugins );
 
 			update_option( 'cd_active_widgets', $active_widgets );
+
+			// If a plugin as been deactivated, we need to mark that in our "cd_widgets"
+			// option for later use in the settings page.
+			$cd_widgets        = get_option( 'cd_widgets', $this->option_defaults['widgets'] );
+			$cd_widgets_update = $cd_widgets;
+
+			foreach ( $cd_widgets as $key => $cd_widget ) {
+				// Skip CD core widgets, they can't be deactivated
+				// OR if it is an active widget
+				if ( isset( $cd_widget['cd_core'] ) || isset( $active_widgets[ $cd_widget['ID'] ] ) ) {
+
+					// If it was previously deactivated, unset that
+					if ( isset( $cd_widgets[ $key ]['deactivated'] ) ) {
+						unset( $cd_widgets_update[ $key ]['deactivated'] );
+					}
+					continue;
+				}
+
+				// Oh boy, looks like the plugin for the widget is deactivated
+				$cd_widgets_update[ $key ]['deactivated'] = true;
+			}
+
+			// Update our option if it's changed
+			if ( $cd_widgets != $cd_widgets_update ) {
+				update_option( 'cd_widgets', $cd_widgets_update );
+			}
 		}
 
 	}
@@ -547,6 +577,7 @@ class ClientDash extends ClientDash_Functions {
 	 * @since Client Dash 1.1
 	 */
 	public function remove_default_dashboard_widgets() {
+
 		global $wp_meta_boxes;
 
 		$active_widgets = get_option( 'cd_active_widgets', null );
@@ -570,7 +601,7 @@ class ClientDash extends ClientDash_Functions {
 		foreach ( $active_widgets as $widget => $values ) {
 			remove_meta_box( $widget, 'dashboard', $values['context'] );
 		}
-		 $wp_meta_boxes = null;
+		$wp_meta_boxes = null;
 	}
 
 	/**
@@ -654,6 +685,7 @@ class ClientDash extends ClientDash_Functions {
 	 * @since Client Dash 1.5
 	 */
 	public function widgets_init() {
+
 		$widgets = get_option( 'cd_widgets', $this->option_defaults['widgets'] );
 
 		if ( ! empty( $widgets ) ) {
@@ -702,7 +734,13 @@ class ClientDash extends ClientDash_Functions {
 					}
 				}
 
-				if ( array_key_exists( $widget['ID'], $user_visible_widgets ) || $widget['cd_core'] ) {
+				if ( array_key_exists( $widget['ID'], $user_visible_widgets ) || isset( $widget['cd_core'] ) ) {
+
+					// If callback should be an object
+					if ( isset( $widget['is_object'] ) ) {
+						$widget['callback'][0] = new $widget['callback'][0];
+					}
+
 					add_meta_box(
 						isset( $new_ID ) ? $new_ID : $widget['ID'],
 						$widget['title'],
@@ -716,9 +754,22 @@ class ClientDash extends ClientDash_Functions {
 		}
 	}
 
-	public function replace_count( $matches ) {
-		$n = intval( $matches[2] ) + 1;
-		return $matches[1] . $n;
+	/**
+	 * Adds admin notices based on pre-specified query args.
+	 *
+	 * @since Client Dash 1.5
+	 */
+	public function admin_notices() {
+
+		if ( isset( $_GET['cd_update_dash'] ) ) {
+			?>
+			<div class="updated">
+				<p>
+					Great! Thanks! Now you can return to the settings <a href="<?php echo $this->get_settings_url( 'widgets' ); ?>">here</a>.
+				</p>
+			</div>
+		<?php
+		}
 	}
 }
 
