@@ -25,6 +25,9 @@ class ClientDash_RequireFiles extends ClientDash {
 		// Require our AJAX file
 		require_once( plugin_dir_path( __FILE__ ) . 'ajax.php' );
 
+		// Require our deprecated file
+		require_once( plugin_dir_path( __FILE__ ) . 'deprecated.php' );
+
 		// Core page and tab files
 		foreach ( $this->core_files as $page => $tabs ) {
 			// Include page file

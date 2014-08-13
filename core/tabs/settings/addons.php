@@ -40,10 +40,12 @@ class ClientDash_Core_Page_Settings_Tab_Addons extends ClientDash {
 		// Activate/Deactivate plugins
 		if ( isset( $_GET['cd_activate'] ) ) {
 			activate_plugin( $_GET['cd_activate'] );
+			$this->update_nag( 'Extension activated! Refresh for changes to take effect.' );
 		}
 
 		if ( isset( $_GET['cd_deactivate'] ) ) {
 			deactivate_plugins( $_GET['cd_deactivate'] );
+			$this->update_nag( 'Extension deactivated! Refresh for changes to take effect.' );
 		}
 
 		// Declare addons
@@ -51,7 +53,7 @@ class ClientDash_Core_Page_Settings_Tab_Addons extends ClientDash {
 			'Client Dash WP Help Addon'         => array(
 				'url'           => 'http://wordpress.org/plugins/client-dash-wp-help-add-on/',
 				'install-url'   => network_admin_url( 'plugin-install.php' ) . '?tab=search&s=client+dash+wp+help+add+on&plugin-search-input=Search+Plugins',
-				'activate-slug' => 'client-dash-wp-help-add-on/client-dash-wp-help.php',
+				'activate-slug' => 'client-dash-wp-help/client-dash-wp-help.php',
 				'installed'     => ( get_plugins( '/client-dash-wp-help' ) ? true : false ),
 				'active'        => ( is_plugin_active( 'client-dash-wp-help/client-dash-wp-help.php' ) ? true : false ),
 				'icon'          => 'editor-help'
@@ -88,8 +90,8 @@ class ClientDash_Core_Page_Settings_Tab_Addons extends ClientDash {
 		foreach ( $addons as $name => $props ) {
 			// Set up activate/deactivate urls
 			$url            = remove_query_arg( array( 'cd_deactivate', 'cd_activate' ) );
-			$activate_url   = add_query_arg( array( 'cd_activate' => $props['activate-slug'] ), $url );
-			$deactivate_url = add_query_arg( array( 'cd_deactivate' => $props['activate-slug'] ), $url );
+			$activate_url   = esc_url( add_query_arg( array( 'cd_activate' => $props['activate-slug'] ), $url ) );
+			$deactivate_url = esc_url( add_query_arg( array( 'cd_deactivate' => $props['activate-slug'] ), $url ) );
 
 			echo '<div class="cd-addon cd-col-three">';
 			echo '<div class="cd-addon-container">';

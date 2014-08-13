@@ -478,32 +478,6 @@ abstract class ClientDash_Functions {
 	}
 
 	/**
-	 * Activates a plugin.
-	 *
-	 * @since Client Dash 1.4
-	 *
-	 * @param $plugin string Plugin path/Plugin file-name
-	 *
-	 * @return null
-	 */
-	public function activate_plugin( $plugin ) {
-
-		$current = get_option( 'active_plugins' );
-		$plugin  = plugin_basename( trim( $plugin ) );
-
-		if ( ! in_array( $plugin, $current ) ) {
-			$current[] = $plugin;
-			sort( $current );
-			do_action( 'activate_plugin', trim( $plugin ) );
-			update_option( 'active_plugins', $current );
-			do_action( 'activate_' . trim( $plugin ) );
-			do_action( 'activated_plugin', trim( $plugin ) );
-		}
-
-		return null;
-	}
-
-	/**
 	 * Displays a WordPress error nag.
 	 *
 	 * The nag will only show if the current user has the capabilities that
@@ -520,6 +494,26 @@ abstract class ClientDash_Functions {
 
 		if ( current_user_can( $caps ) ) {
 			echo "<div class='error'><p>$message</p></div>";
+		}
+	}
+
+	/**
+	 * Displays a WordPress update nag.
+	 *
+	 * The nag will only show if the current user has the capabilities that
+	 * are defined by the second parameter. This defaults to allowing
+	 * everybody to see the message.
+	 *
+	 * @since Client Dash 1.4
+	 *
+	 * @param string $message The message to show.
+	 * @param string $caps . Optional. A WordPress recognized capability. Default
+	 * is 'read'.
+	 */
+	public function update_nag( $message, $caps = 'read' ) {
+
+		if ( current_user_can( $caps ) ) {
+			echo "<div class='updated'><p>$message</p></div>";
 		}
 	}
 
