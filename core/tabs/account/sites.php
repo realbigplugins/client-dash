@@ -11,19 +11,21 @@
  * @since Client Dash 1.5
  */
 class ClientDash_Core_Page_Account_Tab_Sites extends ClientDash {
+
 	/**
 	 * The main construct function.
 	 *
 	 * @since Client Dash 1.5
 	 */
 	function __construct() {
+
 		if ( is_multisite() ) {
 			$this->add_content_section( array(
-				'name' => 'List of Sites',
-				'page' => 'Account',
-				'tab' => 'Sites',
+				'name'     => 'List of Sites',
+				'page'     => 'Account',
+				'tab'      => 'Sites',
 				'callback' => array( $this, 'block_output' )
-			));
+			) );
 		}
 	}
 
@@ -33,6 +35,7 @@ class ClientDash_Core_Page_Account_Tab_Sites extends ClientDash {
 	 * @since Client Dash 1.4
 	 */
 	public function block_output() {
+
 		// Set up current user information
 		$current_user = wp_get_current_user();
 

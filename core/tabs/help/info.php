@@ -11,18 +11,20 @@
  * @since Client Dash 1.5
  */
 class ClientDash_Core_Page_Help_Tab_Info extends ClientDash {
+
 	/**
 	 * The main construct function.
 	 *
 	 * @since Client Dash 1.5
 	 */
 	function __construct() {
+
 		$this->add_content_section( array(
-			'name' => 'Basic Information',
-			'page' => 'Help',
-			'tab' => 'Info',
+			'name'     => 'Basic Information',
+			'page'     => 'Help',
+			'tab'      => 'Info',
 			'callback' => array( $this, 'block_output' )
-		));
+		) );
 	}
 
 	/**
@@ -31,6 +33,7 @@ class ClientDash_Core_Page_Help_Tab_Info extends ClientDash {
 	 * @since Client Dash 1.4
 	 */
 	public function block_output() {
+
 		// Get the user information
 		$cd_current_theme  = wp_get_theme();
 		$cd_plugins        = get_plugins();

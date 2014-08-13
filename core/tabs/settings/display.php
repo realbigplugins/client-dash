@@ -11,21 +11,24 @@
  * @since Client Dash 1.5
  */
 class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
+
 	/**
 	 * The main construct function.
 	 *
 	 * @since Client Dash 1.5
 	 */
 	function __construct() {
+
 		$this->add_content_section( array(
-			'name' => 'Core Settings Display',
-			'page' => 'Settings',
-			'tab' => 'Display',
+			'name'     => 'Core Settings Display',
+			'page'     => 'Settings',
+			'tab'      => 'Display',
 			'callback' => array( $this, 'block_output' )
-		));
+		) );
 	}
 
 	public function add_reset_button( $submit ) {
+
 		$reset = '<input type="button" class="button cd-reset-roles" value="Reset Roles" onclick="if ( confirm(\'WARNING: This will reset all role settings back to default. \\n\\nAre you sure you want to do this?\') ) cd_reset_roles();" />';
 
 		return $submit . $reset;
@@ -37,6 +40,7 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 	 * @since Client Dash 1.4
 	 */
 	public function block_output() {
+
 		global $ClientDash;
 
 		// Add our reset roles button next to submit
@@ -67,10 +71,10 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 
 			// Find out if all roles have been unchecked
 			$all_disabled = true;
-			if ( isset( $content_sections_roles[$page] ) ) {
-				foreach( $content_sections_roles[$page] as $sections ) {
-					foreach( $sections as $section_roles ) {
-						foreach( $section_roles as $section_role ) {
+			if ( isset( $content_sections_roles[ $page ] ) ) {
+				foreach ( $content_sections_roles[ $page ] as $sections ) {
+					foreach ( $sections as $section_roles ) {
+						foreach ( $section_roles as $section_role ) {
 							if ( $section_role == 0 ) {
 								// If even one of these is enabled, we can assume that all are not disabled
 								$all_disabled = false;
@@ -95,7 +99,7 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 
 			// Creates a toggle "switch" for disabling the page entirely
 			echo '<span class="cd-toggle-switch ' . ( empty( $disabled ) ? 'on' : 'off' ) . '" data-inverse="true">';
-			echo '<input type="hidden" name="cd_hide_page_' . $page .'" value="1" ' . ( empty( $disabled ) ? 'disabled' : '' ) . '/>';
+			echo '<input type="hidden" name="cd_hide_page_' . $page . '" value="1" ' . ( empty( $disabled ) ? 'disabled' : '' ) . '/>';
 			echo '</span>';
 
 			echo ucwords( str_replace( '_', ' ', $page ) );
@@ -145,6 +149,8 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 					             name='cd_content_sections_roles[$page][$tab][$block_ID][$role_ID]'
 					             value='0'
 					             id='$page-$tab-$role_ID' ";
+
+						// Check the checkbox if the role does not exist or the defaults have it set to be
 						if ( empty( $content_sections_roles[ $page ][ $tab ][ $block_ID ][ $role_ID ] )
 						     || $content_sections_roles[ $page ][ $tab ][ $block_ID ][ $role_ID ] == '0'
 						) {

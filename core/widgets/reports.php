@@ -12,19 +12,21 @@
  * @since Client Dash 1.5
  */
 class ClientDash_Widget_Reports extends ClientDash {
+
 	/**
 	 * The main construct function.
 	 *
 	 * @since Client Dash 1.5
 	 */
 	public function __construct() {
+
 		$this->add_widget( array(
-			'ID' => 'reports',
-			'title'    => 'Reports',
-			'description' => 'The core Reports widget',
-			'callback' => array( 'ClientDash_Widget_Reports', 'widget_content' ),
+			'ID'            => 'reports',
+			'title'         => 'Reports',
+			'description'   => 'The core Reports widget',
+			'callback'      => array( 'ClientDash_Widget_Reports', 'widget_content' ),
 			'edit_callback' => false,
-			'cd_page' => 'reports'
+			'cd_page'       => 'reports'
 		) );
 	}
 
@@ -34,6 +36,7 @@ class ClientDash_Widget_Reports extends ClientDash {
 	 * @since Client Dash 1.2
 	 */
 	public static function widget_content() {
+
 		global $ClientDash;
 
 		// Get the set dashicon

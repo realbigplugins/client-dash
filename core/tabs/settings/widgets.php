@@ -46,6 +46,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 			$dashboard_link = "<a href='$dashboard_link'>Dashboard</a>";
 			$this->error_nag( "Hate to bother you, but one or more plugins has been activated / deactivated. Could you please visit the $dashboard_link to refresh them?" );
 			add_filter( 'cd_submit', '__return_false' );
+
 			return;
 		}
 

@@ -11,18 +11,20 @@
  * @since Client Dash 1.5
  */
 class ClientDash_Core_Page_Account_Tab_About extends ClientDash {
+
 	/**
 	 * The main construct function.
 	 *
 	 * @since Client Dash 1.5
 	 */
 	function __construct() {
+
 		$this->add_content_section( array(
-			'name' => 'Basic Information',
-			'page' => 'Account',
-			'tab' => 'About You',
+			'name'     => 'Basic Information',
+			'page'     => 'Account',
+			'tab'      => 'About You',
 			'callback' => array( $this, 'block_output' )
-		));
+		) );
 	}
 
 	/**
@@ -31,6 +33,7 @@ class ClientDash_Core_Page_Account_Tab_About extends ClientDash {
 	 * @since Client Dash 1.4
 	 */
 	public function block_output() {
+
 		// Get the current user object
 		global $current_user;
 

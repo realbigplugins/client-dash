@@ -11,18 +11,20 @@
  * @since Client Dash 1.5
  */
 class ClientDash_Core_Page_Help_Tab_Domain extends ClientDash {
+
 	/**
 	 * The main construct function.
 	 *
 	 * @since Client Dash 1.5
 	 */
 	function __construct() {
+
 		$this->add_content_section( array(
-			'name' => 'Basic Information',
-			'page' => 'Help',
-			'tab' => 'Domain',
+			'name'     => 'Basic Information',
+			'page'     => 'Help',
+			'tab'      => 'Domain',
 			'callback' => array( $this, 'block_output' )
-		));
+		) );
 	}
 
 	/**
@@ -31,6 +33,7 @@ class ClientDash_Core_Page_Help_Tab_Domain extends ClientDash {
 	 * @since Client Dash 1.4
 	 */
 	public function block_output() {
+
 		// Get the current site's domain
 		$cd_domain = str_replace( 'http://', '', get_site_url() );
 		$cd_ip     = gethostbyname( $cd_domain );

@@ -14,7 +14,7 @@
   height: 100%;
   z-index: 10000;
   opacity: 0;
-  background-color: rgba(0,0,0,0.7);
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 .cd-toggle-switch {
@@ -69,6 +69,7 @@
   -o-transition: all 200ms;
   transition: all 200ms;
 }
+
 .cd-up-down.open:after {
   border-top: none;
   border-bottom: 15px solid rgba(0, 0, 0, 0.2);

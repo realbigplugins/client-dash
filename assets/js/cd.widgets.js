@@ -12,7 +12,7 @@ var cdWidgets;
                 start: function (event, ui) {
                     ui.item.find('.cd-up-down').removeClass('open');
                     ui.item.find('.cd-dash-widget-settings').removeClass('open');
-                    
+
                     // Prevent up-down while dragging
                     ui.item.data('dragging', true);
                 },
@@ -73,7 +73,7 @@ var cdWidgets;
     $(function () {
         cdWidgets.init();
 
-        $('#cd-dash-widgets-sortable').find('.cd-dash-widget').each(function() {
+        $('#cd-dash-widgets-sortable').find('.cd-dash-widget').each(function () {
             cdWidgets.toggle_init($(this));
         });
     });

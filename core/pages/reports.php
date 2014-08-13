@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class ClientDash_Page_Reports
  *
@@ -10,12 +11,14 @@
  * @since Client Dash 1.5
  */
 class ClientDash_Page_Reports extends ClientDash {
+
 	/**
 	 * The main construct function.
 	 *
 	 * @since Client Dash 1.5
 	 */
 	function __construct() {
+
 		// Add the menu item to the toolbar
 		add_action( 'admin_menu', array( $this, 'add_submenu_page' ) );
 	}
@@ -26,6 +29,7 @@ class ClientDash_Page_Reports extends ClientDash {
 	 * @since Client Dash 1.5
 	 */
 	public function add_submenu_page() {
+
 		global $ClientDash;
 
 		// Check to make sure there is a content section set, there aren't any filters disabling
@@ -48,6 +52,7 @@ class ClientDash_Page_Reports extends ClientDash {
 	 * @since Client Dash 1.5
 	 */
 	public function page_output() {
+
 		?>
 		<div class="wrap cd-reports">
 			<?php

@@ -19,18 +19,16 @@ class ClientDash_Widget_Webmaster extends ClientDash {
 	 * @since Client Dash 1.5
 	 */
 	public function __construct() {
+
 		$webmaster = get_option( 'cd_webmaster_name', $this->option_defaults['webmaster_name'] );
 
-		// Generate the ID
-		$ID = strtolower( str_replace( array( ' ', '-' ), '_', $webmaster ) );
-
 		$this->add_widget( array(
-			'ID'            => $ID,
+			'ID'            => 'webmaster',
 			'title'         => $webmaster,
 			'description'   => 'The core Webmaster widget',
 			'callback'      => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
 			'edit_callback' => false,
-			'cd_page' => 'webmaster'
+			'cd_page'       => 'webmaster'
 		) );
 	}
 

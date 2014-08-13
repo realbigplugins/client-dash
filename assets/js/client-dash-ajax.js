@@ -1,4 +1,3 @@
-
 /**
  * Calls an AJAX function to reset all role settings.
  *

@@ -101,7 +101,7 @@ class ClientDash extends ClientDash_Functions {
 		// The content for the webmaster page
 		'webmaster_main_tab_content' => null,
 		//
-		// Whether or not to show the feed tab at all
+		// Whether or not to show the feed tab
 		'webmaster_feed'             => null,
 		// The url for the RSS feed
 		'webmaster_feed_url'         => null,
@@ -150,7 +150,7 @@ class ClientDash extends ClientDash_Functions {
 				'cd_page'       => 'help'
 			),
 			array(
-				'ID'            => 'cd_core',
+				'ID'            => 'cd_webmaster',
 				'title'         => 'Webmaster',
 				'callback'      => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
 				'edit_callback' => false,
@@ -744,13 +744,17 @@ class ClientDash extends ClientDash_Functions {
 					}
 				}
 
+				// For webmaster widget
+				if ( $widget['ID'] == 'cd_webmaster' ) {
+					$widget['title'] = get_option( 'cd_webmaster_name', $this->option_defaults['webmaster_name'] );
+				}
+
+				// If callback should be an object
+				if ( isset( $widget['is_object'] ) ) {
+					$widget['callback'][0] = new $widget['callback'][0];
+				}
+
 				if ( array_key_exists( $widget['ID'], $user_visible_widgets ) || isset( $widget['cd_core'] ) ) {
-
-					// If callback should be an object
-					if ( isset( $widget['is_object'] ) ) {
-						$widget['callback'][0] = new $widget['callback'][0];
-					}
-
 					add_meta_box(
 						isset( $new_ID ) ? $new_ID : $widget['ID'],
 						$widget['title'],
@@ -775,7 +779,8 @@ class ClientDash extends ClientDash_Functions {
 			?>
 			<div class="updated">
 				<p>
-					Great! Thanks! Now you can return to the settings <a href="<?php echo $this->get_settings_url( 'widgets' ); ?>">here</a>.
+					Great! Thanks! Now you can return to the settings <a
+						href="<?php echo $this->get_settings_url( 'widgets' ); ?>">here</a>.
 				</p>
 			</div>
 		<?php

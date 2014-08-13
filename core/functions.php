@@ -255,7 +255,8 @@ abstract class ClientDash_Functions {
 				}
 			}
 			?>
-			<li class="cd-dash-widget<?php echo $draggable ? ' ui-draggable' : ''; echo isset( $widget['deactivated'] ) ? ' deactivated' : ''; ?>">
+			<li class="cd-dash-widget<?php echo $draggable ? ' ui-draggable' : '';
+			echo isset( $widget['deactivated'] ) ? ' deactivated' : ''; ?>">
 				<h4 class="cd-dash-widget-title">
 					<?php echo $widget['title']; ?>
 					<span class="cd-up-down"></span>
@@ -619,7 +620,9 @@ abstract class ClientDash_Functions {
 	 * @return string Upped count.
 	 */
 	public function replace_count( $matches ) {
+
 		$n = intval( $matches[2] ) + 1;
+
 		return $matches[1] . $n;
 	}
 }

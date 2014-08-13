@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class ClientDash_Page_Webmaster
  *
@@ -10,12 +11,15 @@
  * @since Client Dash 1.5
  */
 class ClientDash_Page_Webmaster extends ClientDash {
+
 	function __construct() {
+
 		// Add the menu item to the toolbar
 		add_action( 'admin_menu', array( $this, 'add_submenu_page' ) );
 	}
 
 	public function add_submenu_page() {
+
 		global $ClientDash;
 
 		$webmaster = get_option( 'cd_webmaster_name', $ClientDash->option_defaults['webmaster_name'] );
@@ -33,6 +37,7 @@ class ClientDash_Page_Webmaster extends ClientDash {
 	}
 
 	public function page_output() {
+
 		?>
 		<div class="wrap cd-webmaster">
 			<?php

@@ -11,12 +11,14 @@
  * @since Client Dash 1.5
  */
 class ClientDash_Core_Page_Webmaster_Tab_Main extends ClientDash {
+
 	/**
 	 * The main construct function.
 	 *
 	 * @since Client Dash 1.5
 	 */
 	function __construct() {
+
 		// Set the tab name to whatever the user set
 		$tab_name = get_option( 'cd_webmaster_main_tab_name' );
 
@@ -26,11 +28,11 @@ class ClientDash_Core_Page_Webmaster_Tab_Main extends ClientDash {
 		}
 
 		$this->add_content_section( array(
-			'name' => 'Main',
-			'page' => 'Webmaster',
-			'tab' => $tab_name,
+			'name'     => 'Main',
+			'page'     => 'Webmaster',
+			'tab'      => $tab_name,
 			'callback' => array( $this, 'block_output' )
-		));
+		) );
 	}
 
 	/**
@@ -39,6 +41,7 @@ class ClientDash_Core_Page_Webmaster_Tab_Main extends ClientDash {
 	 * @since Client Dash 1.4
 	 */
 	public function block_output() {
+
 		$content = get_option( 'cd_webmaster_main_tab_content' );
 		$content = wpautop( $content );
 

@@ -11,12 +11,14 @@
  * @since Client Dash 1.5
  */
 class ClientDash_Core_Page_Webmaster_Tab_Feed extends ClientDash {
+
 	/**
 	 * The main construct function.
 	 *
 	 * @since Client Dash 1.5
 	 */
 	function __construct() {
+
 		// Only show if enabled
 		if ( get_option( 'cd_webmaster_feed', $this->option_defaults['webmaster_feed'] ) ) {
 			$this->add_content_section( array(
@@ -34,6 +36,7 @@ class ClientDash_Core_Page_Webmaster_Tab_Feed extends ClientDash {
 	 * @since Client Dash 1.4
 	 */
 	public function block_output() {
+
 		// Get the feed options
 		$feed_url = get_option( 'cd_webmaster_feed_url', null );
 

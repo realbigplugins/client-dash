@@ -11,18 +11,20 @@
  * @since Client Dash 1.5
  */
 class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
+
 	/**
 	 * The main construct function.
 	 *
 	 * @since Client Dash 1.5
 	 */
 	function __construct() {
+
 		$this->add_content_section( array(
-			'name' => 'Core Settings Icons',
-			'page' => 'Settings',
-			'tab' => 'Icons',
+			'name'     => 'Core Settings Icons',
+			'page'     => 'Settings',
+			'tab'      => 'Icons',
 			'callback' => array( $this, 'block_output' )
-		));
+		) );
 	}
 
 	/**
@@ -31,6 +33,7 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 	 * @since Client Dash 1.4
 	 */
 	public function block_output() {
+
 		$account_dashicon   = get_option( 'cd_dashicon_account', $this->option_defaults['dashicon_account'] );
 		$reports_dashicon   = get_option( 'cd_dashicon_reports', $this->option_defaults['dashicon_reports'] );
 		$help_dashicon      = get_option( 'cd_dashicon_help', $this->option_defaults['dashicon_help'] );
@@ -247,8 +250,10 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 
 		?>
 
-		<input type="hidden" id="cd_dashicon_account" name="cd_dashicon_account" value="<?php echo $account_dashicon; ?>"/>
-		<input type="hidden" id="cd_dashicon_reports" name="cd_dashicon_reports" value="<?php echo $reports_dashicon; ?>"/>
+		<input type="hidden" id="cd_dashicon_account" name="cd_dashicon_account"
+		       value="<?php echo $account_dashicon; ?>"/>
+		<input type="hidden" id="cd_dashicon_reports" name="cd_dashicon_reports"
+		       value="<?php echo $reports_dashicon; ?>"/>
 		<input type="hidden" id="cd_dashicon_help" name="cd_dashicon_help" value="<?php echo $help_dashicon; ?>"/>
 		<input type="hidden" id="cd_dashicon_webmaster" name="cd_dashicon_webmaster"
 		       value="<?php echo $webmaster_dashicon; ?>"/>

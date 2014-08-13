@@ -12,19 +12,21 @@
  * @since Client Dash 1.5
  */
 class ClientDash_Widget_Help extends ClientDash {
+
 	/**
 	 * The main construct function.
 	 *
 	 * @since Client Dash 1.5
 	 */
 	public function __construct() {
+
 		$this->add_widget( array(
-			'ID' => 'help',
-			'title'    => 'Help',
-			'description' => 'The core Help widget',
-			'callback' => array( 'ClientDash_Widget_Help', 'widget_content' ),
+			'ID'            => 'help',
+			'title'         => 'Help',
+			'description'   => 'The core Help widget',
+			'callback'      => array( 'ClientDash_Widget_Help', 'widget_content' ),
 			'edit_callback' => false,
-			'cd_page' => 'help'
+			'cd_page'       => 'help'
 		) );
 	}
 
@@ -34,6 +36,7 @@ class ClientDash_Widget_Help extends ClientDash {
 	 * @since Client Dash 1.2
 	 */
 	public static function widget_content() {
+
 		global $ClientDash;
 
 		// Get the set dashicon

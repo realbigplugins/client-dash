@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class ClientDash_Page_Settings
  *
@@ -10,12 +11,14 @@
  * @since Client Dash 1.5
  */
 class ClientDash_Page_Settings extends ClientDash {
+
 	/**
 	 * The main construct function.
 	 *
 	 * @since Client Dash 1.5
 	 */
 	function __construct() {
+
 		// Register all the settings
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 
@@ -29,6 +32,7 @@ class ClientDash_Page_Settings extends ClientDash {
 	 * @since Client Dash 1.2
 	 */
 	public function register_settings() {
+
 		// Widgets Tab
 		register_setting( 'cd_options_widgets', 'cd_remove_which_widgets' );
 
@@ -66,6 +70,7 @@ class ClientDash_Page_Settings extends ClientDash {
 	 * @since Client Dash 1.5
 	 */
 	public function add_submenu_page() {
+
 		add_submenu_page(
 			'options-general.php',
 			'Client Dash Settings',
@@ -82,6 +87,7 @@ class ClientDash_Page_Settings extends ClientDash {
 	 * @since Client Dash 1.5
 	 */
 	public function page_output() {
+
 		// Make sure user has rights
 		if ( ! current_user_can( 'activate_plugins' ) ) {
 			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
