@@ -30,6 +30,9 @@
   border: 1px solid #aaa;
   border-radius: 3px;
   padding: 10px 0;
+  &:hover {
+    border-color: #888;
+  }
 }
 
 .cd-dashicons-grid-item .dashicons {

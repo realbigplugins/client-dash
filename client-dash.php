@@ -25,6 +25,13 @@ require_once( plugin_dir_path( __FILE__ ) . 'core/functions.php' );
 class ClientDash extends ClientDash_Functions {
 
 	/**
+	 * Current version of Client Dash.
+	 *
+	 * @since Client Dash 1.5
+	 */
+	public $version = '1.5';
+
+	/**
 	 * A list of all tab files to include.
 	 *
 	 * First level in the array are pages and second level are tabs. Altering this
@@ -334,21 +341,24 @@ class ClientDash extends ClientDash_Functions {
 		wp_register_script(
 			'cd-main',
 			plugin_dir_url( __FILE__ ) . 'assets/js/client-dash.js',
-			array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable' )
+			array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable' ),
+			$this->version
 		);
 
 		// The main script for Client Dash
 		wp_register_script(
 			'cd-ajax',
 			plugin_dir_url( __FILE__ ) . 'assets/js/client-dash-ajax.js',
-			array( 'jquery' )
+			array( 'jquery' ),
+			$this->version
 		);
 
 		// The script for dealing with the Widgets tab under Settings
 		wp_register_script(
 			'cd-widgets',
 			plugin_dir_url( __FILE__ ) . 'assets/js/cd.widgets.js',
-			array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable' )
+			array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable' ),
+			$this->version
 		);
 
 		// The main stylesheet for Client Dash
@@ -356,7 +366,7 @@ class ClientDash extends ClientDash_Functions {
 			'cd-main',
 			plugins_url( 'assets/css/client-dash.css', __FILE__ ),
 			array(),
-			null
+			$this->version
 		);
 	}
 
