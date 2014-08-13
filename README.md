@@ -1,4 +1,4 @@
-# Client Dash
+![banner](https://raw.githubusercontent.com/brashrebel/client-dash/master/assets/static/banner.png)
 
 [Releases](https://github.com/brashrebel/client-dash/releases)
 
