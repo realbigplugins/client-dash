@@ -85,7 +85,7 @@ class ClientDash_Core_Page_Account_Tab_About extends ClientDash {
 				<th scope="row">Your role</th>
 				<td><?php echo $cd_userrole; ?>
 					<span class="cd-caps cd-click dashicons dashicons-info"
-					      onclick="cd_updown('cd-caps');"
+					      onclick="cdMain.updown('cd-caps');"
 					      style="color:<?php echo $this->get_color_scheme( 'secondary' ); ?>"></span>
 		        <span id="cd-caps" style="display: none;">
 		          <h4><?php echo $cd_userrole; ?>s are able to:</h4>

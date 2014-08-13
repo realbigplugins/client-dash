@@ -29,7 +29,7 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 
 	public function add_reset_button( $submit ) {
 
-		$reset = '<input type="button" class="button cd-reset-roles" value="Reset Roles" onclick="if ( confirm(\'WARNING: This will reset all role settings back to default. \\n\\nAre you sure you want to do this?\') ) cd_reset_roles();" />';
+		$reset = '<input type="button" class="button cd-reset-roles" value="Reset Roles" onclick="if ( confirm(\'WARNING: This will reset all role settings back to default. \\n\\nAre you sure you want to do this?\') ) cdAJAX.reset_roles();" />';
 
 		return $submit . $reset;
 	}
@@ -93,7 +93,7 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 			echo '<li class="cd-roles-grid-item">';
 
 			// Page box
-			echo '<div class="cd-roles-grid-page" onclick="cd_toggle_roles_page(this)">';
+			echo '<div class="cd-roles-grid-page" onclick="cdMain.toggle_roles_page(this)">';
 
 			echo '<p class="cd-roles-grid-title">';
 
@@ -119,7 +119,7 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 
 				// Tab Box
 				echo '<div class="cd-roles-grid-tab hidden">';
-				echo '<p class="cd-roles-grid-title" onclick="cd_toggle_roles_tab(this)">';
+				echo '<p class="cd-roles-grid-title" onclick="cdMain.toggle_roles_tab(this)">';
 				echo $props['name'];
 				echo '<span class="cd-up-down"></span>';
 				echo '</p>';

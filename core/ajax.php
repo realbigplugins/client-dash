@@ -19,9 +19,9 @@ class ClientDash_AJAX extends ClientDash {
 	 */
 	function __construct() {
 
-		add_action( 'wp_ajax_cd_reset_roles', array( $this, 'cd_reset_roles' ) );
+		add_action( 'wp_ajax_cd_reset_roles', array( $this, 'reset_roles' ) );
 
-		add_action( 'wp_ajax_cd_reset_all_settings', array( $this, 'cd_reset_all_settings' ) );
+		add_action( 'wp_ajax_cd_reset_all_settings', array( $this, 'reset_all_settings' ) );
 	}
 
 	/**
@@ -29,7 +29,7 @@ class ClientDash_AJAX extends ClientDash {
 	 *
 	 * @since Client Dash 1.5
 	 */
-	public function cd_reset_roles() {
+	public function reset_roles() {
 
 		foreach ( $this->core_widgets as $page ) {
 			update_option( "cd_hide_page_$page", $this->option_defaults["hide_page_$page"] );
@@ -40,7 +40,7 @@ class ClientDash_AJAX extends ClientDash {
 		die();
 	}
 
-	public function cd_reset_all_settings() {
+	public function reset_all_settings() {
 
 		foreach ( $this->option_defaults as $name => $value ) {
 			// If the default value is "null", then just delete it

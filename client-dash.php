@@ -340,7 +340,7 @@ class ClientDash extends ClientDash_Functions {
 		// The main script for Client Dash
 		wp_register_script(
 			'cd-main',
-			plugin_dir_url( __FILE__ ) . 'assets/js/client-dash.js',
+			plugin_dir_url( __FILE__ ) . 'assets/js/cd.main.js',
 			array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable' ),
 			$this->version
 		);
@@ -348,7 +348,7 @@ class ClientDash extends ClientDash_Functions {
 		// The main script for Client Dash
 		wp_register_script(
 			'cd-ajax',
-			plugin_dir_url( __FILE__ ) . 'assets/js/client-dash-ajax.js',
+			plugin_dir_url( __FILE__ ) . 'assets/js/cd.ajax.js',
 			array( 'jquery' ),
 			$this->version
 		);
