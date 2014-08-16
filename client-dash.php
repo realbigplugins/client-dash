@@ -18,7 +18,7 @@ require_once( plugin_dir_path( __FILE__ ) . 'core/functions.php' );
  * initialize the plugin.
  *
  * @package WordPress
- * @subpackage Client Dash
+ * @subpackage ClientDash
  *
  * @since Client Dash 1.5
  */
@@ -361,6 +361,14 @@ class ClientDash extends ClientDash_Functions {
 			$this->version
 		);
 
+		// The script for dealing with the Widgets tab under Settings
+		wp_register_script(
+			'cd-pointers',
+			plugin_dir_url( __FILE__ ) . 'assets/js/cd.pointers.js',
+			array( 'jquery' ),
+			$this->version
+		);
+
 		// The main stylesheet for Client Dash
 		wp_register_style(
 			'cd-main',
@@ -379,7 +387,10 @@ class ClientDash extends ClientDash_Functions {
 
 		wp_enqueue_script( 'cd-main' );
 		wp_enqueue_script( 'cd-ajax' );
+		wp_enqueue_script( 'cd-pointers' );
 		wp_enqueue_style( 'cd-main' );
+
+		wp_enqueue_style( 'wp-pointer' );
 
 		// Include widgets.js only on widgets page
 		if ( isset( $_GET['tab'] ) && $_GET['tab'] == 'widgets' ) {

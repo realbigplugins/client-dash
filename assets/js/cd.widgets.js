@@ -1,6 +1,20 @@
+/**
+ * This object contains all functionality for the Settings -> Widgets
+ * page.
+ *
+ * @package WordPress
+ * @subpackage ClientDash
+ *
+ * @since ClientDash 1.6
+ */
 var cdWidgets;
 (function ($) {
     cdWidgets = {
+        /**
+         * Initialization for the widgets page.
+         *
+         * @since Clientdash 1.5
+         */
         init: function () {
             // Sortable list
             $('#cd-dash-widgets-sortable').sortable({
@@ -43,6 +57,13 @@ var cdWidgets;
                 }
             });
         },
+        /**
+         * Re-initializing the toggle buttons when created. (Because jQuery isn't live... blah)
+         *
+         * @since ClientDash 1.5
+         *
+         * @param e The supplied object.
+         */
         toggle_init: function (e) {
             e.on('click', function () {
                 if ($(this).data('dragging')) {
@@ -54,6 +75,12 @@ var cdWidgets;
                     .siblings('.cd-dash-widget-settings').toggleClass('open');
             });
         },
+        /**
+         * Cycles through all widgets and modifies the "name" integers
+         * to match the index of each current item.
+         *
+         * @since ClientDash 1.5
+         */
         update_numbers: function () {
             $('#cd-dash-widgets-sortable').find('.cd-dash-widget').each(function () {
                 $(this).find('input').each(function () {
@@ -65,11 +92,19 @@ var cdWidgets;
                 });
             });
         },
+        /**
+         * Removes the current widget.
+         *
+         * @since ClientDash 1.5
+         *
+         * @param e The supplied object.
+         */
         remove: function (e) {
             $(e).closest('.cd-dash-widget').remove();
         }
     };
 
+    // Launch on ready
     $(function () {
         cdWidgets.init();
 
@@ -77,5 +112,4 @@ var cdWidgets;
             cdWidgets.toggle_init($(this));
         });
     });
-
 })(jQuery);

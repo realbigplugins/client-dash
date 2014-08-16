@@ -6,7 +6,7 @@
  * Adds the core content section for Settings -> Webmaster.
  *
  * @package WordPress
- * @subpackage Client Dash
+ * @subpackage ClientDash
  *
  * @since Client Dash 1.5
  */

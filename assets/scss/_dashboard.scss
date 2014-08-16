@@ -1,72 +1,42 @@
-// Override WP default media queries
-.postbox-container {
-  width: 100% !important;
-}
-
-.cd-icon {
-  -webkit-transition: color 0.3s;
-  -moz-transition: color 0.3s;
-  -o-transition: color 0.3s;
-  transition: color 0.3s;
-}
-
-.cd-dashboard-widget .cd-icon {
-  width: auto;
-  height: auto;
-  font-size: 260px;
-}
-
-.cd-icon:before {
-  font-size: inherit !important;
-}
-
-/* Style widgets */
-.cd .wp-menu-image:before, .cd-title-icon:before {
-  font: 100 55px/1 dashicons;
-  speak: none;
-  display: inline-block;
-}
-
-.postbox-container a.cd-dashboard-widget {
-  display: block;
-  text-align: center;
-}
-
-.postbox-container .cd-dashboard-widget .wp-menu-image:before {
-  font: 100 20em/1 dashicons;
-}
-
-#dashboard-widgets .postbox {
-  float: left;
-  width: 50%;
-  padding: 13px;
-  margin: 0;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  min-height: 300px;
-}
-
-#dashboard-widgets .postbox .hndle {
-  cursor: default !important;
-  font-size: 20px;
-  text-align: center;
-}
-
-#dashboard-widgets .postbox .handlediv {
-  display: none !important;
-}
-
-#dashboard-widgets .postbox .inside {
-  display: block !important;
-}
-
-#dashboard-widgets .postbox h3 {
-  border-bottom: 1px solid #eee !important;
-}
-
-@media screen and (max-width: 600px) {
-  #dashboard-widgets .postbox {
-    width: 100%;
+#dashboard-widgets {
+  // Override WP default media queries
+  .postbox-container {
+    width: 100% !important;
+  }
+  .postbox {
+    float: left;
+    width: 50%;
+    padding: 13px;
+    margin: 0;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    min-height: 300px;
+    .hndle {
+      cursor: default !important;
+      font-size: 20px;
+      text-align: center;
+    }
+    .handlediv {
+      display: none !important;
+    }
+    .inside {
+      display: block !important;
+      text-align: center;
+    }
+    h3 {
+      border-bottom: 1px solid #eee !important;
+    }
+    .cd-icon {
+      width: auto;
+      height: auto;
+      font-size: 260px;
+      &:before {
+        font-size: inherit !important;
+      }
+    }
+    @media screen and (max-width: 600px) {
+      width: 100%;
+    }
   }
 }

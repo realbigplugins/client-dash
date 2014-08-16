@@ -1,3 +1,11 @@
+/**
+ * AJAX functionality within Client Dash.
+ *
+ * @package WordPress
+ * @subpackage ClientDash
+ *
+ * @since ClientDash 1.6
+ */
 var cdAJAX;
 (function ($) {
     cdAJAX = {
@@ -51,5 +59,4 @@ var cdAJAX;
             )
         }
     };
-
 })(jQuery);

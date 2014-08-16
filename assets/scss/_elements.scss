@@ -1,11 +1,4 @@
-.cd-capitalize {
-  text-transform: capitalize;
-}
-
-.cd-click {
-  cursor: pointer;
-}
-
+// To prevent people from clicking during AJAX
 #cd-ajax-cover {
   position: fixed;
   top: 0;
@@ -17,6 +10,7 @@
   background-color: rgba(0, 0, 0, 0.7);
 }
 
+// Toggle switches
 .cd-toggle-switch {
   position: relative;
   cursor: pointer;
@@ -52,6 +46,7 @@
   background-color: #b60508;
 }
 
+// Up-down arrows
 .cd-up-down {
   float: right;
 }

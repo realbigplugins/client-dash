@@ -1,6 +1,19 @@
+/**
+ * Overall base functionality for Client Dash.
+ *
+ * @package WordPress
+ * @subpackage ClientDash
+ *
+ * @since ClientDash 1.6
+ */
 var cdMain;
 (function ($) {
     cdMain = {
+        /**
+         * The initialization for ClientDash functionality.
+         *
+         * @since ClientDash 1.4
+         */
         init: function () {
             cdMain.disable_drag();
 
@@ -38,9 +51,9 @@ var cdMain;
          * @param e_self
          */
         toggle_roles_page: function (e_self) {
-            var e_target = jQuery(e_self).siblings('.cd-roles-grid-tab'),
+            var e_target = jQuery(e_self).siblings('.cd-display-grid-tab'),
                 e_toggle = jQuery(e_self).find('.cd-up-down'),
-                e_child_target = e_target.find('.cd-roles-grid-block'),
+                e_child_target = e_target.find('.cd-display-grid-block'),
                 e_child_toggle = e_target.find('.cd-up-down');
 
             // Toggle arrow up and down
@@ -61,7 +74,7 @@ var cdMain;
          * @param e_self
          */
         toggle_roles_tab: function (e_self) {
-            var e_target = jQuery(e_self).siblings('.cd-roles-grid-block'),
+            var e_target = jQuery(e_self).siblings('.cd-display-grid-block'),
                 e_toggle = jQuery(e_self).find('.cd-up-down');
 
             // Toggle
@@ -184,7 +197,7 @@ var cdMain;
             e.closest('.cd-tip').addClass('cd-tip-hidden');
         },
         /**
-         * Make sure clicking on items inside tops don't propogate up the DOM tree.
+         * Make sure clicking on items inside tips don't propogate up the DOM tree.
          *
          * @since Client Dash 1.5
          */
@@ -195,12 +208,12 @@ var cdMain;
         }
     };
 
+    // Launch on ready
     $(function () {
         cdMain.init();
     });
-
+    // Launch on page load
     $(window).load(function () {
         setTimeout(cdMain.show_tips, 1000);
     });
-
 })(jQuery);

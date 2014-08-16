@@ -6,7 +6,7 @@
  * The main, extensible class for all other classes within Client Dash.
  *
  * @package WordPress
- * @subpackage Client Dash
+ * @subpackage ClientDash
  *
  * @since Client Dash 1.5
  */
@@ -23,9 +23,9 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string The tip.
 	 */
-	public function tip( $content, $position = 'left', $classes = null ) {
+	public function pointer( $content, $position = 'left', $classes = null ) {
 
-		return "<span class='cd-tip cd-tip-hidden cd-tip-$position $classes'>$content<span class='cd-tip-close'>X</span></span>";
+		return "<span class='$classes' data-cd-pointer-position='$position'>$content<span class='cd-tip-close'>X</span></span>";
 	}
 
 	/**
