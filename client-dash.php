@@ -340,7 +340,7 @@ class ClientDash extends ClientDash_Functions {
 		// The main script for Client Dash
 		wp_register_script(
 			'cd-main',
-			plugin_dir_url( __FILE__ ) . 'assets/js/cd.main.js',
+			plugin_dir_url( __FILE__ ) . 'assets/js/cd.main.min.js',
 			array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable' ),
 			$this->version
 		);
@@ -348,7 +348,7 @@ class ClientDash extends ClientDash_Functions {
 		// The main script for Client Dash
 		wp_register_script(
 			'cd-ajax',
-			plugin_dir_url( __FILE__ ) . 'assets/js/cd.ajax.js',
+			plugin_dir_url( __FILE__ ) . 'assets/js/cd.ajax.min.js',
 			array( 'jquery' ),
 			$this->version
 		);
@@ -356,7 +356,7 @@ class ClientDash extends ClientDash_Functions {
 		// The script for dealing with the Widgets tab under Settings
 		wp_register_script(
 			'cd-widgets',
-			plugin_dir_url( __FILE__ ) . 'assets/js/cd.widgets.js',
+			plugin_dir_url( __FILE__ ) . 'assets/js/cd.widgets.min.js',
 			array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable' ),
 			$this->version
 		);
@@ -364,7 +364,7 @@ class ClientDash extends ClientDash_Functions {
 		// The script for dealing with the Widgets tab under Settings
 		wp_register_script(
 			'cd-pointers',
-			plugin_dir_url( __FILE__ ) . 'assets/js/cd.pointers.js',
+			plugin_dir_url( __FILE__ ) . 'assets/js/cd.pointers.min.js',
 			array( 'jquery' ),
 			$this->version
 		);
