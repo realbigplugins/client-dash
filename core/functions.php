@@ -265,7 +265,7 @@ abstract class ClientDash_Functions {
 				<div class="cd-dash-widget-settings">
 					<?php
 					if ( isset( $widget['edit_callback'] ) && $widget['edit_callback'] ) {
-						$widget['edit_callback'][0]::$widget['edit_callback'][1]();
+						call_user_func( $widget['edit_callback'][0] . '::' . $widget['edit_callback'][1] );
 					} else {
 						echo 'No settings';
 					}
