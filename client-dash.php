@@ -751,6 +751,9 @@ class ClientDash extends ClientDash_Functions {
 
 				// If callback should be an object
 				if ( isset( $widget['is_object'] ) ) {
+					if ( ! class_exists( $widget['callback'][0] ) ) {
+						continue;
+					}
 					$widget['callback'][0] = new $widget['callback'][0];
 				}
 
