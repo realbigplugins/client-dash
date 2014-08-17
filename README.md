@@ -35,7 +35,7 @@ Using this plugin is very simple. All you have to do is:
 
 ## Changelog
 
-### [1.5](https://github.com/brashrebel/client-dash/releases/tag/v1.5)
+### [1.5.1](https://github.com/brashrebel/client-dash/releases/tag/v1.5.1)
 * PHP backwards compatibility issue.
 * Check if class does not exist for Dash Widgets.
 
