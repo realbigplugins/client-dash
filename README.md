@@ -43,7 +43,7 @@ Using this plugin is very simple. All you have to do is:
 * Added defaults to Roles settings.
 * Reversed checkbox logic for Roles settings.
 * Added ability to strip out any dashboard widget settings that may be set.
-* Added cd-tips.
+* Added cd-tips which are nice little admin tooltips.
 * Added toggle switches for disabling entire pages within the Roles settings.
 * Renamed "Roles" tab in "Settings" to "Display".
 * Changed content "block" system to a content "section" system and separated them out with menus under the tabs.
