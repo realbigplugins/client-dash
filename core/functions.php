@@ -173,27 +173,22 @@ abstract class ClientDash_Functions {
 		// Fix up the page name (to allow spaces and such)
 		$page = $this->translate_name_to_id( $content_section['page'] );
 
-		$ClientDash->content_sections[ $page ][ $tab_ID ] = array(
-			'name'             => $content_section['tab'],
-			'content-sections' => array(
-				$ID => array(
-					'name'     => $content_section['name'],
-					'callback' => $content_section['callback'],
-					'priority' => $content_section['priority']
-				)
-			)
+		// Add to the array
+		$ClientDash->content_sections[ $page ][ $tab_ID ]['name'] = $content_section['tab'];
+
+		$ClientDash->content_sections[ $page ][ $tab_ID ]['content-sections'][ $ID ] = array(
+			'name'     => $content_section['name'],
+			'callback' => $content_section['callback'],
+			'priority' => $content_section['priority']
 		);
 
 		// Also add for the unmodified version
-		$ClientDash->content_sections_unmodified[ $page ][ $tab_ID ] = array(
-			'name'             => $content_section['tab'],
-			'content-sections' => array(
-				$ID => array(
-					'name'     => $content_section['name'],
-					'callback' => $content_section['callback'],
-					'priority' => $content_section['priority']
-				)
-			)
+		$ClientDash->content_sections_unmodified[ $page ][ $tab_ID ]['name'] = $content_section['tab'];
+
+		$ClientDash->content_sections_unmodified[ $page ][ $tab_ID ]['content-sections'][ $ID ] = array(
+			'name'     => $content_section['name'],
+			'callback' => $content_section['callback'],
+			'priority' => $content_section['priority']
 		);
 	}
 
