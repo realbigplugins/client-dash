@@ -3,7 +3,7 @@
 /*
 Plugin Name: Client Dash
 Description: Creating a more intuitive admin interface for clients.
-Version: 1.5.1
+Version: 1.5.2
 Author: Kyle Maurer
 Author URI: http://realbigmarketing.com/staff/kyle
 */
