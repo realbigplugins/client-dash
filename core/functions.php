@@ -83,9 +83,6 @@ abstract class ClientDash_Functions {
 		foreach ( $ClientDash->content_sections[ $current_page ] as $tab_ID => $props ) {
 			$i ++;
 
-			// Translate the tab ID into the tab name
-			$tab_name = ucwords( str_replace( '_', ' ', $tab_ID ) );
-
 			// If active tab, set class
 			if ( $active_tab == $tab_ID || ! $active_tab && $i == 1 ) {
 				$active = 'nav-tab-active';
