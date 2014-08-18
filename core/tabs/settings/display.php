@@ -57,7 +57,7 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 		}
 
 		// Get options
-		$content_sections_roles = get_option( 'cd_content_sections_roles', $this->option_defaults['content_sections_roles'] );
+		$content_sections_roles = get_option( 'cd_content_sections_roles' );
 
 		// Get roles
 		$roles = get_editable_roles();
@@ -82,6 +82,9 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 						}
 					}
 				}
+			} else {
+				// ... or if the option is NOT set, we can assume defaults wouldn't do this... right?
+				$all_disabled = false;
 			}
 
 			// Skip page "Settings"
@@ -134,6 +137,11 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 
 					// Create checkboxes for all roles
 					foreach ( $roles as $role_ID => $props_role ) {
+
+						// Get these values so we can save space later
+						$option_value  = $content_sections_roles[ $page ][ $tab ][ $block_ID ][ $role_ID ];
+						$default_value = $ClientDash->option_defaults['content_sections_roles'][ $page ][ $tab ][ $block_ID ][ $role_ID ];
+
 						// If the current checkbox being generated is the current user (which
 						// should always be admin), skip it
 						$current_role = $this->get_user_role();
@@ -150,10 +158,15 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 					             value='0'
 					             id='$page-$tab-$role_ID' ";
 
-						// Check the checkbox if the role does not exist or the defaults have it set to be
-						if ( empty( $content_sections_roles[ $page ][ $tab ][ $block_ID ][ $role_ID ] )
-						     || $content_sections_roles[ $page ][ $tab ][ $block_ID ][ $role_ID ] == '0'
-						) {
+						// This does a few things to see if the box should be checked or not.
+						// It first finds out if there is a current set option value and if it
+						// is set to '0'. If this is true, we're going to assume checked IF the
+						// next section ALSO holds true
+						if ( isset( $option_value) ) {
+							if ( $option_value == 'visible') {
+								echo 'checked';
+							}
+						} elseif ( ! isset( $default_value ) || $default_value == 'visible' ) {
 							echo 'checked';
 						}
 						echo '/>'; // Close off checkbox

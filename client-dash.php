@@ -3,7 +3,7 @@
 /*
 Plugin Name: Client Dash
 Description: Creating a more intuitive admin interface for clients.
-Version: 1.5.3
+Version: 1.5.2
 Author: Kyle Maurer
 Author URI: http://realbigmarketing.com/staff/kyle
 */
@@ -29,7 +29,7 @@ class ClientDash extends ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.5
 	 */
-	public $version = '1.5.3';
+	public $version = '1.5';
 
 	/**
 	 * A list of all tab files to include.
@@ -166,64 +166,64 @@ class ClientDash extends ClientDash_Functions {
 			'account'   => array(
 				'about_you' => array(
 					'basic_information' => array(
-						'editor'      => 0,
-						'author'      => 0,
-						'contributor' => 0,
-						'subscriber'  => 0
+						'editor'      => 'visible',
+						'author'      => 'visible',
+						'contributor' => 'visible',
+						'subscriber'  => 'visible'
 					)
 				),
 				'sites'     => array(
 					'list_of_sites' => array(
-						'editor'      => 0,
-						'author'      => 0,
-						'contributor' => 1,
-						'subscriber'  => 1
+						'editor'      => 'visible',
+						'author'      => 'visible',
+						'contributor' => 'hidden',
+						'subscriber'  => 'hidden'
 					)
 				)
 			),
 			'help'      => array(
 				'info'   => array(
 					'basic_information' => array(
-						'editor'      => 0,
-						'author'      => 1,
-						'contributor' => 1,
-						'subscriber'  => 1
+						'editor'      => 'visible',
+						'author'      => 'hidden',
+						'contributor' => 'hidden',
+						'subscriber'  => 'hidden'
 					)
 				),
 				'domain' => array(
 					'basic_information' => array(
-						'editor'      => 0,
-						'author'      => 1,
-						'contributor' => 1,
-						'subscriber'  => 1
+						'editor'      => 'visible',
+						'author'      => 'hidden',
+						'contributor' => 'hidden',
+						'subscriber'  => 'hidden'
 					)
 				)
 			),
 			'reports'   => array(
 				'site' => array(
 					'basic_information' => array(
-						'editor'      => 0,
-						'author'      => 0,
-						'contributor' => 1,
-						'subscriber'  => 1
+						'editor'      => 'visible',
+						'author'      => 'visible',
+						'contributor' => 'hidden',
+						'subscriber'  => 'hidden'
 					)
 				)
 			),
 			'webmaster' => array(
 				'your_site' => array(
 					'main' => array(
-						'editor'      => 0,
-						'author'      => 0,
-						'contributor' => 0,
-						'subscriber'  => 0
+						'editor'      => 'visible',
+						'author'      => 'visible',
+						'contributor' => 'visible',
+						'subscriber'  => 'visible'
 					)
 				),
 				'feed'      => array(
 					'feed' => array(
-						'editor'      => 0,
-						'author'      => 0,
-						'contributor' => 0,
-						'subscriber'  => 0
+						'editor'      => 'visible',
+						'author'      => 'visible',
+						'contributor' => 'visible',
+						'subscriber'  => 'visible'
 					)
 				)
 			)
@@ -657,7 +657,7 @@ class ClientDash extends ClientDash_Functions {
 	public function content_sections_init() {
 
 		$current_role           = $this->get_user_role();
-		$content_sections_roles = get_option( 'cd_content_sections_roles', $this->option_defaults['content_sections_roles'] );
+		$content_sections_roles = get_option( 'cd_content_sections_roles' );
 
 		// Cycles through all content sections to see if they're disabled
 		foreach ( $this->content_sections as $page => $tabs ) {
@@ -668,9 +668,22 @@ class ClientDash extends ClientDash_Functions {
 			}
 			foreach ( $tabs as $tab => $props ) {
 				foreach ( $props['content-sections'] as $ID => $info ) {
-					if ( ! empty( $content_sections_roles[ $page ][ $tab ][ $ID ][ $current_role ] )
-					     && $content_sections_roles[ $page ][ $tab ][ $ID ][ $current_role ] != '0'
-					) {
+
+					// Get our values for easier use
+					$option_value = $content_sections_roles[ $page ][ $tab ][ $ID ][ $current_role ];
+					$default_value = $this->option_defaults['content_sections_roles'][ $page ][ $tab ][ $ID ][ $current_role ];
+					$disabled = false;
+
+					// See if this is disabled
+					if ( isset( $option_value ) ) {
+						if ( $option_value == 'hidden' ) {
+							$disabled = true;
+						}
+					} elseif ( isset( $default_value ) && $default_value == 'hidden' ) {
+						$disabled = true;
+					}
+
+					if ( $disabled ) {
 						// If they are disabled, unset it and then remove tab and page if necessary
 						unset( $this->content_sections[ $page ][ $tab ]['content-sections'][ $ID ] );
 

@@ -32,9 +32,9 @@ class ClientDash_AJAX extends ClientDash {
 	public function cd_reset_roles() {
 
 		foreach ( $this->core_widgets as $page ) {
-			update_option( "cd_hide_page_$page", $this->option_defaults["hide_page_$page"] );
+			delete_option( "cd_hide_page_$page" );
 		}
-		update_option( 'cd_content_sections_roles', $this->option_defaults['content_sections_roles'] );
+		delete_option( 'cd_content_sections_roles' );
 		echo 'Roles successfully reset!';
 
 		die();
@@ -43,12 +43,7 @@ class ClientDash_AJAX extends ClientDash {
 	public function cd_reset_all_settings() {
 
 		foreach ( $this->option_defaults as $name => $value ) {
-			// If the default value is "null", then just delete it
-			if ( $value == null ) {
-				delete_option( "cd_$name" );
-			} else {
-				update_option( "cd_$name", $value );
-			}
+			delete_option( "cd_$name" );
 		}
 
 		echo 'Settings successfully reset!';
