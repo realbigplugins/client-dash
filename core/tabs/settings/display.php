@@ -44,7 +44,7 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 		global $ClientDash;
 
 		// Add our reset roles button next to submit
-		add_filter( 'cd_submit', array( $this, 'add_reset_button' ) );;
+		add_filter( 'cd_submit', array( $this, 'add_reset_button' ) );
 		?>
 		<p>Use this page to disable specific content for specific roles. Simply un-check the role inside of any content
 			block you want to disable for that role.</p>
