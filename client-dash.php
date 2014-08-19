@@ -282,6 +282,13 @@ class ClientDash extends ClientDash_Functions {
 	 */
 	function __construct() {
 
+		// Update all options if not set
+		$init_reset = get_option( 'cd_initial_reset' );
+		if ( empty( $init_reset ) ) {
+			add_action( 'admin_init', array( $this, 'reset_settings' ) );
+			update_option( 'cd_initial_reset', true );
+		}
+
 		// Register and enqueue our scripts / styles
 		add_action( 'admin_init', array( $this, 'register_scripts' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );

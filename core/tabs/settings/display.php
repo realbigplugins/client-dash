@@ -152,10 +152,10 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 						echo '<span class="cd-roles-grid-checkbox">';
 						echo "<input type='hidden'
 						             name='cd_content_sections_roles[$page][$tab][$block_ID][$role_ID]'
-						             value='1'>";
+						             value='hidden'>";
 						echo "<input type='checkbox'
 					             name='cd_content_sections_roles[$page][$tab][$block_ID][$role_ID]'
-					             value='0'
+					             value='visible'
 					             id='$page-$tab-$role_ID' ";
 
 						// This does a few things to see if the box should be checked or not.

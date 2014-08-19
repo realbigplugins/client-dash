@@ -308,6 +308,28 @@ abstract class ClientDash_Functions {
 	}
 
 	/**
+	 * Resets all Client Dash settings.
+	 *
+	 * @since Client Dash 1.5.4
+	 *
+	 * @param bool $force Whether or not to overrite existing values.
+	 */
+	public function reset_settings( $force = false ) {
+
+		global $ClientDash;
+
+		foreach ( $ClientDash->option_defaults as $name => $value ) {
+			$existing_option = get_option( "cd_$name" );
+
+			if ( $force ) {
+				update_option( "cd_$name", $value );
+			} elseif ( empty( $existing_option ) ) {
+				update_option( "cd_$name", $value );
+			}
+		}
+	}
+
+	/**
 	 * Strips out spaces and dashes and replaces them with underscores. Also
 	 * translates to lowercase.
 	 *

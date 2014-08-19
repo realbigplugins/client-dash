@@ -40,11 +40,16 @@ class ClientDash_AJAX extends ClientDash {
 		die();
 	}
 
+	/**
+	 * Resets all settings.
+	 *
+	 * @since Client Dash 1.5
+	 */
 	public function cd_reset_all_settings() {
 
-		foreach ( $this->option_defaults as $name => $value ) {
-			delete_option( "cd_$name" );
-		}
+		$force = isset( $_GET['force'] ) ? $_GET['force'] : false;
+
+		$this->reset_settings( $force );
 
 		echo 'Settings successfully reset!';
 
