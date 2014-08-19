@@ -4,7 +4,7 @@ Contributors: BrashRebel, joelworsham
 Tags: client, portal, dashboard, admin, users, webmaster
 Requires at least: 3.8.0
 Tested up to: 3.9.2
-Stable tag: 1.5.2
+Stable tag: 1.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,6 +46,12 @@ Using this plugin is very simple. All you have to do is:
 1. The wp-admin dashboard as seen by users with the Administrator role. The widgets and pages this plugin creates will be visible by anyone with the Author role and above.
 
 == Changelog ==
+
+= 1.5.4 =
+* Minor improvement in backend Roles functionality (allows compatibility with new WooCommerce extension).
+
+= 1.5.3 =
+* Multiple content sections in the same tab were not working.
 
 = 1.5.2 =
 * Postboxes being half width was targeting all pages, when it should have only been targeting the dashboard.
@@ -152,5 +158,5 @@ Using this plugin is very simple. All you have to do is:
 
 == Upgrade Notice ==
 
-= 1.5.2 =
-* Please update, there is a major styling issue on post-edit pages.
+= 1.5.4 =
+* Please update to fix multiple content sections in the same tab not working and to ensure compatibility with WooCommerce extension.

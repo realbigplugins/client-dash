@@ -35,6 +35,12 @@ Using this plugin is very simple. All you have to do is:
 
 ## Changelog
 
+### [1.5.4](https://github.com/brashrebel/client-dash/releases/tag/v1.5.4)
+* Minor improvement in backend Roles functionality (allows compatibility with new WooCommerce extension).
+
+### [1.5.3](https://github.com/brashrebel/client-dash/releases/tag/v1.5.3)
+* Multiple content sections in the same tab were not working.
+
 ### [1.5.2](https://github.com/brashrebel/client-dash/releases/tag/v1.5.2)
 * Postboxes being half width was targeting all pages, when it should have only been targeting the dashboard.
 
