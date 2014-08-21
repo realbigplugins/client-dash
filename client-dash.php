@@ -3,7 +3,7 @@
 /*
 Plugin Name: Client Dash
 Description: Creating a more intuitive admin interface for clients.
-Version: 1.5.4
+Version: 1.5.5
 Author: Kyle Maurer
 Author URI: http://realbigmarketing.com/staff/kyle
 */
@@ -29,7 +29,7 @@ class ClientDash extends ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.5
 	 */
-	public $version = '1.5.4';
+	public $version = '1.5.5';
 
 	/**
 	 * A list of all tab files to include.
@@ -664,6 +664,10 @@ class ClientDash extends ClientDash_Functions {
 	public function content_sections_init() {
 
 		$current_role           = $this->get_user_role();
+		if ( $current_role == 'administrator' ) {
+			return;
+		}
+
 		$content_sections_roles = get_option( 'cd_content_sections_roles' );
 
 		// Cycles through all content sections to see if they're disabled

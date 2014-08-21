@@ -35,6 +35,9 @@ Using this plugin is very simple. All you have to do is:
 
 ## Changelog
 
+### [1.5.5](https://github.com/brashrebel/client-dash/releases/tag/v1.5.5)
+* Fixed PHP notice error.
+
 ### [1.5.4](https://github.com/brashrebel/client-dash/releases/tag/v1.5.4)
 * Minor improvement in backend Roles functionality (allows compatibility with new WooCommerce extension).
 
