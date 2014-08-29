@@ -6,7 +6,7 @@
  * Adds all AJAX functionality to Client Dash
  *
  * @package WordPress
- * @subpackage Client Dash
+ * @subpackage ClientDash
  *
  * @since Client Dash 1.5
  */
@@ -19,9 +19,9 @@ class ClientDash_AJAX extends ClientDash {
 	 */
 	function __construct() {
 
-		add_action( 'wp_ajax_cd_reset_roles', array( $this, 'cd_reset_roles' ) );
+		add_action( 'wp_ajax_cd_reset_roles', array( $this, 'reset_roles' ) );
 
-		add_action( 'wp_ajax_cd_reset_all_settings', array( $this, 'cd_reset_all_settings' ) );
+		add_action( 'wp_ajax_cd_reset_all_settings', array( $this, 'reset_all_settings' ) );
 	}
 
 	/**
@@ -29,27 +29,27 @@ class ClientDash_AJAX extends ClientDash {
 	 *
 	 * @since Client Dash 1.5
 	 */
-	public function cd_reset_roles() {
+	public function reset_roles() {
 
 		foreach ( $this->core_widgets as $page ) {
-			delete_option( "cd_hide_page_$page" );
+			update_option( "cd_hide_page_$page", $this->option_defaults["hide_page_$page"] );
 		}
-		delete_option( 'cd_content_sections_roles' );
+		update_option( 'cd_content_sections_roles', $this->option_defaults['content_sections_roles'] );
 		echo 'Roles successfully reset!';
 
 		die();
 	}
 
-	/**
-	 * Resets all settings.
-	 *
-	 * @since Client Dash 1.5
-	 */
-	public function cd_reset_all_settings() {
+	public function reset_all_settings() {
 
-		$force = isset( $_GET['force'] ) ? $_GET['force'] : false;
-
-		$this->reset_settings( $force );
+		foreach ( $this->option_defaults as $name => $value ) {
+			// If the default value is "null", then just delete it
+			if ( $value == null ) {
+				delete_option( "cd_$name" );
+			} else {
+				update_option( "cd_$name", $value );
+			}
+		}
 
 		echo 'Settings successfully reset!';
 

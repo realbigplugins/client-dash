@@ -6,7 +6,7 @@
  * Creates the toolbar sub-menu item and the page for Webmaster.
  *
  * @package WordPress
- * @subpackage Client Dash
+ * @subpackage ClientDash
  *
  * @since Client Dash 1.5
  */

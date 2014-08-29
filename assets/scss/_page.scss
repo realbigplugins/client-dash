@@ -1,14 +1,15 @@
-.cd-title .cd-icon {
-  width: auto;
-  height: auto;
-  line-height: normal;
-  font-size: 50px;
-  vertical-align: middle;
-  margin-right: 5px;
-}
-
-.cd-title .cd-title-text {
-  vertical-align: middle;
+.cd-title {
+  .cd-icon {
+    width: auto;
+    height: auto;
+    line-height: normal;
+    font-size: 50px;
+    vertical-align: middle;
+    margin-right: 5px;
+  }
+  .cd-title-text {
+    vertical-align: middle;
+  }
 }
 
 .cd-sections-menu {

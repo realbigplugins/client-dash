@@ -6,7 +6,7 @@
  * Adds the core content section for Settings -> Icons.
  *
  * @package WordPress
- * @subpackage Client Dash
+ * @subpackage ClientDash
  *
  * @since Client Dash 1.5
  */
@@ -259,7 +259,7 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 		       value="<?php echo $webmaster_dashicon; ?>"/>
 
 		<div id="cd-dashicons-selections">
-			<div class="<?php echo $class_grid; ?> cd-account" onclick="cd_dashicons_selected('account');">
+			<div class="<?php echo $class_grid; ?> cd-account" onclick="cdMain.dashicons_selected('account');">
 				<p class="dashicons <?php echo $account_dashicon; ?> active"
 				   data-dashicon="<?php echo $account_dashicon; ?>"
 				   data-widget="account"></p>
@@ -267,7 +267,7 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 				<p class="cd-dashicons-title">Account</p>
 			</div>
 
-			<div class="<?php echo $class_grid; ?> cd-reports" onclick="cd_dashicons_selected('reports');">
+			<div class="<?php echo $class_grid; ?> cd-reports" onclick="cdMain.dashicons_selected('reports');">
 				<p class="dashicons  <?php echo $reports_dashicon; ?>"
 				   data-dashicon="<?php echo $reports_dashicon; ?>"
 				   data-widget="reports"></p>
@@ -275,7 +275,7 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 				<p class="cd-dashicons-title">Reports</p>
 			</div>
 
-			<div class="<?php echo $class_grid; ?> cd-help" onclick="cd_dashicons_selected('help');">
+			<div class="<?php echo $class_grid; ?> cd-help" onclick="cdMain.dashicons_selected('help');">
 				<p class="dashicons  <?php echo $help_dashicon; ?>"
 				   data-dashicon="<?php echo $help_dashicon; ?>"
 				   data-widget="help"></p>
@@ -284,7 +284,7 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 			</div>
 
 			<?php if ( get_option( 'cd_hide_page_webmaster', $this->option_defaults['hide_page_webmaster'] ) != '1' ) : ?>
-				<div class="<?php echo $class_grid; ?> cd-webmaster" onclick="cd_dashicons_selected('webmaster');">
+				<div class="<?php echo $class_grid; ?> cd-webmaster" onclick="cdMain.dashicons_selected('webmaster');">
 					<p class="dashicons  <?php echo $webmaster_dashicon; ?>"
 					   data-dashicon="<?php echo $webmaster_dashicon; ?>"
 					   data-widget="webmaster"></p>
@@ -307,7 +307,7 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 		foreach ( $dashicons as $dashicon ) {
 			?>
 			<li class="cd-dashicons-grid-item <?php echo $account_dashicon == $dashicon ? 'active' : ''; ?>">
-				<div class="container" onclick="cd_dashicons_change('<?php echo $dashicon; ?>', this)">
+				<div class="container" onclick="cdMain.dashicons_change('<?php echo $dashicon; ?>', this)">
 					<span class="dashicons <?php echo $dashicon; ?>"></span>
 				</div>
 			</li>

@@ -125,7 +125,7 @@ Using this plugin is very simple. All you have to do is:
 * Corrected link for Reports dashboard widget
 
 = 1.2 =
-* Enqueued `client-dash.js` with `updown` function.
+* Enqueued `cd.main.js` with `updown` function.
 * Added `cd-click` class to `client-dash.css` for `cursor: pointer`.
 * Rearranged information on Site tab on Reports page to be more clear.
 * Added a few pieces of data to Site tab on Reports page.

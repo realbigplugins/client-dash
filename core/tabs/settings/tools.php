@@ -6,7 +6,7 @@
  * Adds the core content section for Settings -> Tools.
  *
  * @package WordPress
- * @subpackage Client Dash
+ * @subpackage ClientDash
  *
  * @since Client Dash 1.5
  */
@@ -43,7 +43,7 @@ class ClientDash_Core_Page_Settings_Tab_Tools extends ClientDash {
 				</th>
 				<td>
 					<input type="button" class="button" value="Reset All Settings"
-					       onclick="if ( confirm('WARNING: This will reset ALL settings back to default.\nThis can NOT be undone.\n\nAre you sure you want to do this?') ) cd_reset_all_settings();"/>
+					       onclick="if ( confirm('WARNING: This will reset ALL settings back to default.\nThis can NOT be undone.\n\nAre you sure you want to do this?') ) cdAJAX.reset_all_settings();"/>
 				</td>
 			</tr>
 		</table>

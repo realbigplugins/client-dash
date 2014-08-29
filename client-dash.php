@@ -18,7 +18,7 @@ require_once( plugin_dir_path( __FILE__ ) . 'core/functions.php' );
  * initialize the plugin.
  *
  * @package WordPress
- * @subpackage Client Dash
+ * @subpackage ClientDash
  *
  * @since Client Dash 1.5
  */
@@ -347,23 +347,7 @@ class ClientDash extends ClientDash_Functions {
 		// The main script for Client Dash
 		wp_register_script(
 			'cd-main',
-			plugin_dir_url( __FILE__ ) . 'assets/js/client-dash.js',
-			array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable' ),
-			$this->version
-		);
-
-		// The main script for Client Dash
-		wp_register_script(
-			'cd-ajax',
-			plugin_dir_url( __FILE__ ) . 'assets/js/client-dash-ajax.js',
-			array( 'jquery' ),
-			$this->version
-		);
-
-		// The script for dealing with the Widgets tab under Settings
-		wp_register_script(
-			'cd-widgets',
-			plugin_dir_url( __FILE__ ) . 'assets/js/cd.widgets.js',
+			plugin_dir_url( __FILE__ ) . 'assets/js/clientdash.min.js',
 			array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable' ),
 			$this->version
 		);
@@ -371,7 +355,7 @@ class ClientDash extends ClientDash_Functions {
 		// The main stylesheet for Client Dash
 		wp_register_style(
 			'cd-main',
-			plugins_url( 'assets/css/client-dash.css', __FILE__ ),
+			plugins_url( 'assets/css/clientdash.min.css', __FILE__ ),
 			array(),
 			$this->version
 		);
@@ -385,7 +369,6 @@ class ClientDash extends ClientDash_Functions {
 	public function enqueue_scripts() {
 
 		wp_enqueue_script( 'cd-main' );
-		wp_enqueue_script( 'cd-ajax' );
 		wp_enqueue_style( 'cd-main' );
 
 		// Include widgets.js only on widgets page
