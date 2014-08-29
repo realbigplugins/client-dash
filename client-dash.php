@@ -29,7 +29,7 @@ class ClientDash extends ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.5
 	 */
-	public $version = '1.5';
+	public $version = '1.5.5';
 
 	/**
 	 * A list of all tab files to include.
@@ -340,39 +340,15 @@ class ClientDash extends ClientDash_Functions {
 		// The main script for Client Dash
 		wp_register_script(
 			'cd-main',
-			plugin_dir_url( __FILE__ ) . 'assets/js/cd.main.min.js',
+			plugin_dir_url( __FILE__ ) . 'assets/js/clientdash.min.js',
 			array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable' ),
-			$this->version
-		);
-
-		// The main script for Client Dash
-		wp_register_script(
-			'cd-ajax',
-			plugin_dir_url( __FILE__ ) . 'assets/js/cd.ajax.min.js',
-			array( 'jquery' ),
-			$this->version
-		);
-
-		// The script for dealing with the Widgets tab under Settings
-		wp_register_script(
-			'cd-widgets',
-			plugin_dir_url( __FILE__ ) . 'assets/js/cd.widgets.min.js',
-			array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable' ),
-			$this->version
-		);
-
-		// The script for dealing with the Widgets tab under Settings
-		wp_register_script(
-			'cd-pointers',
-			plugin_dir_url( __FILE__ ) . 'assets/js/cd.pointers.min.js',
-			array( 'jquery' ),
 			$this->version
 		);
 
 		// The main stylesheet for Client Dash
 		wp_register_style(
 			'cd-main',
-			plugins_url( 'assets/css/client-dash.css', __FILE__ ),
+			plugins_url( 'assets/css/clientdash.min.css', __FILE__ ),
 			array(),
 			$this->version
 		);
@@ -386,11 +362,7 @@ class ClientDash extends ClientDash_Functions {
 	public function enqueue_scripts() {
 
 		wp_enqueue_script( 'cd-main' );
-		wp_enqueue_script( 'cd-ajax' );
-		wp_enqueue_script( 'cd-pointers' );
 		wp_enqueue_style( 'cd-main' );
-
-		wp_enqueue_style( 'wp-pointer' );
 
 		// Include widgets.js only on widgets page
 		if ( isset( $_GET['tab'] ) && $_GET['tab'] == 'widgets' ) {
