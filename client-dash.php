@@ -3,7 +3,7 @@
 /*
 Plugin Name: Client Dash
 Description: Creating a more intuitive admin interface for clients.
-Version: 1.5.5
+Version: 1.6
 Author: Kyle Maurer
 Author URI: http://realbigmarketing.com/staff/kyle
 */
@@ -29,7 +29,7 @@ class ClientDash extends ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.5
 	 */
-	public $version = '1.5.5';
+	public $version = '1.6';
 
 	/**
 	 * A list of all tab files to include.
@@ -58,6 +58,7 @@ class ClientDash extends ClientDash_Functions {
 		),
 		'settings'  => array(
 			'display',
+			'admin_menu',
 			'icons',
 			'webmaster',
 			'widgets',

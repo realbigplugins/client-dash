@@ -1,5 +1,7 @@
 <?php
 
+// TODO Document
+
 /**
  * Class ClientDash_Functions
  *
