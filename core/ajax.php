@@ -22,6 +22,8 @@ class ClientDash_AJAX extends ClientDash {
 		add_action( 'wp_ajax_cd_reset_roles', array( $this, 'reset_roles' ) );
 
 		add_action( 'wp_ajax_cd_reset_all_settings', array( $this, 'reset_all_settings' ) );
+
+		add_action( 'wp_ajax_cd_reset_admin_menu', array( $this, 'reset_admin_menu' ) );
 	}
 
 	/**
@@ -42,16 +44,33 @@ class ClientDash_AJAX extends ClientDash {
 
 	public function reset_all_settings() {
 
+		// Cycle through all option defaults and delete them
 		foreach ( $this->option_defaults as $name => $value ) {
-			// If the default value is "null", then just delete it
-			if ( $value == null ) {
-				delete_option( "cd_$name" );
-			} else {
-				update_option( "cd_$name", $value );
-			}
+			delete_option( "cd_$name" );
 		}
 
+		// Remove the modified nav menu
+		wp_delete_nav_menu( 'cd_admin_menu' );
+
 		echo 'Settings successfully reset!';
+
+		die();
+	}
+
+	public function reset_admin_menu() {
+
+		$roles = get_editable_roles();
+
+		foreach ( $roles as $role_name => $role ) {
+
+			// Remove the modified nav menu
+			wp_delete_nav_menu( "cd_admin_menu_$role_name" );
+
+			// Delete the option
+			delete_option( "cd_admin_menu_{$role_name}_modified" );
+		}
+
+		echo 'Admin menu successfully reset!';
 
 		die();
 	}

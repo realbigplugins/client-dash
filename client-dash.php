@@ -8,6 +8,8 @@ Author: Kyle Maurer
 Author URI: http://realbigmarketing.com/staff/kyle
 */
 
+// TODO Only require page / tab specific files WHEN they are needed. Not always.
+
 // Require the functions class first so we can extend it
 require_once( plugin_dir_path( __FILE__ ) . 'core/functions.php' );
 
@@ -30,6 +32,13 @@ class ClientDash extends ClientDash_Functions {
 	 * @since Client Dash 1.5
 	 */
 	public $version = '1.6';
+
+	/**
+	 * The path to the plugin.
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public $path;
 
 	/**
 	 * A list of all tab files to include.
@@ -289,6 +298,9 @@ class ClientDash extends ClientDash_Functions {
 			add_action( 'admin_init', array( $this, 'reset_settings' ) );
 			update_option( 'cd_initial_reset', true );
 		}
+
+		// Set the path
+		$this->path = plugin_dir_path( __FILE__ );
 
 		// Register and enqueue our scripts / styles
 		add_action( 'admin_init', array( $this, 'register_scripts' ) );

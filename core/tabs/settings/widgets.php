@@ -1,6 +1,7 @@
 <?php
 
 // TODO Mimic the WordPress HTML exactly and configure CD to work with the new HTMl
+// TODO Use "do_accordion_sections()" with modified "$wp_meta_boxes" in order to produce dropdowns
 
 /**
  * Class ClientDash_Page_Settings_Tab_Widgets

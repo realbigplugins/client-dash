@@ -57,6 +57,27 @@ var cdAJAX;
                     alert(response);
                 }
             )
+        },
+        /**
+         * Calls an AJAX function to reset the admin menu.
+         *
+         * @since Client Dash 1.5
+         */
+        reset_admin_menu: function () {
+            // AJAX
+            var data = {
+                'action': 'cd_reset_admin_menu',
+                'cd-create-admin-menus': true
+            };
+
+            jQuery.post(
+                ajaxurl,
+                data,
+                function (response) {
+                    // Notify user
+                    alert(response);
+                }
+            )
         }
     };
 })(jQuery);

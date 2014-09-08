@@ -102,7 +102,12 @@ class ClientDash_Page_Settings extends ClientDash {
 		?>
 		<div class="wrap cd-settings">
 
-			<form method="post" action="options.php">
+			<?php
+			// Default to wrapping everything in the form, but allow to be disabled
+			if ( apply_filters( 'cd_settings_form_wrap', true ) ) {
+				echo '<form method="post" action="options.php">';
+			}
+			?>
 				<?php
 				// Prepare cd_settings
 				settings_fields( 'cd_options_' . $tab );
@@ -115,7 +120,12 @@ class ClientDash_Page_Settings extends ClientDash {
 				$submit = '<input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">';
 				echo apply_filters( 'cd_submit', $submit );
 				?>
-			</form>
+			<?php
+			// Default to wrapping everything in the form, but allow to be disabled
+			if ( apply_filters( 'cd_settings_form_wrap', true ) ) {
+				echo '</form>';
+			}
+			?>
 		</div>
 	<?php
 	}

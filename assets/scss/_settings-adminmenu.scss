@@ -1,0 +1,50 @@
+.cd-content-section {
+
+  // Left side
+  #menu-settings-column {
+
+    // Post Types tab items (they wouldn't fit before)
+    #posttype-page-tabs {
+      > li {
+        padding: 3px 2px !important;
+      }
+    }
+
+    // Taxonomy items
+    #tabs-panel-posttype-taxonomies {
+      .taxonomy-title {
+        font-style: italic;
+        color: #888;
+      }
+    }
+
+    // WordPress Core sub-menu items
+    #tabs-panel-wordpress-core-submenu {
+      .wp-core-title {
+        font-style: italic;
+        color: #888;
+      }
+    }
+
+    // Plugin / Theme sub-menu items
+    #tabs-panel-plugin-submenu {
+      .plugin-title {
+        font-style: italic;
+        color: #888;
+      }
+    }
+  }
+
+  // Right side
+  #menu-to-edit {
+
+    // Separator
+    .menu-item-separator {
+      .menu-item-handle {
+        background: darken(#fafafa, 10%); // Original background color
+        border-color: darken(#dfdfdf, 10%); // Original border color
+        color: lighten(#222, 40%) // Original font color
+      }
+    }
+  }
+}
