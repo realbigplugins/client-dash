@@ -1,10 +1,18 @@
 <?php
 
-// TODO See line 265
-// TODO Saving menus only works for Admin menu
+// TODO Slug messed up when moving around :/
+// TODO Handling roles with multiple words
+// TODO Don't let admin delete client dash settings menu or settings menu at all
+// TODO Show existing menus at top for visual usability
 
 // TODO Re-order methods
 // TODO Documentation
+
+// TODO Move this into the class
+function test( $parent_file ) {
+	global $cd_parent_file;
+	return $cd_parent_file;
+}
 
 /**
  * Class ClientDash_Core_Page_Settings_Tab_AdminMenu
@@ -16,7 +24,7 @@
  *
  * @since Client Dash 1.6
  */
-class ClientDash_Core_Page_Settings_Tab_Admin_Menu extends ClientDash {
+class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 	/**
 	 * The pre-modified admin menu.
@@ -38,6 +46,20 @@ class ClientDash_Core_Page_Settings_Tab_Admin_Menu extends ClientDash {
 	 * @since Client Dash 1.6
 	 */
 	public $menu_ID;
+
+	/**
+	 * The role that the current menu is for.
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public $role;
+
+	/**
+	 * Lets us know if we're making a new menu.
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public $create_new = false;
 
 	/**
 	 * The ID's for all of the CD nav menus (one for each role).
@@ -137,24 +159,24 @@ class ClientDash_Core_Page_Settings_Tab_Admin_Menu extends ClientDash {
 
 		global $ClientDash;
 
-		// Create the nav menus via cron
-		add_action( 'cd_create_nav_menu', array( $this, 'cd_create_nav_menu'), 10, 1 );
-
 		// Get the original admin menus
-		add_action( 'admin_menu', array( $this, 'get_orig_admin_menu' ), 99995 );
+		add_action( 'admin_menu', array( $this, 'get_orig_admin_menu' ), 99990 );
+
+		// Delete the menu if told so from POST
+		if ( isset( $_GET['cd_delete_admin_menu'] ) ) {
+			add_action( 'admin_menu', array( $this, 'delete_nav_menu' ), 99995 );
+		}
+
+		// Create if told so from POST
+		if ( isset( $_POST['cd_create_admin_menu'] ) ) {
+			add_action( 'admin_menu', array( $this, 'create_nav_menu' ), 99995 );
+		}
 
 		// Create/Get CD nav menu
 		add_action( 'admin_menu', array( $this, 'get_cd_nav_menus' ), 99996 );
 
-		// Only remove and add if we have one ready to go
-		if ( get_option( 'cd_modified_admin_menu', false ) ) {
-
-			// Remove the original admin menu
-			add_action( 'admin_menu', array( $this, 'remove_orig_admin_menu' ), 99997 );
-
-			// Add the new, modified admin menu
-			add_action( 'admin_menu', array( $this, 'add_modified_admin_menu' ), 99999 );
-		}
+		// Remove the original admin menu (and also add the modified menu)
+		add_action( 'admin_menu', array( $this, 'remove_orig_admin_menu' ), 99999 );
 
 		// Hide the CD nav menu from the normal nav menu page
 		add_filter( 'wp_get_nav_menus', array( $this, 'hide_cd_nav_menu' ) );
@@ -164,23 +186,22 @@ class ClientDash_Core_Page_Settings_Tab_Admin_Menu extends ClientDash {
 
 		// Add the content
 		$this->add_content_section( array(
-			'name'     => 'Core Admin Menu Settings',
+			'name'     => 'Core Menu Settings',
 			'page'     => 'Settings',
-			'tab'      => 'Admin Menu',
+			'tab'      => 'Menus',
 			'callback' => array( $this, 'block_output' )
 		) );
 
 		// Anything in here will ONLY apply to this particular settings page
 		if ( isset( $_GET['page'] ) && $_GET['page'] == 'cd_settings'
-		     && isset( $_GET['tab'] ) && $_GET['tab'] == 'admin_menu'
+		     && isset( $_GET['tab'] ) && $_GET['tab'] == 'menus'
 		) {
 
 			// Required functions
 			include_once( ABSPATH . '/wp-admin/includes/nav-menu.php' );
 
 			// Includes callbacks
-			include_once( $ClientDash->path . '/core/includes/adminmenu-availableitems-callbacks.php' );
-			include_once( $ClientDash->path . '/core/includes/adminmenu-editmarkup-callbacks.php' );
+			include_once( $ClientDash->path . '/core/tabs/settings/menus/availableitems-callbacks.php' );
 
 			// Disable the default CD form wrap
 			add_filter( 'cd_settings_form_wrap', '__return_false' );
@@ -223,147 +244,6 @@ class ClientDash_Core_Page_Settings_Tab_Admin_Menu extends ClientDash {
 	}
 
 	/**
-	 * Gets the menu being currently edited.
-	 *
-	 * @since Client Dash 1.6
-	 */
-	public function get_current_menu() {
-
-		// If a menu isn't set, just take the first one. Otherwise, get it from the url
-		if ( isset( $_GET['menu'] ) ) {
-			$this->menu_ID = $_GET['menu'];
-		} else {
-			$this->menu_ID = reset( $this->all_menu_IDs );
-		}
-
-		// If this menu doesn't exist, return false
-		$menu_object = wp_get_nav_menu_object( $this->menu_ID );
-		if ( ! $menu_object ) {
-			$this->menu_ID = false;
-		}
-	}
-
-	/**
-	 * Gets our main admin menu nav menu, and creates it if it doesn't already
-	 * exist.
-	 *
-	 * @since Client Dash 1.6
-	 */
-	public function get_cd_nav_menus() {
-
-		// Get the nav menu for each role
-		$roles = get_editable_roles();
-		foreach ( $roles as $role_name => $role ) {
-
-			$menu_object = wp_get_nav_menu_object( "cd_admin_menu_$role_name" );
-
-			// If it doesn't exist, either create it or just return false
-			if ( ! $menu_object ) {
-
-				// Only create the menus if told so
-				if ( isset( $_POST['cd-create-admin-menus'] ) ) {
-
-					// TODO This is taking up waaay too much memory. Figure out how on earth to sort this out.
-					$this->create_cd_nav_menu( $role_name );
-
-					continue;
-				}
-
-				$this->all_menu_IDs[ $role_name ] = false;
-
-				continue;
-			}
-
-			$this->all_menu_IDs[ $role_name ] = $menu_object->term_id;
-		}
-
-		$this->get_current_menu();
-	}
-
-	public function create_cd_nav_menu( $role_name ) {
-		$this->all_menu_IDs[ $role_name ] = wp_create_nav_menu( "cd_admin_menu_$role_name" );
-
-		// Create the default items
-		$this->create_modified_menu( $this->all_menu_IDs[ $role_name], $role_name );
-
-		// Save it
-		$this->save_cd_menu( "cd_admin_menu_$role_name" );
-	}
-
-	public static function return_cd_nav_menu() {
-		// Get our nav menu (if it exists)
-		$term = get_term_by( 'name', 'cd_admin_menu', 'nav_menu' );
-
-		$term_id = $term->term_id;
-
-		// If it doesn't exist, create it
-		if ( ! $term ) {
-			$term_id = wp_create_nav_menu( 'cd_admin_menu' );
-		}
-
-		return $term_id;
-	}
-
-	/**
-	 * Filters the walker class used on the CD admin menu page.
-	 *
-	 * @return string The new Walker class.
-	 */
-	public function return_new_walker_menu( $walker, $menu ) {
-
-		// Needed to get the plugin path
-		global $ClientDash;
-
-		// When being loaded via AJAX, we won't have the menu ID, so we need
-		// to get it again.
-		if ( ! isset( $this->menu_ID ) ) {
-
-			// TODO Make this only get the current menu
-			$this->get_cd_nav_menus();
-
-			// Includes our modified walker class for when ajax-actions.php tries to call it
-			include_once( $ClientDash->path . '/core/includes/adminmenu-walkerclass.php' );
-		}
-
-		// TODO Address PHP notices in AJAX response
-
-		if ( $menu == $this->menu_ID ) {
-			return 'Walker_Nav_Menu_Edit_CD';
-		}
-
-		return $walker;
-	}
-
-	/**
-	 * Filters the returned nav menus on the nav menu edit screen to remove
-	 * the CD admin nav menu from the list.
-	 *
-	 * @param array $menus The supplied available nav menus.
-	 *
-	 * @return mixed The filtered nav menus.
-	 */
-	public function hide_cd_nav_menu( $menus ) {
-
-		// Get the current screen and make sure it's on the nav-menus.php page
-		global $current_screen;
-
-		if ( $current_screen->base != 'nav-menus' ) {
-			return $menus;
-		}
-
-		// Cycle through each available menu and remove it if it's name is cd_admin_menu
-		foreach ( $menus as $key => $menu_ID ) {
-			$menu = wp_get_nav_menu_object( $menu_ID );
-
-			if ( $menu->name == 'cd_admin_menu' ) {
-				unset( $menus[ $key ] );
-			}
-		}
-
-		return $menus;
-	}
-
-	/**
 	 * Get the original, un-modified admin menu.
 	 *
 	 * @since Client Dash 1.6
@@ -402,30 +282,280 @@ class ClientDash_Core_Page_Settings_Tab_Admin_Menu extends ClientDash {
 			}
 		}
 
-		// Re-order the menus and submenus into an indexed order
-		$i = 0;
+		// Sort the menus, then re-index them
 		ksort( $orig_menu );
+		$orig_menu = array_values( $orig_menu );
 		foreach ( $orig_menu as $menu_position => $menu_item ) {
 
-			unset( $orig_menu[ $menu_position ] );
-			$orig_menu[ $i ] = $menu_item;
-
-			// Loop through all of the sub-menus IF they exist
-			if ( ! empty( $menu_item['submenus'] ) && is_array( $menu_item['submenus'] ) ) {
-				$i_sub = 0;
-				foreach ( $menu_item['submenus'] as $submenu_position => $submenu_item ) {
-
-					unset( $orig_menu[ $i ]['submenus'][ $submenu_position ] );
-					$orig_menu[ $i ]['submenus'][ $i_sub ] = $submenu_item;
-
-					$i_sub ++;
-				}
+			if ( isset( $menu_item['submenus'] ) ) {
+				ksort( $orig_menu[ $menu_position ]['submenus'] );
+				$orig_menu[ $menu_position ]['submenus'] = array_values( $orig_menu[ $menu_position ]['submenus'] );
 			}
-
-			$i ++;
 		}
 
 		$this->original_admin_menu = $orig_menu;
+	}
+
+	/**
+	 * Deletes the specified nav menu permanently.
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public function delete_nav_menu() {
+
+		$menu_ID = $_GET['cd_delete_admin_menu'];
+
+		// Make sure they got here correctly
+		check_admin_referer( 'delete-cd_nav_menu-' . $menu_ID );
+
+		$menu_object = wp_get_nav_menu_object( $menu_ID );
+
+		// If we got here incorrectly, the menu may not actually exist
+		if ( empty( $menu_object ) || is_wp_error( $menu_object ) ) {
+			return;
+		}
+
+		// Delete errything
+		delete_option( "{$menu_object->name}_modified" );
+		wp_delete_nav_menu( $menu_ID );
+
+		// Redirect
+		wp_redirect( remove_query_arg( array( 'cd_delete_admin_menu', '0', '_wpnonce', 'menu' ) ) );
+		exit();
+	}
+
+	/**
+	 * Creates each role's nav menu for the first time.
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public function create_nav_menu() {
+
+		// The role name to create for
+		$role_name = $_POST['cd_create_admin_menu'];
+
+		// Bail if it exists (failsafe)
+		$menu_object = wp_get_nav_menu_object( "cd_admin_menu_$role_name" );
+		if ( ! empty( $menu_object ) ) {
+			return;
+		}
+
+		// Create the nav menu
+		$this->menu_ID = wp_create_nav_menu( "cd_admin_menu_$role_name" );
+
+		// Now populate it with menu items (this is a hefty memory toll)
+		$this->populate_nav_menu( $role_name );
+
+		// Save it into our modified menu option
+		$this->save_cd_menu( $this->menu_ID );
+
+		// Redirect
+		wp_redirect( add_query_arg( 'menu', $this->menu_ID ) );
+		exit();
+	}
+
+	public function populate_nav_menu( $role ) {
+
+		// Cycle through each item and create the nav menu accordingly
+		foreach ( $this->original_admin_menu as $position => $menu ) {
+
+			// Pass over if current role doesn't have the capabilities
+			// TODO Make sure this works well with parent -> child relationships
+			$role_info = get_role( $role );
+			if ( ! array_key_exists( $menu['capability'], $role_info->capabilities ) ) {
+				continue;
+			}
+
+			// Skip links
+			// TODO Figure out how to better deal with this
+			if ( $menu['menu_title'] == 'Links' ) {
+				continue;
+			}
+
+			// Deal with "Plugins" having an extra space
+			$menu['menu_title'] = trim( $menu['menu_title'] );
+
+			$sorted      = self::sort_original_admin_menu( $menu );
+			$args        = $sorted[0];
+			$custom_meta = $sorted[1];
+
+			$ID = wp_update_nav_menu_item( $this->menu_ID, 0, $args );
+
+			if ( ! is_wp_error( $ID ) ) {
+				foreach ( $custom_meta as $meta_name => $meta_value ) {
+					update_post_meta( $ID, $meta_name, $meta_value );
+				}
+			}
+
+			// If there are submenus, cycle through them
+			if ( isset( $menu['submenus'] ) && ! empty( $menu['submenus'] ) ) {
+
+				foreach ( $menu['submenus'] as $submenu_item ) {
+
+					$sorted      = self::sort_original_admin_menu( $submenu_item, $menu );
+					$args        = $sorted[0];
+					$custom_meta = $sorted[1];
+
+					// Make it a child
+					$args['menu-item-parent-id'] = $ID;
+
+					$submenu_ID = wp_update_nav_menu_item( $this->menu_ID, 0, $args );
+
+					if ( ! is_wp_error( $submenu_ID ) ) {
+						foreach ( $custom_meta as $meta_name => $meta_value ) {
+							update_post_meta( $submenu_ID, $meta_name, $meta_value );
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Gets our main admin menu nav menu, and creates it if it doesn't already
+	 * exist.
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public function get_cd_nav_menus() {
+
+		// Get the nav menu for each role
+		$roles = get_editable_roles();
+		foreach ( $roles as $role_ID => $role ) {
+
+			$menu_object = wp_get_nav_menu_object( "cd_admin_menu_$role_ID" );
+
+			// If it doesn't exist return false, otherwise return the menu ID
+			if ( ! $menu_object ) {
+				$this->all_menu_IDs[ $role_ID ] = false;
+			} else {
+				$this->all_menu_IDs[ $role_ID ] = $menu_object->term_id;
+			}
+		}
+
+		$this->get_current_menu();
+	}
+
+	/**
+	 * Gets the menu being currently edited. Also gets current role.
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public function get_current_menu() {
+
+		// If a menu isn't set, just take the first one that exists. Otherwise, get it from the url
+		if ( isset( $_GET['menu'] ) ) {
+			$this->menu_ID = $_GET['menu'];
+		} else {
+
+			// Cycle through to find the first role with a menu ID
+			foreach ( $this->all_menu_IDs as $menu_ID ) {
+				if ( ! $menu_ID ) {
+					continue;
+				}
+
+				$this->menu_ID = $menu_ID;
+				break;
+			}
+		}
+
+		// If this menu doesn't exist, return false
+		$menu_object = wp_get_nav_menu_object( $this->menu_ID );
+		if ( ! $menu_object ) {
+			$this->menu_ID = false;
+			$this->role    = false;
+
+			// We may be on create a new menu?
+			if ( isset( $_GET['menu'] ) ) {
+				$this->role       = $_GET['menu'];
+				$this->create_new = true;
+			}
+
+			return;
+		}
+
+		// Now figure out which role this menu is for
+		foreach ( $this->all_menu_IDs as $role => $menu ) {
+			if ( $this->menu_ID == $menu ) {
+				$this->role = $role;
+
+				return;
+			}
+		}
+	}
+
+	// TODO Is this function necessary? It's not populating the menu
+	public static function return_cd_nav_menu() {
+		// Get our nav menu (if it exists)
+		$term = get_term_by( 'name', 'cd_admin_menu', 'nav_menu' );
+
+		$term_id = $term->term_id;
+
+		// If it doesn't exist, create it
+		if ( ! $term ) {
+			$term_id = wp_create_nav_menu( 'cd_admin_menu' );
+		}
+
+		return $term_id;
+	}
+
+	/**
+	 * Filters the walker class used on the CD admin menu page.
+	 *
+	 * @return string The new Walker class.
+	 */
+	public function return_new_walker_menu( $walker, $menu ) {
+
+		// Needed to get the plugin path
+		global $ClientDash;
+
+		// When being loaded via AJAX, we won't have the menu ID, so we need
+		// to get it again.
+		if ( ! isset( $this->menu_ID ) ) {
+
+			// TODO Make this only get the current menu
+			$this->get_cd_nav_menus();
+
+			// Includes our modified walker class for when ajax-actions.php tries to call it
+			include_once( $ClientDash->path . '/core/tabs/settings/menus/walkerclass.php' );
+		}
+
+		// TODO Address PHP notices in AJAX response
+
+		if ( $menu == $this->menu_ID ) {
+			return 'Walker_Nav_Menu_Edit_CD';
+		}
+
+		return $walker;
+	}
+
+	/**
+	 * Filters the returned nav menus on the nav menu edit screen to remove
+	 * the CD admin nav menu from the list.
+	 *
+	 * @param array $menus The supplied available nav menus.
+	 *
+	 * @return mixed The filtered nav menus.
+	 */
+	public function hide_cd_nav_menu( $menus ) {
+
+		// Get the current screen and make sure it's on the nav-menus.php page
+		global $current_screen;
+
+		if ( $current_screen->base != 'nav-menus' ) {
+			return $menus;
+		}
+
+		// Cycle through each available menu and remove it if it's name is cd_admin_menu
+		foreach ( $menus as $key => $menu_ID ) {
+			$menu = wp_get_nav_menu_object( $menu_ID );
+
+			if ( strpos( $menu->name, 'cd_admin_menu' ) !== false ) {
+				unset( $menus[ $key ] );
+			}
+		}
+
+		return $menus;
 	}
 
 	/**
@@ -467,91 +597,18 @@ class ClientDash_Core_Page_Settings_Tab_Admin_Menu extends ClientDash {
 			}
 		}
 
-		// Re-order the menus and submenus into an indexed order
-		$i = 0;
+		// Sort the menus, then re-index them
+		ksort( $orig_menu );
+		$orig_menu = array_values( $orig_menu );
 		foreach ( $orig_menu as $menu_position => $menu_item ) {
 
-			unset( $orig_menu[ $menu_position ] );
-			$orig_menu[ $i ] = $menu_item;
-
-			// Loop through all of the sub-menus IF they exist
-			if ( ! empty( $menu_item['submenus'] ) && is_array( $menu_item['submenus'] ) ) {
-				$i_sub = 0;
-				foreach ( $menu_item['submenus'] as $submenu_position => $submenu_item ) {
-
-					unset( $orig_menu[ $i ]['submenus'][ $submenu_position ] );
-					$orig_menu[ $i ]['submenus'][ $i_sub ] = $submenu_item;
-
-					$i_sub ++;
-				}
+			if ( isset( $menu_item['submenus'] ) ) {
+				ksort( $orig_menu[ $menu_position ]['submenus'] );
+				$orig_menu[ $menu_position ]['submenus'] = array_values( $orig_menu[ $menu_position ]['submenus'] );
 			}
-
-			$i ++;
 		}
 
 		return $orig_menu;
-	}
-
-	public function create_modified_menu( $menu_ID, $role ) {
-
-		// Cycle through each item and create the nav menu accordingly
-		foreach ( $this->original_admin_menu as $position => $menu ) {
-
-			// Pass over if current role doesn't have the capabilities
-			// TODO Make sure this works well with parent -> child relationships
-			$role_info = get_role( $role );
-			if ( ! array_key_exists( $menu['capability'], $role_info->capabilities ) ) {
-				continue;
-			}
-
-			// Skip links
-			// TODO Figure out how to better deal with this
-			if ( $menu['menu_title'] == 'Links' ) {
-				continue;
-			}
-
-			// Deal with "Plugins" having an extra space
-			$menu['menu_title'] = trim( $menu['menu_title'] );
-
-			$sorted      = self::sort_original_admin_menu( $menu );
-			$args        = $sorted[0];
-			$custom_meta = $sorted[1];
-
-			$ID = wp_update_nav_menu_item( $menu_ID, 0, $args );
-
-			if ( ! is_wp_error( $ID ) ) {
-				foreach ( $custom_meta as $meta_name => $meta_value ) {
-					update_post_meta( $ID, $meta_name, $meta_value );
-				}
-			}
-
-			// If there are submenus, cycle through them
-			if ( isset( $menu['submenus'] ) && ! empty( $menu['submenus'] ) ) {
-
-				foreach ( $menu['submenus'] as $submenu_item ) {
-
-					// TODO Fix/remove this
-					if ( $submenu_item['menu_title'] == 'Client Dash' ) {
-						continue;
-					}
-
-					$sorted      = self::sort_original_admin_menu( $submenu_item, $menu );
-					$args        = $sorted[0];
-					$custom_meta = $sorted[1];
-
-					// Make it a child
-					$args['menu-item-parent-id'] = $ID;
-
-					$submenu_ID = wp_update_nav_menu_item( $menu_ID, 0, $args );
-
-					if ( ! is_wp_error( $submenu_ID ) ) {
-						foreach ( $custom_meta as $meta_name => $meta_value ) {
-							update_post_meta( $submenu_ID, $meta_name, $meta_value );
-						}
-					}
-				}
-			}
-		}
 	}
 
 	public static function sort_original_admin_menu( $menu, $is_submenu = false ) {
@@ -579,7 +636,8 @@ class ClientDash_Core_Page_Settings_Tab_Admin_Menu extends ClientDash {
 			'cd-original-title'   => $menu['menu_title'],
 			'cd-icon'             => $menu['icon_url'],
 			'cd-separator-height' => 5,
-			'cd-url'              => $menu['menu_slug']
+			'cd-url'              => $menu['menu_slug'],
+			'cd-page-title'       => $menu['page_title']
 		);
 
 		// Figure out what we're dealing with
@@ -675,6 +733,12 @@ class ClientDash_Core_Page_Settings_Tab_Admin_Menu extends ClientDash {
 	 */
 	public function remove_orig_admin_menu() {
 
+		// Only remove the menus if the current role has a modified menu created
+		$current_role = $this->get_user_role();
+		if ( ! $this->all_menu_IDs[ $current_role ] ) {
+			return;
+		}
+
 		// If the menus have been set, remove all of them
 		if ( ! empty( $this->original_admin_menu ) ) {
 			foreach ( $this->original_admin_menu as $menu_item ) {
@@ -688,6 +752,9 @@ class ClientDash_Core_Page_Settings_Tab_Admin_Menu extends ClientDash {
 				}
 			}
 		}
+
+		// We removed it, now add it
+		$this->add_modified_admin_menu();
 	}
 
 	/**
@@ -696,25 +763,45 @@ class ClientDash_Core_Page_Settings_Tab_Admin_Menu extends ClientDash {
 	 * @since Client Dash 1.6
 	 */
 	public function add_modified_admin_menu() {
-		global $menu;
 
-		// TODO Change back to modified once modified is in place
-		$modified_menu = get_option( 'cd_modified_admin_menu', false );
+		global $menu, $cd_parent_file;
+
+		// Get current role
+		$current_role = $this->get_user_role();
+
+		// Get the modified menu
+		$menu_object   = wp_get_nav_menu_object( $this->all_menu_IDs[ $current_role ] );
+		$modified_menu = get_option( "{$menu_object->name}_modified", false );
 
 		// If the modified menus are set, then add them
 		if ( $modified_menu ) {
 			foreach ( $modified_menu as $menu_position => $menu_item ) {
 
+				// Change parent file
+				if ( strpos( $_SERVER['REQUEST_URI'], $menu_item['menu_slug'] ) !== false ) {
+					$cd_parent_file = $menu_item['menu_slug'];
+					add_filter( 'parent_file', 'test' );
+				}
+
+				$classes = [];
+
+				// Determine if active
+				if ( strpos( $_SERVER['REQUEST_URI'], $menu_item['menu_slug'] ) ) {
+					$classes[] = 'wp-has-current-submenu';
+				} else {
+					$classes[] = 'wp-not-current-submenu';
+				}
+
 				// If a separator, do that instead
 				if ( strpos( $menu_item['menu_slug'], 'separator' ) !== false ) {
-					$height                 = $menu_item['separator-height'];
 					$menu[ $menu_position ] = array(
 						'',
 						'read',
 						$menu_item['menu_slug'],
 						'',
-						"wp-menu-separator height-$height"
+						'wp-menu-separator'
 					);
+					$classes[] = 'wp-menu-separator';
 				} else {
 					add_menu_page(
 						! empty( $menu_item['page_title'] ) ? $menu_item['page_title'] : null,
@@ -725,10 +812,17 @@ class ClientDash_Core_Page_Settings_Tab_Admin_Menu extends ClientDash {
 						! empty( $menu_item['icon_url'] ) ? $menu_item['icon_url'] : 'none',
 						$menu_position
 					);
+
+					$classes[] = "toplevel_page_$menu_item[menu_slug]";
+					$classes[] = 'menu-top';
 				}
 
 				// Now for the sub-menus (if they exist)
 				if ( ! empty( $menu_item['submenus'] ) ) {
+
+					// Add the class
+					$classes[] = 'wp-has-submenu';
+
 					foreach ( $menu_item['submenus'] as $submenu_item ) {
 						add_submenu_page(
 							! empty( $menu_item['menu_slug'] ) ? $menu_item['menu_slug'] : null,
@@ -740,8 +834,15 @@ class ClientDash_Core_Page_Settings_Tab_Admin_Menu extends ClientDash {
 						);
 					}
 				}
+
+				// Add the menu classes
+//				$menu[ $menu_position ][4] = implode( ' ', $classes );
 			}
 		}
+
+		// Save menu and submenu vars
+//		$this->menu = $menu;
+//		$this->submenu = $submenu;
 	}
 
 	// Add specific CSS class by filter
@@ -757,31 +858,20 @@ class ClientDash_Core_Page_Settings_Tab_Admin_Menu extends ClientDash {
 	public function save_menu() {
 		// TODO Secure page better with nonce
 
-		// Update existing menu
-		$_menu_object = wp_get_nav_menu_object( $this->menu_ID );
-
-		$menu_title = trim( esc_html( $_POST['menu-name'] ) );
-
-		if ( ! is_wp_error( $_menu_object ) ) {
-			$_nav_menu_selected_id   = wp_update_nav_menu_object( $this->menu_ID, array( 'menu-name' => $menu_title ) );
-			$_menu_object            = wp_get_nav_menu_object( $_nav_menu_selected_id );
-			$nav_menu_selected_title = $_menu_object->name;
-		}
+		$menu_object = wp_get_nav_menu_object( $this->menu_ID );
 
 		// Update menu items
 		if ( ! is_wp_error( $_menu_object ) ) {
 
 			// Default WP nav menu save
-			wp_nav_menu_update_menu_items( $this->menu_ID, $nav_menu_selected_title );
+			wp_nav_menu_update_menu_items( $this->menu_ID, $menu_object->name );
 
 			// Save CD friendly menu
-			$this->save_cd_menu();
+			$this->save_cd_menu( $this->menu_ID );
 		}
 	}
 
-	public function save_cd_menu( $menu_name = false ) {
-
-		// TODO Make sure this works with "Save Menu", otherwise, fix it
+	public static function save_cd_menu( $menu_ID ) {
 
 		$menu = [ ];
 
@@ -796,7 +886,7 @@ class ClientDash_Core_Page_Settings_Tab_Admin_Menu extends ClientDash {
 			'capability' => 'read'
 		);
 
-		$menu_items = wp_get_nav_menu_items( $menu_name ? $this->all_menu_IDs[ $menu_name ] : $this->menu_ID );
+		$menu_items = wp_get_nav_menu_items( $menu_ID );
 
 		// Cycle through all existing items
 		foreach ( $menu_items as $item ) {
@@ -818,7 +908,7 @@ class ClientDash_Core_Page_Settings_Tab_Admin_Menu extends ClientDash {
 					'menu_title' => $item->post_title,
 					'menu_slug'  => $slug,
 					// TODO Get page title
-					'page_title' => '',
+					'page_title' => get_post_meta( $item->ID, 'cd-page-title', true),
 					'icon_url'   => $icon
 				), $default_menu );
 
@@ -833,7 +923,7 @@ class ClientDash_Core_Page_Settings_Tab_Admin_Menu extends ClientDash {
 					'menu_title'  => $item->post_title,
 					'menu_slug'   => $slug,
 					// TODO Get page title
-					'page_title'  => '',
+					'page_title'  => get_post_meta( $item->ID, 'cd-page-title', true),
 					'parent_slug' => $menu[ $item->menu_item_parent ]['menu_slug']
 				), $default_submenu );
 			}
@@ -848,7 +938,9 @@ class ClientDash_Core_Page_Settings_Tab_Admin_Menu extends ClientDash {
 			$menu[ $i ] = $menu_item;
 		}
 
-		update_option( "{$menu_name}_modified", $menu );
+		// Save it!
+		$menu_object = wp_get_nav_menu_object( $menu_ID );
+		update_option( "{$menu_object->name}_modified", $menu );
 	}
 
 	/**
@@ -897,7 +989,7 @@ class ClientDash_Core_Page_Settings_Tab_Admin_Menu extends ClientDash {
 
 		if ( is_nav_menu( $this->menu_ID ) ) {
 			// Our modified walker class
-			include_once( $ClientDash->path . '/core/includes/adminmenu-walkerclass.php' );
+			include_once( $ClientDash->path . '/core/tabs/settings/menus/walkerclass.php' );
 
 			$menu_items  = wp_get_nav_menu_items( $this->menu_ID, array( 'post_status' => 'any' ) );
 			$edit_markup = wp_get_nav_menu_to_edit( $this->menu_ID );
@@ -915,55 +1007,58 @@ class ClientDash_Core_Page_Settings_Tab_Admin_Menu extends ClientDash {
 	 */
 	public function block_output() {
 
-		global $ClientDash;
-
 		$menu_info = $this->get_available_items();
 
 		$menu_items  = $menu_info[0];
 		$edit_markup = $menu_info[1];
 
-		// TODO Make spinner on first load
+		if ( is_wp_error( $edit_markup ) ) {
+			$this->error_nag( array_shift( array_shift( $edit_markup->errors ) ) );
 
-		// If the menus have not yet been loaded
-		if ( ! $this->menu_ID ) {
-			?>
-			<form action="" method="post">
-				<input type="hidden" name="cd-create-admin-menus" value="1"/>
-
-				<p>Client Dash offers the ability to customize the Admin Menu (that's the vertical menu on the left). If
-					you would like to take advantage of this, click <input type="submit" class="button" value="here"/>
-					to load in the corresponding menus. Please note that it will take some time.</p>
-			</form>
-			<?php
-
-			// Don't show the rest of the markup because we haven't created a menu yet
 			return;
 		}
 
+		// TODO Remove
+		var_dump( $this->all_menu_IDs );
+
 		// From wp-admin/nav-menus.php. Modified for CD use.
 		?>
-		<div class="manage-menus">
-			<form method="get">
-				<input type="hidden" name="action" value="edit" />
-				<label for="menu" class="selected-menu"><?php _e( 'Select a menu to edit:' ); ?></label>
-				<select name="menu" id="menu">
-					<?php foreach ( $nav_menus as $nav_menu ) : ?>
-						<option value="<?php echo esc_attr( $nav_menu->term_id ); ?>"
-							<?php selected( $nav_menu->term_id, $this->menu_ID ); ?>>
-							<?php echo esc_html( $nav_menu->truncated_name ); ?>
-						</option>
-					<?php endforeach; ?>
-				</select>
-				<span class="submit-btn">
-					<input type="submit"
-					       class="button-secondary"
-					       value="<?php esc_attr_e( 'Select' ); ?>" />
-				</span>
-			</form>
-		</div><!-- /manage-menus -->
+
+		<?php
+		// Only show select area if a menu has been created. Otherwise, this will be shown below
+		if ( $this->menu_ID || $this->create_new ) :
+			?>
+			<div class="manage-menus">
+				<form method="get">
+					<label for="menu" class="selected-menu"><?php _e( 'Select a menu to edit:' ); ?></label>
+
+					<?php // Keep us on the same page! ?>
+					<input type="hidden" name="page" value="cd_settings"/>
+					<input type="hidden" name="tab" value="menus"/>
+
+					<select id="menu" name="menu">
+						<?php
+						foreach ( get_editable_roles() as $role_ID => $role ) {
+							?>
+							<option
+								value="<?php echo $this->all_menu_IDs[ $role_ID ] ? $this->all_menu_IDs[ $role_ID ] : $role_ID; ?>"
+								<?php selected( $this->role, $role_ID ); ?>>
+								<?php echo $role_ID == 'administrator' ? $role['name'] . ' (that\'s you!)' : $role['name']; ?>
+							</option>
+						<?php
+						}
+						?>
+					</select>
+					<span class="submit-btn">
+						<input type="submit" class="button-secondary" value="Select"/>
+					</span>
+				</form>
+			</div><!-- /manage-menus -->
+		<?php endif; ?>
 
 		<div id="nav-menus-frame">
-			<div id="menu-settings-column" class="metabox-holder">
+			<div id="menu-settings-column"
+			     class="metabox-holder<?php echo $this->menu_ID ? '' : ' metabox-holder-disabled'; ?>">
 
 				<div class="clear"></div>
 
@@ -986,22 +1081,50 @@ class ClientDash_Core_Page_Settings_Tab_Admin_Menu extends ClientDash {
 							wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );
 							wp_nonce_field( 'update-nav_menu', 'update-nav-menu-nonce' );
 							?>
-							<input type="hidden" name="action" value="update"/>
+							<?php if ( $this->menu_ID ) : ?>
+								<input type="hidden" name="action" value="update"/>
+							<?php else : ?>
+								<input type="hidden" name="action" value="create"/>
+							<?php endif; ?>
 							<input type="hidden" name="menu" id="menu"
 							       value="<?php echo esc_attr( $this->menu_ID ); ?>"/>
+							<input type="hidden" id="menu-name" value="cd_admin_menu"/>
 
 							<div id="nav-menu-header">
 								<div class="major-publishing-actions">
 									<label class="menu-name-label howto open-label" for="menu-name">
-										<span>Menu Name</span>
-										<span>Admin Menu</span>
-										<input name="menu-name" id="menu-name" type="hidden"
-										       class="menu-name regular-text menu-item-textbox input-with-default-title"
-										       value="cd_admin_menu"/>
+										<?php
+										// If the menu is set, show it, otherwise, allow user to select which
+										// menu to create
+										if ( $this->menu_ID ) :
+											?>
+											<span>Menu Name:</span>
+											<span class="cd-nav-menu-title"><?php echo ucwords( $this->role ); ?></span>
+										<?php else : ?>
+											<span>Choose which role to create a menu for:</span>
+											<select name="cd_create_admin_menu">
+												<?php
+												foreach ( get_editable_roles() as $role_ID => $role ) {
+
+													// Don't show if already created
+													if ( $this->all_menu_IDs[ $role_ID ] ) {
+														continue;
+													}
+													?>
+													<option
+														value="<?php echo $role_ID; ?>"
+														<?php selected( $this->role, $role_ID ); ?>>
+														<?php echo $role_ID == 'administrator' ? $role['name'] . ' (that\'s you!)' : $role['name']; ?>
+													</option>
+												<?php
+												}
+												?>
+											</select>
+										<?php endif; ?>
 									</label>
 
 									<div class="publishing-action">
-										<?php submit_button( __( 'Save Menu' ), 'button-primary menu-save', 'save_menu', false, array( 'id' => 'save_menu_header' ) ); ?>
+										<?php submit_button( $this->menu_ID ? __( 'Save Menu' ) : __( 'Create Menu' ), 'button-primary menu-save', 'save_menu', false, array( 'id' => 'save_menu_header' ) ); ?>
 									</div>
 									<!-- END .publishing-action -->
 								</div>
@@ -1010,28 +1133,53 @@ class ClientDash_Core_Page_Settings_Tab_Admin_Menu extends ClientDash {
 							<!-- END .nav-menu-header -->
 							<div id="post-body">
 								<div id="post-body-content">
-									<h3><?php _e( 'Menu Structure' ); ?></h3>
 
-									<div class="drag-instructions post-body-plain"
-									     <?php if (isset( $menu_items ) && 0 == count( $menu_items )) { ?>style="display: none;"<?php } ?>>
-										<p>Drag and drop them in the order you like. Click on
-											the arrows on each box to reveal more options.</p>
-									</div>
 									<?php
-									if ( isset( $edit_markup ) && ! is_wp_error( $edit_markup ) ) {
-										echo $edit_markup;
-									} else {
+									// If no menu ID is set, instruct to create a new menu from above
+									if ( $this->menu_ID ) :
 										?>
-										<ul class="menu" id="menu-to-edit"></ul>
-									<?php } ?>
+										<h3><?php _e( 'Menu Structure' ); ?></h3>
+
+										<div class="drag-instructions post-body-plain"
+											<?php echo isset( $menu_items ) && 0 == count( $menu_items ) ? 'style="display: none;"' : ''; ?>>
+											<p>Drag and drop them in the order you like. Click on
+												the arrows on each box to reveal more options.</p>
+										</div>
+										<?php
+										if ( isset( $edit_markup ) && ! is_wp_error( $edit_markup ) ) {
+											echo $edit_markup;
+										} else {
+											echo '<ul class="menu" id="menu-to-edit"></ul>';
+										}
+										?>
+									<?php else : ?>
+										<p class="post-body-plain">Select a role to create a menu for.</p>
+										<p class="post-body-plain">The menu will be automatically populated with all
+											visible admin menu items for the specified roles.</p>
+									<?php endif; ?>
+
 								</div>
 								<!-- /#post-body-content -->
 							</div>
 							<!-- /#post-body -->
 							<div id="nav-menu-footer">
 								<div class="major-publishing-actions">
+									<?php if ( $this->menu_ID ) : ?>
+										<span class="delete-action">
+<!--								<a class="submitdelete deletion menu-delete"-->
+<!--								   href="--><?php //echo add_query_arg( 'cd_delete_admin_menu', $this->menu_ID ); ?><!--">Delete-->
+<!--									Menu</a>-->
+											<a class="submitdelete deletion menu-delete"
+											   href="<?php echo esc_url( wp_nonce_url( add_query_arg( array(
+												   'cd_delete_admin_menu' => $this->menu_ID,
+												   admin_url()
+											   ) ), 'delete-cd_nav_menu-' . $this->menu_ID ) ); ?>"><?php _e( 'Delete Menu' ); ?></a>
+
+							</span><!-- END .delete-action -->
+									<?php endif; ?>
 									<div class="publishing-action">
-										<?php submit_button( __( 'Save Menu' ), 'button-primary menu-save', 'save_menu', false, array( 'id' => 'save_menu_header' ) ); ?>
+										<?php submit_button( $this->menu_ID ? __( 'Save Menu' ) : __( 'Create Menu' ), 'button-primary menu-save', 'save_menu', false, array( 'id' => 'save_menu_footer' ) ); ?>
+
 									</div>
 									<!-- END .publishing-action -->
 								</div>

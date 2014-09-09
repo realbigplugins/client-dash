@@ -114,7 +114,7 @@ Using this plugin is very simple. All you have to do is:
 
 = 1.2.1 =
 * Fixed php warning.
-* Safeguarded require_once occurrences for potential issues.
+* Safeguarded include_once occurrences for potential issues.
 * Reformatted code.
 * Added missing files causing fatal error.
 * Fixed dashboard widget broken links.

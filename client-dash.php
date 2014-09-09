@@ -11,7 +11,7 @@ Author URI: http://realbigmarketing.com/staff/kyle
 // TODO Only require page / tab specific files WHEN they are needed. Not always.
 
 // Require the functions class first so we can extend it
-require_once( plugin_dir_path( __FILE__ ) . 'core/functions.php' );
+include_once( plugin_dir_path( __FILE__ ) . 'core/functions.php' );
 
 /**
  * Class ClientDash
@@ -67,7 +67,7 @@ class ClientDash extends ClientDash_Functions {
 		),
 		'settings'  => array(
 			'display',
-			'admin_menu',
+			'menus',
 			'icons',
 			'webmaster',
 			'widgets',
@@ -840,4 +840,4 @@ class ClientDash extends ClientDash_Functions {
 $ClientDash = new ClientDash();
 
 // Require other files
-require_once( plugin_dir_path( __FILE__ ) . 'core/require.php' );
+include_once( plugin_dir_path( __FILE__ ) . 'core/include-files.php' );

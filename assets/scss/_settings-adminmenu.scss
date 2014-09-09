@@ -36,7 +36,7 @@
   }
 
   // Right side
-  #menu-to-edit {
+  #menu-management-liquid {
 
     // Separator
     .menu-item-separator {
@@ -45,6 +45,22 @@
         border-color: darken(#dfdfdf, 10%); // Original border color
         color: lighten(#222, 40%) // Original font color
       }
+    }
+
+    // Some gross whitespace
+    #post-body {
+      padding: 10px !important;
+    }
+    #post-body-content {
+      margin-bottom: 0;
+    }
+
+    // The nav menu title
+    .cd-nav-menu-title {
+      font-style: normal;
+      font-weight: bold;
+      color: #222;
+      font-size: 125%;
     }
   }
 }

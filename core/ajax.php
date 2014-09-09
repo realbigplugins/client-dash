@@ -70,6 +70,9 @@ class ClientDash_AJAX extends ClientDash {
 			delete_option( "cd_admin_menu_{$role_name}_modified" );
 		}
 
+		// TODO Remove
+		update_option( 'cd_testing_cron', 'IT HASN\'T RAN' );
+
 		echo 'Admin menu successfully reset!';
 
 		die();

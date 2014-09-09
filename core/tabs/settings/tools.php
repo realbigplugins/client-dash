@@ -15,7 +15,7 @@
 class ClientDash_Core_Page_Settings_Tab_Tools extends ClientDash {
 
 	/**
-	 * The main construct function.
+	 * The main construct function.update_option( 'cd_testing_cron', 'IT RAN' );
 	 *
 	 * @since Client Dash 1.5
 	 */

@@ -118,7 +118,8 @@ var cdAdminMenu;
                             'custom-meta-cd-icon',
                             'custom-meta-cd-type',
                             'custom-meta-cd-separator-height',
-                            'custom-meta-cd-url'
+                            'custom-meta-cd-url',
+                            'custom-meta-cd-page-title'
                         ];
 
                     if (!id && itemType == 'menu-item') {
@@ -165,8 +166,6 @@ var cdAdminMenu;
          * @since Client Dash 1.6
          */
         modify_max_menu_depth: function () {
-
-            // TODO Working... but you can drag an item 1 level in that has children 1 level in, and then children become 2 levels in :|
 
             // Reset the max depth HERE (default is 11)
             wpNavMenu.options.globalMaxDepth = 1;
@@ -356,7 +355,7 @@ var cdAdminMenu;
     };
 
     $(function () {
-        if ($('body').hasClass('cd-nav-menu')) {
+        if ($('body').hasClass('cd-nav-menu') && !$('#menu-settings-column').hasClass('metabox-holder-disabled')) {
             cdAdminMenu.init();
         }
 

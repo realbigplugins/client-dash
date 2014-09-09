@@ -59,7 +59,7 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 		// Get the action
 		$action = isset( $_POST['action'] ) ? $_POST['action'] : null;
 
-		// This needs to match $custom_meta keys from "./core/inc/adminmenu-availableitems-callbacks.php:~67"
+		// This needs to match $custom_meta keys from "./core/inc/adminmenu-availableitems-callbacks.php:~31"
 		$custom_meta = array(
 			'cd-type',
 			'cd-post-type',
@@ -67,7 +67,8 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 			'cd-original-title',
 			'cd-icon',
 			'cd-separator-height',
-			'cd-url'
+			'cd-url',
+			'cd-page-title'
 		);
 
 		// Save any cd custom meta
@@ -191,12 +192,14 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 
 		<div class="menu-item-settings" id="menu-item-settings-<?php echo $item_id; ?>">
 
-			<?php if ( $type == 'custom' ) : ?>
+			<?php // TODO Remove "|| true" ?>
+			<?php if ( $type == 'custom' || true) : ?>
 				<p class="field-url description description-wide">
 					<label for="edit-menu-item-url-<?php echo $item_id; ?>">
 						<?php _e( 'URL' ); ?><br/>
 						<input type="text" id="edit-menu-item-url-<?php echo $item_id; ?>"
-						       class="widefat code edit-menu-item-cd-url" name="menu-item-cd-url[<?php echo $item_id; ?>]"
+						       class="widefat code edit-menu-item-cd-url"
+						       name="menu-item-cd-url[<?php echo $item_id; ?>]"
 						       value="<?php echo esc_attr( $url ); ?>"/>
 					</label>
 				</p>
@@ -241,16 +244,18 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 				</p>
 			<?php endif; ?>
 
+			<?php // TODO Enable this, because I do believe it's possible ?>
 			<?php // Not using for now because I can't figure out how to attach classes to the menu items ?>
-<!--			<p class="field-css-classes description description-thin">-->
-<!--				<label for="edit-menu-item-classes---><?php //echo $item_id; ?><!--">-->
-<!--					--><?php //_e( 'CSS Classes (optional)' ); ?><!--<br/>-->
-<!--					<input type="text" id="edit-menu-item-classes---><?php //echo $item_id; ?><!--"-->
-<!--					       class="widefat code edit-menu-item-classes"-->
-<!--					       name="menu-item-classes[--><?php //echo $item_id; ?><!--]"-->
-<!--					       value="--><?php //echo esc_attr( implode( ' ', $item->classes ) ); ?><!--"/>-->
-<!--				</label>-->
-<!--			</p>-->
+			<!--			<p class="field-css-classes description description-thin">-->
+			<!--				<label for="edit-menu-item-classes---><?php //echo $item_id; ?><!--">-->
+			<!--					--><?php //_e( 'CSS Classes (optional)' ); ?><!--<br/>-->
+			<!--					<input type="text" id="edit-menu-item-classes---><?php //echo $item_id; ?><!--"-->
+			<!--					       class="widefat code edit-menu-item-classes"-->
+			<!--					       name="menu-item-classes[--><?php //echo $item_id; ?><!--]"-->
+			<!--					       value="-->
+			<?php //echo esc_attr( implode( ' ', $item->classes ) ); ?><!--"/>-->
+			<!--				</label>-->
+			<!--			</p>-->
 
 			<p class="field-move hide-if-no-js description description-wide">
 				<label>
@@ -271,17 +276,22 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 					</p>
 				<?php endif; ?>
 
-				<a class="item-delete submitdelete deletion" id="delete-<?php echo $item_id; ?>" href="<?php
-				echo wp_nonce_url(
-					add_query_arg(
-						array(
-							'action'    => 'delete-menu-item',
-							'menu-item' => $item_id,
+				<?php if ( $original_title != 'Client Dash' && $original_title != 'Settings' ) : ?>
+					<a class="item-delete submitdelete deletion" id="delete-<?php echo $item_id; ?>" href="<?php
+					echo wp_nonce_url(
+						add_query_arg(
+							array(
+								'action'    => 'delete-menu-item',
+								'menu-item' => $item_id,
+							),
+							admin_url( 'nav-menus.php' )
 						),
-						admin_url( 'nav-menus.php' )
-					),
-					'delete-menu_item_' . $item_id
-				); ?>"><?php _e( 'Remove' ); ?></a> <span class="meta-sep hide-if-no-js"> | </span> <a
+						'delete-menu_item_' . $item_id
+					); ?>"><?php _e( 'Remove' ); ?></a>
+						<span class="meta-sep hide-if-no-js"> | </span>
+				<?php endif; ?>
+
+				<a
 					class="item-cancel submitcancel hide-if-no-js" id="cancel-<?php echo $item_id; ?>"
 					href="<?php echo esc_url( add_query_arg( array(
 						'edit-menu-item' => $item_id,

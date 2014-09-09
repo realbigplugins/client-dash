@@ -12,7 +12,7 @@
  * @package WordPress
  * @subpackage ClientDash
  */
-class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Settings_Tab_Admin_Menu {
+class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Settings_Tab_Menus {
 
 	public static function default_post_types() {
 		// Default options
@@ -27,7 +27,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 		);
 
 		// Custom meta to send
-		// This needs to match $custom_meta from "./core/inc/adminmenu-walkerclass.php:~61"
+		// This needs to match $custom_meta from "./core/tabs/settings/menus/walkerclass.php:~63"
 		$custom_meta = array(
 			'cd-type'             => '',
 			'cd-post-type'        => 'post',
@@ -35,7 +35,8 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 			'cd-original-title'   => '',
 			'cd-icon'             => 'dashicons-admin-generic',
 			'cd-separator-height' => 5,
-			'cd-url'              => ''
+			'cd-url'              => '',
+			'cd-page-title'       => ''
 		);
 
 		return apply_filters( 'cd_availableitems_callback_defaults_posttype', array( $options, $custom_meta ) );
@@ -450,7 +451,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					<?php
 
 					$i = 0;
-					foreach ( ClientDash_Core_Page_Settings_Tab_Admin_Menu::$wp_core as $item_title => $item ) {
+					foreach ( ClientDash_Core_Page_Settings_Tab_Menus::$wp_core as $item_title => $item ) {
 						$i --;
 
 						// Reset defaults on each iteration
@@ -512,7 +513,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					<?php
 
 					$i = 0;
-					foreach ( ClientDash_Core_Page_Settings_Tab_Admin_Menu::$wp_core as $item_title => $item ) {
+					foreach ( ClientDash_Core_Page_Settings_Tab_Menus::$wp_core as $item_title => $item ) {
 						$i --;
 
 						if ( isset( $item['submenus'] ) ) {
@@ -597,13 +598,13 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 	public static function plugin() {
 
 		// Get the original menu
-		$orig_menu = ClientDash_Core_Page_Settings_Tab_Admin_Menu::return_orig_admin_menu();
+		$orig_menu = ClientDash_Core_Page_Settings_Tab_Menus::return_orig_admin_menu();
 
 		// Separate out only the items added by plugins
 		$menu_items = [ ];
 		foreach ( $orig_menu as $menu ) {
 
-			$sorted = ClientDash_Core_Page_Settings_Tab_Admin_Menu::sort_original_admin_menu( $menu );
+			$sorted = ClientDash_Core_Page_Settings_Tab_Menus::sort_original_admin_menu( $menu );
 
 			if ( $sorted[1]['cd-type'] == 'plugin' ) {
 				$menu_items[] = $menu;

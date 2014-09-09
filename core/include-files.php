@@ -22,16 +22,18 @@ class ClientDash_RequireFiles extends ClientDash {
 	 */
 	function __construct() {
 
+		global $ClientDash;
+
 		// Require our AJAX file
-		require_once( plugin_dir_path( __FILE__ ) . 'ajax.php' );
+		include_once( $ClientDash->path . '/core/ajax.php' );
 
 		// Require our deprecated file
-		require_once( plugin_dir_path( __FILE__ ) . 'deprecated.php' );
+		include_once( $ClientDash->path . '/core/deprecated.php' );
 
 		// Core page and tab files
 		foreach ( $this->core_files as $page => $tabs ) {
 			// Include page file
-			require_once( plugin_dir_path( __FILE__ ) . 'pages/' . $page . '.php' );
+			include_once( plugin_dir_path( __FILE__ ) . 'pages/' . $page . '.php' );
 
 			// Initiate the new page class to launch it
 			$page_class = 'ClientDash_Page_' . $page;
@@ -39,7 +41,7 @@ class ClientDash_RequireFiles extends ClientDash {
 
 			foreach ( $tabs as $tab ) {
 				// Include tabs
-				require_once( plugin_dir_path( __FILE__ ) . 'tabs/' . $page . '/' . $tab . '.php' );
+				include_once( plugin_dir_path( __FILE__ ) . 'tabs/' . $page . '/' . $tab . '.php' );
 
 				// Initiate the new tab class to launch it
 				$tab_class = 'ClientDash_Core_Page_' . $page . '_Tab_' . $tab;
@@ -49,7 +51,7 @@ class ClientDash_RequireFiles extends ClientDash {
 
 		// Core widget files
 		foreach ( $this->core_widgets as $widget ) {
-			require_once( plugin_dir_path( __FILE__ ) . 'widgets/' . $widget . '.php' );
+			include_once( plugin_dir_path( __FILE__ ) . 'widgets/' . $widget . '.php' );
 
 			// Initiate the new widget class to launch it
 			$widget_class = 'ClientDash_Widget_' . $widget;
