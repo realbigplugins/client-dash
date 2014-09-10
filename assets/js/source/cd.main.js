@@ -158,22 +158,18 @@ var cdMain;
          * @param e The supplied object.
          */
         toggle_switch: function (e) {
+
+            // Find the hidden input
+            var e_input = e.find('input');
+
+            // Toggle the on and off classes
             e.toggleClass('on').toggleClass('off');
 
-            var toggle;
-
-            if (e.attr('data-inverse')) {
-                if (e.hasClass('on')) {
-                    e.find('input').prop('disabled', true);
-                } else {
-                    e.find('input').prop('disabled', false);
-                }
+            // Toggle the disabled attr
+            if (e_input.prop('disabled')) {
+                e_input.prop('disabled', false);
             } else {
-                if (e.hasClass('on')) {
-                    e.find('input').prop('disabled', false);
-                } else {
-                    e.find('input').prop('disabled', true);
-                }
+                e_input.prop('disabled', true);
             }
         },
         /**

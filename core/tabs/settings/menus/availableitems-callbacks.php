@@ -1,6 +1,7 @@
 <?php
 
-// TODO Make it so that when you use a checkbox item, it becomes disabled until deleted from the menu
+// TODO Url erased from custom
+// TODO Adding multiple menu items only takes last
 
 /**
  * class CD_AdminMenu_AvailableItems_Callbacks
@@ -29,14 +30,13 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 		// Custom meta to send
 		// This needs to match $custom_meta from "./core/tabs/settings/menus/walkerclass.php:~63"
 		$custom_meta = array(
-			'cd-type'             => '',
-			'cd-post-type'        => 'post',
-			'cd-object-type'      => '',
-			'cd-original-title'   => '',
-			'cd-icon'             => 'dashicons-admin-generic',
-			'cd-separator-height' => 5,
-			'cd-url'              => '',
-			'cd-page-title'       => ''
+			'cd-type'           => '',
+			'cd-post-type'      => 'post',
+			'cd-object-type'    => '',
+			'cd-original-title' => '',
+			'cd-icon'           => 'dashicons-admin-generic',
+			'cd-url'            => '',
+			'cd-page-title'     => ''
 		);
 
 		return apply_filters( 'cd_availableitems_callback_defaults_posttype', array( $options, $custom_meta ) );
@@ -97,7 +97,12 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 			'page'  => 'dashicons-admin-page'
 		);
 
-		// TODO Tabs don't fit well (taxonomies hangs off)
+		// If no post types (uh never?)
+		if ( empty( $post_types ) ) {
+			echo '<p class="description">No items present</p>';
+
+			return;
+		}
 		?>
 
 		<div id="posttype-page" class="posttypediv">
@@ -512,14 +517,15 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 				<ul id="posttypechecklist-wordpress-core" class="categorychecklist form-no-clear">
 					<?php
 
-					$i = 0;
 					foreach ( ClientDash_Core_Page_Settings_Tab_Menus::$wp_core as $item_title => $item ) {
-						$i --;
 
 						if ( isset( $item['submenus'] ) ) {
 
 							echo '<li class="wp-core-title">' . $item_title . '</li>';
+
+							$i = 0;
 							foreach ( $item['submenus'] as $submenu_item_title => $submenu_item_url ) {
+								$i --;
 
 								// Reset defaults on each iteration
 								$defaults    = self::default_post_types();
@@ -602,13 +608,40 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 		// Separate out only the items added by plugins
 		$menu_items = [ ];
+		$i          = 0;
 		foreach ( $orig_menu as $menu ) {
+			$i ++;
+			$menu_item = $menu;
+			unset( $menu_item['submenus'] );
 
 			$sorted = ClientDash_Core_Page_Settings_Tab_Menus::sort_original_admin_menu( $menu );
 
 			if ( $sorted[1]['cd-type'] == 'plugin' ) {
-				$menu_items[] = $menu;
+				$menu_items[ $i ] = $menu_item;
 			}
+
+			foreach ( $menu['submenus'] as $submenu ) {
+				$sorted = ClientDash_Core_Page_Settings_Tab_Menus::sort_original_admin_menu( $submenu, $menu );
+
+				if ( $sorted[1]['cd-type'] == 'plugin' ) {
+					$menu_item['submenus'][] = $submenu;
+				}
+			}
+
+			// Now throw on the submenus
+			if ( isset( $menu_item['submenus'] ) ) {
+				if ( ! isset( $menu_items[ $i ] ) ) {
+					$menu_item['disabled'] = true;
+				}
+
+				$menu_items[ $i ] = $menu_item;
+			}
+		}
+
+		if ( empty( $menu_items ) ) {
+			echo '<p class="description">No items present</p>';
+
+			return;
 		}
 		?>
 
@@ -633,57 +666,74 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 				<ul id="posttypechecklist-plugin" class="categorychecklist form-no-clear">
 					<?php
 
-					$i = 0;
+					// If there are sub-menus present, but no top-level, we need to let the user know.
+					$enabled = false;
 					foreach ( $menu_items as $item ) {
-						$i --;
-
-						// Reset defaults on each iteration
-						$defaults    = self::default_post_types();
-						$options     = $defaults[0];
-						$custom_meta = $defaults[1];
-
-						echo '<li>';
-						// Set specific options
-						$options['title'] = $item['menu_title'];
-						$options['url']   = $item['menu_slug'];
-
-						// Now for the custom meta
-						$custom_meta['cd-type']           = 'plugin';
-						$custom_meta['cd-original-title'] = $options['title'];
-						$custom_meta['cd-icon']           = $item['icon_url'];
-						$custom_meta['cd-url']            = $item['url'];
-
-						// Allow data to be filtered
-						$options     = apply_filters( 'cd_adminmenu_availableitems_options_plugin_' . $options['title'] . '_' . $options['url'], $options );
-						$custom_meta = apply_filters( 'cd_adminmenu_availableitems_custommeta_plugin_' . $options['title'] . '_' . $options['url'], $custom_meta );
-
-						?>
-						<label class="menu-item-title">
-							<input type="checkbox" class="menu-item-checkbox"
-							       name="menu-item[<?php echo $i; ?>][menu-item-object-id]"
-							       value="<?php echo strtolower( $options['title'] ); ?>"/>
-							<?php echo $options['title']; ?>
-						</label>
-						<?php
-						// Cycle through all the options
-						foreach ( $options as $option_name => $option_value ) {
-							?>
-							<input type="hidden"
-							       class="menu-item-<?php echo $option_name; ?>"
-							       name="menu-item[<?php echo $i; ?>][menu-item-<?php echo $option_name; ?>]"
-							       value="<?php echo $option_value; ?>"/>
-						<?php
+						if ( ! isset( $item['disabled'] ) ) {
+							$enabled = true;
 						}
-						foreach ( $custom_meta as $meta_name => $meta_value ) {
-							?>
-							<input type="hidden"
-							       class="cd-custom-menu-item"
-							       name="menu-item[<?php echo $i; ?>][custom-meta-<?php echo $meta_name; ?>]"
-							       value="<?php echo $meta_value; ?>"/>
-						<?php
-						}
+					}
 
-						echo '</li>';
+					if ( $enabled ) {
+
+						$i = 0;
+						foreach ( $menu_items as $item ) {
+							$i --;
+
+							if ( $item['disabled'] ) {
+								continue;
+							}
+
+							// Reset defaults on each iteration
+							$defaults    = self::default_post_types();
+							$options     = $defaults[0];
+							$custom_meta = $defaults[1];
+
+							echo '<li>';
+							// Set specific options
+							$options['title'] = $item['menu_title'];
+							$options['url']   = $item['menu_slug'];
+
+							// Now for the custom meta
+							$custom_meta['cd-type']           = 'plugin';
+							$custom_meta['cd-original-title'] = $options['title'];
+							$custom_meta['cd-icon']           = $item['icon_url'];
+							$custom_meta['cd-url']            = $item['url'];
+
+							// Allow data to be filtered
+							$options     = apply_filters( 'cd_adminmenu_availableitems_options_plugin_' . $options['title'] . '_' . $options['url'], $options );
+							$custom_meta = apply_filters( 'cd_adminmenu_availableitems_custommeta_plugin_' . $options['title'] . '_' . $options['url'], $custom_meta );
+
+							?>
+							<label class="menu-item-title">
+								<input type="checkbox" class="menu-item-checkbox"
+								       name="menu-item[<?php echo $i; ?>][menu-item-object-id]"
+								       value="<?php echo strtolower( $options['title'] ); ?>"/>
+								<?php echo $options['title']; ?>
+							</label>
+							<?php
+							// Cycle through all the options
+							foreach ( $options as $option_name => $option_value ) {
+								?>
+								<input type="hidden"
+								       class="menu-item-<?php echo $option_name; ?>"
+								       name="menu-item[<?php echo $i; ?>][menu-item-<?php echo $option_name; ?>]"
+								       value="<?php echo $option_value; ?>"/>
+							<?php
+							}
+							foreach ( $custom_meta as $meta_name => $meta_value ) {
+								?>
+								<input type="hidden"
+								       class="cd-custom-menu-item"
+								       name="menu-item[<?php echo $i; ?>][custom-meta-<?php echo $meta_name; ?>]"
+								       value="<?php echo $meta_value; ?>"/>
+							<?php
+							}
+
+							echo '</li>';
+						}
+					} else {
+						echo '<p class="description">No items</p>';
 					}
 					?>
 
@@ -695,9 +745,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 				<ul id="posttypechecklist-plugin" class="categorychecklist form-no-clear">
 					<?php
 
-					$i = 0;
 					foreach ( $menu_items as $item ) {
-						$i --;
 
 						// Reset defaults on each iteration
 						$defaults    = self::default_post_types();
@@ -707,7 +755,10 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 						if ( isset( $item['submenus'] ) ) {
 
 							echo '<li class="plugin-title">' . $item['menu_title'] . '</li>';
+
+							$i = 0;
 							foreach ( $item['submenus'] as $submenu_item ) {
+								$i --;
 
 								// Reset defaults on each iteration
 								$defaults    = self::default_post_types();
@@ -781,5 +832,49 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 		</div>
 	<?php
 
+	}
+
+	public function separator() {
+		?>
+		<div id="separator" class="posttypediv">
+
+			<p class="description">Adds some vertical space between items.</p>
+
+			<div id="tabs-panel-separator-submenu" class="tabs-panel tabs-panel-active" style="display: none;">
+				<ul id="posttypechecklist-separator" class="categorychecklist form-no-clear">
+					<li>
+						<input type="checkbox" class="menu-item-checkbox" id="separator-checkbox"
+						       name="menu-item[-1][menu-item-object-id]"
+						       value="separator" checked/>
+
+						<input type="hidden" name="menu-item[-1][menu-item-db-id]" class="menu-item-db-id" value="0"/>
+						<input type="hidden" name="menu-item[-1][menu-item-data-object]" class="menu-item-data-object"
+						       value=""/>
+						<input type="hidden" name="menu-item[-1][menu-item-parent-id]" class="menu-item-parent-id"
+						       value="0"/>
+						<input type="hidden" name="menu-item[-1][menu-item-type]" class="menu-item-type"
+						       value="custom"/>
+						<input type="hidden" name="menu-item[-1][menu-item-title]" class="menu-item-title"
+						       value="Separator"/>
+						<input type="hidden" name="menu-item[-1][menu-item-url]" class="menu-item-url"
+						       value="index.php"/>
+						<input type="hidden" name="menu-item[-1][custom-meta-cd-type]" class="cd-custom-menu-item"
+						       value="separator"/>
+					</li>
+				</ul>
+			</div>
+			<!-- /.tabs-panel -->
+
+			<p class="button-controls">
+
+			<span class="add-to-menu">
+				<input type="submit" class="button-secondary submit-add-to-menu right" value="Add to Menu"
+				       name="add-post-type-menu-item" id="submit-separator">
+				<span class="spinner"></span>
+			</span>
+			</p>
+
+		</div>
+	<?php
 	}
 }

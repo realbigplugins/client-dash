@@ -47,6 +47,19 @@
       }
     }
 
+    // Items with duplicate parent slugs
+    .duplicate-parent-slug {
+      .menu-item-handle {
+        background: #ffc5bf;
+        border-color: darken(#ffc5bf, 10%);
+      }
+    }
+
+    // Icons
+    .dashicons {
+      color: #555;
+    }
+
     // Some gross whitespace
     #post-body {
       padding: 10px !important;

@@ -1,18 +1,14 @@
 <?php
 
-// TODO Slug messed up when moving around :/
 // TODO Handling roles with multiple words
-// TODO Don't let admin delete client dash settings menu or settings menu at all
 // TODO Show existing menus at top for visual usability
+// TODO Page title broke
+// TODO Pretty icon selector
+// TODO Temporarily disable menus via each menu
 
+// TODO Clean up warnings, notices, and stricts
 // TODO Re-order methods
 // TODO Documentation
-
-// TODO Move this into the class
-function test( $parent_file ) {
-	global $cd_parent_file;
-	return $cd_parent_file;
-}
 
 /**
  * Class ClientDash_Core_Page_Settings_Tab_AdminMenu
@@ -315,9 +311,11 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			return;
 		}
 
-		// Delete errything
-		delete_option( "{$menu_object->name}_modified" );
-		wp_delete_nav_menu( $menu_ID );
+		// Delete everything pertaining to this menu
+		delete_transient( "cd_adminmenu_output_$menu_ID" ); // Cached menu info
+		delete_option( "{$menu_object->name}_modified" );   // Menu output
+		delete_option( "cd_adminmenu_disabled_$menu_ID" );  // Menu disable option
+		wp_delete_nav_menu( $menu_ID );                     // The nav menu item
 
 		// Redirect
 		wp_redirect( remove_query_arg( array( 'cd_delete_admin_menu', '0', '_wpnonce', 'menu' ) ) );
@@ -334,7 +332,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		// The role name to create for
 		$role_name = $_POST['cd_create_admin_menu'];
 
-		// Bail if it exists (failsafe)
+		// Bail if it exists (fail-safe)
 		$menu_object = wp_get_nav_menu_object( "cd_admin_menu_$role_name" );
 		if ( ! empty( $menu_object ) ) {
 			return;
@@ -343,11 +341,15 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		// Create the nav menu
 		$this->menu_ID = wp_create_nav_menu( "cd_admin_menu_$role_name" );
 
-		// Now populate it with menu items (this is a hefty memory toll)
-		$this->populate_nav_menu( $role_name );
+		// Only import and save the existing menu items IF the checkbox is checked (default)
+		if ( isset( $_POST['import_items'] ) ) {
 
-		// Save it into our modified menu option
-		$this->save_cd_menu( $this->menu_ID );
+			// Now populate it with menu items (this is a hefty memory toll)
+			$this->populate_nav_menu( $role_name );
+
+			// Save it into our modified menu option
+			$this->save_cd_menu( $this->menu_ID );
+		}
 
 		// Redirect
 		wp_redirect( add_query_arg( 'menu', $this->menu_ID ) );
@@ -406,6 +408,9 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 							update_post_meta( $submenu_ID, $meta_name, $meta_value );
 						}
 					}
+
+					// Also update custom meta for it's parent
+					update_post_meta( $submenu_ID, 'cd-submenu-parent', $submenu_item['parent_slug'] );
 				}
 			}
 		}
@@ -443,6 +448,8 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 */
 	public function get_current_menu() {
 
+		global $cd_current_menu_id;
+
 		// If a menu isn't set, just take the first one that exists. Otherwise, get it from the url
 		if ( isset( $_GET['menu'] ) ) {
 			$this->menu_ID = $_GET['menu'];
@@ -459,6 +466,8 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			}
 		}
 
+		$cd_current_menu_id = $this->menu_ID;
+
 		// If this menu doesn't exist, return false
 		$menu_object = wp_get_nav_menu_object( $this->menu_ID );
 		if ( ! $menu_object ) {
@@ -470,6 +479,9 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 				$this->role       = $_GET['menu'];
 				$this->create_new = true;
 			}
+
+			// Globalize the menu ID
+			$cd_current_menu_id = $this->menu_ID;
 
 			return;
 		}
@@ -509,12 +521,11 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		// Needed to get the plugin path
 		global $ClientDash;
 
-		// When being loaded via AJAX, we won't have the menu ID, so we need
-		// to get it again.
+		// When being loaded via AJAX, we won't have the menu ID, but we can assume that
+		// the supplied menu is correct
 		if ( ! isset( $this->menu_ID ) ) {
 
-			// TODO Make this only get the current menu
-			$this->get_cd_nav_menus();
+			$this->menu_ID = $menu;
 
 			// Includes our modified walker class for when ajax-actions.php tries to call it
 			include_once( $ClientDash->path . '/core/tabs/settings/menus/walkerclass.php' );
@@ -633,11 +644,12 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 		// Meta to attach to new nav menu item
 		$custom_meta = array(
-			'cd-original-title'   => $menu['menu_title'],
-			'cd-icon'             => $menu['icon_url'],
-			'cd-separator-height' => 5,
-			'cd-url'              => $menu['menu_slug'],
-			'cd-page-title'       => $menu['page_title']
+			'cd-original-title'        => $menu['menu_title'],
+			'cd-icon'                  => $menu['icon_url'],
+			'cd-separator-height'      => 5,
+			'cd-url'                   => $menu['menu_slug'],
+			'cd-page-title'            => $menu['page_title'],
+			'cd-duplicate-parent-slug' => false
 		);
 
 		// Figure out what we're dealing with
@@ -764,7 +776,34 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 */
 	public function add_modified_admin_menu() {
 
-		global $menu, $cd_parent_file;
+		global $menu, $cd_parent_file, $_registered_pages, $plugin_page, $cd_submenu_file;
+
+		// This is a strange little hack. When moving a sub-menu page to a top-level page, there are some
+		// caveats. One being, WordPress doesn't know what the heck to do!... You will get a permissions
+		// denied error without this line because of the hook names being different than normal. This simply
+		// ensures that it will not be un-reachable.
+		if ( ! empty( $plugin_page ) ) {
+			$_registered_pages["admin_page_$plugin_page"] = true;
+		}
+
+		// In the case of a sub-menu item being moved to a parent item, WordPress will be confused
+		// about which menu item is active. So I compensate for this by overriding the "self" and
+		// "parent_file" globals with the new (previously sub-menu) slug. This corrects the issue.
+
+		// We compare the REQUEST_URI (minus all extra query args), but we allow the query args
+		// that will be found within the slug
+		$allowed_args = array( 'page' => true, 'post_type' => true, 'taxonomy' => true, 'tab' => true );
+		$url          = remove_query_arg( array_keys( array_diff_key( $_GET, $allowed_args ) ) );
+		if ( $url === false ) {
+			// If false, there were no extra query args, so just use the REQUEST_URI
+			$url = $_SERVER['REQUEST_URI'];
+		}
+
+		// Filter out the WP base url (from wp-admin/menu-header.php:~16)
+		$url = preg_replace( '|^.*/wp-admin/network/|i', '', $url );
+		$url = preg_replace( '|^.*/wp-admin/|i', '', $url );
+		$url = preg_replace( '|^.*/plugins/|i', '', $url );
+		$url = preg_replace( '|^.*/mu-plugins/|i', '', $url );
 
 		// Get current role
 		$current_role = $this->get_user_role();
@@ -777,20 +816,13 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		if ( $modified_menu ) {
 			foreach ( $modified_menu as $menu_position => $menu_item ) {
 
-				// Change parent file
-				if ( strpos( $_SERVER['REQUEST_URI'], $menu_item['menu_slug'] ) !== false ) {
+				// Now for each top level item, let's see if it's currently active
+				if ( $url == $menu_item['menu_slug'] ) {
 					$cd_parent_file = $menu_item['menu_slug'];
-					add_filter( 'parent_file', 'test' );
+					add_filter( 'parent_file', array( $this, 'modify_self' ) );
 				}
 
-				$classes = [];
-
-				// Determine if active
-				if ( strpos( $_SERVER['REQUEST_URI'], $menu_item['menu_slug'] ) ) {
-					$classes[] = 'wp-has-current-submenu';
-				} else {
-					$classes[] = 'wp-not-current-submenu';
-				}
+				$classes = [ ];
 
 				// If a separator, do that instead
 				if ( strpos( $menu_item['menu_slug'], 'separator' ) !== false ) {
@@ -801,7 +833,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 						'',
 						'wp-menu-separator'
 					);
-					$classes[] = 'wp-menu-separator';
+					$classes[]              = 'wp-menu-separator';
 				} else {
 					add_menu_page(
 						! empty( $menu_item['page_title'] ) ? $menu_item['page_title'] : null,
@@ -824,6 +856,14 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 					$classes[] = 'wp-has-submenu';
 
 					foreach ( $menu_item['submenus'] as $submenu_item ) {
+
+						// Now for each sub-menu item, let's see if it's currently active
+						if ( $url == $submenu_item['menu_slug'] ) {
+							$cd_parent_file  = $menu_item['menu_slug'];
+							$cd_submenu_file = $submenu_item['menu_slug'];
+							add_filter( 'parent_file', array( $this, 'modify_self' ) );
+						}
+
 						add_submenu_page(
 							! empty( $menu_item['menu_slug'] ) ? $menu_item['menu_slug'] : null,
 							! empty( $submenu_item['page_title'] ) ? $submenu_item['page_title'] : null,
@@ -834,15 +874,34 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 						);
 					}
 				}
-
 				// Add the menu classes
 //				$menu[ $menu_position ][4] = implode( ' ', $classes );
 			}
 		}
+	}
 
-		// Save menu and submenu vars
-//		$this->menu = $menu;
-//		$this->submenu = $submenu;
+	/**
+	 * This is where the magic happens.
+	 *
+	 * When you tinker around with WP and move sub-menus to parents and parents to submenus... well,
+	 * WP doesn't get too happy about it and doesn't know what to do with it. So I need to tell WP
+	 * a few things about what's going on. I need to modify 3 globals: $self, $parent_file, and
+	 * $submenu_file. These 3 globals tell WP what we're currently viewing. Because of the strange
+	 * URL's and moving around of menus, I have to let WP know accordingly what's going on.
+	 *
+	 * @return mixed The parent file.
+	 */
+	public function modify_self() {
+		global $self, $cd_parent_file, $submenu_file, $cd_submenu_file;
+
+		// Set the self (or what WP thinks we're viewing) to the ENTIRE slug, not just the parent.
+		$self = $cd_parent_file;
+
+		// Tell WP what our new submenu file is (because it's custom), otherwise, default to
+		// the parent
+		$submenu_file = ! empty( $cd_submenu_file ) ? $cd_submenu_file : $cd_parent_file;
+
+		return $cd_parent_file;
 	}
 
 	// Add specific CSS class by filter
@@ -858,10 +917,20 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	public function save_menu() {
 		// TODO Secure page better with nonce
 
+		// Remove the transient so it resets
+		delete_transient( "cd_adminmenu_output_$this->menu_ID" );
+
 		$menu_object = wp_get_nav_menu_object( $this->menu_ID );
 
 		// Update menu items
 		if ( ! is_wp_error( $_menu_object ) ) {
+
+			// Update the disabled option
+			if ( isset( $_POST["cd_adminmenu_disabled_$this->menu_ID"] ) ) {
+				update_option( "cd_adminmenu_disabled_$this->menu_ID", '1' );
+			} else {
+				delete_option( "cd_adminmenu_disabled_$this->menu_ID" );
+			}
 
 			// Default WP nav menu save
 			wp_nav_menu_update_menu_items( $this->menu_ID, $menu_object->name );
@@ -894,36 +963,39 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			// When saving with "Save Menu", we need to grab custom meta from $_POST
 			// Otherwise, just grab it from the already saved post meta
 			if ( isset( $_POST['action'] ) && $_POST['action'] == 'update' ) {
-				$icon             = $_POST['menu-item-cd-icon'][ $item->ID ];
-				$slug             = $_POST['menu-item-cd-url'][ $item->ID ];
-				$separator_height = $_POST['menu-item-cd-separator-height'][ $item->ID ];
+				$icon = $_POST['menu-item-cd-icon'][ $item->ID ];
+				$slug = $_POST['menu-item-cd-url'][ $item->ID ];
 			} else {
-				$icon             = get_post_meta( $item->ID, 'cd-icon', true );
-				$slug             = get_post_meta( $item->ID, 'cd-url', true );
-				$separator_height = get_post_meta( $item->ID, 'cd-separator-height', true );
+				$icon = get_post_meta( $item->ID, 'cd-icon', true );
+				$slug = get_post_meta( $item->ID, 'cd-url', true );
 			}
 
 			if ( $item->menu_item_parent == '0' ) {
+
+				// If a parent item (has no parent)
 				$menu[ $item->ID ] = wp_parse_args( array(
 					'menu_title' => $item->post_title,
 					'menu_slug'  => $slug,
 					// TODO Get page title
-					'page_title' => get_post_meta( $item->ID, 'cd-page-title', true),
+					'page_title' => get_post_meta( $item->ID, 'cd-page-title', true ),
 					'icon_url'   => $icon
 				), $default_menu );
 
-				// For the separator
-
-				// TODO Get separator height to work without JS
-				if ( $item->post_title == 'Separator' ) {
-					$menu[ $item->ID ]['separator-height'] = $separator_height;
+				// If this was originally a sub-menu, we need to fix the link (unless the slug is already
+				// a hardlink
+				if ( strpos( $slug, '.php' ) === false
+				     && ( $parent_slug = get_post_meta( $item->ID, 'cd-submenu-parent', true ) )
+				) {
+					$menu[ $item->ID ]['menu_slug'] = "$parent_slug?page=$slug";
 				}
+
 			} else {
+				// If a sub-menu item (has a parent)
 				$menu[ $item->menu_item_parent ]['submenus'][] = wp_parse_args( array(
 					'menu_title'  => $item->post_title,
 					'menu_slug'   => $slug,
 					// TODO Get page title
-					'page_title'  => get_post_meta( $item->ID, 'cd-page-title', true),
+					'page_title'  => get_post_meta( $item->ID, 'cd-page-title', true ),
 					'parent_slug' => $menu[ $item->menu_item_parent ]['menu_slug']
 				), $default_submenu );
 			}
@@ -952,7 +1024,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 */
 	public function get_available_items() {
 
-		global $wp_meta_boxes, $ClientDash;
+		global $wp_meta_boxes, $ClientDash, $errors;
 
 		// This establishes the meta boxes on the left side of the screen
 		$this->available_items = array(
@@ -964,11 +1036,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 							'title'    => 'Post Types',
 							'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'post_types' )
 						),
-						'add-custom-links' => array(
-							'id'       => 'add-custom-links',
-							'title'    => 'Custom',
-							'callback' => 'wp_nav_menu_item_link_meta_box'
-						),
 						'add-wp-core'      => array(
 							'id'       => 'add-wp-core',
 							'title'    => 'WordPress',
@@ -978,6 +1045,16 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 							'id'       => 'add-plugin',
 							'title'    => 'Plugin / Theme',
 							'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'plugin' )
+						),
+						'add-custom-links' => array(
+							'id'       => 'add-custom-links',
+							'title'    => 'Custom',
+							'callback' => 'wp_nav_menu_item_link_meta_box'
+						),
+						'add-separator'    => array(
+							'id'       => 'add-separator',
+							'title'    => 'Separator',
+							'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'separator' )
 						)
 					)
 				)
@@ -987,17 +1064,25 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		// Used by the do_accordion_sections()
 		$wp_meta_boxes = $this->available_items;
 
-		if ( is_nav_menu( $this->menu_ID ) ) {
+		// Save the information in a transient and get it for faster page loads
+		$output = get_transient( "cd_adminmenu_output_$this->menu_ID" );
+		if ( ! $output && is_nav_menu( $this->menu_ID ) ) {
 			// Our modified walker class
 			include_once( $ClientDash->path . '/core/tabs/settings/menus/walkerclass.php' );
 
 			$menu_items  = wp_get_nav_menu_items( $this->menu_ID, array( 'post_status' => 'any' ) );
 			$edit_markup = wp_get_nav_menu_to_edit( $this->menu_ID );
 
-			return array( $menu_items, $edit_markup );
+			$output = array(
+				'menu_items'  => $menu_items,
+				'edit_markup' => $edit_markup,
+				'errors'      => $errors
+			);
+
+			set_transient( "cd_adminmenu_output_$this->menu_ID", $output );
 		}
 
-		return false;
+		return $output;
 	}
 
 	/**
@@ -1009,8 +1094,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 		$menu_info = $this->get_available_items();
 
-		$menu_items  = $menu_info[0];
-		$edit_markup = $menu_info[1];
+		extract( $menu_info );
 
 		if ( is_wp_error( $edit_markup ) ) {
 			$this->error_nag( array_shift( array_shift( $edit_markup->errors ) ) );
@@ -1018,8 +1102,12 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			return;
 		}
 
-		// TODO Remove
-		var_dump( $this->all_menu_IDs );
+		// Output any errors
+		if ( ! empty( $errors ) ) {
+			foreach ( $errors as $error ) {
+				$this->error_nag( $error );
+			}
+		}
 
 		// From wp-admin/nav-menus.php. Modified for CD use.
 		?>
@@ -1049,6 +1137,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 						}
 						?>
 					</select>
+
 					<span class="submit-btn">
 						<input type="submit" class="button-secondary" value="Select"/>
 					</span>
@@ -1120,10 +1209,33 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 												}
 												?>
 											</select>
+
+											<?php // Needed for added spacing ?>
+											&nbsp;
+
+											<?php // Tells us whether to import items (default) or just start blank ?>
+											<label for="import_items">
+												<input type="checkbox" id="import_items" name="import_items" value="1"
+												       checked/>
+												Import role's existing menu items?
+											</label>
 										<?php endif; ?>
 									</label>
 
 									<div class="publishing-action">
+
+										<?php
+										// Outputs a toggle switch for quickly disabling / enabling the menu
+										if ( $this->menu_ID ) {
+											$this->toggle_switch(
+												"cd_adminmenu_disabled_$this->menu_ID",
+												'1',
+												get_option( "cd_adminmenu_disabled_$this->menu_ID", '0' ),
+												true
+											);
+										}
+										?>
+
 										<?php submit_button( $this->menu_ID ? __( 'Save Menu' ) : __( 'Create Menu' ), 'button-primary menu-save', 'save_menu', false, array( 'id' => 'save_menu_header' ) ); ?>
 									</div>
 									<!-- END .publishing-action -->

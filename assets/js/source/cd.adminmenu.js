@@ -14,68 +14,19 @@ var cdAdminMenu;
         init: function () {
             this.modify_max_menu_depth();
             this.jQuery_extensions();
-            this.separator_height();
-
-            // TODO Decide if going to use, otherwise, delete
-            //this.disableCheckboxes();
-            //this.enableCheckboxes();
+            this.separator_checkbox();
         },
         /**
-         * Modifies the height of custom separators to reflect what was set.
+         * Keeps the checkbox checked!
          *
          * @since Client Dash 1.6
          */
-        separator_height: function () {
-            $('#adminmenu').find('li.wp-menu-separator').each(function () {
-                var e_classes = $(this).attr('class'),
-                    height = e_classes.match(/(?!height-)\d+/g);
-
-                $(this).height(height + 'px');
-            });
-        },
-        /**
-         * Disables any checkboxes that are in use in the nav menu.
-         *
-         * @since Client Dash 1.6
-         */
-        disableCheckboxes: function () {
-            // Add a listener to the "Add to Menu" button
-            $('#menu-settings-column').find('input[type="submit"]').click(function () {
-
-                // Cycle through every checkbox
-                $('#menu-settings-column').find('input[type="checkbox"]').each(function () {
-
-                    // If it is indeed checked, then it's being added, so disable it
-                    if ($(this).prop('checked')) {
-                        $(this).prop('disabled', true);
-                        $(this).closest('label').addClass('disabled');
-                    }
-                });
-            });
-        },
-        /**
-         * Re-enables checkboxes that are no longer in use in the nav menu.
-         *
-         * @since Client Dash 1.6
-         */
-        enableCheckboxes: function () {
-            // Add a listener to the "Remove" button for each menu item
-            $('#menu-to-edit').on('click', '.item-delete', function () {
-                var title = $(this).closest('li').find('input[name^="menu-item-title"]').val(),
-                    url = $(this).closest('li').find('input[name^="menu-item-url"]').val();
-
-                // Cycle through each checkbox
-                $('#menu-settings-column').find('li').each(function () {
-                    var t_title = $(this).find('input[name*="menu-item-title"]').val(),
-                        t_url = $(this).find('input[name*="menu-item-url"]').val();
-
-                    // If the checkbox "matches" the item deleted, re-enabled it
-                    if (title == t_title && url == t_url) {
-                        $(this).find('label').removeClass('disabled')
-                            .find('input[type="checkbox"]').prop('disabled', false);
-                    }
-                });
-            });
+        separator_checkbox: function () {
+            //$('#separator-checkbox')
+            $('#submit-separator').click(function () {
+                console.log('clicked');
+                $('#separator-checkbox').prop('checked', true);
+            })
         },
         /**
          * Modifies some jQuery extensions that were defined in wpNavMenu.
@@ -238,7 +189,7 @@ var cdAdminMenu;
                     updateSharedVars(ui);
                 },
                 stop: function (e, ui) {
-                    var children, subMenuTitle,
+                    var children, subMenuTitle, menuIcon,
                         depthChange = currentDepth - originalDepth;
 
                     // Return child elements to the list
@@ -250,6 +201,13 @@ var cdAdminMenu;
                         subMenuTitle.show();
                     else
                         subMenuTitle.hide();
+
+                    // Hide or show icon
+                    menuIcon = ui.item.find('.dashicons');
+                    if (currentDepth == 0)
+                        menuIcon.removeClass('hidden');
+                    else
+                        menuIcon.addClass('hidden');
 
                     // Update depth classes
                     if (0 !== depthChange) {
@@ -358,7 +316,5 @@ var cdAdminMenu;
         if ($('body').hasClass('cd-nav-menu') && !$('#menu-settings-column').hasClass('metabox-holder-disabled')) {
             cdAdminMenu.init();
         }
-
-        cdAdminMenu.separator_height();
     });
 })(jQuery);

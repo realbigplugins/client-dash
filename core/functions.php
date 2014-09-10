@@ -15,6 +15,48 @@
 abstract class ClientDash_Functions {
 
 	/**
+	 * Outputs the default Client Dash toggle switch (on|off).
+	 *
+	 * @since Client Dash 1.6
+	 *
+	 * @param string $name The name of the input.
+	 * @param string|int $value The value for the input to output.
+	 * @param string|int $current_val The current value of whatever the input has output.
+	 * @param bool $horizontal Optional. Whether the switch is vertical or horizontal.
+	 * @param bool $echo Optional. Whether to echo the HTML or just return it.
+	 * @param bool $invert Optional. Whether to invert the relationship between the value and on|off.
+	 *
+	 * @return string HTML of toggle switch.
+	 */
+	public function toggle_switch( $name, $value, $current_val, $horizontal = false, $echo = true, $invert = false ) {
+
+		// TODO Use this function across the entire plugin
+
+		// Setup orientation
+		if ( $horizontal ) {
+			$horizontal = 'horizontal';
+		}
+
+		// If the current value matches the input value, it's not disabled
+		// (if $invert is true, reverse the output)
+		$disabled = $invert ? false : true;
+		if ( $value == $current_val ) {
+			$disabled = $invert ? true : false;
+		}
+
+		// The HTML output
+		$html = '<span class="cd-toggle-switch ' . ( $disabled ? 'off' : 'on' ) . " $horizontal\">";
+		$html .= "<input type='hidden' id='$name' name='$name' value='$value' " . ( $disabled || ! $disabled && $invert ? 'disabled' : '') . '/>';
+		$html .= '</span>';
+
+		// Echo by default, return if told so
+		if ( $echo ) {
+			echo $html;
+		} else {
+			return $html;
+		}
+	}
+	/**
 	 * Outputs a helpful tip that can be closed.
 	 *
 	 * @since Client Dash 1.5

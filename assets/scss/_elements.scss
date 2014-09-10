@@ -29,6 +29,13 @@
   background-color: #aaa;
 }
 
+.cd-toggle-switch.horizontal {
+  &:before, &:after {
+    display: inline-block;
+    padding: 0 3px;
+  }
+}
+
 .cd-toggle-switch:before {
   content: "ON";
   border-bottom: 1px solid #ddd;
