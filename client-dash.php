@@ -263,14 +263,14 @@ class ClientDash extends ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.5
 	 */
-	public $content_sections = array();
+	public $content_sections = [];
 
 	/**
 	 * A duplicate of content sections that is NOT filtered.
 	 *
 	 * @since Client Dash 1.5
 	 */
-	public $content_sections_unmodified = array();
+	public $content_sections_unmodified = [];
 
 	/**
 	 * The semi-magical widget property.
@@ -280,7 +280,14 @@ class ClientDash extends ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.5
 	 */
-	public $widgets = array();
+	public $widgets = [];
+
+	/**
+	 * Data to be sent to the main JS file.
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public $jsData = [];
 
 	/**
 	 * Constructs the class.
@@ -364,6 +371,8 @@ class ClientDash extends ClientDash_Functions {
 			array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable' ),
 			$this->version
 		);
+
+		wp_localize_script( 'cd-main', 'cdData', $this->jsData );
 
 		// The main stylesheet for Client Dash
 		wp_register_style(

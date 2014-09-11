@@ -25,10 +25,11 @@ abstract class ClientDash_Functions {
 	 * @param bool $horizontal Optional. Whether the switch is vertical or horizontal.
 	 * @param bool $echo Optional. Whether to echo the HTML or just return it.
 	 * @param bool $invert Optional. Whether to invert the relationship between the value and on|off.
+	 * @param bool|array $atts Optional. Additional attributes for the item.
 	 *
 	 * @return string HTML of toggle switch.
 	 */
-	public function toggle_switch( $name, $value, $current_val, $horizontal = false, $echo = true, $invert = false ) {
+	public function toggle_switch( $name, $value, $current_val, $horizontal = false, $echo = true, $invert = false, $atts = false ) {
 
 		// TODO Use this function across the entire plugin
 
@@ -45,8 +46,14 @@ abstract class ClientDash_Functions {
 		}
 
 		// The HTML output
-		$html = '<span class="cd-toggle-switch ' . ( $disabled ? 'off' : 'on' ) . " $horizontal\">";
-		$html .= "<input type='hidden' id='$name' name='$name' value='$value' " . ( $disabled || ! $disabled && $invert ? 'disabled' : '') . '/>';
+		$html = '<span class="cd-toggle-switch ' . ( $disabled ? 'off' : 'on' ) . " $horizontal\"";
+		if ( $atts ) {
+			foreach ( $atts as $att => $att_val ) {
+				$html .= " $att='$att_val' ";
+			}
+		}
+		$html .= '>';
+		$html .= "<input type='hidden' id='$name' name='$name' value='$value' " . ( $disabled && ! $invert || $invert && ! $disabled ? 'disabled' : '') . '/>';
 		$html .= '</span>';
 
 		// Echo by default, return if told so
@@ -691,7 +698,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return bool|mixed
 	 */
-	public function strposa( $haystack, $needles = array(), $offset = 0 ) {
+	public static function strposa( $haystack, $needles = array(), $offset = 0 ) {
 		$chr = array();
 		foreach ( $needles as $needle ) {
 			$res = strpos( $haystack, $needle, $offset );

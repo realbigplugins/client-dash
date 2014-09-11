@@ -59,7 +59,9 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 		$_wp_nav_menu_max_depth = $depth > $_wp_nav_menu_max_depth ? $depth : $_wp_nav_menu_max_depth;
 
 		// Remove the transient so it resets
-		delete_transient( "cd_adminmenu_output_$cd_current_menu_id" );
+		if ( get_transient( "cd_adminmenu_output_$cd_current_menu_id" ) ) {
+			delete_transient( "cd_adminmenu_output_$cd_current_menu_id" );
+		}
 
 		// Get the action
 		$action = isset( $_POST['action'] ) ? $_POST['action'] : null;

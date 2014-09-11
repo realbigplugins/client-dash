@@ -43,6 +43,8 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 	}
 
 	public static function post_types() {
+		global $cd_current_menu_id;
+
 		// Get all of our post types
 		$all_post_types = get_post_types( array(
 			'public' => true
@@ -432,6 +434,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 	}
 
 	public static function wp_core() {
+		global $cd_current_menu_id;
 		?>
 
 		<div id="wordpress-core" class="posttypediv">

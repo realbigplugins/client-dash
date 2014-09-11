@@ -78,6 +78,62 @@ var cdAJAX;
                     alert(response);
                 }
             )
+        },
+        populate_nav_menu: function () {
+            console.log(cdData.navMenusAJAX);
+            for (i = 0; i < cdData.navMenusAJAX.menu_items.length; i++) {
+
+                var current_item = cdData.navMenusAJAX.menu_items[i],
+                    completed_items = 0;
+
+                var data = {
+                    action: 'cd_populate_nav_menu',
+                    total: cdData.navMenusAJAX.total,
+                    menu_item: current_item.menu_item,
+                    menu_item_position: current_item.menu_item_position,
+                    menu_ID: cdData.navMenusAJAX.menu_ID,
+                    role: cdData.navMenusAJAX.role
+                };
+
+                console.log('ready');
+
+                var test = 'test';
+                $.post(
+                    ajaxurl, // already defined
+                    data,
+                    function (response) {
+
+                        // Update the loader percentage
+                        var progress = Math.round(((100 / cdData.navMenusAJAX.menu_items.length) * completed_items)) + '%';
+                        completed_items++;
+                        $('#cd-creating-nav-menu-progress').html(progress);
+
+                        if (response.complete) {
+
+                            // Okay, now save it and THEN reload
+                            var data = {
+                                action: 'cd_save_nav_menu',
+                                menu_ID: response.menu_ID
+                            };
+
+                            $.post(
+                                ajaxurl, // already defined
+                                data,
+                                function () {
+                                    window.location.reload();
+                                }
+                            )
+                        }
+                    }
+                )
+            }
         }
     };
+
+    $(function () {
+        // If the navMenusAJAX property is present, then it's time to create some nav menus!
+        if (cdData.hasOwnProperty('navMenusAJAX')) {
+            cdAJAX.populate_nav_menu();
+        }
+    });
 })(jQuery);

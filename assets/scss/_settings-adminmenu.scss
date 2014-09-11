@@ -1,5 +1,14 @@
 .cd-content-section {
 
+  // Manage menus
+  .manage-menus {
+
+    // Disabled
+    &.disabled {
+      opacity: 0.5;
+    }
+  }
+
   // Left side
   #menu-settings-column {
 
@@ -37,6 +46,15 @@
 
   // Right side
   #menu-management-liquid {
+
+    .cd-toggle-switch {
+      margin-top: 2px;
+    }
+
+    // Progress when creating a nav menu
+    #cd-creating-nav-menu-progress {
+      font-size: 40px;
+    }
 
     // Separator
     .menu-item-separator {
