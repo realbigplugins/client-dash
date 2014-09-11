@@ -47,6 +47,7 @@
   // Right side
   #menu-management-liquid {
 
+    // Align the switch
     .cd-toggle-switch {
       margin-top: 2px;
     }
@@ -93,5 +94,10 @@
       color: #222;
       font-size: 125%;
     }
+  }
+
+  // When the separator shakes, the container is too big
+  .ui-effects-wrapper {
+    width: 0 !important;
   }
 }

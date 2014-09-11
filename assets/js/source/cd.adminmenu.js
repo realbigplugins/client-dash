@@ -15,18 +15,36 @@ var cdAdminMenu;
             this.modify_max_menu_depth();
             this.jQuery_extensions();
             this.separator_checkbox();
+            this.link_checkbox();
         },
         /**
-         * Keeps the checkbox checked!
+         * Keeps the checkbox checked! (required by WP AJAX call) Also submit form on enter.
+         *
+         * @since Client Dash 1.6
+         */
+        link_checkbox: function () {
+
+            // Keep checkbox checked
+            $('#submit-custom-link').click(function () {
+                $('#custom-checkbox').prop('checked', true);
+            });
+
+            // Submit on enter
+            $('#custom-link').find('input[type="text"]').keypress(function (e) {
+                if (e.which == 13) {
+                    $('#submit-custom-link').click();
+                }
+            });
+        },
+        /**
+         * Keeps the checkbox checked! (required by WP AJAX call)
          *
          * @since Client Dash 1.6
          */
         separator_checkbox: function () {
-            //$('#separator-checkbox')
             $('#submit-separator').click(function () {
-                console.log('clicked');
                 $('#separator-checkbox').prop('checked', true);
-            })
+            });
         },
         /**
          * Modifies some jQuery extensions that were defined in wpNavMenu.
@@ -133,8 +151,10 @@ var cdAdminMenu;
             // Use the right edge if RTL.
             menuEdge += wpNavMenu.isRTL ? wpNavMenu.menuList.width() : 0;
 
-            // TODO Don't allow items to be placed as a submenu of "Separator"
-            // TODO Don't allow an item with children to be placed 1 level deep (then children are 2 levels deep)
+            // CD Modification {
+            var hasChildren;
+            // } End CD Modification
+
             wpNavMenu.menuList.sortable({
                 handle: '.menu-item-handle',
                 placeholder: 'sortable-placeholder',
@@ -187,6 +207,10 @@ var cdAdminMenu;
 
                     // Now that the element is complete, we can update...
                     updateSharedVars(ui);
+
+                    // CD {
+                    hasChildren = !!children.length;
+                    // } End CD
                 },
                 stop: function (e, ui) {
                     var children, subMenuTitle, menuIcon,
@@ -229,6 +253,26 @@ var cdAdminMenu;
                         ui.item[0].style.right = 0;
                     }
 
+                    // CD {
+                    // If is a separator AND was trying to be placed as a child, well, STOP IT!
+                    if (ui.item.hasClass('menu-item-separator') && currentDepth != 0){
+
+                        // Cancel the sort altogether
+                        wpNavMenu.menuList.sortable( 'cancel' );
+
+                        // Reset some other properties that may have been improperly updated
+                        // Make sure it's depth is at base level
+                        ui.item.updateDepthClass(0);
+
+                        // Hide the "sub item" message
+                        subMenuTitle.hide();
+
+                        // Shake, shake, sh-sh-sh shake it!
+                        ui.item.effect('shake');
+                    }
+
+                    // } End CD
+
                     wpNavMenu.refreshKeyboardAccessibility();
                     wpNavMenu.refreshAdvancedAccessibility();
                 },
@@ -244,14 +288,35 @@ var cdAdminMenu;
                     var offset = ui.helper.offset(),
                         edge = wpNavMenu.isRTL ? offset.left + ui.helper.width() : offset.left,
                         depth = wpNavMenu.negateIfRTL * wpNavMenu.pxToDepth(edge - menuEdge);
+
                     // Check and correct if depth is not within range.
                     // Also, if the dragged element is dragged upwards over
                     // an item, shift the placeholder to a child position.
                     if (depth > maxDepth || offset.top < prevBottom) depth = maxDepth;
                     else if (depth < minDepth) depth = minDepth;
 
-                    if (depth != currentDepth)
+                    // CD {
+
+                    // Make sure this isn't the child of a separator
+                    // TODO Make this less resource heavy?
+                    var separatorIsParent = false;
+                    $('#menu-to-edit').find('li.menu-item-separator').each(function () {
+
+                        // If next child after separator is the placeholder
+                        // OR if the next child is a helper AND the child after THAT is a placeholder
+                        if ($(this).next('li.sortable-placeholder').length
+                            || $(this).next('li.ui-sortable-helper').next('li.sortable-placeholder').length) {
+                            separatorIsParent = true;
+                        }
+                    });
+
+                    // If doesn't meet requirements, make it a parent
+                    if (depth != currentDepth && !hasChildren && !separatorIsParent)
                         updateCurrentDepth(ui, depth);
+                    else if (hasChildren || separatorIsParent)
+                        updateCurrentDepth(ui, 0);
+
+                    // } End CD
 
                     // If we overlap the next element, manually shift downwards
                     if (nextThreshold && offset.top + helperHeight > nextThreshold) {
@@ -313,6 +378,7 @@ var cdAdminMenu;
     };
 
     $(function () {
+        // Only initialize if on CD page and if the page isn't "disabled"
         if ($('body').hasClass('cd-nav-menu') && !$('#menu-settings-column').hasClass('metabox-holder-disabled')) {
             cdAdminMenu.init();
         }

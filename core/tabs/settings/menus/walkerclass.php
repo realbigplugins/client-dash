@@ -362,5 +362,4 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 		<?php
 		$output .= ob_get_clean();
 	}
-
-} // Walker_Nav_Menu_Edit
+}

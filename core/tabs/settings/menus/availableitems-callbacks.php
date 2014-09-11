@@ -1,6 +1,6 @@
 <?php
 
-// FIXME Url erased from custom
+// TODO Slim down default meta for each type (strip un-needed items)
 
 /**
  * class CD_AdminMenu_AvailableItems_Callbacks
@@ -605,13 +605,13 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 	public static function plugin() {
 
-		// Get the original menu
-		$orig_menu = ClientDash_Core_Page_Settings_Tab_Menus::return_orig_admin_menu();
+		// Globalize the "parent" class object for access of public properties
+		global $ClientDash_Core_Page_Settings_Tab_Menus;
 
 		// Separate out only the items added by plugins
 		$menu_items = [ ];
 		$i          = 0;
-		foreach ( $orig_menu as $menu ) {
+		foreach ( $ClientDash_Core_Page_Settings_Tab_Menus->original_admin_menu as $menu ) {
 			$i ++;
 			$menu_item = $menu;
 			unset( $menu_item['submenus'] );
@@ -874,6 +874,56 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 				       name="add-post-type-menu-item" id="submit-separator">
 				<span class="spinner"></span>
 			</span>
+			</p>
+
+		</div>
+	<?php
+	}
+
+	public static function custom_link() {
+		?>
+		<div id="custom-link" class="posttypediv">
+
+			<div id="tabs-panel-custom-link" class="tabs-panel-active categorychecklist form-no-clear">
+				<ul id="posttypechecklist-custom-link" class="categorychecklist form-no-clear">
+					<li>
+						<label class="menu-item-title">
+							<p id="menu-item-url-wrap">
+								<label class="howto" for="custom-menu-item-url">
+									<span>URL</span>
+									<input type="text" class="cd-custom-menu-item"
+									       name="menu-item[-1][custom-meta-cd-url]" value="">
+								</label>
+							</p>
+
+							<p id="menu-item-name-wrap">
+								<label class="howto" for="custom-menu-item-name">
+									<span>Link Text</span>
+									<input type="text" class="menu-item-title" name="menu-item[-1][menu-item-title]"
+									       value="">
+									<input type="checkbox" id="custom-checkbox" style="display: none;"
+									       class="menu-item-checkbox" name="menu-item[-1][menu-item-object-id]"
+									       value="customlink" checked>
+								</label>
+							</p>
+
+						</label>
+
+						<input type="hidden" class="menu-item-type" name="menu-item[-1][menu-item-type]" value="custom">
+						<input type="hidden" class="cd-custom-menu-item" name="menu-item[-1][custom-meta-cd-type]"
+						       value="custom">
+						<input type="hidden" class="cd-custom-menu-item" name="menu-item[-1][custom-meta-cd-icon]"
+						       value="dashicons-admin-links">
+					</li>
+				</ul>
+			</div>
+
+			<p class="button-controls">
+				<span class="add-to-menu">
+					<input type="submit" class="button-secondary submit-add-to-menu right" value="Add to Menu"
+					       name="add-post-type-menu-item" id="submit-custom-link">
+					<span class="spinner"></span>
+				</span>
 			</p>
 
 		</div>

@@ -1,9 +1,9 @@
 <?php
 
 // TODO Show existing menus at top so admin knows what menus exist and if they're disabled / enabled
-// FIXME Page title broke (maybe not anymore)
 // TODO Pretty icon selector
 
+// FIXME Page title messed up when sub-menu goes to parent (may leave this though)
 // FIXME Clean up warnings, notices, and stricts
 // TODO Re-order methods
 // TODO Documentation
@@ -245,7 +245,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 * @since Client Dash 1.6
 	 */
 	public function get_orig_admin_menu() {
-		global $menu, $submenu;
+		global $menu, $submenu, $ClientDash;
 
 		foreach ( $menu as $menu_location => $menu_item ) {
 
@@ -278,7 +278,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			}
 		}
 
-		// Sort the menus, then re-index them
+		// Sort the menus, then re-index them by their position
 		ksort( $orig_menu );
 
 		$i = - 1;
@@ -299,14 +299,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 				}
 			}
 		}
-//		$orig_menu = array_values( $orig_menu );
-//		foreach ( $orig_menu as $menu_position => $menu_item ) {
-//
-//			if ( isset( $menu_item['submenus'] ) ) {
-//				ksort( $orig_menu[ $menu_position ]['submenus'] );
-//				$orig_menu[ $menu_position ]['submenus'] = array_values( $orig_menu[ $menu_position ]['submenus'] );
-//			}
-//		}
 
 		$this->total_menu_items    = $i;
 		$this->original_admin_menu = $new_menu;
@@ -370,7 +362,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			// Save it into our modified menu option
 			$this->save_cd_menu( $this->menu_ID );
 		} else {
-			wp_redirect( add_query_arg( 'menu', $this->menu_ID) );
+			wp_redirect( add_query_arg( 'menu', $this->menu_ID ) );
 			exit();
 		}
 	}
@@ -616,6 +608,16 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		return $orig_menu;
 	}
 
+	/**
+	 * Takes the given menu item and determines basic properties about it.
+	 *
+	 * @since Client Dash 1.6
+	 *
+	 * @param array $menu The menu item to sort.
+	 * @param bool|array $is_submenu Optional. The array of the PARENT menu item.
+	 *
+	 * @return array The sorted menu item properties.
+	 */
 	public static function sort_original_admin_menu( $menu, $is_submenu = false ) {
 		// Account for "Comments" having html in the title
 		if ( strpos( $is_submenu ? $is_submenu['menu_title'] : $menu['menu_title'], 'Comments' ) !== false ) {
@@ -775,7 +777,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 */
 	public function add_modified_admin_menu() {
 
-		global $menu, $cd_parent_file, $_registered_pages, $plugin_page, $cd_submenu_file;
+		global $menu, $submenu, $cd_parent_file, $_registered_pages, $plugin_page, $cd_submenu_file;
 
 		// This is a strange little hack. When moving a sub-menu page to a top-level page, there are some
 		// caveats. One being, WordPress doesn't know what the heck to do!... You will get a permissions
@@ -784,25 +786,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		if ( ! empty( $plugin_page ) ) {
 			$_registered_pages["admin_page_$plugin_page"] = true;
 		}
-
-		// In the case of a sub-menu item being moved to a parent item, WordPress will be confused
-		// about which menu item is active. So I compensate for this by overriding the "self" and
-		// "parent_file" globals with the new (previously sub-menu) slug. This corrects the issue.
-
-		// We compare the REQUEST_URI (minus all extra query args), but we allow the query args
-		// that will be found within the slug
-		$allowed_args = array( 'page' => true, 'post_type' => true, 'taxonomy' => true, 'tab' => true );
-		$url          = remove_query_arg( array_keys( array_diff_key( $_GET, $allowed_args ) ) );
-		if ( $url === false ) {
-			// If false, there were no extra query args, so just use the REQUEST_URI
-			$url = $_SERVER['REQUEST_URI'];
-		}
-
-		// Filter out the WP base url (from wp-admin/menu-header.php:~16)
-		$url = preg_replace( '|^.*/wp-admin/network/|i', '', $url );
-		$url = preg_replace( '|^.*/wp-admin/|i', '', $url );
-		$url = preg_replace( '|^.*/plugins/|i', '', $url );
-		$url = preg_replace( '|^.*/mu-plugins/|i', '', $url );
 
 		// Get current role
 		$current_role = $this->get_user_role();
@@ -815,13 +798,25 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		if ( $modified_menu ) {
 			foreach ( $modified_menu as $menu_position => $menu_item ) {
 
-				// Now for each top level item, let's see if it's currently active
-				if ( $url == $menu_item['menu_slug'] ) {
+				// Get the filtered url
+				$args = array(
+					'page'      => true,
+					'post_type' => true,
+					'taxonomy'  => true
+				);
+				if ( strpos( $menu_item['menu_slug'], '&tab=' ) !== false ) {
+					$args['tab'] = true;
+				}
+				$url = $this->get_cleaned_url( $args );
+
+				if ( $url == $menu_item['menu_slug'] && strpos( $cd_parent_file, '&tab=' ) === false ) {
+
+					// In the case of a sub-menu item being moved to a parent item, WordPress will be confused
+					// about which menu item is active. So I compensate for this by overriding the "self" and
+					// "parent_file" globals with the new (previously sub-menu) slug. This corrects the issue.
 					$cd_parent_file = $menu_item['menu_slug'];
 					add_filter( 'parent_file', array( $this, 'modify_self' ) );
 				}
-
-				$classes = [ ];
 
 				// If a separator, do that instead
 				if ( strpos( $menu_item['menu_slug'], 'separator' ) !== false ) {
@@ -832,7 +827,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 						'',
 						'wp-menu-separator'
 					);
-					$classes[]              = 'wp-menu-separator';
 				} else {
 					add_menu_page(
 						! empty( $menu_item['page_title'] ) ? $menu_item['page_title'] : null,
@@ -843,40 +837,68 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 						! empty( $menu_item['icon_url'] ) ? $menu_item['icon_url'] : 'none',
 						$menu_position
 					);
-
-					$classes[] = "toplevel_page_$menu_item[menu_slug]";
-					$classes[] = 'menu-top';
 				}
 
 				// Now for the sub-menus (if they exist)
 				if ( ! empty( $menu_item['submenus'] ) ) {
 
-					// Add the class
-					$classes[] = 'wp-has-submenu';
-
-					foreach ( $menu_item['submenus'] as $submenu_item ) {
+					foreach ( $menu_item['submenus'] as $submenu_position => $submenu_item ) {
 
 						// Now for each sub-menu item, let's see if it's currently active
+						$url = $this->get_cleaned_url( array(
+							'page'      => true,
+							'post_type' => true,
+							'taxonomy'  => true,
+							'tab'       => true
+						) );
+
 						if ( $url == $submenu_item['menu_slug'] ) {
 							$cd_parent_file  = $menu_item['menu_slug'];
 							$cd_submenu_file = $submenu_item['menu_slug'];
 							add_filter( 'parent_file', array( $this, 'modify_self' ) );
 						}
 
-						add_submenu_page(
-							! empty( $menu_item['menu_slug'] ) ? $menu_item['menu_slug'] : null,
-							! empty( $submenu_item['page_title'] ) ? $submenu_item['page_title'] : null,
-							! empty( $submenu_item['menu_title'] ) ? $submenu_item['menu_title'] : null,
-							! empty( $submenu_item['capability'] ) ? $submenu_item['capability'] : null,
-							! empty( $submenu_item['menu_slug'] ) ? $submenu_item['menu_slug'] : null,
-							! empty( $submenu_item['callback'] ) ? $submenu_item['callback'] : null
-						);
+						// Skip separators, they don't work in sub-menus
+						if ( strpos( $submenu_item['menu_slug'], 'separator' ) === false ) {
+							add_submenu_page(
+								! empty( $menu_item['menu_slug'] ) ? $menu_item['menu_slug'] : null,
+								! empty( $submenu_item['page_title'] ) ? $submenu_item['page_title'] : null,
+								! empty( $submenu_item['menu_title'] ) ? $submenu_item['menu_title'] : null,
+								! empty( $submenu_item['capability'] ) ? $submenu_item['capability'] : null,
+								! empty( $submenu_item['menu_slug'] ) ? $submenu_item['menu_slug'] : null,
+								! empty( $submenu_item['callback'] ) ? $submenu_item['callback'] : null
+							);
+						}
 					}
 				}
-				// Add the menu classes
-//				$menu[ $menu_position ][4] = implode( ' ', $classes );
 			}
 		}
+	}
+
+	/**
+	 * Returns the current url without the WP base and stripped of all query args, except
+	 * those specified.
+	 *
+	 * @since Client Dash 1.6
+	 *
+	 * @return string The filtered current url.
+	 */
+	public function get_cleaned_url( $allowed_args = null ) {
+		// We compare the REQUEST_URI (minus all extra query args), but we allow the query args
+		// that will be found within the slug
+		$url = remove_query_arg( array_keys( array_diff_key( $_GET, $allowed_args ) ) );
+		if ( $url === false ) {
+			// If false, there were no extra query args, so just use the REQUEST_URI
+			$url = $_SERVER['REQUEST_URI'];
+		}
+
+		// Filter out the WP base url (from wp-admin/menu-header.php:~16)
+		$url = preg_replace( '|^.*/wp-admin/network/|i', '', $url );
+		$url = preg_replace( '|^.*/wp-admin/|i', '', $url );
+		$url = preg_replace( '|^.*/plugins/|i', '', $url );
+		$url = preg_replace( '|^.*/mu-plugins/|i', '', $url );
+
+		return $url;
 	}
 
 	/**
@@ -887,6 +909,8 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 * a few things about what's going on. I need to modify 3 globals: $self, $parent_file, and
 	 * $submenu_file. These 3 globals tell WP what we're currently viewing. Because of the strange
 	 * URL's and moving around of menus, I have to let WP know accordingly what's going on.
+	 *
+	 * @since Client Dash 1.6
 	 *
 	 * @return mixed The parent file.
 	 */
@@ -1046,7 +1070,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 						'add-custom-links' => array(
 							'id'       => 'add-custom-links',
 							'title'    => 'Custom',
-							'callback' => 'wp_nav_menu_item_link_meta_box'
+							'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'custom_link' )
 						),
 						'add-separator'    => array(
 							'id'       => 'add-separator',

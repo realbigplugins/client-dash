@@ -8,6 +8,7 @@ Author: Kyle Maurer
 Author URI: http://realbigmarketing.com/staff/kyle
 */
 
+// FIXME When tab name is incorrect, fatal error
 // TODO Only require page / tab specific files WHEN they are needed. Not always.
 
 // Require the functions class first so we can extend it
@@ -368,7 +369,7 @@ class ClientDash extends ClientDash_Functions {
 		wp_register_script(
 			'cd-main',
 			plugin_dir_url( __FILE__ ) . 'assets/js/clientdash.min.js',
-			array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable' ),
+			array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable', 'jquery-effects-shake' ),
 			$this->version
 		);
 
