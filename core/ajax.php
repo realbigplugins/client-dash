@@ -10,7 +10,7 @@
  *
  * @since Client Dash 1.5
  */
-class ClientDash_AJAX extends ClientDash {
+class ClientDash_AJAX {
 
 	/**
 	 * Constructs the class.
@@ -19,15 +19,16 @@ class ClientDash_AJAX extends ClientDash {
 	 */
 	function __construct() {
 
-		add_action( 'wp_ajax_cd_reset_roles', array( $this, 'reset_roles' ) );
+		// Cycle through each method and add its ajax action
+		foreach ( get_class_methods( 'ClientDash_AJAX' ) as $method ) {
 
-		add_action( 'wp_ajax_cd_reset_all_settings', array( $this, 'reset_all_settings' ) );
+			// Skip construct method
+			if ( $method == '__construct' ) {
+				continue;
+			}
 
-		add_action( 'wp_ajax_cd_reset_admin_menu', array( $this, 'reset_admin_menu' ) );
-
-		add_action( 'wp_ajax_cd_populate_nav_menu', array( $this, 'populate_nav_menu' ) );
-
-		add_action( 'wp_ajax_cd_save_nav_menu', array( $this, 'save_nav_menu' ) );
+			add_action( "wp_ajax_cd_$method", array( $this, $method ) );
+		}
 	}
 
 	/**
@@ -37,19 +38,28 @@ class ClientDash_AJAX extends ClientDash {
 	 */
 	public function reset_roles() {
 
-		foreach ( $this->core_widgets as $page ) {
-			update_option( "cd_hide_page_$page", $this->option_defaults["hide_page_$page"] );
+		global $ClientDash;
+
+		foreach ( $ClientDash->core_widgets as $page ) {
+			update_option( "cd_hide_page_$page", $ClientDash->option_defaults["hide_page_$page"] );
 		}
-		update_option( 'cd_content_sections_roles', $this->option_defaults['content_sections_roles'] );
+		update_option( 'cd_content_sections_roles', $ClientDash->option_defaults['content_sections_roles'] );
 		echo 'Roles successfully reset!';
 
 		die();
 	}
 
+	/**
+	 * Resets ALL Client Dash settings by deleting them.
+	 *
+	 * @since Client Dash 1.6
+	 */
 	public function reset_all_settings() {
 
+		global $ClientDash;
+
 		// Cycle through all option defaults and delete them
-		foreach ( $this->option_defaults as $name => $value ) {
+		foreach ( $ClientDash->option_defaults as $name => $value ) {
 			delete_option( "cd_$name" );
 		}
 
@@ -61,41 +71,33 @@ class ClientDash_AJAX extends ClientDash {
 		die();
 	}
 
-	public function reset_admin_menu() {
-
-		$roles = get_editable_roles();
-
-		foreach ( $roles as $role_name => $role ) {
-
-			// Remove the modified nav menu
-			wp_delete_nav_menu( "cd_admin_menu_$role_name" );
-
-			// Delete the option
-			delete_option( "cd_admin_menu_{$role_name}_modified" );
-		}
-
-		echo 'Admin menu successfully reset!';
-
-		die();
-	}
-
+	/**
+	 * Simply launches the save_cd_menu() function with the proper menu ID.
+	 *
+	 * @since Client Dash 1.6
+	 */
 	public function save_nav_menu() {
+
 		$menu_ID = $_POST['menu_ID'];
 
 		ClientDash_Core_Page_Settings_Tab_Menus::save_cd_menu( $menu_ID );
 
+		// We're done!
 		die();
 	}
 
+	/**
+	 * Creates a nav menu item and it's sub-menus. Used for initial creation of nav menus.
+	 *
+	 * @since Client Dash 1.6
+	 */
 	public function populate_nav_menu() {
 
-		// TODO Progress bar for creating menu
-
-		$menu_item = $_POST['menu_item'];
+		// Get our POST data from AJAX
+		$menu_item          = $_POST['menu_item'];
 		$menu_item_position = $_POST['menu_item_position'];
-		$menu_ID = $_POST['menu_ID'];
-		$role = $_POST['role'];
-		$total = $_POST['total'];
+		$menu_ID            = $_POST['menu_ID'];
+		$role               = $_POST['role'];
 
 		// Get the role object (for capabilities)
 		$role = get_role( $role );
@@ -162,17 +164,8 @@ class ClientDash_AJAX extends ClientDash {
 			}
 		}
 
-		if ( ( isset( $position ) && $position == $total ) || $menu_item_position == $total ) {
-			$complete = true;
-		}
-
-		wp_send_json( array(
-			'complete' => isset( $complete ) ? true : false,
-			'menu_ID' => $menu_ID,
-			'total' => $total,
-			'position' => isset( $position ) ? $position : null,
-			'current' => $menu_item_position
-		));
+		// We're done!
+		die();
 	}
 }
 

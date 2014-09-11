@@ -78,3 +78,32 @@
   border-top: none;
   border-bottom: 15px solid rgba(0, 0, 0, 0.2);
 }
+
+// Progress bar
+.cd-progress-bar {
+  position: relative;
+  text-align: center;
+  width: 100%;
+  height: 30px;
+  border: 1px solid #aaa;
+
+  // The moving bar
+  .cd-progress-bar-inner {
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 100%;
+    background-color: rgb(96, 203, 229);
+    z-index: 1;
+
+    transition: right 300ms ease;
+  }
+
+  // The completed text
+  .cd-progress-bar-percent {
+    position: relative;
+    line-height: 30px;
+    z-index: 2;
+  }
+}

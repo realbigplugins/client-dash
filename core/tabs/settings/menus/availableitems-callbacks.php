@@ -1,7 +1,6 @@
 <?php
 
-// TODO Url erased from custom
-// TODO Adding multiple menu items only takes last
+// FIXME Url erased from custom
 
 /**
  * class CD_AdminMenu_AvailableItems_Callbacks

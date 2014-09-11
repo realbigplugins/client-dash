@@ -15,7 +15,7 @@
 class ClientDash_Core_Page_Settings_Tab_Tools extends ClientDash {
 
 	/**
-	 * The main construct function.update_option( 'cd_testing_cron', 'IT RAN' );
+	 * The main construct function.
 	 *
 	 * @since Client Dash 1.5
 	 */
@@ -46,15 +46,6 @@ class ClientDash_Core_Page_Settings_Tab_Tools extends ClientDash {
 				<td>
 					<input type="button" class="button" value="Reset All Settings"
 					       onclick="if ( confirm('WARNING: This will reset ALL settings back to default.\nThis can NOT be undone.\n\nAre you sure you want to do this?') ) cdAJAX.reset_all_settings();"/>
-				</td>
-			</tr>
-			<tr valign="top">
-				<th scope="row">
-					<label for="cd_webmaster_enable">Reset Admin Menu</label>
-				</th>
-				<td>
-					<input type="button" class="button" value="Reset Admin Menu"
-					       onclick="if ( confirm('WARNING: This will reset the Admin Menu back to default.\nThis can NOT be undone.\n\nAre you sure you want to do this?') ) cdAJAX.reset_admin_menu();"/>
 				</td>
 			</tr>
 		</table>

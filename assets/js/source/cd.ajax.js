@@ -79,48 +79,57 @@ var cdAJAX;
                 }
             )
         },
+        /**
+         * Sends off all AJAX requests to populate the nav menu. Also updates the progress bar.
+         *
+         * @since Client Dash 1.6
+         */
         populate_nav_menu: function () {
-            console.log(cdData.navMenusAJAX);
-            for (i = 0; i < cdData.navMenusAJAX.menu_items.length; i++) {
 
-                var current_item = cdData.navMenusAJAX.menu_items[i],
-                    completed_items = 0;
+            // Get the total number of menu items (excluding children)
+            // And start the completed items at 0
+            var total_items = cdData.navMenusAJAX.menu_items.length,
+                completed_items = 0;
 
+            // Cycle through all menu items data and send them off
+            for (var i = 0; i < total_items; i++) {
+
+                // Prepare our data to send
                 var data = {
                     action: 'cd_populate_nav_menu',
-                    total: cdData.navMenusAJAX.total,
-                    menu_item: current_item.menu_item,
-                    menu_item_position: current_item.menu_item_position,
+                    menu_item: cdData.navMenusAJAX.menu_items[i].menu_item,
+                    menu_item_position: cdData.navMenusAJAX.menu_items[i].menu_item_position,
                     menu_ID: cdData.navMenusAJAX.menu_ID,
                     role: cdData.navMenusAJAX.role
                 };
 
-                console.log('ready');
-
-                var test = 'test';
+                // Now send it off
+                // TODO If you leave the page, they don't all fire, why?
                 $.post(
                     ajaxurl, // already defined
                     data,
                     function (response) {
 
                         // Update the loader percentage
-                        var progress = Math.round(((100 / cdData.navMenusAJAX.menu_items.length) * completed_items)) + '%';
                         completed_items++;
-                        $('#cd-creating-nav-menu-progress').html(progress);
+                        var progress = Math.round(((100 / total_items) * completed_items));
+                        $('.cd-progress-bar-inner').css('right', 100 - progress + '%');
+                        $('.cd-progress-bar-percent').html(progress + '%');
 
-                        if (response.complete) {
+                        // If we've cycled though ALL of the menu items, then we're done
+                        if (completed_items == total_items) {
 
-                            // Okay, now save it and THEN reload
                             var data = {
                                 action: 'cd_save_nav_menu',
-                                menu_ID: response.menu_ID
+                                menu_ID: cdData.navMenusAJAX.menu_ID
                             };
 
+                            // Okay, now save it and THEN reload
                             $.post(
                                 ajaxurl, // already defined
                                 data,
                                 function () {
-                                    window.location.reload();
+                                    window.location.href = cdData.navMenusAJAX.url;
                                 }
                             )
                         }
@@ -131,6 +140,7 @@ var cdAJAX;
     };
 
     $(function () {
+
         // If the navMenusAJAX property is present, then it's time to create some nav menus!
         if (cdData.hasOwnProperty('navMenusAJAX')) {
             cdAJAX.populate_nav_menu();

@@ -1,11 +1,10 @@
 <?php
 
-// TODO Handling roles with multiple words
 // TODO Show existing menus at top so admin knows what menus exist and if they're disabled / enabled
-// TODO Page title broke
+// FIXME Page title broke (maybe not anymore)
 // TODO Pretty icon selector
 
-// TODO Clean up warnings, notices, and stricts
+// FIXME Clean up warnings, notices, and stricts
 // TODO Re-order methods
 // TODO Documentation
 
@@ -64,7 +63,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 *
 	 * @since Client Dash 1.6
 	 */
-	// TODO Test if new roles have been added, and if so, create them (or at least tell the user they need to do so and have a button for doing it)
 	public $all_menu_IDs;
 
 	/**
@@ -371,14 +369,23 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 			// Save it into our modified menu option
 			$this->save_cd_menu( $this->menu_ID );
+		} else {
+			wp_redirect( add_query_arg( 'menu', $this->menu_ID) );
+			exit();
 		}
 	}
 
+	/**
+	 * Prepares AJAX data with information from the original admin menu to be sent off
+	 * and create the new menu.
+	 *
+	 * @since Client Dash 1.6
+	 *
+	 * @param string $role The role to create a menu for.
+	 */
 	public function populate_nav_menu( $role ) {
 
 		global $ClientDash;
-
-		$menu_items = wp_get_nav_menu_items( $this->menu_ID );
 
 		$AJAX_output = [ ];
 
@@ -386,73 +393,17 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		$AJAX_output['role']    = $role;
 		$AJAX_output['total']   = $this->total_menu_items;
 
+		// Build the URL to be sent back
+		$AJAX_output['url'] = add_query_arg( 'menu', $this->menu_ID );
+
 		// Cycle through each item and create the nav menu accordingly
 		foreach ( $this->original_admin_menu as $position => $menu ) {
-
-			// REMOVE
-			// Call AJAX sending:
-			// $menu_item ($menu)
-			// $menu_item_position ($position)
-			// $menu_ID ($this->menu_ID)
-			// $role ($role)
 
 			// Prepare AJAX data to send
 			$AJAX_output['menu_items'][] = array(
 				'menu_item'          => $menu,
 				'menu_item_position' => $position
 			);
-
-//			// Pass over if current role doesn't have the capabilities
-//			// TODO Make sure this works well with parent -> child relationships
-//			if ( ! array_key_exists( $menu['capability'], $role_info->capabilities ) ) {
-//				continue;
-//			}
-//
-//			// Skip links
-//			// TODO Figure out how to better deal with this
-//			if ( $menu['menu_title'] == 'Links' ) {
-//				continue;
-//			}
-//
-//			// Deal with "Plugins" having an extra space
-//			$menu['menu_title'] = trim( $menu['menu_title'] );
-//
-//			$sorted      = self::sort_original_admin_menu( $menu );
-//			$args        = $sorted[0];
-//			$custom_meta = $sorted[1];
-//
-//			$ID = wp_update_nav_menu_item( $this->menu_ID, 0, $args );
-//
-//			if ( ! is_wp_error( $ID ) ) {
-//				foreach ( $custom_meta as $meta_name => $meta_value ) {
-//					update_post_meta( $ID, $meta_name, $meta_value );
-//				}
-//			}
-//
-//			// If there are submenus, cycle through them
-//			if ( isset( $menu['submenus'] ) && ! empty( $menu['submenus'] ) ) {
-//
-//				foreach ( $menu['submenus'] as $submenu_item ) {
-//
-//					$sorted      = self::sort_original_admin_menu( $submenu_item, $menu );
-//					$args        = $sorted[0];
-//					$custom_meta = $sorted[1];
-//
-//					// Make it a child
-//					$args['menu-item-parent-id'] = $ID;
-//
-//					$submenu_ID = wp_update_nav_menu_item( $this->menu_ID, 0, $args );
-//
-//					if ( ! is_wp_error( $submenu_ID ) ) {
-//						foreach ( $custom_meta as $meta_name => $meta_value ) {
-//							update_post_meta( $submenu_ID, $meta_name, $meta_value );
-//						}
-//					}
-//
-//					// Also update custom meta for it's parent
-//					update_post_meta( $submenu_ID, 'cd-submenu-parent', $submenu_item['parent_slug'] );
-//				}
-//			}
 		}
 
 		// Send off the ajax data to be localized
@@ -1024,7 +975,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 				$menu[ $item->ID ] = wp_parse_args( array(
 					'menu_title' => $item->post_title,
 					'menu_slug'  => $slug,
-					// TODO Get page title
 					'page_title' => get_post_meta( $item->ID, 'cd-page-title', true ),
 					'icon_url'   => $icon
 				), $default_menu );
@@ -1042,7 +992,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 				$menu[ $item->menu_item_parent ]['submenus'][] = wp_parse_args( array(
 					'menu_title'  => $item->post_title,
 					'menu_slug'   => $slug,
-					// TODO Get page title
 					'page_title'  => get_post_meta( $item->ID, 'cd-page-title', true ),
 					'parent_slug' => $menu[ $item->menu_item_parent ]['menu_slug']
 				), $default_submenu );
@@ -1241,7 +1190,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 									<?php
 									// If the menu is set, show it, otherwise, allow user to select which
 									// menu to create
-									if ( $this->menu_ID ) :
+									if ( $this->menu_ID || $creating ) :
 										?>
 										<span>Menu Name:</span>
 
@@ -1340,7 +1289,10 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 										<p><strong>Please do NOT leave this page.</strong></p>
 
-										<p id="cd-creating-nav-menu-progress">0%</p>
+										<div class="cd-progress-bar">
+											<div class="cd-progress-bar-inner"></div>
+											<span class="cd-progress-bar-percent">0%</span>
+										</div>
 									</div>
 
 								<?php else : ?>
