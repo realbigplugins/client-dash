@@ -1,6 +1,7 @@
 <?php
 
 // TODO Slim down default meta for each type (strip un-needed items)
+// FIXME Plugin and WP Core items that are sub-menu items need to have the parent saved in the meta
 
 /**
  * class CD_AdminMenu_AvailableItems_Callbacks
@@ -157,7 +158,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					$custom_meta['cd-object-type']    = 'toplevel';
 					$custom_meta['cd-post-type']      = $post_type['title'];
 					$custom_meta['cd-original-title'] = $options['title'];
-					$custom_meta['cd-icon']           = $icon[ $post_type['id'] ];
+					$custom_meta['cd-icon']           = isset( $icon[ $post_type['id'] ] ) ? $icon[ $post_type['id'] ] : null;
 					$custom_meta['cd-type']           = 'post_type';
 					$custom_meta['cd-url']            = $options['url'];
 
@@ -224,7 +225,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					$custom_meta['cd-object-type']    = 'addnew';
 					$custom_meta['cd-post-type']      = $post_type['title'];
 					$custom_meta['cd-original-title'] = $options['title'];
-					$custom_meta['cd-icon']           = $icon[ $post_type['id'] ];
+					$custom_meta['cd-icon']           = isset( $icon[ $post_type['id'] ] ) ? $icon[ $post_type['id'] ] : null;
 					$custom_meta['cd-type']           = 'post_type';
 					$custom_meta['cd-url']            = $options['url'];
 
@@ -289,7 +290,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					$custom_meta['cd-object-type']    = 'listall';
 					$custom_meta['cd-post-type']      = $post_type['title'];
 					$custom_meta['cd-original-title'] = $options['title'];
-					$custom_meta['cd-icon']           = $icon[ $post_type['id'] ];
+					$custom_meta['cd-icon']           = isset( $icon[ $post_type['id'] ] ) ? $icon[ $post_type['id'] ] : null;
 					$custom_meta['cd-type']           = 'post_type';
 					$custom_meta['cd-url']            = $options['url'];
 
@@ -370,7 +371,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 							$custom_meta['cd-object-type']    = 'listall';
 							$custom_meta['cd-post-type']      = $post_type['title'];
 							$custom_meta['cd-original-title'] = $options['title'];
-							$custom_meta['cd-icon']           = $icon[ $post_type['id'] ];
+							$custom_meta['cd-icon']           = isset( $icon[ $post_type['id'] ] ) ? $icon[ $post_type['id'] ] : null;
 							$custom_meta['cd-type']           = 'taxonomy';
 							$custom_meta['cd-url']            = $options['url'];
 
@@ -544,6 +545,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 								$custom_meta['cd-original-title'] = $options['title'];
 								$custom_meta['cd-url']            = $options['url'];
 								$custom_meta['cd-icon']           = 'dashicons-admin-generic';
+								$custom_meta['cd-submenu-parent'] = $item['url'];
 
 								// Allow data to be filtered
 								$options     = apply_filters( 'cd_adminmenu_availableitems_options_wp_core_' . $options['title'] . '_' . $options['url'], $options );
@@ -622,11 +624,13 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 				$menu_items[ $i ] = $menu_item;
 			}
 
-			foreach ( $menu['submenus'] as $submenu ) {
-				$sorted = ClientDash_Core_Page_Settings_Tab_Menus::sort_original_admin_menu( $submenu, $menu );
+			if ( isset( $menu['submenus'] ) ) {
+				foreach ( $menu['submenus'] as $submenu ) {
+					$sorted = ClientDash_Core_Page_Settings_Tab_Menus::sort_original_admin_menu( $submenu, $menu );
 
-				if ( $sorted[1]['cd-type'] == 'plugin' ) {
-					$menu_item['submenus'][] = $submenu;
+					if ( $sorted[1]['cd-type'] == 'plugin' && $submenu['menu_title'] != 'Client Dash' ) {
+						$menu_item['submenus'][] = $submenu;
+					}
 				}
 			}
 
@@ -682,7 +686,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 						foreach ( $menu_items as $item ) {
 							$i --;
 
-							if ( $item['disabled'] ) {
+							if ( isset( $item['disabled'] ) && $item['disabled'] ) {
 								continue;
 							}
 
@@ -700,7 +704,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 							$custom_meta['cd-type']           = 'plugin';
 							$custom_meta['cd-original-title'] = $options['title'];
 							$custom_meta['cd-icon']           = $item['icon_url'];
-							$custom_meta['cd-url']            = $item['url'];
+							$custom_meta['cd-url']            = $options['url'];
 
 							// Allow data to be filtered
 							$options     = apply_filters( 'cd_adminmenu_availableitems_options_plugin_' . $options['title'] . '_' . $options['url'], $options );
@@ -777,6 +781,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 								$custom_meta['cd-original-title'] = $options['title'];
 								$custom_meta['cd-url']            = $options['url'];
 								$custom_meta['cd-icon']           = 'dashicons-admin-generic';
+								$custom_meta['cd-submenu-parent'] = $item['menu_slug'];
 
 								// Allow data to be filtered
 								$options     = apply_filters( 'cd_adminmenu_availableitems_options_wp_core_' . $options['title'] . '_' . $options['url'], $options );
@@ -836,7 +841,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 	}
 
-	public function separator() {
+	public static function separator() {
 		?>
 		<div id="separator" class="posttypediv">
 

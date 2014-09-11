@@ -88,7 +88,8 @@ var cdAdminMenu;
                             'custom-meta-cd-type',
                             'custom-meta-cd-separator-height',
                             'custom-meta-cd-url',
-                            'custom-meta-cd-page-title'
+                            'custom-meta-cd-page-title',
+                            'custom-meta-cd-submenu-parent'
                         ];
 
                     if (!id && itemType == 'menu-item') {
@@ -266,6 +267,9 @@ var cdAdminMenu;
 
                         // Hide the "sub item" message
                         subMenuTitle.hide();
+
+                        // Get rid of the input data for its parent
+                        ui.item.find('.menu-item-data-parent-id').val('0');
 
                         // Shake, shake, sh-sh-sh shake it!
                         ui.item.effect('shake');

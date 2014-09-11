@@ -112,7 +112,9 @@ class ClientDash_Page_Settings extends ClientDash {
 				// Prepare cd_settings
 				settings_fields( 'cd_options_' . $tab );
 
-				$this->the_page_title( 'settings' );
+			?>
+			<h2 class="cd-title"><span class="dashicons dashicons-admin-settings cd-icon"></span><span class="cd-title-text">Client Dash Settings</span></h2>
+			<?php
 				$this->create_tab_page();
 
 				// Can modify submit button with this filter

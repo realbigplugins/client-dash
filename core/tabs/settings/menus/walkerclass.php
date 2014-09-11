@@ -58,11 +58,6 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 		global $_wp_nav_menu_max_depth, $cd_current_menu_id, $errors;
 		$_wp_nav_menu_max_depth = $depth > $_wp_nav_menu_max_depth ? $depth : $_wp_nav_menu_max_depth;
 
-		// Remove the transient so it resets
-		if ( get_transient( "cd_adminmenu_output_$cd_current_menu_id" ) ) {
-			delete_transient( "cd_adminmenu_output_$cd_current_menu_id" );
-		}
-
 		// Get the action
 		$action = isset( $_POST['action'] ) ? $_POST['action'] : null;
 
@@ -75,7 +70,8 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 			'cd-icon',
 			'cd-separator-height',
 			'cd-url',
-			'cd-page-title'
+			'cd-page-title',
+			'cd-submenu-parent'
 		);
 
 		// Save any cd custom meta

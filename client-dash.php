@@ -8,7 +8,6 @@ Author: Kyle Maurer
 Author URI: http://realbigmarketing.com/staff/kyle
 */
 
-// FIXME When tab name is incorrect, fatal error
 // TODO Only require page / tab specific files WHEN they are needed. Not always.
 
 // Require the functions class first so we can extend it

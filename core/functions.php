@@ -193,7 +193,21 @@ abstract class ClientDash_Functions {
 
 		// This calls the dynamic class and dynamic callback function
 		echo '<div class="cd-content-section">';
-		$section_output['callback'][0]->$section_output['callback'][1]();
+
+		// Only call the tab if it exists
+		if ( method_exists( $section_output['callback'][0], $section_output['callback'][1] ) ) {
+			call_user_func( array( $section_output['callback'][0], $section_output['callback'][1] ) );
+		} else {
+
+			// Let the user know the tab doesn't exist
+			$this->error_nag( 'This tab doesn\'t seem to exist! Sorry about that.' );
+
+			// Also need to remove the submit button if on settings pages
+			if ( $_GET['page'] == 'cd_settings' ) {
+				add_filter( 'cd_submit', '__return_false' );
+			}
+		}
+
 		echo '</div>';
 	}
 

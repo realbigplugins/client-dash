@@ -214,29 +214,39 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			}
 
 			// Make sure we include the WP nav menu script for our custom CD page
-			wp_enqueue_script( 'nav-menu' );
-
-			// Localize the default items for "nav-menu" script
-			$nav_menus_l10n = array(
-				'oneThemeLocationNoMenus' => false,
-				'moveUp'                  => __( 'Move up one' ),
-				'moveDown'                => __( 'Move down one' ),
-				'moveToTop'               => __( 'Move to the top' ),
-				/* translators: %s: previous item name */
-				'moveUnder'               => __( 'Move under %s' ),
-				/* translators: %s: previous item name */
-				'moveOutFrom'             => __( 'Move out from under %s' ),
-				/* translators: %s: previous item name */
-				'under'                   => __( 'Under %s' ),
-				/* translators: %s: previous item name */
-				'outFrom'                 => __( 'Out from under %s' ),
-				/* translators: 1: item name, 2: item position, 3: total number of items */
-				'menuFocus'               => __( '%1$s. Menu item %2$d of %3$d.' ),
-				/* translators: 1: item name, 2: item position, 3: parent item name */
-				'subMenuFocus'            => __( '%1$s. Sub item number %2$d under %3$s.' ),
-			);
-			wp_localize_script( 'nav-menu', 'menus', $nav_menus_l10n );
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_nav_menu' ) );
 		}
+	}
+
+	/**
+	 * Adds the WP Core script for the nav menu page.
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public function enqueue_nav_menu() {
+
+		wp_enqueue_script( 'nav-menu' );
+
+		// Localize the default items for "nav-menu" script
+		$nav_menus_l10n = array(
+			'oneThemeLocationNoMenus' => false,
+			'moveUp'                  => __( 'Move up one' ),
+			'moveDown'                => __( 'Move down one' ),
+			'moveToTop'               => __( 'Move to the top' ),
+			/* translators: %s: previous item name */
+			'moveUnder'               => __( 'Move under %s' ),
+			/* translators: %s: previous item name */
+			'moveOutFrom'             => __( 'Move out from under %s' ),
+			/* translators: %s: previous item name */
+			'under'                   => __( 'Under %s' ),
+			/* translators: %s: previous item name */
+			'outFrom'                 => __( 'Out from under %s' ),
+			/* translators: 1: item name, 2: item position, 3: total number of items */
+			'menuFocus'               => __( '%1$s. Menu item %2$d of %3$d.' ),
+			/* translators: 1: item name, 2: item position, 3: parent item name */
+			'subMenuFocus'            => __( '%1$s. Sub item number %2$d under %3$s.' ),
+		);
+		wp_localize_script( 'nav-menu', 'menus', $nav_menus_l10n );
 	}
 
 	/**
@@ -362,9 +372,40 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			// Save it into our modified menu option
 			$this->save_cd_menu( $this->menu_ID );
 		} else {
+
+			// If creating a blank menu and an admin, make sure the CD page is there
+			if ( $role_name == 'administrator' ) {
+				$this->add_client_dash_menu_item();
+			}
+
 			wp_redirect( add_query_arg( 'menu', $this->menu_ID ) );
 			exit();
 		}
+	}
+
+	/**
+	 * Adds the Client Dash menu item. Used when creating a blank menu for the admin.
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public function add_client_dash_menu_item() {
+
+		$ID = wp_update_nav_menu_item( $this->menu_ID, 0, array(
+			'menu-item-type' => 'custom',
+			'menu-item-title' => 'Client Dash',
+			'menu-item-url' => 'options-general.php?page=cd_settings',
+			'menu-item-status' => 'publish'
+		));
+
+		if ( ! is_wp_error( $ID ) ) {
+			update_post_meta( $ID, 'cd-original-title', 'Client Dash' );
+			update_post_meta( $ID, 'cd-icon', 'dashicons-admin-generic' );
+			update_post_meta( $ID, 'cd-url', 'options-general.php?page=cd_settings' );
+			update_post_meta( $ID, 'cd-page-title', 'Client Dash' );
+			update_post_meta( $ID, 'cd-type', 'plugin' );
+		}
+
+		$this->save_cd_menu( $this->menu_ID );
 	}
 
 	/**
@@ -777,7 +818,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 */
 	public function add_modified_admin_menu() {
 
-		global $menu, $submenu, $cd_parent_file, $_registered_pages, $plugin_page, $cd_submenu_file;
+		global $menu, $cd_parent_file, $_registered_pages, $plugin_page, $cd_submenu_file;
 
 		// This is a strange little hack. When moving a sub-menu page to a top-level page, there are some
 		// caveats. One being, WordPress doesn't know what the heck to do!... You will get a permissions
@@ -857,6 +898,8 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 							$cd_submenu_file = $submenu_item['menu_slug'];
 							add_filter( 'parent_file', array( $this, 'modify_self' ) );
 						}
+
+						//  add_submenu_page( 'edit.php?post_type=product', __( 'Attributes', 'woocommerce' ), __( 'Attributes', 'woocommerce' ), 'manage_product_terms', 'product_attributes', array( $this, 'attributes_page' ) );
 
 						// Skip separators, they don't work in sub-menus
 						if ( strpos( $submenu_item['menu_slug'], 'separator' ) === false ) {
@@ -1008,7 +1051,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 				if ( strpos( $slug, '.php' ) === false
 				     && ( $parent_slug = get_post_meta( $item->ID, 'cd-submenu-parent', true ) )
 				) {
-					$menu[ $item->ID ]['menu_slug'] = "$parent_slug?page=$slug";
+					$menu[ $item->ID ]['menu_slug'] = $parent_slug . ( strpos( $parent_slug, '?' ) !== false ? '&' : '?' ) . "page=$slug";
 				}
 
 			} else {
@@ -1086,8 +1129,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		$wp_meta_boxes = $this->available_items;
 
 		// Save the information in a transient and get it for faster page loads
-		// REMOVE comment
-//		$output = get_transient( "cd_adminmenu_output_$this->menu_ID" );
+		$output = get_transient( "cd_adminmenu_output_$this->menu_ID" );
 		if ( ! $output && is_nav_menu( $this->menu_ID ) ) {
 			// Our modified walker class
 			include_once( $ClientDash->path . '/core/tabs/settings/menus/walkerclass.php' );
@@ -1101,8 +1143,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 				'errors'      => $errors
 			);
 
-			// REMOVE comment
-//			set_transient( "cd_adminmenu_output_$this->menu_ID", $output, DAY_IN_SECONDS );
+			set_transient( "cd_adminmenu_output_$this->menu_ID", $output, DAY_IN_SECONDS );
 		}
 
 		return $output;
