@@ -16,6 +16,47 @@ var cdAdminMenu;
             this.jQuery_extensions();
             this.separator_checkbox();
             this.link_checkbox();
+            this.addItemToMenu();
+        },
+        /**
+         * Replaces wpNavMenu.addItemToMenu() (nav-menu.js:~918).
+         *
+         * I want to use my own save menu function. So I need to replace this function
+         * in order to change the post action.
+         *
+         * @since Client Dash 1.6
+         */
+        addItemToMenu: function () {
+            wpNavMenu.addItemToMenu = function (menuItem, processMethod, callback) {
+                var menu = $('#menu').val(),
+                    nonce = $('#menu-settings-column-nonce').val(),
+                    params;
+
+                processMethod = processMethod || function(){};
+                callback = callback || function(){};
+
+                params = {
+                    'action': 'cd_add_menu_item',
+                    'menu': menu,
+                    'menu-settings-column-nonce': nonce,
+                    'menu-item': menuItem
+                };
+
+                $.post( ajaxurl, params, function(menuMarkup) {
+                    var ins = $('#menu-instructions');
+
+                    menuMarkup = $.trim( menuMarkup ); // Trim leading whitespaces
+                    processMethod(menuMarkup, params);
+
+                    // Make it stand out a bit more visually, by adding a fadeIn
+                    $( 'li.pending' ).hide().fadeIn('slow');
+                    $( '.drag-instructions' ).show();
+                    if( ! ins.hasClass( 'menu-instructions-inactive' ) && ins.siblings().length )
+                        ins.addClass( 'menu-instructions-inactive' );
+
+                    callback();
+                });
+            };
         },
         /**
          * Keeps the checkbox checked! (required by WP AJAX call) Also submit form on enter.
@@ -66,30 +107,21 @@ var cdAdminMenu;
 
                     // The allowed input fields
                         fields = [
+                            // (removed some)
                             'menu-item-db-id',
-                            'menu-item-object-id',
-                            'menu-item-object',
                             'menu-item-parent-id',
                             'menu-item-position',
-                            'menu-item-type',
                             'menu-item-title',
+                            'menu-item-original-title',
                             'menu-item-url',
-                            'menu-item-description',
-                            'menu-item-attr-title',
-                            'menu-item-target',
-                            'menu-item-classes',
-                            'menu-item-xfn',
-
-                            // Add custom meta HERE
-                            'custom-meta-cd-object-type',
-                            'custom-meta-cd-post-type',
-                            'custom-meta-cd-original-title',
-                            'custom-meta-cd-icon',
-                            'custom-meta-cd-type',
-                            'custom-meta-cd-separator-height',
-                            'custom-meta-cd-url',
-                            'custom-meta-cd-page-title',
-                            'custom-meta-cd-submenu-parent'
+                            //
+                            // CD added
+                            'menu-item-cd-type',
+                            'menu-item-cd-icon',
+                            'menu-item-cd-page-title',
+                            'menu-item-cd-submenu-parent',
+                            'menu-item-cd-params',
+                            'menu-item-cd-hookname'
                         ];
 
                     if (!id && itemType == 'menu-item') {

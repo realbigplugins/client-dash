@@ -47,6 +47,15 @@
   // Right side
   #menu-management-liquid {
 
+    // Extra params arrow
+    .cd-extra-params:after {
+      content: "";
+      border-top: 6px solid #aaa;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      display: inline-block;
+    }
+
     // Align the switch
     .cd-toggle-switch {
       margin-top: 2px;
@@ -67,7 +76,8 @@
     }
 
     // Items with duplicate parent slugs
-    .duplicate-parent-slug {
+    // Also disabled items due to CD Core page visibility
+    .duplicate-parent-slug, .menu-item-cd-disabled {
       .menu-item-handle {
         background: #ffc5bf;
         border-color: darken(#ffc5bf, 10%);

@@ -1,10 +1,9 @@
 <?php
 
-// TODO Slim down default meta for each type (strip un-needed items)
-// FIXME Plugin and WP Core items that are sub-menu items need to have the parent saved in the meta
+// TODO Only show items available for given role
 
 /**
- * class CD_AdminMenu_AvailableItems_Callbacks
+ * Class CD_AdminMenu_AvailableItems_Callbacks
  *
  * Contains all callbacks for the admin menu available items.
  *
@@ -15,35 +14,66 @@
  */
 class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Settings_Tab_Menus {
 
-	public static function default_post_types() {
-		// Default options
-		$options = array(
-			'db-id'       => 0,
-			'data-object' => '',
-			'parent-id'   => 0,
-			'type'        => 'custom',
-			'title'       => '',
-			'url'         => '',
-			'classes'     => ''
+	/**
+	 * Outputs the checkbox, its label, and all of the hidden inputs.
+	 *
+	 * @since Client Dash 1.6
+	 *
+	 * @param int $i The current iteration (in negative).
+	 * @param string $label The label that will show next to the checkbox.
+	 * @param array $options_args Options to be explicitly set.
+	 */
+	public function loop( $i = - 1, $label = '', $options_args = array() ) {
+
+		// Set up the defaults and the inputs to output
+		$options = wp_parse_args( $options_args, self::$menu_item_defaults );
+
+		echo '<li>';
+
+		// The checkbox and label
+		?>
+		<label class="menu-item-title">
+			<input type="checkbox" class="menu-item-checkbox"
+			       name="menu-item[<?php echo $i; ?>][menu-item-object-id]"
+			       value="0"/>
+			<?php echo $label; ?>
+		</label>
+		<?php
+
+		// Iterations of options to skip over
+		$skip = array(
+			'db-id',
+			'parent-id',
+			'position',
+			'original-title',
+			'cd-page-title',
+			'cd-params',
 		);
 
-		// Custom meta to send
-		// This needs to match $custom_meta from "./core/tabs/settings/menus/walkerclass.php:~63"
-		$custom_meta = array(
-			'cd-type'           => '',
-			'cd-post-type'      => 'post',
-			'cd-object-type'    => '',
-			'cd-original-title' => '',
-			'cd-icon'           => 'dashicons-admin-generic',
-			'cd-url'            => '',
-			'cd-page-title'     => ''
-		);
+		// Cycle through all the options and output the hidden inputs
+		foreach ( $options as $option_name => $option_value ) {
 
-		return apply_filters( 'cd_availableitems_callback_defaults_posttype', array( $options, $custom_meta ) );
+			// Skip if in $skip array
+			if ( in_array( $option_name, $skip ) ) {
+				continue;
+			}
+			?>
+			<input type="hidden"
+			       class="menu-item-<?php echo $option_name; ?>"
+			       name="menu-item[<?php echo $i; ?>][menu-item-<?php echo $option_name; ?>]"
+			       value="<?php echo $option_value; ?>"/>
+		<?php
+		}
+
+		echo '</li>';
 	}
 
+	/**
+	 * All menu / sub-menu pages created by added post types: Add New, View All, Taxonomies.
+	 *
+	 * @since Client Dash 1.6
+	 */
 	public static function post_types() {
-		global $cd_current_menu_id;
 
 		// Get all of our post types
 		$all_post_types = get_post_types( array(
@@ -109,314 +139,149 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 		<div id="posttype-page" class="posttypediv">
 
-		<ul id="posttype-page-tabs" class="posttype-tabs add-menu-item-tabs">
-			<li class="tabs">
-				<a class="nav-tab-link" data-type="tabs-panel-posttype-toplevel"
-				   href="/wp-admin/nav-menus.php?page-tab=most-recent#tabs-panel-posttype-toplevel">
-					Top-level
-				</a>
-			</li>
-			<li>
-				<a class="nav-tab-link" data-type="tabs-panel-posttype-addnew"
-				   href="/wp-admin/nav-menus.php?page-tab=all#tabs-panel-posttype-addnew">
-					Add New
-				</a>
-			</li>
-			<li>
-				<a class="nav-tab-link" data-type="tabs-panel-posttype-listall"
-				   href="/wp-admin/nav-menus.php?page-tab=search#tabs-panel-posttype-listall">
-					List All
-				</a>
-			</li>
-			<li>
-				<a class="nav-tab-link" data-type="tabs-panel-posttype-taxonomies"
-				   href="/wp-admin/nav-menus.php?page-tab=search#tabs-panel-posttype-taxonomies">
-					Taxonomies
-				</a>
-			</li>
-		</ul>
-
-		<div id="tabs-panel-posttype-toplevel" class="tabs-panel tabs-panel-active">
-			<ul id="posttypechecklist-toplevel" class="categorychecklist form-no-clear">
-				<?php
-
-				$i = 0;
-				foreach ( $post_types as $post_type ) {
-					$i --;
-
-					// Reset defaults on each iteration
-					$defaults    = self::default_post_types();
-					$options     = $defaults[0];
-					$custom_meta = $defaults[1];
-
-					echo '<li>';
-					// Set specific options
-					$options['title'] = $post_type['title_plural'];
-					$options['url']   = $post_type['listall_link'];
-
-					// Now for the custom meta
-					$custom_meta['cd-object-type']    = 'toplevel';
-					$custom_meta['cd-post-type']      = $post_type['title'];
-					$custom_meta['cd-original-title'] = $options['title'];
-					$custom_meta['cd-icon']           = isset( $icon[ $post_type['id'] ] ) ? $icon[ $post_type['id'] ] : null;
-					$custom_meta['cd-type']           = 'post_type';
-					$custom_meta['cd-url']            = $options['url'];
-
-					// Allow data to be filtered
-
-					$options = apply_filters( 'cd_adminmenu_availableitems_options_' . $post_type['id'] . '_' . $custom_meta['cd-object-type'], $options );
-
-					$custom_meta = apply_filters( 'cd_adminmenu_availableitems_custommeta_' . $post_type['id'] . '_' . $custom_meta['cd-object-type'], $custom_meta );
-
-					?>
-					<label class="menu-item-title">
-						<input type="checkbox" class="menu-item-checkbox"
-						       name="menu-item[<?php echo $i; ?>][menu-item-object-id]"
-						       value="<?php echo $post_type['id']; ?>"/>
-						<?php echo $options['title']; ?>
-					</label>
-					<?php
-					// Cycle through all the options
-					foreach ( $options as $option_name => $option_value ) {
-						?>
-						<input type="hidden"
-						       class="menu-item-<?php echo $option_name; ?>"
-						       name="menu-item[<?php echo $i; ?>][menu-item-<?php echo $option_name; ?>]"
-						       value="<?php echo $option_value; ?>"/>
-					<?php
-					}
-					foreach ( $custom_meta as $meta_name => $meta_value ) {
-						?>
-						<input type="hidden"
-						       class="cd-custom-menu-item"
-						       name="menu-item[<?php echo $i; ?>][custom-meta-<?php echo $meta_name; ?>]"
-						       value="<?php echo $meta_value; ?>"/>
-					<?php
-					}
-
-					echo '</li>';
-				}
-				?>
-
+			<ul id="posttype-page-tabs" class="posttype-tabs add-menu-item-tabs">
+				<li class="tabs">
+					<a class="nav-tab-link" data-type="tabs-panel-posttype-toplevel"
+					   href="/wp-admin/nav-menus.php?page-tab=most-recent#tabs-panel-posttype-toplevel">
+						Top-level
+					</a>
+				</li>
+				<li>
+					<a class="nav-tab-link" data-type="tabs-panel-posttype-addnew"
+					   href="/wp-admin/nav-menus.php?page-tab=all#tabs-panel-posttype-addnew">
+						Add New
+					</a>
+				</li>
+				<li>
+					<a class="nav-tab-link" data-type="tabs-panel-posttype-listall"
+					   href="/wp-admin/nav-menus.php?page-tab=search#tabs-panel-posttype-listall">
+						List All
+					</a>
+				</li>
+				<li>
+					<a class="nav-tab-link" data-type="tabs-panel-posttype-taxonomies"
+					   href="/wp-admin/nav-menus.php?page-tab=search#tabs-panel-posttype-taxonomies">
+						Taxonomies
+					</a>
+				</li>
 			</ul>
-		</div>
-		<!-- /.tabs-panel -->
 
-		<div id="tabs-panel-posttype-addnew" class="tabs-panel tabs-panel-inactive">
-			<ul id="posttypechecklist-addnew" class="categorychecklist form-no-clear">
-				<?php
-
-				$i = 0;
-				foreach ( $post_types as $post_type ) {
-					$i --;
-
-					// Reset defaults on each iteration
-					$defaults    = self::default_post_types();
-					$options     = $defaults[0];
-					$custom_meta = $defaults[1];
-
-					echo '<li>';
-
-					// Set specific options
-					$options['title'] = 'Add New ' . $post_type['title'];
-					$options['url']   = $post_type['addnew_link'];
-
-					// Now for the custom meta
-					$custom_meta['cd-object-type']    = 'addnew';
-					$custom_meta['cd-post-type']      = $post_type['title'];
-					$custom_meta['cd-original-title'] = $options['title'];
-					$custom_meta['cd-icon']           = isset( $icon[ $post_type['id'] ] ) ? $icon[ $post_type['id'] ] : null;
-					$custom_meta['cd-type']           = 'post_type';
-					$custom_meta['cd-url']            = $options['url'];
-
-					// Allow data to be filtered
-					$options = apply_filters( 'cd_adminmenu_availableitems_options_' . $post_type['id'] . '_' . $custom_meta['cd-object-type'], $options );
-
-					$custom_meta = apply_filters( 'cd_adminmenu_availableitems_custommeta_' . $post_type['id'] . '_' . $custom_meta['cd-object-type'], $custom_meta );
-					?>
-					<label class="menu-item-title">
-						<input type="checkbox" class="menu-item-checkbox"
-						       name="menu-item[<?php echo $i; ?>][menu-item-object-id]"
-						       value="<?php echo $post_type['id']; ?>"/>
-						<?php echo $options['title']; ?>
-					</label>
+			<div id="tabs-panel-posttype-toplevel" class="tabs-panel tabs-panel-active">
+				<ul id="posttypechecklist-toplevel" class="categorychecklist form-no-clear">
 					<?php
-					// Cycle through all the options
-					foreach ( $options as $option_name => $option_value ) {
-						?>
-						<input type="hidden"
-						       class="menu-item-<?php echo $option_name; ?>"
-						       name="menu-item[<?php echo $i; ?>][menu-item-<?php echo $option_name; ?>]"
-						       value="<?php echo $option_value; ?>"/>
-					<?php
-					}
-					foreach ( $custom_meta as $meta_name => $meta_value ) {
-						?>
-						<input type="hidden"
-						       class="cd-custom-menu-item"
-						       name="menu-item[<?php echo $i; ?>][custom-meta-<?php echo $meta_name; ?>]"
-						       value="<?php echo $meta_value; ?>"/>
-					<?php
-					}
 
-					echo '</li>';
-				}
-				?>
+					$i = 0;
+					foreach ( $post_types as $post_type ) {
+						$i --;
 
-			</ul>
-		</div>
-		<!-- /.tabs-panel -->
+						$options = array(
+							'title'   => $post_type['title_plural'],
+							'url'     => $post_type['listall_link'],
+							'cd-icon' => isset( $icon[ $post_type['id'] ] ) ? $icon[ $post_type['id'] ] : 'dashicons-admin-post',
+							'cd-type' => 'post_type',
+						);
 
-		<div id="tabs-panel-posttype-listall" class="tabs-panel tabs-panel-inactive">
-			<ul id="posttypechecklist-listall" class="categorychecklist form-no-clear">
-				<?php
-
-				$i = 0;
-				foreach ( $post_types as $post_type ) {
-					$i --;
-
-					// Reset defaults on each iteration
-					$defaults    = self::default_post_types();
-					$options     = $defaults[0];
-					$custom_meta = $defaults[1];
-
-					echo '<li>';
-
-					// Set specific data
-					$options['title'] = 'All ' . $post_type['title'] . 's';
-					$options['url']   = $post_type['listall_link'];
-
-					// Now for the custom meta
-					$custom_meta['cd-object-type']    = 'listall';
-					$custom_meta['cd-post-type']      = $post_type['title'];
-					$custom_meta['cd-original-title'] = $options['title'];
-					$custom_meta['cd-icon']           = isset( $icon[ $post_type['id'] ] ) ? $icon[ $post_type['id'] ] : null;
-					$custom_meta['cd-type']           = 'post_type';
-					$custom_meta['cd-url']            = $options['url'];
-
-					// Allow data to be filtered
-					$options = apply_filters( 'cd_adminmenu_availableitems_options_' . $post_type['id'] . '_' . $custom_meta['cd-object-type'], $options );
-
-					$custom_meta = apply_filters( 'cd_adminmenu_availableitems_custommeta_' . $post_type['id'] . '_' . $custom_meta['cd-object-type'], $custom_meta );
-
-					// Special case for "Media" title
-					if ( $post_type['id'] == 'media' ) {
-						$options['title'] = 'Library';
+						// Output the checkbox and inputs HTML
+						self::loop( $i, $options['title'], $options );
 					}
 					?>
-					<label class="menu-item-title">
-						<input type="checkbox" class="menu-item-checkbox"
-						       name="menu-item[<?php echo $i; ?>][menu-item-object-id]"
-						       value="<?php echo $post_type['id']; ?>"/>
-						<?php echo $options['title']; ?>
-					</label>
+
+				</ul>
+			</div>
+			<!-- /.tabs-panel -->
+
+			<div id="tabs-panel-posttype-addnew" class="tabs-panel tabs-panel-inactive">
+				<ul id="posttypechecklist-addnew" class="categorychecklist form-no-clear">
 					<?php
-					// Cycle through all the options
-					foreach ( $options as $option_name => $option_value ) {
-						?>
-						<input type="hidden"
-						       class="menu-item-<?php echo $option_name; ?>"
-						       name="menu-item[<?php echo $i; ?>][menu-item-<?php echo $option_name; ?>]"
-						       value="<?php echo $option_value; ?>"/>
-					<?php
+
+					$i = 0;
+					foreach ( $post_types as $post_type ) {
+						$i --;
+
+						$options = array(
+							'title'   => 'Add New ' . $post_type['title'],
+							'url'     => $post_type['addnew_link'],
+							'cd-icon' => isset( $icon[ $post_type['id'] ] ) ? $icon[ $post_type['id'] ] : 'dashicons-admin-post',
+							'cd-type' => 'post_type',
+						);
+
+						// Output the checkbox and inputs HTML
+						self::loop( $i, $options['title'], $options );
 					}
-					foreach ( $custom_meta as $meta_name => $meta_value ) {
-						?>
-						<input type="hidden"
-						       class="cd-custom-menu-item"
-						       name="menu-item[<?php echo $i; ?>][custom-meta-<?php echo $meta_name; ?>]"
-						       value="<?php echo $meta_value; ?>"/>
+					?>
+
+				</ul>
+			</div>
+			<!-- /.tabs-panel -->
+
+			<div id="tabs-panel-posttype-listall" class="tabs-panel tabs-panel-inactive">
+				<ul id="posttypechecklist-listall" class="categorychecklist form-no-clear">
 					<?php
-					}
 
-					echo '</li>';
-				}
-				?>
+					$i = 0;
+					foreach ( $post_types as $post_type ) {
+						$i --;
 
-			</ul>
-		</div>
-		<!-- /.tabs-panel -->
+						$options = array(
+							'title'   => 'All ' . $post_type['title'] . 's',
+							'url'     => $post_type['listall_link'],
+							'cd-icon' => isset( $icon[ $post_type['id'] ] ) ? $icon[ $post_type['id'] ] : 'dashicons-admin-post',
+							'cd-type' => 'post_type',
+						);
 
-
-		<div id="tabs-panel-posttype-taxonomies" class="tabs-panel tabs-panel-inactive">
-			<ul id="posttypechecklist-taxonomies" class="categorychecklist form-no-clear">
-				<?php
-
-				// Cycle through post types
-				foreach ( $post_types as $post_type ) {
-
-					// Reset defaults on each iteration
-					$defaults    = self::default_post_types();
-					$options     = $defaults[0];
-					$custom_meta = $defaults[1];
-
-					// Get available taxonomies
-					$taxonomies = get_object_taxonomies( $post_type['id'], 'object' );
-
-					if ( ! empty( $taxonomies ) ) {
-
-						echo '<li class="taxonomy-title">' . $post_type['title_plural'] . '</li>';
-
-						$i = 0;
-						foreach ( $taxonomies as $taxonomy ) {
-							$i --;
-
-							echo '<li>';
-
-							// Set specific options
-							$options['title'] = $taxonomy->labels->name;
-							$options['url']   = "edit-tags.php?taxonomy={$taxonomy->name}";
-
-							// Now for the custom meta
-							$custom_meta['cd-object-type']    = 'listall';
-							$custom_meta['cd-post-type']      = $post_type['title'];
-							$custom_meta['cd-original-title'] = $options['title'];
-							$custom_meta['cd-icon']           = isset( $icon[ $post_type['id'] ] ) ? $icon[ $post_type['id'] ] : null;
-							$custom_meta['cd-type']           = 'taxonomy';
-							$custom_meta['cd-url']            = $options['url'];
-
-							// Allow data to be filtered
-							$options = apply_filters( 'cd_adminmenu_availableitems_options_' . $post_type['id'] . '_' . $custom_meta['cd-object-type'], $options );
-
-							$custom_meta = apply_filters( 'cd_adminmenu_availableitems_custommeta_' . $post_type['id'] . '_' . $custom_meta['cd-object-type'], $custom_meta );
-							?>
-							<label class="menu-item-title">
-								<input type="checkbox" class="menu-item-checkbox"
-								       name="menu-item[<?php echo $i; ?>][menu-item-object-id]"
-								       value="<?php echo $taxonomy->labels->name; ?>"/>
-								<?php echo $taxonomy->labels->name; ?>
-							</label>
-							<?php
-							// Cycle through all the options
-							foreach ( $options as $option_name => $option_value ) {
-								?>
-								<input type="hidden"
-								       class="menu-item-<?php echo $option_name; ?>"
-								       name="menu-item[<?php echo $i; ?>][menu-item-<?php echo $option_name; ?>]"
-								       value="<?php echo $option_value; ?>"/>
-							<?php
-							}
-							foreach ( $custom_meta as $meta_name => $meta_value ) {
-								?>
-								<input type="hidden"
-								       class="cd-custom-menu-item"
-								       name="menu-item[<?php echo $i; ?>][custom-meta-<?php echo $meta_name; ?>]"
-								       value="<?php echo $meta_value; ?>"/>
-							<?php
-							}
-
-							echo '</li>';
+						// Special case for "Media" title
+						if ( $post_type['id'] == 'media' ) {
+							$options['title'] = 'Library';
 						}
-						echo '</li>'; // .taxonomy-title
+
+						// Output the checkbox and inputs HTML
+						self::loop( $i, $options['title'], $options );
 					}
-				}
-				?>
+					?>
 
-			</ul>
-		</div>
-		<!-- /.tabs-panel -->
+				</ul>
+			</div>
+			<!-- /.tabs-panel -->
 
-		<p class="button-controls">
+
+			<div id="tabs-panel-posttype-taxonomies" class="tabs-panel tabs-panel-inactive">
+				<ul id="posttypechecklist-taxonomies" class="categorychecklist form-no-clear">
+					<?php
+
+					// Cycle through post types
+					foreach ( $post_types as $post_type ) {
+
+						// Get available taxonomies
+						$taxonomies = get_object_taxonomies( $post_type['id'], 'object' );
+
+						if ( ! empty( $taxonomies ) ) {
+
+							echo '<li class="taxonomy-title">' . $post_type['title_plural'] . '</li>';
+
+							$i = 0;
+							foreach ( $taxonomies as $taxonomy ) {
+								$i --;
+
+								$options = wp_parse_args( array(
+									'title'   => $taxonomy->labels->name,
+									'url'     => "edit-tags.php?taxonomy={$taxonomy->name}",
+									'cd-icon' => isset( $icon[ $post_type['id'] ] ) ? $icon[ $post_type['id'] ] : 'dashicons-admin-post',
+									'cd-type' => 'taxonomy',
+								), self::$menu_item_defaults );
+
+								// Output the checkbox and inputs HTML
+								self::loop( $i, $taxonomy->labels->name, $options );
+							}
+							echo '</li>'; // .taxonomy-title
+						}
+					}
+					?>
+
+				</ul>
+			</div>
+			<!-- /.tabs-panel -->
+
+			<p class="button-controls">
 			<span class="list-controls">
 				<a href="/wp-admin/nav-menus.php?page-tab=all&amp;selectall=1#posttype-page" class="select-all">Select
 					All</a>
@@ -427,14 +292,18 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 				       name="add-post-type-menu-item" id="submit-posttype-page">
 				<span class="spinner"></span>
 			</span>
-		</p>
+			</p>
 
 		</div>
 	<?php
 	}
 
+	/**
+	 * All default admin menu items added by core (or potentially added).
+	 *
+	 * @since Client Dash 1.6
+	 */
 	public static function wp_core() {
-		global $cd_current_menu_id;
 		?>
 
 		<div id="wordpress-core" class="posttypediv">
@@ -462,53 +331,16 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					foreach ( ClientDash_Core_Page_Settings_Tab_Menus::$wp_core as $item_title => $item ) {
 						$i --;
 
-						// Reset defaults on each iteration
-						$defaults    = self::default_post_types();
-						$options     = $defaults[0];
-						$custom_meta = $defaults[1];
-
-						echo '<li>';
 						// Set specific options
-						$options['title'] = $item_title;
-						$options['url']   = $item['url'];
+						$options = array(
+							'title'   => $item_title,
+							'url'     => $item['url'],
+							'cd-icon' => $item['icon'],
+							'cd-type' => 'wp_core',
+						);
 
-						// Now for the custom meta
-						$custom_meta['cd-type']           = 'wp_core';
-						$custom_meta['cd-original-title'] = $options['title'];
-						$custom_meta['cd-icon']           = $item['icon'];
-						$custom_meta['cd-url']            = $item['url'];
-
-						// Allow data to be filtered
-						$options     = apply_filters( 'cd_adminmenu_availableitems_options_wp_core_' . $options['title'] . '_' . $options['url'], $options );
-						$custom_meta = apply_filters( 'cd_adminmenu_availableitems_custommeta_wp_core_' . $options['title'] . '_' . $options['url'], $custom_meta );
-
-						?>
-						<label class="menu-item-title">
-							<input type="checkbox" class="menu-item-checkbox"
-							       name="menu-item[<?php echo $i; ?>][menu-item-object-id]"
-							       value="<?php echo strtolower( $item_title ); ?>"/>
-							<?php echo $options['title']; ?>
-						</label>
-						<?php
-						// Cycle through all the options
-						foreach ( $options as $option_name => $option_value ) {
-							?>
-							<input type="hidden"
-							       class="menu-item-<?php echo $option_name; ?>"
-							       name="menu-item[<?php echo $i; ?>][menu-item-<?php echo $option_name; ?>]"
-							       value="<?php echo $option_value; ?>"/>
-						<?php
-						}
-						foreach ( $custom_meta as $meta_name => $meta_value ) {
-							?>
-							<input type="hidden"
-							       class="cd-custom-menu-item"
-							       name="menu-item[<?php echo $i; ?>][custom-meta-<?php echo $meta_name; ?>]"
-							       value="<?php echo $meta_value; ?>"/>
-						<?php
-						}
-
-						echo '</li>';
+						// Output the checkbox and inputs HTML
+						self::loop( $i, $options['title'], $options );
 					}
 					?>
 
@@ -530,54 +362,17 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 							foreach ( $item['submenus'] as $submenu_item_title => $submenu_item_url ) {
 								$i --;
 
-								// Reset defaults on each iteration
-								$defaults    = self::default_post_types();
-								$options     = $defaults[0];
-								$custom_meta = $defaults[1];
-
-								echo '<li>';
 								// Set specific options
-								$options['title'] = $submenu_item_title;
-								$options['url']   = $submenu_item_url;
+								$options = array(
+									'title'             => $submenu_item_title,
+									'url'               => $submenu_item_url,
+									'cd-icon'           => 'dashicons-admin-generic',
+									'cd-type'           => 'wp_core',
+									'cd-submenu-parent' => $item['menu_slug'],
+								);
 
-								// Now for the custom meta
-								$custom_meta['cd-type']           = 'wp_core';
-								$custom_meta['cd-original-title'] = $options['title'];
-								$custom_meta['cd-url']            = $options['url'];
-								$custom_meta['cd-icon']           = 'dashicons-admin-generic';
-								$custom_meta['cd-submenu-parent'] = $item['url'];
-
-								// Allow data to be filtered
-								$options     = apply_filters( 'cd_adminmenu_availableitems_options_wp_core_' . $options['title'] . '_' . $options['url'], $options );
-								$custom_meta = apply_filters( 'cd_adminmenu_availableitems_custommeta_wp_core_' . $options['title'] . '_' . $options['url'], $custom_meta );
-
-								?>
-								<label class="menu-item-title">
-									<input type="checkbox" class="menu-item-checkbox"
-									       name="menu-item[<?php echo $i; ?>][menu-item-object-id]"
-									       value="<?php echo strtolower( str_replace( ' ', '_', $options['title'] ) ); ?>"/>
-									<?php echo $options['title']; ?>
-								</label>
-								<?php
-								// Cycle through all the options
-								foreach ( $options as $option_name => $option_value ) {
-									?>
-									<input type="hidden"
-									       class="menu-item-<?php echo $option_name; ?>"
-									       name="menu-item[<?php echo $i; ?>][menu-item-<?php echo $option_name; ?>]"
-									       value="<?php echo $option_value; ?>"/>
-								<?php
-								}
-								foreach ( $custom_meta as $meta_name => $meta_value ) {
-									?>
-									<input type="hidden"
-									       class="cd-custom-menu-item"
-									       name="menu-item[<?php echo $i; ?>][custom-meta-<?php echo $meta_name; ?>]"
-									       value="<?php echo $meta_value; ?>"/>
-								<?php
-								}
-
-								echo '</li>';
+								// Output the checkbox and inputs HTML
+								self::loop( $i, $options['title'], $options );
 							}
 						}
 					}
@@ -602,9 +397,13 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 		</div>
 	<?php
-
 	}
 
+	/**
+	 * All other items present in the admin menu (from plugins or themes).
+	 *
+	 * @since Client Dash 1.6
+	 */
 	public static function plugin() {
 
 		// Globalize the "parent" class object for access of public properties
@@ -615,37 +414,54 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 		$i          = 0;
 		foreach ( $ClientDash_Core_Page_Settings_Tab_Menus->original_admin_menu as $menu ) {
 			$i ++;
+
 			$menu_item = $menu;
-			unset( $menu_item['submenus'] );
 
-			$sorted = ClientDash_Core_Page_Settings_Tab_Menus::sort_original_admin_menu( $menu );
+			// Plugins has white space :|
+			$menu_item['menu_title'] = trim( $menu_item['menu_title'] );
 
-			if ( $sorted[1]['cd-type'] == 'plugin' ) {
-				$menu_items[ $i ] = $menu_item;
+			// Deal with Comments title
+			if ( strpos( $menu_item['menu_title'], 'Comments' ) !== false ) {
+				$menu_item['menu_title'] = 'Comments';
 			}
 
-			if ( isset( $menu['submenus'] ) ) {
-				foreach ( $menu['submenus'] as $submenu ) {
-					$sorted = ClientDash_Core_Page_Settings_Tab_Menus::sort_original_admin_menu( $submenu, $menu );
+			// Skip if a separator
+			if ( $menu_item['menu_title'] == 'Separator' || strpos( $menu_item['menu_slug'], 'separator' ) !== false ) {
+				continue;
+			}
 
-					if ( $sorted[1]['cd-type'] == 'plugin' && $submenu['menu_title'] != 'Client Dash' ) {
-						$menu_item['submenus'][] = $submenu;
+			// If in the WP Core list, this isn't a plugin page, so set it to disabled
+			if ( array_key_exists( $menu_item['menu_title'], $ClientDash_Core_Page_Settings_Tab_Menus::$wp_core ) ) {
+				$menu_item['disabled'] = true;
+			}
+
+			// Submenus
+			if ( isset( $menu['submenus'] ) ) {
+
+				unset( $menu_item['submenus'] );
+
+				foreach ( $menu['submenus'] as $submenu_item ) {
+
+					// Skip separators
+					if ( $submenu_item['menu_title'] == 'Separator' || strpos( $submenu_item['menu_slug'], 'separator' ) !== false ) {
+						continue;
+					}
+
+					// If in the WP Core list, this isn't a plugin page, so set it to disabled
+					// Also skip Client Dash settings page
+					if ( ! array_key_exists( $submenu_item['menu_title'], $ClientDash_Core_Page_Settings_Tab_Menus::$wp_core[ $menu_item['menu_title'] ]['submenus'] ) ) {
+						$menu_item['submenus'][] = $submenu_item;
 					}
 				}
 			}
 
-			// Now throw on the submenus
-			if ( isset( $menu_item['submenus'] ) ) {
-				if ( ! isset( $menu_items[ $i ] ) ) {
-					$menu_item['disabled'] = true;
-				}
-
+			if ( isset( $menu_item['submenus'] ) || ! isset( $menu_item['disabled'] ) ) {
 				$menu_items[ $i ] = $menu_item;
 			}
 		}
 
 		if ( empty( $menu_items ) ) {
-			echo '<p class="description">No items present</p>';
+			echo '<p class="description">No items</p>';
 
 			return;
 		}
@@ -672,74 +488,24 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 				<ul id="posttypechecklist-plugin" class="categorychecklist form-no-clear">
 					<?php
 
-					// If there are sub-menus present, but no top-level, we need to let the user know.
-					$enabled = false;
+					$i = 0;
 					foreach ( $menu_items as $item ) {
-						if ( ! isset( $item['disabled'] ) ) {
-							$enabled = true;
+						$i --;
+
+						if ( isset( $item['disabled'] ) && $item['disabled'] ) {
+							continue;
 						}
-					}
 
-					if ( $enabled ) {
+						// Set specific options
+						$options = array(
+							'title'   => $item['menu_title'],
+							'url'     => $item['menu_slug'],
+							'cd-icon' => $item['icon_url'],
+							'cd-type' => 'plugin',
+						);
 
-						$i = 0;
-						foreach ( $menu_items as $item ) {
-							$i --;
-
-							if ( isset( $item['disabled'] ) && $item['disabled'] ) {
-								continue;
-							}
-
-							// Reset defaults on each iteration
-							$defaults    = self::default_post_types();
-							$options     = $defaults[0];
-							$custom_meta = $defaults[1];
-
-							echo '<li>';
-							// Set specific options
-							$options['title'] = $item['menu_title'];
-							$options['url']   = $item['menu_slug'];
-
-							// Now for the custom meta
-							$custom_meta['cd-type']           = 'plugin';
-							$custom_meta['cd-original-title'] = $options['title'];
-							$custom_meta['cd-icon']           = $item['icon_url'];
-							$custom_meta['cd-url']            = $options['url'];
-
-							// Allow data to be filtered
-							$options     = apply_filters( 'cd_adminmenu_availableitems_options_plugin_' . $options['title'] . '_' . $options['url'], $options );
-							$custom_meta = apply_filters( 'cd_adminmenu_availableitems_custommeta_plugin_' . $options['title'] . '_' . $options['url'], $custom_meta );
-
-							?>
-							<label class="menu-item-title">
-								<input type="checkbox" class="menu-item-checkbox"
-								       name="menu-item[<?php echo $i; ?>][menu-item-object-id]"
-								       value="<?php echo strtolower( $options['title'] ); ?>"/>
-								<?php echo $options['title']; ?>
-							</label>
-							<?php
-							// Cycle through all the options
-							foreach ( $options as $option_name => $option_value ) {
-								?>
-								<input type="hidden"
-								       class="menu-item-<?php echo $option_name; ?>"
-								       name="menu-item[<?php echo $i; ?>][menu-item-<?php echo $option_name; ?>]"
-								       value="<?php echo $option_value; ?>"/>
-							<?php
-							}
-							foreach ( $custom_meta as $meta_name => $meta_value ) {
-								?>
-								<input type="hidden"
-								       class="cd-custom-menu-item"
-								       name="menu-item[<?php echo $i; ?>][custom-meta-<?php echo $meta_name; ?>]"
-								       value="<?php echo $meta_value; ?>"/>
-							<?php
-							}
-
-							echo '</li>';
-						}
-					} else {
-						echo '<p class="description">No items</p>';
+						// Output the checkbox and inputs HTML
+						self::loop( $i, $options['title'], $options );
 					}
 					?>
 
@@ -753,11 +519,6 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 					foreach ( $menu_items as $item ) {
 
-						// Reset defaults on each iteration
-						$defaults    = self::default_post_types();
-						$options     = $defaults[0];
-						$custom_meta = $defaults[1];
-
 						if ( isset( $item['submenus'] ) ) {
 
 							echo '<li class="plugin-title">' . $item['menu_title'] . '</li>';
@@ -766,55 +527,20 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 							foreach ( $item['submenus'] as $submenu_item ) {
 								$i --;
 
-								// Reset defaults on each iteration
-								$defaults    = self::default_post_types();
-								$options     = $defaults[0];
-								$custom_meta = $defaults[1];
-
-								echo '<li>';
 								// Set specific options
-								$options['title'] = $submenu_item['menu_title'];
-								$options['url']   = $submenu_item['menu_slug'];
+								$options = array(
+									'title'             => $submenu_item['menu_title'],
+									'url'               => $submenu_item['menu_slug'],
+									'cd-icon'           => 'dashicons-admin-generic',
+									'cd-type'           => 'plugin',
+									'cd-submenu-parent' => $item['menu_slug'],
+								);
 
-								// Now for the custom meta
-								$custom_meta['cd-type']           = 'plugin';
-								$custom_meta['cd-original-title'] = $options['title'];
-								$custom_meta['cd-url']            = $options['url'];
-								$custom_meta['cd-icon']           = 'dashicons-admin-generic';
-								$custom_meta['cd-submenu-parent'] = $item['menu_slug'];
-
-								// Allow data to be filtered
-								$options     = apply_filters( 'cd_adminmenu_availableitems_options_wp_core_' . $options['title'] . '_' . $options['url'], $options );
-								$custom_meta = apply_filters( 'cd_adminmenu_availableitems_custommeta_wp_core_' . $options['title'] . '_' . $options['url'], $custom_meta );
-
-								?>
-								<label class="menu-item-title">
-									<input type="checkbox" class="menu-item-checkbox"
-									       name="menu-item[<?php echo $i; ?>][menu-item-object-id]"
-									       value="<?php echo strtolower( str_replace( ' ', '_', $options['title'] ) ); ?>"/>
-									<?php echo $options['title']; ?>
-								</label>
-								<?php
-								// Cycle through all the options
-								foreach ( $options as $option_name => $option_value ) {
-									?>
-									<input type="hidden"
-									       class="menu-item-<?php echo $option_name; ?>"
-									       name="menu-item[<?php echo $i; ?>][menu-item-<?php echo $option_name; ?>]"
-									       value="<?php echo $option_value; ?>"/>
-								<?php
-								}
-								foreach ( $custom_meta as $meta_name => $meta_value ) {
-									?>
-									<input type="hidden"
-									       class="cd-custom-menu-item"
-									       name="menu-item[<?php echo $i; ?>][custom-meta-<?php echo $meta_name; ?>]"
-									       value="<?php echo $meta_value; ?>"/>
-								<?php
-								}
-
-								echo '</li>';
+								// Output the checkbox and inputs HTML
+								self::loop( $i, $options['title'], $options );
 							}
+						} else {
+							echo '<p class="description">No items</p>';
 						}
 					}
 					?>
@@ -838,9 +564,66 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 		</div>
 	<?php
-
 	}
 
+	/**
+	 * Client Dash core pages: Account, Help, Reports, Webmaster, Settings.
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public static function cd_core() {
+		global $ClientDash;
+		?>
+
+		<div id="clientdash-core" class="posttypediv">
+
+			<div id="tabs-panel-clientdash-core-submenu" class="tabs-panel tabs-panel-active">
+				<ul id="posttypechecklist-clientdash-core" class="categorychecklist form-no-clear">
+					<?php
+					$i = 0;
+					foreach ( $ClientDash::$core_files as $item_title => $submenus ) {
+						$i --;
+
+						// Set specific options
+						$options = array(
+							'title'             => $item_title != 'settings' ? ucfirst( $item_title ) : 'Client Dash',
+							'url'               => "cd_$item_title",
+							'cd-icon'           => $ClientDash->option_defaults["dashicon_$item_title"],
+							'cd-type'           => 'cd_core',
+							'cd-submenu-parent' => $item_title != 'settings' ? 'index.php' : 'options-general.php',
+						);
+
+						// Output the checkbox and inputs HTML
+						self::loop( $i, ucfirst( $item_title ), $options );
+					}
+					?>
+
+				</ul>
+			</div>
+			<!-- /.tabs-panel -->
+
+			<p class="button-controls">
+			<span class="list-controls">
+				<a href="/wp-admin/nav-menus.php?page-tab=all&amp;selectall=1#clientdash-core" class="select-all">Select
+					All</a>
+			</span>
+
+			<span class="add-to-menu">
+				<input type="submit" class="button-secondary submit-add-to-menu right" value="Add to Menu"
+				       name="add-post-type-menu-item" id="submit-clientdash-core">
+				<span class="spinner"></span>
+			</span>
+			</p>
+
+		</div>
+	<?php
+	}
+
+	/**
+	 * The separator admin menu item.
+	 *
+	 * @since Client Dash 1.6
+	 */
 	public static function separator() {
 		?>
 		<div id="separator" class="posttypediv">
@@ -852,20 +635,11 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					<li>
 						<input type="checkbox" class="menu-item-checkbox" id="separator-checkbox"
 						       name="menu-item[-1][menu-item-object-id]"
-						       value="separator" checked/>
+						       value="0" checked/>
 
-						<input type="hidden" name="menu-item[-1][menu-item-db-id]" class="menu-item-db-id" value="0"/>
-						<input type="hidden" name="menu-item[-1][menu-item-data-object]" class="menu-item-data-object"
-						       value=""/>
-						<input type="hidden" name="menu-item[-1][menu-item-parent-id]" class="menu-item-parent-id"
-						       value="0"/>
-						<input type="hidden" name="menu-item[-1][menu-item-type]" class="menu-item-type"
-						       value="custom"/>
 						<input type="hidden" name="menu-item[-1][menu-item-title]" class="menu-item-title"
 						       value="Separator"/>
-						<input type="hidden" name="menu-item[-1][menu-item-url]" class="menu-item-url"
-						       value="index.php"/>
-						<input type="hidden" name="menu-item[-1][custom-meta-cd-type]" class="cd-custom-menu-item"
+						<input type="hidden" name="menu-item[-1][menu-item-cd-type]" class="cd-custom-menu-item"
 						       value="separator"/>
 					</li>
 				</ul>
@@ -885,7 +659,13 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 	<?php
 	}
 
+	/**
+	 * Custom absolute uri's.
+	 *
+	 * @since Client Dash 1.6
+	 */
 	public static function custom_link() {
+		// TODO Clear fields when adding a link
 		?>
 		<div id="custom-link" class="posttypediv">
 
@@ -896,8 +676,8 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 							<p id="menu-item-url-wrap">
 								<label class="howto" for="custom-menu-item-url">
 									<span>URL</span>
-									<input type="text" class="cd-custom-menu-item"
-									       name="menu-item[-1][custom-meta-cd-url]" value="">
+									<input type="text" class="cd-custom-menu-item code" placeholder="http://"
+									       name="menu-item[-1][custom-meta-cd-url]" value="http://">
 								</label>
 							</p>
 
@@ -905,18 +685,17 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 								<label class="howto" for="custom-menu-item-name">
 									<span>Link Text</span>
 									<input type="text" class="menu-item-title" name="menu-item[-1][menu-item-title]"
-									       value="">
+									       value="" placeholder="Menu Item">
 									<input type="checkbox" id="custom-checkbox" style="display: none;"
 									       class="menu-item-checkbox" name="menu-item[-1][menu-item-object-id]"
 									       value="customlink" checked>
 								</label>
 							</p>
-
 						</label>
 
 						<input type="hidden" class="menu-item-type" name="menu-item[-1][menu-item-type]" value="custom">
 						<input type="hidden" class="cd-custom-menu-item" name="menu-item[-1][custom-meta-cd-type]"
-						       value="custom">
+						       value="link">
 						<input type="hidden" class="cd-custom-menu-item" name="menu-item[-1][custom-meta-cd-icon]"
 						       value="dashicons-admin-links">
 					</li>

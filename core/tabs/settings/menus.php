@@ -1,13 +1,13 @@
 <?php
 
 // TODO Show existing menus at top so admin knows what menus exist and if they're disabled / enabled
-// TODO Pretty icon selector
+// TODO Make display settings take precedence over menu settings for CD Core page visibility
 
-// FIXME Page title messed up when sub-menu goes to parent (may leave this though)
-// FIXME Clean up warnings, notices, and stricts
+// FIXME When populating a new menu, get_orig_admin_menu does just that, gets the ADMIN menu, but I need to get the CONTRIB menu, or the SUBSCRIBER menu, etc.
+
+// TODO Clean up warnings, notices, and stricts
 // TODO Re-order methods
 // TODO Documentation
-
 
 /**
  * Class ClientDash_Core_Page_Settings_Tab_AdminMenu
@@ -27,13 +27,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 * @since Client Dash 1.6
 	 */
 	public $original_admin_menu;
-
-	/**
-	 * The available items to show on the left.
-	 *
-	 * @since Client Dash 1.6
-	 */
-	public $available_items;
 
 	/**
 	 * The menu ID for the currently being edited cd_admin_menu nav menu.
@@ -65,6 +58,24 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 */
 	public $all_menu_IDs;
 
+	public static $menu_item_defaults = array(
+		'db-id'             => 0,
+		'parent-id'         => 0,
+		'position'          => 0,
+		'title'             => '',
+		'original-title'    => '',
+		'url'               => '',
+		//
+		// Added by CD
+		'cd-type'           => '',
+		'cd-icon'           => 'dashicons-admin-generic',
+		'cd-page-title'     => '',
+		'cd-submenu-parent' => '',
+		'cd-params'         => '',
+	);
+
+	public $matching_urls = [ ];
+
 	/**
 	 * All WordPress core nav menu items (aside from post types).
 	 *
@@ -83,16 +94,48 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			'submenus' => array(
 				'Home'     => 'index.php',
 				'My Sites' => 'my-sites.php',
-				'Updates'  => 'update-core.php'
+				'Updates'  => 'update-core.php',
+			),
+		),
+		'Posts'      => array(
+			'url'      => 'edit.php',
+			'icon'     => 'dashicons-admin-post',
+			'submenus' => array(
+				'All Posts'  => 'edit.php',
+				'Add New'    => 'post-new.php',
+				'Categories' => 'edit-tags.php?taxonomy=category',
+				'Tags'       => 'edit-tags.php?taxonomy=post_tag',
 			)
+		),
+		'Media'      => array(
+			'url'      => 'upload.php',
+			'icon'     => 'dashicons-admin-media',
+			'submenus' => array(
+				'Library' => 'upload.php',
+				'Add New' => 'media-new.php',
+			),
+		),
+		'Pages'      => array(
+			'url'      => 'edit.php?post_type=page',
+			'icon'     => 'dashicons-admin-pages',
+			'submenus' => array(
+				'All Pages' => 'edit.php?post_type=page',
+				'Add New'   => 'post-new.php?post_type=page',
+			),
+		),
+		'Links'      => array(
+			// TODO Finish this.
+			'submenus' => array(
+				'Link Categories' => '',
+			),
 		),
 		'Comments'   => array(
 			'url'      => 'edit-comments.php',
 			'icon'     => 'dashicons-admin-comments',
 			// TODO Find better way to deal with this
 			'submenus' => array(
-				'All Comments' => 'index.php'
-			)
+				'All Comments' => 'index.php',
+			),
 		),
 		'Appearance' => array(
 			'url'      => 'themes.php',
@@ -102,8 +145,8 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 				'Customize' => 'customize.php',
 				'Widgets'   => 'widgets.php',
 				'Menus'     => 'nav-menus.php',
-				'Editor'    => 'theme-editor.php'
-			)
+				'Editor'    => 'theme-editor.php',
+			),
 		),
 		'Plugins'    => array(
 			'url'      => 'plugins.php',
@@ -111,8 +154,8 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			'submenus' => array(
 				'Installed Plugins' => 'plugins.php',
 				'Add New'           => 'plugin-install.php',
-				'Editor'            => 'plugin-editor.php'
-			)
+				'Editor'            => 'plugin-editor.php',
+			),
 		),
 		'Users'      => array(
 			'url'      => 'users.php',
@@ -120,8 +163,8 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			'submenus' => array(
 				'All Users'    => 'users.php',
 				'Add New'      => 'user-new.php',
-				'Your Profile' => 'profile.php'
-			)
+				'Your Profile' => 'profile.php',
+			),
 		),
 		'Tools'      => array(
 			'url'      => 'tools.php',
@@ -129,8 +172,9 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			'submenus' => array(
 				'Available Tools' => 'tools.php',
 				'Import'          => 'import.php',
-				'Export'          => 'export.php'
-			)
+				'Export'          => 'export.php',
+				'Delete Site'     => 'ms-delete-site.php',
+			),
 		),
 		'Settings'   => array(
 			'url'      => 'options-general.php',
@@ -141,9 +185,9 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 				'Reading'    => 'options-reading.php',
 				'Discussion' => 'options-discussion.php',
 				'Media'      => 'options-media.php',
-				'Permalinks' => 'options-permalink.php'
-			)
-		)
+				'Permalinks' => 'options-permalink.php',
+			),
+		),
 	);
 
 	/**
@@ -179,6 +223,9 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 		// Use custom walker menu for displaying sortable menu items
 		add_filter( 'wp_edit_nav_menu_walker', array( $this, 'return_new_walker_menu' ), 10, 2 );
+
+		// Filters the modified menu item when returned
+		add_filter( 'wp_setup_nav_menu_item', array( $this, 'modify_menu_item' ) );
 
 		// Add the content
 		$this->add_content_section( array(
@@ -260,13 +307,13 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		foreach ( $menu as $menu_location => $menu_item ) {
 
 			$menu_array = array(
-				'menu_title' => isset( $menu_item[0] ) ? $menu_item[0] : false,
-				'capability' => isset( $menu_item[1] ) ? $menu_item[1] : false,
-				'menu_slug'  => isset( $menu_item[2] ) ? $menu_item[2] : false,
-				'page_title' => isset( $menu_item[3] ) ? $menu_item[3] : false,
+				'menu_title' => isset( $menu_item[0] ) ? $menu_item[0] : null,
+				'capability' => isset( $menu_item[1] ) ? $menu_item[1] : null,
+				'menu_slug'  => isset( $menu_item[2] ) ? $menu_item[2] : null,
+				'page_title' => isset( $menu_item[3] ) ? $menu_item[3] : null,
 				'position'   => $menu_location,
-				'hookname'   => isset( $menu_item[5] ) ? $menu_item[5] : false,
-				'icon_url'   => isset( $menu_item[6] ) ? $menu_item[6] : false
+				'hookname'   => isset( $menu_item[5] ) ? $menu_item[5] : null,
+				'icon_url'   => isset( $menu_item[6] ) && $menu_item[6] != 'dashicons-admin-generic' ? $menu_item[6] : null
 			);
 
 			$orig_menu[ $menu_location ] = $menu_array;
@@ -276,10 +323,10 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 				foreach ( $submenu[ $menu_array['menu_slug'] ] as $submenu_location => $submenu_item ) {
 
 					$submenu_array = array(
-						'menu_title'  => isset( $submenu_item[0] ) ? $submenu_item[0] : false,
-						'capability'  => isset( $submenu_item[1] ) ? $submenu_item[1] : false,
-						'menu_slug'   => isset( $submenu_item[2] ) ? $submenu_item[2] : false,
-						'page_title'  => isset( $submenu_item[3] ) ? $submenu_item[3] : false,
+						'menu_title'  => isset( $submenu_item[0] ) ? $submenu_item[0] : null,
+						'capability'  => isset( $submenu_item[1] ) ? $submenu_item[1] : null,
+						'menu_slug'   => isset( $submenu_item[2] ) ? $submenu_item[2] : null,
+						'page_title'  => isset( $submenu_item[3] ) ? $submenu_item[3] : null,
 						'parent_slug' => $menu_array['menu_slug']
 					);
 
@@ -368,9 +415,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 			// Now populate it with menu items (this is a hefty memory toll)
 			$this->populate_nav_menu( $role_name );
-
-			// Save it into our modified menu option
-			$this->save_cd_menu( $this->menu_ID );
 		} else {
 
 			// If creating a blank menu and an admin, make sure the CD page is there
@@ -390,22 +434,14 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 */
 	public function add_client_dash_menu_item() {
 
-		$ID = wp_update_nav_menu_item( $this->menu_ID, 0, array(
-			'menu-item-type' => 'custom',
-			'menu-item-title' => 'Client Dash',
-			'menu-item-url' => 'options-general.php?page=cd_settings',
-			'menu-item-status' => 'publish'
-		));
-
-		if ( ! is_wp_error( $ID ) ) {
-			update_post_meta( $ID, 'cd-original-title', 'Client Dash' );
-			update_post_meta( $ID, 'cd-icon', 'dashicons-admin-generic' );
-			update_post_meta( $ID, 'cd-url', 'options-general.php?page=cd_settings' );
-			update_post_meta( $ID, 'cd-page-title', 'Client Dash' );
-			update_post_meta( $ID, 'cd-type', 'plugin' );
-		}
-
-		$this->save_cd_menu( $this->menu_ID );
+		self::update_menu_item( $this->menu_ID, 0, array(
+			'title'             => 'Client Dash',
+			'url'               => 'cd_settings',
+			'cd-type'           => 'cd_core',
+			'cd-icon'           => $this->option_defaults['dashicon_settings'],
+			'cd-submenu-parent' => 'options-general.php',
+			'original-title'    => 'Client Dash ORIG',
+		) );
 	}
 
 	/**
@@ -417,6 +453,8 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 * @param string $role The role to create a menu for.
 	 */
 	public function populate_nav_menu( $role ) {
+
+		// TODO Remove side by side separators
 
 		global $ClientDash;
 
@@ -475,7 +513,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 */
 	public function get_current_menu() {
 
-		global $cd_current_menu_id;
+		global $cd_current_menu_id, $cd_current_menu_role;
 
 		// If a menu isn't set, just take the first one that exists. Otherwise, get it from the url
 		if ( isset( $_GET['menu'] ) ) {
@@ -493,6 +531,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			}
 		}
 
+		// Globalize the menu ID and role
 		$cd_current_menu_id = $this->menu_ID;
 
 		// If this menu doesn't exist, return false
@@ -507,8 +546,9 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 				$this->create_new = true;
 			}
 
-			// Globalize the menu ID
-			$cd_current_menu_id = $this->menu_ID;
+			// Globalize the menu ID and role
+			$cd_current_menu_id   = $this->menu_ID;
+			$cd_current_menu_role = $role;
 
 			return;
 		}
@@ -517,6 +557,9 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		foreach ( $this->all_menu_IDs as $role => $menu ) {
 			if ( $this->menu_ID == $menu ) {
 				$this->role = $role;
+
+				// Globalize the menu role
+				$cd_current_menu_role = $role;
 
 				return;
 			}
@@ -548,23 +591,52 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		// Needed to get the plugin path
 		global $ClientDash;
 
-		// When being loaded via AJAX, we won't have the menu ID, but we can assume that
-		// the supplied menu is correct
-		if ( ! isset( $this->menu_ID ) ) {
-
-			$this->menu_ID = $menu;
-
-			// Includes our modified walker class for when ajax-actions.php tries to call it
-			include_once( $ClientDash->path . '/core/tabs/settings/menus/walkerclass.php' );
-		}
+		// Includes our modified walker class for when ajax-actions.php tries to call it
+		include_once( $ClientDash->path . '/core/tabs/settings/menus/walkerclass.php' );
 
 		// TODO Address PHP notices in AJAX response
 
-		if ( $menu == $this->menu_ID ) {
+		if ( isset( $_POST['menu-item'] ) ) {
+			$menu_item = reset( $_POST['menu-item'] );
+		}
+
+		if ( $this->menu_ID == $menu || isset( $menu_item['custom-meta-cd-type'] ) ) {
 			return 'Walker_Nav_Menu_Edit_CD';
 		}
 
 		return $walker;
+	}
+
+	public function modify_menu_item( $menu_item ) {
+
+		// Unset unnecessary properties
+		$remove = array(
+			'object',
+			'target',
+			'attr_title',
+			'description',
+			'classes',
+			'xfn',
+		);
+		foreach ( $remove as $property ) {
+			unset( $menu_item->$property );
+		}
+
+		// Add new properties
+		$add = array(
+			'original_title'    => get_post_meta( $menu_item->ID, '_menu_item_original_title', true ),
+			'cd_type'           => get_post_meta( $menu_item->ID, '_menu_item_cd_type', true ),
+			'cd_icon'           => get_post_meta( $menu_item->ID, '_menu_item_cd_icon', true ),
+			'cd_page_title'     => get_post_meta( $menu_item->ID, '_menu_item_cd_page_title', true ),
+			'cd_submenu_parent' => get_post_meta( $menu_item->ID, '_menu_item_cd_submenu_parent', true ),
+			'cd_params'         => get_post_meta( $menu_item->ID, '_menu_item_cd_params', true ),
+		);
+		foreach ( $add as $property_name => $property ) {
+			$menu_item->$property_name = $property;
+		}
+
+		// Return the modified menu item object
+		return $menu_item;
 	}
 
 	/**
@@ -660,6 +732,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 * @return array The sorted menu item properties.
 	 */
 	public static function sort_original_admin_menu( $menu, $is_submenu = false ) {
+
 		// Account for "Comments" having html in the title
 		if ( strpos( $is_submenu ? $is_submenu['menu_title'] : $menu['menu_title'], 'Comments' ) !== false ) {
 			if ( $is_submenu ) {
@@ -674,35 +747,18 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 		// Args to send to new nav menu item
 		$args = array(
-			'menu-item-title'  => $menu['menu_title'],
-			'menu-item-url'    => $menu['menu_slug'],
-			'menu-item-status' => 'publish'
-		);
-
-		// Meta to attach to new nav menu item
-		$custom_meta = array(
-			'cd-original-title'        => $menu['menu_title'],
-			'cd-icon'                  => isset( $menu['icon_url'] ) ? $menu['icon_url'] : false,
-			'cd-url'                   => $menu['menu_slug'],
-			'cd-page-title'            => $menu['page_title'],
-			'cd-duplicate-parent-slug' => false
+			'title'         => $menu['menu_title'],
+			'url'           => $menu['menu_slug'],
+			'cd-icon'       => isset( $menu['icon_url'] ) ? $menu['icon_url'] : 'dashicons-admin-generic',
+			'cd-page-title' => $menu['page_title'],
 		);
 
 		// Figure out what we're dealing with
 		if ( strpos( $menu['menu_slug'], 'separator' ) !== false ) {
 
 			// Separator
-			$args['menu-item-title'] = 'Separator';
-
-			$custom_meta['cd-original-title']   = 'Separator';
-			$custom_meta['cd-type']             = 'separator';
-			$custom_meta['cd-separator-height'] = 5;
-
-			if ( ! $is_submenu ) {
-				$custom_meta['cd-object-type'] = 'toplevel';
-			} else {
-				$custom_meta['cd-object-type'] = 'submenu';
-			}
+			$args['title']   = 'Separator';
+			$args['cd-type'] = 'separator';
 
 		} elseif ( self::strposa( $menu['menu_slug'], array(
 				'edit.php',
@@ -712,43 +768,17 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 				'link_category'
 			) ) !== false
 		) {
-			// Posts (and the weird link thing...)
-			$custom_meta['cd-type'] = 'post_type';
 
-			// Which type?
-			switch ( $menu['menu_title'] ) {
-				case 'Posts':
-					$custom_meta['cd-post-type'] = 'post';
-					break;
-				case 'Media':
-					$custom_meta['cd-post-type'] = 'media';
-					break;
-				default:
-					// Custom post types caught by this. Takes whatever is after "edit.php?post_type="
-					preg_match( '/[^=]+$/', $menu['menu_slug'], $posttype );
-					$custom_meta['cd-post-type'] = $posttype;
-			}
+			// Posts (and the weird link thing...)
+			$args['cd-type'] = 'post_type';
+
 		} elseif ( self::strposa( $menu['menu_slug'], array(
 				'edit-tags.php'
 			) ) !== false
 		) {
 
 			// Taxonomy
-			$custom_meta['cd-type'] = 'taxonomy';
-
-			// Which type?
-			switch ( $is_submenu ? $is_submenu['menu_title'] : $menu['menu_title'] ) {
-				case 'Posts':
-					$custom_meta['cd-post-type'] = 'post';
-					break;
-				case 'Media':
-					$custom_meta['cd-post-type'] = 'media';
-					break;
-				default:
-					// Custom post types caught by this. Takes whatever is after "edit.php?post_type="
-					preg_match( '/[^=]+$/', $menu['menu_slug'], $posttype );
-					$custom_meta['cd-post-type'] = $posttype;
-			}
+			$args['cd-type'] = 'taxonomy';
 
 			// This looks nasty, but it's not too bad. If $is_submenu has a value, then we're dealing with a
 			// submenu, and that value is it's parent. So the first checks if it is NOT a submenu and then looks
@@ -766,13 +796,18 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		) {
 
 			// WordPress core
-			$custom_meta['cd-type'] = 'wp_core';
+			$args['cd-type'] = 'wp_core';
+		} elseif ( strpos( $menu['menu_slug'], 'cd_' ) !== false ) {
+
+			// CD Core
+			$args['cd-type'] = 'cd_core';
 		} else {
+
 			// The catchall for everything else (defaults to plugin)
-			$custom_meta['cd-type'] = 'plugin';
+			$args['cd-type'] = 'plugin';
 		}
 
-		return array( $args, $custom_meta );
+		return $args;
 	}
 
 	/**
@@ -783,7 +818,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	public function remove_orig_admin_menu() {
 
 		// Don't replace the default admin menu if the current user's role does NOT have
-		// a menu ready, OR if the menu is disabled OOOOOR if it has no items
+		// a menu ready, OR if the menu is disabled, OR if it has no items
 		$menu_items   = wp_get_nav_menu_items( $this->menu_ID );
 		$current_role = $this->get_user_role();
 		if ( ! $this->all_menu_IDs[ $current_role ]
@@ -818,7 +853,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 */
 	public function add_modified_admin_menu() {
 
-		global $menu, $cd_parent_file, $_registered_pages, $plugin_page, $cd_submenu_file;
+		global $menu, $cd_parent_file, $_registered_pages, $plugin_page, $cd_submenu_file, $ClientDash;
 
 		// This is a strange little hack. When moving a sub-menu page to a top-level page, there are some
 		// caveats. One being, WordPress doesn't know what the heck to do!... You will get a permissions
@@ -831,91 +866,175 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		// Get current role
 		$current_role = $this->get_user_role();
 
-		// Get the modified menu
-		$menu_object   = wp_get_nav_menu_object( $this->all_menu_IDs[ $current_role ] );
-		$modified_menu = get_option( "{$menu_object->name}_modified" );
+		// Get menu items and then index items by db ID
+		$unsorted_menu_items = wp_get_nav_menu_items(
+			$this->all_menu_IDs[ $current_role ],
+			array(
+				'orderby'    => 'ID',
+				'output'     => ARRAY_A,
+				'output_key' => 'ID',
+			)
+		);
+		$menu_items          = array();
+		foreach ( $unsorted_menu_items as $_item ) {
+			$menu_items[ $_item->db_id ] = $_item;
+		}
 
-		// If the modified menus are set, then add them
-		if ( $modified_menu ) {
-			foreach ( $modified_menu as $menu_position => $menu_item ) {
+		// If menu not empty, cycle through all items and add them as either menus or sub-menus
+		if ( ! empty( $menu_items ) && ! is_wp_error( $menu_items ) ) {
+			foreach ( $menu_items as $dbID => $menu_item ) {
 
-				// Get the filtered url
-				$args = array(
-					'page'      => true,
-					'post_type' => true,
-					'taxonomy'  => true
-				);
-				if ( strpos( $menu_item['menu_slug'], '&tab=' ) !== false ) {
-					$args['tab'] = true;
+				// If this item is a CD Core page and isn't currently enabled for this role (no content), then
+				// don't add it (and also remove it from the list for making sure none of its sub-menus load)
+				if ( $menu_item->cd_type == 'cd_core'
+				     && ! isset( $ClientDash->content_sections[ str_replace( 'cd_', '', $menu_item->url ) ] )
+				) {
+					unset( $menu_items[ $dbID ] );
+					continue;
 				}
-				$url = $this->get_cleaned_url( $args );
 
-				if ( $url == $menu_item['menu_slug'] && strpos( $cd_parent_file, '&tab=' ) === false ) {
-
-					// In the case of a sub-menu item being moved to a parent item, WordPress will be confused
-					// about which menu item is active. So I compensate for this by overriding the "self" and
-					// "parent_file" globals with the new (previously sub-menu) slug. This corrects the issue.
-					$cd_parent_file = $menu_item['menu_slug'];
-					add_filter( 'parent_file', array( $this, 'modify_self' ) );
+				// If webmaster page, change the title
+				if ( $menu_item->url == 'cd_webmaster' ) {
+					$menu_item->title = get_option( 'cd_webmaster_name', $ClientDash->option_defaults['webmaster_name'] );
+					$menu_item->cd_page_title = get_option( 'cd_webmaster_name', $ClientDash->option_defaults['webmaster_name'] );
 				}
 
-				// If a separator, do that instead
-				if ( strpos( $menu_item['menu_slug'], 'separator' ) !== false ) {
-					$menu[ $menu_position ] = array(
+				// If this was originally a sub-menu, we need to fix the link (unless the slug is already
+				// a hardlink)
+				if ( strpos( $menu_item->url, '.php' ) === false
+				     && ( $parent_slug = ! empty( $menu_item->cd_submenu_parent ) ? $menu_item->cd_submenu_parent : false )
+				) {
+					$menu_item->url = $parent_slug . ( strpos( $parent_slug, '?' ) !== false ? '&' : '?' ) . "page=$menu_item->url";
+				}
+
+				if ( strpos( $menu_item->url, 'separator' ) !== false ) {
+
+					// If a separator
+					$menu[ $menu_item->menu_order ] = array(
 						'',
 						'read',
-						$menu_item['menu_slug'],
+						$menu_item->url,
 						'',
 						'wp-menu-separator'
 					);
-				} else {
-					add_menu_page(
-						! empty( $menu_item['page_title'] ) ? $menu_item['page_title'] : null,
-						! empty( $menu_item['menu_title'] ) ? $menu_item['menu_title'] : null,
-						! empty( $menu_item['capability'] ) ? $menu_item['capability'] : null,
-						! empty( $menu_item['menu_slug'] ) ? $menu_item['menu_slug'] : null,
-						! empty( $menu_item['callback'] ) ? $menu_item['callback'] : null,
-						! empty( $menu_item['icon_url'] ) ? $menu_item['icon_url'] : 'none',
-						$menu_position
+				} elseif ( $menu_item->menu_item_parent == 0 ) {
+
+					// If a parent
+
+					// If extra parameters are set, add them on
+					if ( ! empty( $menu_item->cd_params ) ) {
+						$menu_item->url .= $menu_item->cd_params;
+					}
+
+					// Allowed query params for when filtering the url
+					$args = array(
+						'page'      => true,
+						'post_type' => true,
+						'taxonomy'  => true
 					);
-				}
 
-				// Now for the sub-menus (if they exist)
-				if ( ! empty( $menu_item['submenus'] ) ) {
+					// If this page has added extra to the url
+					if ( ! empty( $menu_item->cd_params ) ) {
+						$params = explode( '&', $menu_item->cd_params );
 
-					foreach ( $menu_item['submenus'] as $submenu_position => $submenu_item ) {
-
-						// Now for each sub-menu item, let's see if it's currently active
-						$url = $this->get_cleaned_url( array(
-							'page'      => true,
-							'post_type' => true,
-							'taxonomy'  => true,
-							'tab'       => true
-						) );
-
-						if ( $url == $submenu_item['menu_slug'] ) {
-							$cd_parent_file  = $menu_item['menu_slug'];
-							$cd_submenu_file = $submenu_item['menu_slug'];
-							add_filter( 'parent_file', array( $this, 'modify_self' ) );
-						}
-
-						//  add_submenu_page( 'edit.php?post_type=product', __( 'Attributes', 'woocommerce' ), __( 'Attributes', 'woocommerce' ), 'manage_product_terms', 'product_attributes', array( $this, 'attributes_page' ) );
-
-						// Skip separators, they don't work in sub-menus
-						if ( strpos( $submenu_item['menu_slug'], 'separator' ) === false ) {
-							add_submenu_page(
-								! empty( $menu_item['menu_slug'] ) ? $menu_item['menu_slug'] : null,
-								! empty( $submenu_item['page_title'] ) ? $submenu_item['page_title'] : null,
-								! empty( $submenu_item['menu_title'] ) ? $submenu_item['menu_title'] : null,
-								! empty( $submenu_item['capability'] ) ? $submenu_item['capability'] : null,
-								! empty( $submenu_item['menu_slug'] ) ? $submenu_item['menu_slug'] : null,
-								! empty( $submenu_item['callback'] ) ? $submenu_item['callback'] : null
-							);
+						foreach ( $params as $param ) {
+							if ( ! empty( $param ) ) {
+								preg_match( '/.*(?==)/', $param, $matches );
+								$args[ $matches[0] ] = true;
+							}
 						}
 					}
+
+					// Get the filtered url
+					$url = $this->get_cleaned_url( $args );
+
+					// If the url matches, add it to an array storing all matching urls
+					if ( $url == $menu_item->url ) {
+						$this->matching_urls[] = array(
+							'parent'  => $menu_item->url,
+							'submenu' => false,
+						);
+					}
+
+					add_menu_page(
+						$menu_item->cd_page_title,
+						$menu_item->title,
+						// TODO Use correct capability
+						'read',
+						$menu_item->url,
+						// TODO Use correct callback
+						'',
+						$menu_item->cd_icon,
+						$menu_item->menu_order
+					);
+				} else {
+
+					// If a sub-menu
+
+					// If the parent has been unset, then don't add the sub-menu
+					if ( ! isset( $menu_items[ (int) $menu_item->menu_item_parent ] ) ) {
+						continue;
+					}
+
+					// If extra parameters are set, add them on
+					if ( ! empty( $menu_item->cd_params ) ) {
+						$menu_item->url .= $menu_item->cd_params;
+					}
+
+					// Allowed query params for when filtering the url
+					$args = array(
+						'page'      => true,
+						'post_type' => true,
+						'taxonomy'  => true
+					);
+
+					// If this page has added extra to the url
+					if ( ! empty( $menu_item->cd_params ) ) {
+						$params = explode( '&', $menu_item->cd_params );
+
+						foreach ( $params as $param ) {
+							if ( ! empty( $param ) ) {
+								preg_match( '/.*(?==)/', $param, $matches );
+								$args[ $matches[0] ] = true;
+							}
+						}
+					}
+
+					// Get the filtered url
+					$url = $this->get_cleaned_url( $args );
+
+					// If the url matches, add it to an array storing all matching urls
+					if ( $url == $menu_item->url ) {
+						$this->matching_urls[] = array(
+							'parent'  => $menu_items[ (int) $menu_item->menu_item_parent ]->url,
+							'submenu' => $menu_item->url,
+						);
+					}
+
+					add_submenu_page(
+						$menu_items[ (int) $menu_item->menu_item_parent ]->url,
+						$menu_item->cd_page_title,
+						$menu_item->title,
+						// TODO Use correct capability
+						'read',
+						$menu_item->url,
+						// TODO Use correct callback
+						''
+					);
 				}
 			}
 		}
+
+		// In the case of a sub-menu item being moved to a parent item, WordPress will be confused
+		// about which menu item is active. So I compensate for this by overriding the "self" and
+		// "parent_file" globals with the new (previously sub-menu) slug. This corrects the issue.
+
+		// Get the most specific url (the biggest value)
+		$url = max( $this->matching_urls );
+
+		$cd_parent_file  = $url['parent'];
+		$cd_submenu_file = $url['submenu'];
+		add_filter( 'parent_file', array( $this, 'modify_self' ) );
 	}
 
 	/**
@@ -970,7 +1089,9 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		return $cd_parent_file;
 	}
 
-	// Add specific CSS class by filter
+	/**
+	 * Add specific CSS class by filter
+	 */
 	public function my_class_names( $classes ) {
 		return $classes . ' nav-menus-php cd-nav-menu';
 	}
@@ -986,8 +1107,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		// Remove the transient so it resets
 		delete_transient( "cd_adminmenu_output_$this->menu_ID" );
 
-		$menu_object = wp_get_nav_menu_object( $this->menu_ID );
-
 		// Update menu items
 		if ( ! is_wp_error( $_menu_object ) ) {
 
@@ -998,85 +1117,251 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 				delete_option( "cd_adminmenu_disabled_$this->menu_ID" );
 			}
 
-			// Default WP nav menu save
-			wp_nav_menu_update_menu_items( $this->menu_ID, $menu_object->name );
-
-			// Save CD friendly menu
-			$this->save_cd_menu( $this->menu_ID );
+			// Save the menu items
+			$this->update_menu_items( $this->menu_ID );
 		}
 	}
 
-	public static function save_cd_menu( $menu_ID ) {
+	/**
+	 * Replaces wp_save_nav_menu_items() (wp-admin/includes/nav-menu.php:~1045).
+	 *
+	 * @param int $menu_id
+	 * @param array $menu_data
+	 *
+	 * @return array
+	 */
+	public static function save_menu_items( $menu_id = 0, $menu_data = array() ) {
 
-		$menu = [ ];
+		// Initialize some vars
+		$menu_id     = (int) $menu_id;
+		$items_saved = array();
 
-		// Default menu
-		$default_menu = array(
-			'capability' => 'read',
-			'icon_url'   => 'dashicons-admin-generic'
-		);
+		// Loop through all the menu items' POST values.
+		foreach ( (array) $menu_data as $_possible_db_id => $_item_object_data ) {
 
-		// Default submenu
-		$default_submenu = array(
-			'capability' => 'read'
-		);
+			// If this possible menu item doesn't actually have a menu database ID yet.
+			$_actual_db_id = 0;
 
-		$menu_items = wp_get_nav_menu_items( $menu_ID );
-
-		// Cycle through all existing items
-		foreach ( $menu_items as $item ) {
-
-			// When saving with "Save Menu", we need to grab custom meta from $_POST
-			// Otherwise, just grab it from the already saved post meta
-			if ( isset( $_POST['action'] ) && $_POST['action'] == 'update' ) {
-				$icon = $_POST['menu-item-cd-icon'][ $item->ID ];
-				$slug = $_POST['menu-item-cd-url'][ $item->ID ];
-			} else {
-				$icon = get_post_meta( $item->ID, 'cd-icon', true );
-				$slug = get_post_meta( $item->ID, 'cd-url', true );
+			// Setup args from POST data, or use default
+			foreach ( self::$menu_item_defaults as $field => $default ) {
+				$args[ $field ] = isset( $_item_object_data["menu-item-$field"] ) ? $_item_object_data["menu-item-$field"] : $default;
 			}
 
-			if ( $item->menu_item_parent == '0' ) {
+			// Update that crap
+			$items_saved[] = self::update_menu_item( $menu_id, $_actual_db_id, $args );
+		}
 
-				// If a parent item (has no parent)
-				$menu[ $item->ID ] = wp_parse_args( array(
-					'menu_title' => $item->post_title,
-					'menu_slug'  => $slug,
-					'page_title' => get_post_meta( $item->ID, 'cd-page-title', true ),
-					'icon_url'   => $icon
-				), $default_menu );
+		return $items_saved;
+	}
 
-				// If this was originally a sub-menu, we need to fix the link (unless the slug is already
-				// a hardlink
-				if ( strpos( $slug, '.php' ) === false
-				     && ( $parent_slug = get_post_meta( $item->ID, 'cd-submenu-parent', true ) )
-				) {
-					$menu[ $item->ID ]['menu_slug'] = $parent_slug . ( strpos( $parent_slug, '?' ) !== false ? '&' : '?' ) . "page=$slug";
+	/**
+	 * Saves the current nav menu.
+	 *
+	 * Taken and modified for Client Dash needs from wp-admin/includes/nav-menu.php:~1257
+	 *
+	 * @param int $menu_ID The ID of the nav menu to save to.
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public static function update_menu_items( $menu_ID ) {
+
+		// Get our old menu items
+		$unsorted_menu_items = wp_get_nav_menu_items(
+			$menu_ID,
+			array(
+				'orderby'    => 'ID',
+				'output'     => ARRAY_A,
+				'output_key' => 'ID'
+			)
+		);
+
+		// Index menu items by db ID
+		$menu_items = array();
+		foreach ( $unsorted_menu_items as $_item ) {
+			$menu_items[ $_item->db_id ] = $_item;
+		}
+
+		wp_defer_term_counting( true );
+
+		// Loop through all the menu items' POST variables
+		if ( ! empty( $_POST['menu-item-db-id'] ) ) {
+			foreach ( (array) $_POST['menu-item-db-id'] as $db_ID ) {
+
+				// Setup args
+				$args = array();
+				foreach ( self::$menu_item_defaults as $field => $default ) {
+
+					// Skip some static properties
+					if ( in_array( $field, array(
+						'original-title',
+						'cd-type',
+						'cd-page-title',
+						'cd-submenu-parent',
+						'db-id',
+					) ) ) {
+						continue;
+					}
+
+					$args[ $field ] = isset( $_POST["menu-item-$field"][ $db_ID ] ) ? $_POST["menu-item-$field"][ $db_ID ] : '';
 				}
 
-			} else {
-				// If a sub-menu item (has a parent)
-				$menu[ $item->menu_item_parent ]['submenus'][] = wp_parse_args( array(
-					'menu_title'  => $item->post_title,
-					'menu_slug'   => $slug,
-					'page_title'  => get_post_meta( $item->ID, 'cd-page-title', true ),
-					'parent_slug' => $menu[ $item->menu_item_parent ]['menu_slug']
-				), $default_submenu );
+				$menu_item_db_id = self::update_menu_item( $menu_ID, $_POST['menu-item-db-id'][ $db_ID ] != $db_ID ? 0 : $db_ID, $args );
+
+				// Saved it, now remove it (for comparison later) and move on
+				unset( $menu_items[ $menu_item_db_id ] );
 			}
 		}
 
-		// Re-order menus to be in indexed order
-		$i = - 1;
-		foreach ( $menu as $menu_position => $menu_item ) {
-			$i ++;
-
-			unset( $menu[ $menu_position ] );
-			$menu[ $i ] = $menu_item;
+		// Remove menu items from the menu that weren't in $_POST
+		if ( ! empty( $menu_items ) ) {
+			foreach ( array_keys( $menu_items ) as $menu_item_id ) {
+				if ( is_nav_menu_item( $menu_item_id ) ) {
+					wp_delete_post( $menu_item_id );
+				}
+			}
 		}
 
-		// Save it!
-		$menu_object = wp_get_nav_menu_object( $menu_ID );
-		update_option( "{$menu_object->name}_modified", $menu );
+		wp_defer_term_counting( false );
+	}
+
+	/**
+	 * Save's a nav menu item.
+	 *
+	 * Taken and modified for Client Dash needs from wp-includes/nav-menu.php:~311
+	 *
+	 * @since Client Dash 1.6
+	 *
+	 * @param int $menu_ID The menu to save to.
+	 * @param int $menu_item_db_id The existing nav menu item db ID.
+	 * @param array $menu_item_data Args sent from the POST save.
+	 *
+	 * @return int|WP_Error The menu item's db ID on success. WP_Error on failure.
+	 */
+	public static function update_menu_item( $menu_ID, $menu_item_db_id = 0, $menu_item_data = array() ) {
+
+		// If item db ID is 0, it's a new item, otherwise we're updating
+		$update = 0 != $menu_item_db_id;
+
+		// Defaults
+		$defaults          = self::$menu_item_defaults;
+		$defaults['db-id'] = $menu_item_db_id;
+
+		$args = wp_parse_args( $menu_item_data, $defaults );
+
+		// Some defaults for when updating
+		if ( ! $update && empty( $args['original-title'] ) ) {
+			$args['original-title'] = $args['title'];
+		}
+
+		// Get the position of the end of the menu. Used for when adding items via AJAX
+		if ( 0 == (int) $args['position'] ) {
+			$menu_items       = (array) wp_get_nav_menu_items( $menu_ID, array( 'post_status' => 'publish,draft' ) );
+			$last_item        = array_pop( $menu_items );
+			$args['position'] = ( $last_item && isset( $last_item->menu_order ) ) ? 1 + $last_item->menu_order : count( $menu_items );
+		}
+
+		$original_parent = 0 < $menu_item_db_id ? get_post_field( 'post_parent', $menu_item_db_id ) : 0;
+
+		// Populate the menu item object
+		$post = array(
+			'menu_order'  => $args['position'],
+			'ping_status' => 0,
+			'post_parent' => $original_parent,
+			'post_title'  => $args['title'],
+			'post_type'   => 'nav_menu_item',
+			'post_status' => 'publish',
+		);
+
+		// Create the new post item
+		if ( ! $update ) {
+			$post['ID']      = 0;
+			$menu_item_db_id = wp_insert_post( $post );
+			$menu_item_db_id = (int) $menu_item_db_id;
+
+			// Set all of the post meta
+			update_post_meta( $menu_item_db_id, '_menu_item_type', 'custom' );
+			update_post_meta( $menu_item_db_id, '_menu_item_original_title', $args['original-title'] );
+			update_post_meta( $menu_item_db_id, '_menu_item_object', 'custom' );
+			update_post_meta( $menu_item_db_id, '_menu_item_object_id', strval( (int) $menu_item_db_id ) );
+			update_post_meta( $menu_item_db_id, '_menu_item_cd_type', $args['cd-type'] );
+			update_post_meta( $menu_item_db_id, '_menu_item_cd_page_title', $args['cd-page-title'] );
+			update_post_meta( $menu_item_db_id, '_menu_item_cd_submenu_parent', $args['cd-submenu-parent'] );
+			update_post_meta( $menu_item_db_id, '_menu_item_menu_item_parent', strval( (int) $args['parent-id'] ) );
+			update_post_meta( $menu_item_db_id, '_menu_item_url', $args['url'] );
+			update_post_meta( $menu_item_db_id, '_menu_item_cd_icon', $args['cd-icon'] );
+			update_post_meta( $menu_item_db_id, '_menu_item_cd_params', $args['cd-params'] );
+		} else {
+
+			// Else update it
+			$post['ID']          = $menu_item_db_id;
+			$post['post_status'] = 'publish';
+			wp_update_post( $post );
+
+			// Update specific post meta
+			update_post_meta( $menu_item_db_id, '_menu_item_menu_item_parent', strval( (int) $args['parent-id'] ) );
+			update_post_meta( $menu_item_db_id, '_menu_item_url', $args['url'] );
+			update_post_meta( $menu_item_db_id, '_menu_item_cd_params', $args['cd-params'] );
+			update_post_meta( $menu_item_db_id, '_menu_item_cd_icon', $args['cd-icon'] );
+		}
+
+		// Associate the menu item with the menu term
+		// Only set the menu term if it isn't set to avoid unnecessary wp_get_object_terms()
+		if ( ! $update || ! is_object_in_term( $menu_item_db_id, 'nav_menu', $menu_ID ) ) {
+			wp_set_object_terms( $menu_item_db_id, array( (int) $menu_ID ), 'nav_menu' );
+		}
+
+		return $menu_item_db_id;
+	}
+
+	/**
+	 * Populates the global $wp_meta_boxes variable which is used when populating the
+	 * side sortables area (on the left).
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public function populate_side_sortables() {
+
+		global $wp_meta_boxes;
+
+		// This establishes the meta boxes on the left side of the screen
+		$wp_meta_boxes = array(
+			'nav-menus' => array(
+				'side' => array(
+					'default' => array(
+						'add-post-type'    => array(
+							'id'       => 'add-post-types',
+							'title'    => 'Post Types',
+							'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'post_types' ),
+						),
+						'add-wp-core'      => array(
+							'id'       => 'add-wp-core',
+							'title'    => 'WordPress',
+							'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'wp_core' ),
+						),
+						'add-plugin'       => array(
+							'id'       => 'add-plugin',
+							'title'    => 'Plugin / Theme',
+							'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'plugin' ),
+						),
+						'add-cd-core'      => array(
+							'id'       => 'add-cd-core',
+							'title'    => 'Client Dash',
+							'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'cd_core' ),
+						),
+						'add-custom-links' => array(
+							'id'       => 'add-custom-links',
+							'title'    => 'Custom Link',
+							'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'custom_link' ),
+						),
+						'add-separator'    => array(
+							'id'       => 'add-separator',
+							'title'    => 'Separator',
+							'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'separator' ),
+						),
+					)
+				)
+			)
+		);
 	}
 
 	/**
@@ -1086,55 +1371,24 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 *
 	 * @return array|bool The menu items, if they exist, otherwise false.
 	 */
-	public function get_available_items() {
+	public function get_current_menu_items() {
 
-		global $wp_meta_boxes, $ClientDash, $errors;
-
-		// This establishes the meta boxes on the left side of the screen
-		$this->available_items = array(
-			'nav-menus' => array(
-				'side' => array(
-					'default' => array(
-						'add-post-type'    => array(
-							'id'       => 'add-post-types',
-							'title'    => 'Post Types',
-							'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'post_types' )
-						),
-						'add-wp-core'      => array(
-							'id'       => 'add-wp-core',
-							'title'    => 'WordPress',
-							'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'wp_core' )
-						),
-						'add-plugin'       => array(
-							'id'       => 'add-plugin',
-							'title'    => 'Plugin / Theme',
-							'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'plugin' )
-						),
-						'add-custom-links' => array(
-							'id'       => 'add-custom-links',
-							'title'    => 'Custom',
-							'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'custom_link' )
-						),
-						'add-separator'    => array(
-							'id'       => 'add-separator',
-							'title'    => 'Separator',
-							'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'separator' )
-						)
-					)
-				)
-			)
-		);
-
-		// Used by the do_accordion_sections()
-		$wp_meta_boxes = $this->available_items;
+		global $ClientDash, $errors, $cd_total_menu_items;
 
 		// Save the information in a transient and get it for faster page loads
-		$output = get_transient( "cd_adminmenu_output_$this->menu_ID" );
+		// Only use a transient when debugging is on
+		if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
+			$output = get_transient( "cd_adminmenu_output_$this->menu_ID" );
+		}
 		if ( ! $output && is_nav_menu( $this->menu_ID ) ) {
 			// Our modified walker class
 			include_once( $ClientDash->path . '/core/tabs/settings/menus/walkerclass.php' );
 
 			$menu_items  = wp_get_nav_menu_items( $this->menu_ID, array( 'post_status' => 'any' ) );
+
+			// Globalize menu item count
+			$cd_total_menu_items = count( $menu_items );
+
 			$edit_markup = wp_get_nav_menu_to_edit( $this->menu_ID );
 
 			$output = array(
@@ -1156,35 +1410,48 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 */
 	public function block_output() {
 
-		$menu_info = $this->get_available_items();
+		// MAYBEFIX Error nag not showing for subscriber with duplicate parent slugs
 
-		extract( $menu_info );
+		// Populate the side sortables area
+		$this->populate_side_sortables();
 
-		if ( is_wp_error( $edit_markup ) ) {
-			$this->error_nag( array_shift( array_shift( $edit_markup->errors ) ) );
+		// If we're creating a menu via AJAX currently
+		$creating = isset( $_POST['cd_create_admin_menu'] ) ? true : false;
 
-			return;
-		}
+		// Skip all this garbage if we're creating
+		if ( ! $creating ) {
 
-		// Output any errors
-		if ( ! empty( $errors ) ) {
-			foreach ( $errors as $error ) {
-				$this->error_nag( $error );
+			// Get our menu items!
+			$menu_info = $this->get_current_menu_items();
+
+			// TODO Remove extract
+			if ( $menu_info ) {
+				extract( $menu_info );
+			}
+
+			if ( is_wp_error( $edit_markup ) ) {
+				$this->error_nag( array_shift( array_shift( $edit_markup->errors ) ) );
+
+				return;
+			}
+
+			// Output any errors
+			if ( ! empty( $errors ) ) {
+				foreach ( $errors as $error ) {
+					$this->error_nag( $error );
+				}
 			}
 		}
 
 		// Get the role info (for name)
 		$role_name = ucwords( str_replace( '_', ' ', $this->role ) );
 
-		// If we're creating a menu via AJAX currently
-		$creating = isset( $_POST['cd_create_admin_menu'] ) ? true : false;
-
 		// From wp-admin/nav-menus.php. Modified for CD use.
 		?>
 
 		<?php
 		// Only show select area if a menu has been created. Otherwise, this will be shown below
-		if ( $this->menu_ID || $this->create_new ) :
+		if ( ( $this->menu_ID || $this->create_new ) && ! $creating ) :
 			?>
 			<div class="manage-menus<?php echo $creating ? ' disabled' : ''; ?>">
 				<form method="get">
@@ -1304,7 +1571,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 									<?php
 									// Outputs a toggle switch for quickly disabling / enabling the menu
-									if ( $this->menu_ID ) {
+									if ( $this->menu_ID && ! $creating ) {
 										$this->toggle_switch(
 											"cd_adminmenu_disabled_$this->menu_ID",
 											'1',

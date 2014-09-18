@@ -108,7 +108,7 @@ var cdAJAX;
                 $.post(
                     ajaxurl, // already defined
                     data,
-                    function (response) {
+                    function () {
 
                         // Update the loader percentage
                         completed_items++;
@@ -118,20 +118,7 @@ var cdAJAX;
 
                         // If we've cycled though ALL of the menu items, then we're done
                         if (completed_items == total_items) {
-
-                            var data = {
-                                action: 'cd_save_nav_menu',
-                                menu_ID: cdData.navMenusAJAX.menu_ID
-                            };
-
-                            // Okay, now save it and THEN reload
-                            $.post(
-                                ajaxurl, // already defined
-                                data,
-                                function () {
-                                    window.location.href = cdData.navMenusAJAX.url;
-                                }
-                            )
+                            window.location.href = cdData.navMenusAJAX.url;
                         }
                     }
                 )

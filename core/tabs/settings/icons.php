@@ -246,6 +246,7 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 			'dashicons-smiley'
 		);
 
+		// TODO Hide webmaster page option now deprecated. Replace by checking if the content section is empty
 		$class_grid = get_option( 'cd_hide_page_webmaster', $this->option_defaults['hide_page_webmaster'] ) != '1' ? 'cd-col-four' : 'cd-col-three';
 
 		?>
@@ -283,6 +284,7 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 				<p class="cd-dashicons-title">Help</p>
 			</div>
 
+			<?php // TODO Hide page webmaster is now deprecated. Replace with checking if content section is empty ?>
 			<?php if ( get_option( 'cd_hide_page_webmaster', $this->option_defaults['hide_page_webmaster'] ) != '1' ) : ?>
 				<div class="<?php echo $class_grid; ?> cd-webmaster" onclick="cdMain.dashicons_selected('webmaster');">
 					<p class="dashicons  <?php echo $webmaster_dashicon; ?>"

@@ -31,7 +31,7 @@ class ClientDash_RequireFiles extends ClientDash {
 		include_once( $ClientDash->path . '/core/deprecated.php' );
 
 		// Core page and tab files
-		foreach ( $this->core_files as $page => $tabs ) {
+		foreach ( $this::$core_files as $page => $tabs ) {
 			// Include page file
 			include_once( plugin_dir_path( __FILE__ ) . 'pages/' . $page . '.php' );
 

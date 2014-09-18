@@ -1,6 +1,7 @@
 <?php
 
-// TODO Make some sort of loading animation while AJAX is working.
+// TODO Make some sort of loading animation while AJAX is working
+// TODO Also reset all admin menu related properties
 
 /**
  * Class ClientDash_Page_Settings_Tab_Tools

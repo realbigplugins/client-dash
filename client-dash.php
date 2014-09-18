@@ -49,7 +49,7 @@ class ClientDash extends ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.5
 	 */
-	public $core_files = array(
+	public static $core_files = array(
 		'account'   => array(
 			'about',
 			'sites'
@@ -118,13 +118,6 @@ class ClientDash extends ClientDash_Functions {
 		//
 		// The number of blog posts to show on the feed tab of the webmaster page
 		'webmaster_feed_count'       => 5,
-		//
-		// Page visibility
-		'hide_page_account'          => null,
-		'hide_page_reports'          => null,
-		'hide_page_help'             => null,
-		'hide_page_webmaster'        => '1',
-		'hide_page_settings'         => null,
 		//
 		// The default dashicons for everything
 		'dashicon_account'           => 'dashicons-id-alt',
@@ -220,20 +213,20 @@ class ClientDash extends ClientDash_Functions {
 				)
 			),
 			'webmaster' => array(
-				'your_site' => array(
+				'main' => array(
 					'main' => array(
-						'editor'      => 'visible',
-						'author'      => 'visible',
-						'contributor' => 'visible',
-						'subscriber'  => 'visible'
+						'editor'      => 'hidden',
+						'author'      => 'hidden',
+						'contributor' => 'hidden',
+						'subscriber'  => 'hidden'
 					)
 				),
 				'feed'      => array(
 					'feed' => array(
-						'editor'      => 'visible',
-						'author'      => 'visible',
-						'contributor' => 'visible',
-						'subscriber'  => 'visible'
+						'editor'      => 'hidden',
+						'author'      => 'hidden',
+						'contributor' => 'hidden',
+						'subscriber'  => 'hidden'
 					)
 				)
 			)
@@ -673,33 +666,19 @@ class ClientDash extends ClientDash_Functions {
 			return;
 		}
 
-		$content_sections_roles = get_option( 'cd_content_sections_roles' );
+		$content_sections_roles = get_option( 'cd_content_sections_roles', $this->option_defaults['content_sections_roles'] );
 
 		// Cycles through all content sections to see if they're disabled
 		foreach ( $this->content_sections as $page => $tabs ) {
-			$disable_page = get_option( "cd_hide_page_$page", $this->option_defaults["hide_page_$page"] );
-			if ( $disable_page ) {
-				unset( $this->content_sections[ $page ] );
-				continue;
-			}
 			foreach ( $tabs as $tab => $props ) {
 				foreach ( $props['content-sections'] as $ID => $info ) {
 
 					// Get our values for easier use
 					$option_value  = $content_sections_roles[ $page ][ $tab ][ $ID ][ $current_role ];
-					$default_value = $this->option_defaults['content_sections_roles'][ $page ][ $tab ][ $ID ][ $current_role ];
-					$disabled      = false;
 
 					// See if this is disabled
-					if ( isset( $option_value ) ) {
-						if ( $option_value == 'hidden' ) {
-							$disabled = true;
-						}
-					} elseif ( isset( $default_value ) && $default_value == 'hidden' ) {
-						$disabled = true;
-					}
+					if ( $option_value == 'hidden' ) {
 
-					if ( $disabled ) {
 						// If they are disabled, unset it and then remove tab and page if necessary
 						unset( $this->content_sections[ $page ][ $tab ]['content-sections'][ $ID ] );
 
@@ -828,7 +807,7 @@ class ClientDash extends ClientDash_Functions {
 		$existing_roles    = get_editable_roles();
 
 		// Resets cd_existing_roles on save or for the first time
-		if ( ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] == 'true' ) || empty( $cd_existing_roles ) ) {
+		if ( get_option( 'cd_display_settings_updated', false ) || empty( $cd_existing_roles ) ) {
 			update_option( 'cd_existing_roles', get_editable_roles() );
 			$cd_existing_roles = get_editable_roles();
 		}
@@ -842,6 +821,9 @@ class ClientDash extends ClientDash_Functions {
 			</div>
 		<?php
 		}
+
+		// Ensure option is always unset (except right before the initial checking)
+		delete_option( 'cd_display_settings_updated' );
 	}
 }
 

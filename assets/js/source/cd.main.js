@@ -15,7 +15,7 @@ var cdMain;
          * @since ClientDash 1.4
          */
         init: function () {
-            cdMain.disable_drag();
+            this.disable_drag();
 
             jQuery('.cd-toggle-switch').click(function (e) {
                 e.stopPropagation();
@@ -27,7 +27,7 @@ var cdMain;
                 cdMain.close_tip(jQuery(this));
             });
 
-            cdMain.tips_stop_propogation();
+            this.tips_stop_propogation();
         },
         /**
          * Hides/shows element with given ID.
@@ -52,35 +52,12 @@ var cdMain;
          */
         toggle_roles_page: function (e_self) {
             var e_target = jQuery(e_self).siblings('.cd-display-grid-tab'),
-                e_toggle = jQuery(e_self).find('.cd-up-down'),
-                e_child_target = e_target.find('.cd-display-grid-block'),
-                e_child_toggle = e_target.find('.cd-up-down');
+                e_toggle = jQuery(e_self).find('.cd-up-down');
 
             // Toggle arrow up and down
             e_toggle.toggleClass('open');
 
             // Open/collapse target
-            e_target.toggleClass('hidden');
-
-            // Collapse children
-            e_child_toggle.removeClass('open');
-            e_child_target.addClass('hidden');
-        },
-        /**
-         * Toggles the tabs on the Settings -> Roles page.
-         *
-         * @since Client Dash 1.4
-         *
-         * @param e_self
-         */
-        toggle_roles_tab: function (e_self) {
-            var e_target = jQuery(e_self).siblings('.cd-display-grid-block'),
-                e_toggle = jQuery(e_self).find('.cd-up-down');
-
-            // Toggle
-            e_toggle.toggleClass('open');
-
-            // Toggle target
             e_target.toggleClass('hidden');
         },
         /**

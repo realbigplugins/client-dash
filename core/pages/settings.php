@@ -53,10 +53,7 @@ class ClientDash_Page_Settings extends ClientDash {
 
 		// Display Tab
 		register_setting( 'cd_options_display', 'cd_content_sections_roles' );
-		register_setting( 'cd_options_display', 'cd_hide_page_account' );
-		register_setting( 'cd_options_display', 'cd_hide_page_reports' );
-		register_setting( 'cd_options_display', 'cd_hide_page_help' );
-		register_setting( 'cd_options_display', 'cd_hide_page_webmaster' );
+		register_setting( 'cd_options_display', 'cd_display_settings_updated' );
 
 		// Widgets Tab
 		register_setting( 'cd_options_widgets', 'cd_widgets' );

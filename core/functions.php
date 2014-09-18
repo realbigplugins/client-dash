@@ -93,7 +93,12 @@ abstract class ClientDash_Functions {
 		// Get the current dashicon
 		$dashicon = get_option( 'cd_dashicon_' . $page, $ClientDash->option_defaults[ 'dashicon_' . $page ] );
 
-		echo '<h2 class="cd-title"><span class="dashicons ' . $dashicon . ' cd-icon"></span><span class="cd-title-text">' . get_admin_page_title() . '</span></h2>';
+		// If Webmaster, get name
+		if ( $page == 'webmaster' ) {
+			$page = get_option( 'cd_webmaster_name', $ClientDash->option_defaults['webmaster_name'] );
+		}
+
+		echo '<h2 class="cd-title"><span class="dashicons ' . $dashicon . ' cd-icon"></span><span class="cd-title-text">' . ucwords( $page ) . '</span></h2>';
 	}
 
 	/**
@@ -552,7 +557,6 @@ abstract class ClientDash_Functions {
 		global $current_user;
 		$user_roles = $current_user->roles;
 		$user_role  = array_shift( $user_roles );
-
 		return $user_role;
 	}
 
@@ -566,13 +570,20 @@ abstract class ClientDash_Functions {
 	 * @since Client Dash 1.4
 	 *
 	 * @param string $message The message to show.
-	 * @param string $caps . Optional. A WordPress recognized capability. Default
+	 * @param string $caps Optional. A WordPress recognized capability.
+	 * @param bool $echo Optional. Whether to echo or return the error.
+	 *
+	 * @return string The error.
 	 * is 'read'.
 	 */
-	public function error_nag( $message, $caps = 'read' ) {
+	public function error_nag( $message, $caps = 'read', $echo = true ) {
 
 		if ( current_user_can( $caps ) ) {
-			echo "<div class='error'><p>$message</p></div>";
+			if ( $echo ) {
+				echo "<div class='error inline cd-message'><p>$message</p></div>";
+			} else {
+				return "<div class='error inline cd-message'><p>$message</p></div>";
+			}
 		}
 	}
 
@@ -592,7 +603,7 @@ abstract class ClientDash_Functions {
 	public function update_nag( $message, $caps = 'read' ) {
 
 		if ( current_user_can( $caps ) ) {
-			echo "<div class='updated'><p>$message</p></div>";
+			echo "<div class='updated inline cd-message'><p>$message</p></div>";
 		}
 	}
 

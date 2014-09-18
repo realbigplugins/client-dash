@@ -1,5 +1,7 @@
 <?php
 
+// TODO Disable tab drop-downs
+
 /**
  * Class ClientDash_Page_Settings_Tab_Display
  *
@@ -43,6 +45,11 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 
 		global $ClientDash;
 
+		// Tells us that this page has been updated
+		?>
+		<input type="hidden" name="cd_display_settings_updated" value="1" />
+		<?php
+
 		// Add our reset roles button next to submit
 		add_filter( 'cd_submit', array( $this, 'add_reset_button' ) );
 		?>
@@ -57,7 +64,7 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 		}
 
 		// Get options
-		$content_sections_roles = get_option( 'cd_content_sections_roles' );
+		$content_sections_roles = get_option( 'cd_content_sections_roles', $this->option_defaults['content_sections_roles'] );
 
 		// Get roles
 		$roles = get_editable_roles();
@@ -67,7 +74,6 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 
 		// Cycle through all content sections and output accordingly
 		foreach ( $ClientDash->content_sections_unmodified as $page => $tabs ) {
-			$disabled = get_option( "cd_hide_page_$page", $this->option_defaults["hide_page_$page"] );
 
 			// Find out if all roles have been unchecked
 			$all_disabled = true;
@@ -100,11 +106,6 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 
 			echo '<p class="cd-display-grid-title">';
 
-			// Creates a toggle "switch" for disabling the page entirely
-			echo '<span class="cd-toggle-switch ' . ( empty( $disabled ) ? 'on' : 'off' ) . '" data-inverse="true">';
-			echo '<input type="hidden" name="cd_hide_page_' . $page . '" value="1" ' . ( empty( $disabled ) ? 'disabled' : '' ) . '/>';
-			echo '</span>';
-
 			echo ucwords( str_replace( '_', ' ', $page ) );
 
 			// All disabled tip
@@ -122,17 +123,16 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 
 				// Tab Box
 				echo '<div class="cd-display-grid-tab hidden">';
-				echo '<p class="cd-display-grid-title" onclick="cdMain.toggle_roles_tab(this)">';
+				echo '<p class="cd-display-grid-title">';
 				echo $props['name'];
-				echo '<span class="cd-up-down"></span>';
 				echo '</p>';
 
 				foreach ( $props['content-sections'] as $block_ID => $props_block ) {
 
 					// Content Box
-					echo '<div class="cd-display-grid-block hidden">';
+					echo '<div class="cd-display-grid-block">';
 					echo '<p class="cd-display-grid-title">' . $props_block['name'] . '</p>';
-					echo '<p class="description">Un-check all who should <strong>not</strong> see this content.</p>';
+					echo '<p class="description">All checked sections will be visible to the given role.</p>';
 					echo '<p class="cd-roles-grid-list">';
 
 					// Create checkboxes for all roles
@@ -140,7 +140,6 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 
 						// Get these values so we can save space later
 						$option_value  = $content_sections_roles[ $page ][ $tab ][ $block_ID ][ $role_ID ];
-						$default_value = $ClientDash->option_defaults['content_sections_roles'][ $page ][ $tab ][ $block_ID ][ $role_ID ];
 
 						// If the current checkbox being generated is the current user (which
 						// should always be admin), skip it
@@ -158,17 +157,8 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 					             value='visible'
 					             id='$page-$tab-$role_ID' ";
 
-						// This does a few things to see if the box should be checked or not.
-						// It first finds out if there is a current set option value and if it
-						// is set to '0'. If this is true, we're going to assume checked IF the
-						// next section ALSO holds true
-						if ( isset( $option_value) ) {
-							if ( $option_value == 'visible') {
-								echo 'checked';
-							}
-						} elseif ( ! isset( $default_value ) || $default_value == 'visible' ) {
-							echo 'checked';
-						}
+						// Check the checkbox if set to visible
+						echo $option_value == 'visible' ? 'checked' : '';
 						echo '/>'; // Close off checkbox
 						echo '<label for="' . $page . '-' . $tab . '-' . $role_ID . '">' . $props_role['name'] . '</label>';
 						echo '</span>';
