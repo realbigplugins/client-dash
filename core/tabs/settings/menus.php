@@ -6,6 +6,8 @@
 // TODO Re-order methods
 // TODO Documentation
 
+// update_option( 'cd_adminmenu_disabled_4', 1 );
+
 /**
  * Class ClientDash_Core_Page_Settings_Tab_AdminMenu
  *
@@ -158,6 +160,11 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 					'capability' => 'edit_pages',
 				),
 			),
+		),
+		'Links'      => array(
+			'url'        => 'links.php',
+			'icon'       => 'dashicons-admin-links',
+			'capability' => 'edit_pages',
 		),
 		'Comments'   => array(
 			'url'        => 'edit-comments.php',
@@ -406,7 +413,8 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 * @since Client Dash 1.6
 	 */
 	public function get_orig_admin_menu() {
-		global $menu, $submenu, $ClientDash;
+
+		global $menu, $submenu;
 
 		foreach ( $menu as $menu_location => $menu_item ) {
 
@@ -652,7 +660,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 			// Globalize the menu ID and role
 			$cd_current_menu_id   = $this->menu_ID;
-			$cd_current_menu_role = $role;
+			$cd_current_menu_role = $this->role;
 
 			return;
 		}
@@ -692,6 +700,16 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 */
 	public function return_new_walker_menu( $walker, $menu ) {
 
+		// Get our active menus
+		if ( ! isset( $this->all_menu_IDs ) || empty( $this->all_menu_IDs ) ) {
+			$this->get_cd_nav_menus();
+		}
+
+		// If not a CD nav menu, get out of here!
+		if ( ! in_array( $menu, $this->all_menu_IDs ) ) {
+			return $walker;
+		}
+
 		// Needed to get the plugin path
 		global $ClientDash;
 
@@ -712,6 +730,10 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	}
 
 	public function modify_menu_item( $menu_item ) {
+
+		if ( $menu_item->type != 'cd_nav_menu' ) {
+			return $menu_item;
+		}
 
 		// Unset unnecessary properties
 		$remove = array(
@@ -923,8 +945,8 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 		// Don't replace the default admin menu if the current user's role does NOT have
 		// a menu ready, OR if the menu is disabled, OR if it has no items
-		$menu_items   = wp_get_nav_menu_items( $this->menu_ID );
 		$current_role = $this->get_user_role();
+		$menu_items   = wp_get_nav_menu_items( $this->all_menu_IDs[ $current_role] );
 		if ( ! $this->all_menu_IDs[ $current_role ]
 		     || get_option( "cd_adminmenu_disabled_{$this->all_menu_IDs[$current_role]}" )
 		     || empty( $menu_items )
@@ -1139,6 +1161,10 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		// "parent_file" globals with the new (previously sub-menu) slug. This corrects the issue.
 
 		// Get the most specific url (the biggest value)
+		// If no matching urls, then stop
+		if ( empty( $this->matching_urls ) ) {
+			return;
+		}
 		$url = max( $this->matching_urls );
 
 		$cd_parent_file  = $url['parent'];
@@ -1216,19 +1242,15 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		// Remove the transient so it resets
 		delete_transient( "cd_adminmenu_output_$this->menu_ID" );
 
-		// Update menu items
-		if ( ! is_wp_error( $_menu_object ) ) {
-
-			// Update the disabled option
-			if ( isset( $_POST["cd_adminmenu_disabled_$this->menu_ID"] ) ) {
-				update_option( "cd_adminmenu_disabled_$this->menu_ID", '1' );
-			} else {
-				delete_option( "cd_adminmenu_disabled_$this->menu_ID" );
-			}
-
-			// Save the menu items
-			$this->update_menu_items( $this->menu_ID );
+		// Update the disabled option
+		if ( isset( $_POST["cd_adminmenu_disabled_$this->menu_ID"] ) ) {
+			update_option( "cd_adminmenu_disabled_$this->menu_ID", '1' );
+		} else {
+			delete_option( "cd_adminmenu_disabled_$this->menu_ID" );
 		}
+
+		// Save the menu items
+		$this->update_menu_items( $this->menu_ID );
 	}
 
 	/**
@@ -1388,7 +1410,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			$menu_item_db_id = (int) $menu_item_db_id;
 
 			// Set all of the post meta
-			update_post_meta( $menu_item_db_id, '_menu_item_type', 'custom' );
+			update_post_meta( $menu_item_db_id, '_menu_item_type', 'cd_nav_menu' );
 			update_post_meta( $menu_item_db_id, '_menu_item_original_title', $args['original-title'] );
 			update_post_meta( $menu_item_db_id, '_menu_item_object', 'custom' );
 			update_post_meta( $menu_item_db_id, '_menu_item_object_id', strval( (int) $menu_item_db_id ) );
@@ -1488,6 +1510,8 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		// Only use a transient when debugging is on
 		if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
 			$output = get_transient( "cd_adminmenu_output_$this->menu_ID" );
+		} else {
+			$output = false;
 		}
 		if ( ! $output && is_nav_menu( $this->menu_ID ) ) {
 			// Our modified walker class
@@ -1534,9 +1558,9 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			$menu_info = $this->get_current_menu_items();
 
 			// TODO Remove extract
-			if ( $menu_info ) {
-				extract( $menu_info );
-			}
+			$edit_markup = $menu_info['edit_markup'];
+			$errors = $menu_info['errors'];
+			$menu_items = $menu_info['menu_items'];
 
 			if ( is_wp_error( $edit_markup ) ) {
 				$this->error_nag( array_shift( array_shift( $edit_markup->errors ) ) );
@@ -1560,7 +1584,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 		<?php
 		// Only show select area if a menu has been created. Otherwise, this will be shown below
-		if ( ( $this->menu_ID || $this->create_new ) && ! $creating ) :
+		if ( $this->menu_ID && ! $creating ) :
 			?>
 			<div class="manage-menus<?php echo $creating ? ' disabled' : ''; ?>">
 				<form method="get">
@@ -1607,47 +1631,52 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 			<div class="clear"></div>
 
-			<div id="cd-nav-menu-statuses" class="accordion-container">
-				<div class="control-section accordion-section  open add-post-types" id="add-post-types">
-					<h3 class="accordion-section-title">
-						Menu Statuses
-					</h3>
+			<?php
+			// Only show if menus exist
+			if ( $this->menu_ID ) :
+				?>
+				<div id="cd-nav-menu-statuses" class="accordion-container">
+					<div class="control-section accordion-section  open add-post-types" id="add-post-types">
+						<h3 class="accordion-section-title">
+							Menu Statuses
+						</h3>
 
-					<div class="accordion-section-content ">
-						<div class="inside">
-							<table class="cd-nav-menu-statuses-table">
-								<tr>
-									<th>Menu</th>
-									<th>Active</th>
-								</tr>
-								<?php
-								// Cycle through all role menus and show them
-								foreach ( $this->all_menu_IDs as $role => $menu_ID ) {
-
-									// Skip if no menu ID present
-									if ( ! $menu_ID ) {
-										continue;
-									}
-
-									$on_off = get_option( 'cd_adminmenu_disabled_' . $this->all_menu_IDs[ $role ], false ) ? 'off' : 'on';
-
-									?>
+						<div class="accordion-section-content ">
+							<div class="inside">
+								<table class="cd-nav-menu-statuses-table">
 									<tr>
-										<td>
-											<?php echo $this->translate_id_to_name( $role ); ?>
-										</td>
-										<td>
-											<span class="cd-nav-menu-status <?php echo $on_off; ?>"></span>
-										</td>
+										<th>Menu</th>
+										<th>Active</th>
 									</tr>
-								<?php
-								}
-								?>
-							</table>
+									<?php
+									// Cycle through all role menus and show them
+									foreach ( $this->all_menu_IDs as $role => $menu_ID ) {
+
+										// Skip if no menu ID present
+										if ( ! $menu_ID ) {
+											continue;
+										}
+
+										$on_off = get_option( 'cd_adminmenu_disabled_' . $this->all_menu_IDs[ $role ], false ) ? 'off' : 'on';
+
+										?>
+										<tr>
+											<td>
+												<?php echo $this->translate_id_to_name( $role ); ?>
+											</td>
+											<td>
+												<span class="cd-nav-menu-status <?php echo $on_off; ?>"></span>
+											</td>
+										</tr>
+									<?php
+									}
+									?>
+								</table>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			<?php endif; ?>
 
 		</div>
 

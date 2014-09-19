@@ -23,7 +23,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 	 * @param string $label The label that will show next to the checkbox.
 	 * @param array $options_args Options to be explicitly set.
 	 */
-	public function loop( $i = - 1, $label = '', $options_args = array() ) {
+	public static function loop( $i = - 1, $label = '', $options_args = array() ) {
 
 		// Set up the defaults and the inputs to output
 		$options = wp_parse_args( $options_args, self::$menu_item_defaults );
@@ -77,11 +77,12 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 		global $cd_current_menu_role;
 
-		$role = get_role( $cd_current_menu_role );
+		$role = get_role( $cd_current_menu_role ? $cd_current_menu_role : 'administrator' );
 
 		if ( ! array_key_exists( 'edit_posts', $role->capabilities ) ) {
 
 			echo '<p class="description">No items present</p>';
+
 			return;
 		}
 
@@ -317,7 +318,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 		global $cd_current_menu_role;
 
-		$role = get_role( $cd_current_menu_role );
+		$role = get_role( $cd_current_menu_role ? $cd_current_menu_role : 'administrator' );
 		?>
 
 		<div id="wordpress-core" class="posttypediv">
@@ -346,7 +347,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 						$i --;
 
 						// Skip if no cap
-						if ( ! array_key_exists( $item->capability, $role->capabilities ) ) {
+						if ( ! array_key_exists( $item['capability'], $role->capabilities ) ) {
 							continue;
 						}
 
@@ -374,10 +375,6 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 					foreach ( ClientDash_Core_Page_Settings_Tab_Menus::$wp_core as $item_title => $item ) {
 
-						unset( $core_items[ $item_title ]['url'] );
-						unset( $core_items[ $item_title ]['icon'] );
-						unset( $core_items[ $item_title ]['capability'] );
-
 						if ( isset( $item['submenus'] ) ) {
 
 							foreach ( $item['submenus'] as $submenu_item_title => $submenu_item ) {
@@ -386,16 +383,17 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 									unset( $core_items[ $item_title ]['submenus'][ $submenu_item_title ] );
 								}
 
-								if ( empty( $core_items[ $item_title]['submenus'] ) ) {
-									unset( $core_items[ $item_title]['submenus'] );
+								if ( empty( $core_items[ $item_title ]['submenus'] ) ) {
+									unset( $core_items[ $item_title ]['submenus'] );
 								}
 							}
 						}
 
-						if ( empty( $core_items[ $item_title ] ) ) {
+						if ( empty( $core_items[ $item_title ]['submenus'] ) ) {
 							unset( $core_items[ $item_title ] );
 						}
 					}
+
 					foreach ( $core_items as $item_title => $item ) {
 
 						if ( isset( $item['submenus'] ) ) {
@@ -412,7 +410,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 									'url'               => $submenu_item['url'],
 									'cd-icon'           => 'dashicons-admin-generic',
 									'cd-type'           => 'wp_core',
-									'cd-submenu-parent' => $item['menu_slug'],
+									'cd-submenu-parent' => $item['url'],
 								);
 
 								// Output the checkbox and inputs HTML
@@ -453,7 +451,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 		// Globalize the "parent" class object for access of public properties
 		global $ClientDash_Core_Page_Settings_Tab_Menus, $cd_current_menu_role;
 
-		$role = get_role( $cd_current_menu_role );
+		$role = get_role( $cd_current_menu_role ? $cd_current_menu_role : 'administrator' );
 
 		// Separate out only the items added by plugins
 		$menu_items = [ ];
@@ -474,6 +472,11 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 			// Deal with Comments title
 			if ( strpos( $menu_item['menu_title'], 'Comments' ) !== false ) {
 				$menu_item['menu_title'] = 'Comments';
+			}
+
+			// Deal with Plugins title
+			if ( strpos( $menu_item['menu_title'], 'Plugins' ) !== false ) {
+				$menu_item['menu_title'] = 'Plugins';
 			}
 
 			// Skip if a separator
@@ -505,7 +508,9 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 					// If in the WP Core list, this isn't a plugin page, so set it to disabled
 					// Also skip Client Dash settings page
-					if ( ! array_key_exists( $submenu_item['menu_title'], $ClientDash_Core_Page_Settings_Tab_Menus::$wp_core[ $menu_item['menu_title'] ]['submenus'] ) ) {
+					if ( isset( $ClientDash_Core_Page_Settings_Tab_Menus::$wp_core[ $menu_item['menu_title'] ]['submenus'] )
+					     && ! array_key_exists( $submenu_item['menu_title'], $ClientDash_Core_Page_Settings_Tab_Menus::$wp_core[ $menu_item['menu_title'] ]['submenus'] )
+					) {
 						$menu_item['submenus'][] = $submenu_item;
 					}
 				}
@@ -519,6 +524,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 		if ( empty( $menu_items ) ) {
 
 			echo '<p class="description">No items</p>';
+
 			return;
 		}
 		?>
@@ -595,8 +601,6 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 								// Output the checkbox and inputs HTML
 								self::loop( $i, $options['title'], $options );
 							}
-						} else {
-							echo '<p class="description">No items</p>';
 						}
 					}
 					?>
@@ -630,7 +634,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 	public static function cd_core() {
 		global $ClientDash, $cd_current_menu_role;
 
-		$role = get_role( $cd_current_menu_role );
+		$role = get_role( $cd_current_menu_role ? $cd_current_menu_role : 'administrator' );
 		?>
 
 		<div id="clientdash-core" class="posttypediv">
@@ -737,10 +741,10 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					<li>
 						<label class="menu-item-title">
 							<p id="menu-item-url-wrap">
-								<label class="howto" for="custom-menu-item-url">
+								<label class="howto" for="menu-item-url">
 									<span>URL</span>
-									<input type="text" class="cd-custom-menu-item code" placeholder="http://"
-									       name="menu-item[-1][custom-meta-cd-url]" value="http://">
+									<input type="text" class="menu-item-url code" placeholder="Link"
+									       name="menu-item[-1][menu-item-url]" value="">
 								</label>
 							</p>
 
@@ -751,15 +755,15 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 									       value="" placeholder="Menu Item">
 									<input type="checkbox" id="custom-checkbox" style="display: none;"
 									       class="menu-item-checkbox" name="menu-item[-1][menu-item-object-id]"
-									       value="customlink" checked>
+									       value="0" checked>
 								</label>
 							</p>
 						</label>
 
 						<input type="hidden" class="menu-item-type" name="menu-item[-1][menu-item-type]" value="custom">
-						<input type="hidden" class="cd-custom-menu-item" name="menu-item[-1][custom-meta-cd-type]"
+						<input type="hidden" class="menu-item-cd-type" name="menu-item[-1][menu-item-cd-type]"
 						       value="link">
-						<input type="hidden" class="cd-custom-menu-item" name="menu-item[-1][custom-meta-cd-icon]"
+						<input type="hidden" class="menu-item-cd-icon" name="menu-item[-1][menu-item-cd-icon]"
 						       value="dashicons-admin-links">
 					</li>
 				</ul>

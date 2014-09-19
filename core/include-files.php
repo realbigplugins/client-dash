@@ -24,6 +24,11 @@ class ClientDash_RequireFiles extends ClientDash {
 
 		global $ClientDash;
 
+		// Backup
+		if ( empty( $ClientDash ) ) {
+			$ClientDash = new ClientDash();
+		}
+
 		// Require our AJAX file
 		include_once( $ClientDash->path . '/core/ajax.php' );
 

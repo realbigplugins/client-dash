@@ -135,18 +135,6 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 			$classes[] = 'menu-item-cd-disabled';
 		}
 
-		// Add an error message for duplicate PARENT slugs
-		if ( $duplicate_parent_slug ) {
-			$error_msg = 'There are multiple top-level menu items that go to the same place. This can cause issues with the menu output. Please correct and save.';
-
-			if ( empty( $errors ) || ! in_array( $error_msg, $errors ) ) {
-				$errors[] = $error_msg;
-			}
-
-			// Also add a class to the menu item for highlighting
-			$classes[] = 'duplicate-parent-slug';
-		}
-
 		// Item errors
 		$item_errors = [ ];
 
@@ -232,8 +220,7 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 
 		<div <?php echo $item->cd_type == 'separator' ? 'style="display: none;"' : ''; ?> >
 
-			<?php // REMOVE || true ?>
-			<?php if ( $item->cd_type == 'link' || true ) : ?>
+			<?php if ( $item->cd_type == 'link' ) : ?>
 				<p class="field-url description description-wide">
 					<label for="edit-menu-item-url-<?php echo $item->ID; ?>">
 						<?php _e( 'URL' ); ?><br/>
@@ -248,7 +235,7 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 				       value="<?php echo esc_attr( $item->url ); ?>"/>
 			<?php endif; ?>
 
-			<?php if ( $type != 'separator' ) : ?>
+			<?php if ( $item->cd_type != 'separator' ) : ?>
 				<p class="description description-thin <?php echo $item->cd_type == 'separator' ? 'hidden' : ''; ?>">
 					<label for="edit-menu-item-title-<?php echo $item->ID; ?>">
 						<?php _e( 'Navigation Label' ); ?><br/>

@@ -68,14 +68,35 @@ var cdAdminMenu;
             // Keep checkbox checked
             $('#submit-custom-link').click(function () {
                 $('#custom-checkbox').prop('checked', true);
+
+                // Clear fields
+                setTimeout(function () {
+                    wait_for_load();
+                }, 50 );
             });
 
             // Submit on enter
             $('#custom-link').find('input[type="text"]').keypress(function (e) {
                 if (e.which == 13) {
                     $('#submit-custom-link').click();
+
+                    // Clear fields
+                    wait_for_load();
                 }
             });
+
+            /**
+             * Checks if the spinner is visible, and waits until it's not. Then clears the input fields.
+             *
+             * @since Client Dash 1.6
+             */
+            function wait_for_load() {
+                if ($('#add-custom-links').find('.spinner').is(':visible')) {
+                    setTimeout(wait_for_load, 100);
+                } else {
+                    $('#add-custom-links').find('input[type="text"]').val('');
+                }
+            }
         },
         /**
          * Keeps the checkbox checked! (required by WP AJAX call)
