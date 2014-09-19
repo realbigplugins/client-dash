@@ -75,6 +75,16 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 	 */
 	public static function post_types() {
 
+		global $cd_current_menu_role;
+
+		$role = get_role( $cd_current_menu_role );
+
+		if ( ! array_key_exists( 'edit_posts', $role->capabilities ) ) {
+
+			echo '<p class="description">No items present</p>';
+			return;
+		}
+
 		// Get all of our post types
 		$all_post_types = get_post_types( array(
 			'public' => true
@@ -304,6 +314,10 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 	 * @since Client Dash 1.6
 	 */
 	public static function wp_core() {
+
+		global $cd_current_menu_role;
+
+		$role = get_role( $cd_current_menu_role );
 		?>
 
 		<div id="wordpress-core" class="posttypediv">
@@ -331,6 +345,11 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					foreach ( ClientDash_Core_Page_Settings_Tab_Menus::$wp_core as $item_title => $item ) {
 						$i --;
 
+						// Skip if no cap
+						if ( ! array_key_exists( $item->capability, $role->capabilities ) ) {
+							continue;
+						}
+
 						// Set specific options
 						$options = array(
 							'title'   => $item_title,
@@ -351,21 +370,46 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 			<div id="tabs-panel-wordpress-core-submenu" class="tabs-panel tabs-panel-inactive">
 				<ul id="posttypechecklist-wordpress-core" class="categorychecklist form-no-clear">
 					<?php
+					$core_items = ClientDash_Core_Page_Settings_Tab_Menus::$wp_core;
 
 					foreach ( ClientDash_Core_Page_Settings_Tab_Menus::$wp_core as $item_title => $item ) {
+
+						unset( $core_items[ $item_title ]['url'] );
+						unset( $core_items[ $item_title ]['icon'] );
+						unset( $core_items[ $item_title ]['capability'] );
+
+						if ( isset( $item['submenus'] ) ) {
+
+							foreach ( $item['submenus'] as $submenu_item_title => $submenu_item ) {
+								// Skip if no cap
+								if ( ! array_key_exists( $submenu_item['capability'], $role->capabilities ) ) {
+									unset( $core_items[ $item_title ]['submenus'][ $submenu_item_title ] );
+								}
+
+								if ( empty( $core_items[ $item_title]['submenus'] ) ) {
+									unset( $core_items[ $item_title]['submenus'] );
+								}
+							}
+						}
+
+						if ( empty( $core_items[ $item_title ] ) ) {
+							unset( $core_items[ $item_title ] );
+						}
+					}
+					foreach ( $core_items as $item_title => $item ) {
 
 						if ( isset( $item['submenus'] ) ) {
 
 							echo '<li class="wp-core-title">' . $item_title . '</li>';
 
 							$i = 0;
-							foreach ( $item['submenus'] as $submenu_item_title => $submenu_item_url ) {
+							foreach ( $item['submenus'] as $submenu_item_title => $submenu_item ) {
 								$i --;
 
 								// Set specific options
 								$options = array(
 									'title'             => $submenu_item_title,
-									'url'               => $submenu_item_url,
+									'url'               => $submenu_item['url'],
 									'cd-icon'           => 'dashicons-admin-generic',
 									'cd-type'           => 'wp_core',
 									'cd-submenu-parent' => $item['menu_slug'],
@@ -407,13 +451,20 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 	public static function plugin() {
 
 		// Globalize the "parent" class object for access of public properties
-		global $ClientDash_Core_Page_Settings_Tab_Menus;
+		global $ClientDash_Core_Page_Settings_Tab_Menus, $cd_current_menu_role;
+
+		$role = get_role( $cd_current_menu_role );
 
 		// Separate out only the items added by plugins
 		$menu_items = [ ];
 		$i          = 0;
 		foreach ( $ClientDash_Core_Page_Settings_Tab_Menus->original_admin_menu as $menu ) {
 			$i ++;
+
+			// Pass over if current role (for menu) doesn't have the capability
+			if ( ! array_key_exists( $menu['capability'], $role->capabilities ) ) {
+				continue;
+			}
 
 			$menu_item = $menu;
 
@@ -442,6 +493,11 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 				foreach ( $menu['submenus'] as $submenu_item ) {
 
+					// Pass over if current role (for menu) doesn't have the capability
+					if ( ! array_key_exists( $submenu_item['capability'], $role->capabilities ) ) {
+						continue;
+					}
+
 					// Skip separators
 					if ( $submenu_item['menu_title'] == 'Separator' || strpos( $submenu_item['menu_slug'], 'separator' ) !== false ) {
 						continue;
@@ -461,8 +517,8 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 		}
 
 		if ( empty( $menu_items ) ) {
-			echo '<p class="description">No items</p>';
 
+			echo '<p class="description">No items</p>';
 			return;
 		}
 		?>
@@ -572,7 +628,9 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 	 * @since Client Dash 1.6
 	 */
 	public static function cd_core() {
-		global $ClientDash;
+		global $ClientDash, $cd_current_menu_role;
+
+		$role = get_role( $cd_current_menu_role );
 		?>
 
 		<div id="clientdash-core" class="posttypediv">
@@ -584,6 +642,11 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					foreach ( $ClientDash::$core_files as $item_title => $submenus ) {
 						$i --;
 
+						// If not admin, don't show settings
+						if ( ! array_key_exists( 'manage_options', $role->capabilities ) && $item_title == 'settings' ) {
+							return;
+						}
+
 						// Set specific options
 						$options = array(
 							'title'             => $item_title != 'settings' ? ucfirst( $item_title ) : 'Client Dash',
@@ -594,7 +657,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 						);
 
 						// Output the checkbox and inputs HTML
-						self::loop( $i, ucfirst( $item_title ), $options );
+						self::loop( $i, self::translate_id_to_name( $item_title ), $options );
 					}
 					?>
 

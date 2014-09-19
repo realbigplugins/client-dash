@@ -9,6 +9,66 @@
     }
   }
 
+  // Left side nav menus status
+  #cd-nav-menu-statuses {
+    margin-top: 20px;
+
+    .cd-nav-menu-statuses-table {
+      width: 100%;
+      text-align: left;
+
+      .cd-nav-menu-status {
+        position: relative;
+        width: 12px;
+        height: 12px;
+        display: inline-block;
+        border-radius: 8px;
+
+        &:before {
+          content: "";
+          width: 16px;
+          height: 16px;
+          border-radius: 8px;
+          position: absolute;
+          left: -2px;
+          top: -2px;
+          background-color: #ccc;
+        }
+
+        &:after {
+          content: "";
+          width: 10px;
+          height: 10px;
+          border-radius: 8px;
+          position: absolute;
+          left: 1px;
+          top: 1px;
+        }
+
+        &.on:after {
+          background-color: #71ff6a;
+          box-shadow: 0 0 10px 1px #71ff6a;
+        }
+
+        &.off:after {
+          background-color: #ff462e;
+          box-shadow: 0 0 10px 1px #ff462e;
+        }
+      }
+
+      th {
+        padding-bottom: 5px;
+      }
+
+      td, th {
+
+        &:last-of-type {
+          text-align: right;
+        }
+      }
+    }
+  }
+
   // Left side
   #menu-settings-column {
 

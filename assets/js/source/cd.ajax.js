@@ -104,7 +104,6 @@ var cdAJAX;
                 };
 
                 // Now send it off
-                // TODO If you leave the page, they don't all fire, why?
                 $.post(
                     ajaxurl, // already defined
                     data,

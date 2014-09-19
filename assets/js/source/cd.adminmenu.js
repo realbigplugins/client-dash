@@ -334,7 +334,6 @@ var cdAdminMenu;
                     // CD {
 
                     // Make sure this isn't the child of a separator
-                    // TODO Make this less resource heavy?
                     var separatorIsParent = false;
                     $('#menu-to-edit').find('li.menu-item-separator').each(function () {
 

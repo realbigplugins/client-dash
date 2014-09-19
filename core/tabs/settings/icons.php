@@ -245,10 +245,6 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 			'dashicons-smartphone',
 			'dashicons-smiley'
 		);
-
-		// TODO Hide webmaster page option now deprecated. Replace by checking if the content section is empty
-		$class_grid = get_option( 'cd_hide_page_webmaster', $this->option_defaults['hide_page_webmaster'] ) != '1' ? 'cd-col-four' : 'cd-col-three';
-
 		?>
 
 		<input type="hidden" id="cd_dashicon_account" name="cd_dashicon_account"
@@ -260,7 +256,7 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 		       value="<?php echo $webmaster_dashicon; ?>"/>
 
 		<div id="cd-dashicons-selections">
-			<div class="<?php echo $class_grid; ?> cd-account" onclick="cdMain.dashicons_selected('account');">
+			<div class="cd-col-four cd-account" onclick="cdMain.dashicons_selected('account');">
 				<p class="dashicons <?php echo $account_dashicon; ?> active"
 				   data-dashicon="<?php echo $account_dashicon; ?>"
 				   data-widget="account"></p>
@@ -268,7 +264,7 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 				<p class="cd-dashicons-title">Account</p>
 			</div>
 
-			<div class="<?php echo $class_grid; ?> cd-reports" onclick="cdMain.dashicons_selected('reports');">
+			<div class="cd-col-four cd-reports" onclick="cdMain.dashicons_selected('reports');">
 				<p class="dashicons  <?php echo $reports_dashicon; ?>"
 				   data-dashicon="<?php echo $reports_dashicon; ?>"
 				   data-widget="reports"></p>
@@ -276,7 +272,7 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 				<p class="cd-dashicons-title">Reports</p>
 			</div>
 
-			<div class="<?php echo $class_grid; ?> cd-help" onclick="cdMain.dashicons_selected('help');">
+			<div class="cd-col-four cd-help" onclick="cdMain.dashicons_selected('help');">
 				<p class="dashicons  <?php echo $help_dashicon; ?>"
 				   data-dashicon="<?php echo $help_dashicon; ?>"
 				   data-widget="help"></p>
@@ -284,18 +280,15 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 				<p class="cd-dashicons-title">Help</p>
 			</div>
 
-			<?php // TODO Hide page webmaster is now deprecated. Replace with checking if content section is empty ?>
-			<?php if ( get_option( 'cd_hide_page_webmaster', $this->option_defaults['hide_page_webmaster'] ) != '1' ) : ?>
-				<div class="<?php echo $class_grid; ?> cd-webmaster" onclick="cdMain.dashicons_selected('webmaster');">
-					<p class="dashicons  <?php echo $webmaster_dashicon; ?>"
-					   data-dashicon="<?php echo $webmaster_dashicon; ?>"
-					   data-widget="webmaster"></p>
+			<div class="cd-col-four cd-webmaster" onclick="cdMain.dashicons_selected('webmaster');">
+				<p class="dashicons  <?php echo $webmaster_dashicon; ?>"
+				   data-dashicon="<?php echo $webmaster_dashicon; ?>"
+				   data-widget="webmaster"></p>
 
-					<p class="cd-dashicons-title">
-						<?php echo get_option( 'cd_webmaster_name', $this->option_defaults['webmaster_name'] ); ?>
-					</p>
-				</div>
-			<?php endif; ?>
+				<p class="cd-dashicons-title">
+					<?php echo get_option( 'cd_webmaster_name', $this->option_defaults['webmaster_name'] ); ?>
+				</p>
+			</div>
 		</div>
 
 		<p class="submit" style="text-align:center;">

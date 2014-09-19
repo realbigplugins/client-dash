@@ -1,7 +1,5 @@
 <?php
 
-// TODO Disable tab drop-downs
-
 /**
  * Class ClientDash_Page_Settings_Tab_Display
  *

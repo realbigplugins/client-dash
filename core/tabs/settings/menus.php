@@ -1,8 +1,5 @@
 <?php
 
-// TODO Show existing menus at top so admin knows what menus exist and if they're disabled / enabled
-// TODO Make display settings take precedence over menu settings for CD Core page visibility
-
 // FIXME When populating a new menu, get_orig_admin_menu does just that, gets the ADMIN menu, but I need to get the CONTRIB menu, or the SUBSCRIBER menu, etc.
 
 // TODO Clean up warnings, notices, and stricts
@@ -89,103 +86,210 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 */
 	public static $wp_core = array(
 		'Dashboard'  => array(
-			'url'      => 'index.php',
-			'icon'     => 'dashicons-dashboard',
-			'submenus' => array(
-				'Home'     => 'index.php',
-				'My Sites' => 'my-sites.php',
-				'Updates'  => 'update-core.php',
+			'url'        => 'index.php',
+			'icon'       => 'dashicons-dashboard',
+			'capability' => 'read',
+			'submenus'   => array(
+				'Home'     => array(
+					'url'        => 'index.php',
+					'capability' => 'read',
+				),
+				'My Sites' => array(
+					'url'        => 'my-sites.php',
+					// TODO Find real cap
+					'capability' => 'read',
+				),
+				'Updates'  => array(
+					'url'        => 'update-core.php',
+					// TODO Find real cap
+					'capability' => 'read',
+				),
 			),
 		),
 		'Posts'      => array(
-			'url'      => 'edit.php',
-			'icon'     => 'dashicons-admin-post',
-			'submenus' => array(
-				'All Posts'  => 'edit.php',
-				'Add New'    => 'post-new.php',
-				'Categories' => 'edit-tags.php?taxonomy=category',
-				'Tags'       => 'edit-tags.php?taxonomy=post_tag',
+			'url'        => 'edit.php',
+			'icon'       => 'dashicons-admin-post',
+			'capability' => 'edit_posts',
+			'submenus'   => array(
+				'All Posts'  => array(
+					'url'        => 'edit.php',
+					'capability' => 'edit_posts',
+				),
+				'Add New'    => array(
+					'url'        => 'post-new.php',
+					'capability' => 'edit_posts',
+				),
+				'Categories' => array(
+					'url'        => 'edit-tags.php?taxonomy=category',
+					'capability' => 'manage_categories',
+				),
+				'Tags'       => array(
+					'url'        => 'edit-tags.php?taxonomy=post_tag',
+					'capability' => 'manage_categories',
+				),
 			)
 		),
 		'Media'      => array(
-			'url'      => 'upload.php',
-			'icon'     => 'dashicons-admin-media',
-			'submenus' => array(
-				'Library' => 'upload.php',
-				'Add New' => 'media-new.php',
+			'url'        => 'upload.php',
+			'icon'       => 'dashicons-admin-media',
+			'capability' => 'upload_files',
+			'submenus'   => array(
+				'Library' => array(
+					'url'        => 'upload.php',
+					'capability' => 'upload_files',
+				),
+				'Add New' => array(
+					'url'        => 'media-new.php',
+					'capability' => 'upload_files',
+				),
 			),
 		),
 		'Pages'      => array(
-			'url'      => 'edit.php?post_type=page',
-			'icon'     => 'dashicons-admin-pages',
-			'submenus' => array(
-				'All Pages' => 'edit.php?post_type=page',
-				'Add New'   => 'post-new.php?post_type=page',
-			),
-		),
-		'Links'      => array(
-			// TODO Finish this.
-			'submenus' => array(
-				'Link Categories' => '',
+			'url'        => 'edit.php?post_type=page',
+			'icon'       => 'dashicons-admin-pages',
+			'capability' => 'edit_pages',
+			'submenus'   => array(
+				'All Pages' => array(
+					'url'        => 'edit.php?post_type=page',
+					'capability' => 'edit_pages',
+				),
+				'Add New'   => array(
+					'url'        => 'post-new.php?post_type=page',
+					'capability' => 'edit_pages',
+				),
 			),
 		),
 		'Comments'   => array(
-			'url'      => 'edit-comments.php',
-			'icon'     => 'dashicons-admin-comments',
+			'url'        => 'edit-comments.php',
+			'icon'       => 'dashicons-admin-comments',
+			'capability' => 'edit_posts',
 			// TODO Find better way to deal with this
-			'submenus' => array(
-				'All Comments' => 'index.php',
+			'submenus'   => array(
+				'All Comments' => array(
+					'url'        => 'index.php',
+					'capability' => 'edit_posts',
+				),
 			),
 		),
 		'Appearance' => array(
-			'url'      => 'themes.php',
-			'icon'     => 'dashicons-admin-appearance',
-			'submenus' => array(
-				'Themes'    => 'themes.php',
-				'Customize' => 'customize.php',
-				'Widgets'   => 'widgets.php',
-				'Menus'     => 'nav-menus.php',
-				'Editor'    => 'theme-editor.php',
+			'url'        => 'themes.php',
+			'icon'       => 'dashicons-admin-appearance',
+			'capability' => 'switch_themes',
+			'submenus'   => array(
+				'Themes'    => array(
+					'url'        => 'themes.php',
+					'capability' => 'switch_themes',
+				),
+				'Customize' => array(
+					'url'        => 'customize.php',
+					'capability' => 'customize',
+				),
+				'Widgets'   => array(
+					'url'        => 'widgets.php',
+					'capability' => 'edit_theme_options',
+				),
+				'Menus'     => array(
+					'url'        => 'nav-menus.php',
+					'capability' => 'edit_theme_options',
+				),
+				'Editor'    => array(
+					'url'        => 'theme-editor.php',
+					// TODO Get real cap
+					'capability' => 'edit_theme_options',
+				),
 			),
 		),
 		'Plugins'    => array(
-			'url'      => 'plugins.php',
-			'icon'     => 'dashicons-admin-plugins',
-			'submenus' => array(
-				'Installed Plugins' => 'plugins.php',
-				'Add New'           => 'plugin-install.php',
-				'Editor'            => 'plugin-editor.php',
+			'url'        => 'plugins.php',
+			'icon'       => 'dashicons-admin-plugins',
+			'capability' => 'activate_plugins',
+			'submenus'   => array(
+				'Installed Plugins' => array(
+					'url'        => 'plugins.php',
+					'capability' => 'activate_plugins',
+				),
+				'Add New'           => array(
+					'url'        => 'plugin-install.php',
+					'capability' => 'install_plugins',
+				),
+				'Editor'            => array(
+					'url'        => 'plugin-editor.php',
+					// TODO Get real cap
+					'capability' => 'activate_plugins',
+				),
 			),
 		),
 		'Users'      => array(
-			'url'      => 'users.php',
-			'icon'     => 'dashicons-admin-users',
-			'submenus' => array(
-				'All Users'    => 'users.php',
-				'Add New'      => 'user-new.php',
-				'Your Profile' => 'profile.php',
+			'url'        => 'users.php',
+			'icon'       => 'dashicons-admin-users',
+			'capability' => 'list_users',
+			'submenus'   => array(
+				'All Users'    => array(
+					'url'        => 'users.php',
+					'capability' => 'list_users',
+				),
+				'Add New'      => array(
+					'url'        => 'user-new.php',
+					'capability' => 'create_users',
+				),
+				'Your Profile' => array(
+					'url'        => 'profile.php',
+					'capability' => 'read',
+				),
 			),
 		),
 		'Tools'      => array(
-			'url'      => 'tools.php',
-			'icon'     => 'dashicons-admin-tools',
-			'submenus' => array(
-				'Available Tools' => 'tools.php',
-				'Import'          => 'import.php',
-				'Export'          => 'export.php',
-				'Delete Site'     => 'ms-delete-site.php',
+			'url'        => 'tools.php',
+			'icon'       => 'dashicons-admin-tools',
+			'capability' => 'edit_posts',
+			'submenus'   => array(
+				'Available Tools' => array(
+					'url'        => 'tools.php',
+					'capability' => 'edit_posts',
+				),
+				'Import'          => array(
+					'url'        => 'import.php',
+					'capability' => 'import',
+				),
+				'Export'          => array(
+					'url'        => 'export.php',
+					'capability' => 'export',
+				),
+				'Delete Site'     => array(
+					'url'        => 'ms-delete-site.php',
+					'capability' => 'manage_options',
+				),
 			),
 		),
 		'Settings'   => array(
-			'url'      => 'options-general.php',
-			'icon'     => 'dashicons-admin-settings',
-			'submenus' => array(
-				'General'    => 'options-general.php',
-				'Writing'    => 'options-writing.php',
-				'Reading'    => 'options-reading.php',
-				'Discussion' => 'options-discussion.php',
-				'Media'      => 'options-media.php',
-				'Permalinks' => 'options-permalink.php',
+			'url'        => 'options-general.php',
+			'icon'       => 'dashicons-admin-settings',
+			'capability' => 'manage_options',
+			'submenus'   => array(
+				'General'    => array(
+					'url'        => 'options-general.php',
+					'capability' => 'manage_options',
+				),
+				'Writing'    => array(
+					'url'        => 'options-writing.php',
+					'capability' => 'manage_options',
+				),
+				'Reading'    => array(
+					'url'        => 'options-reading.php',
+					'capability' => 'manage_options',
+				),
+				'Discussion' => array(
+					'url'        => 'options-discussion.php',
+					'capability' => 'manage_options',
+				),
+				'Media'      => array(
+					'url'        => 'options-media.php',
+					'capability' => 'manage_options',
+				),
+				'Permalinks' => array(
+					'url'        => 'options-permalink.php',
+					'capability' => 'manage_options',
+				),
 			),
 		),
 	);
@@ -895,8 +999,13 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 				// If webmaster page, change the title
 				if ( $menu_item->url == 'cd_webmaster' ) {
-					$menu_item->title = get_option( 'cd_webmaster_name', $ClientDash->option_defaults['webmaster_name'] );
+					$menu_item->title         = get_option( 'cd_webmaster_name', $ClientDash->option_defaults['webmaster_name'] );
 					$menu_item->cd_page_title = get_option( 'cd_webmaster_name', $ClientDash->option_defaults['webmaster_name'] );
+				}
+
+				// If the comments page, get original html (because when there are new comments, the title changes)
+				if ( $menu_item->title == 'Comments' ) {
+					$menu_item->title = $this->original_admin_menu[20]['menu_title'];
 				}
 
 				// If this was originally a sub-menu, we need to fix the link (unless the slug is already
@@ -1384,7 +1493,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			// Our modified walker class
 			include_once( $ClientDash->path . '/core/tabs/settings/menus/walkerclass.php' );
 
-			$menu_items  = wp_get_nav_menu_items( $this->menu_ID, array( 'post_status' => 'any' ) );
+			$menu_items = wp_get_nav_menu_items( $this->menu_ID, array( 'post_status' => 'any' ) );
 
 			// Globalize menu item count
 			$cd_total_menu_items = count( $menu_items );
@@ -1496,7 +1605,52 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 				<?php do_accordion_sections( 'nav-menus', 'side', null ); ?>
 			</form>
 
+			<div class="clear"></div>
+
+			<div id="cd-nav-menu-statuses" class="accordion-container">
+				<div class="control-section accordion-section  open add-post-types" id="add-post-types">
+					<h3 class="accordion-section-title">
+						Menu Statuses
+					</h3>
+
+					<div class="accordion-section-content ">
+						<div class="inside">
+							<table class="cd-nav-menu-statuses-table">
+								<tr>
+									<th>Menu</th>
+									<th>Active</th>
+								</tr>
+								<?php
+								// Cycle through all role menus and show them
+								foreach ( $this->all_menu_IDs as $role => $menu_ID ) {
+
+									// Skip if no menu ID present
+									if ( ! $menu_ID ) {
+										continue;
+									}
+
+									$on_off = get_option( 'cd_adminmenu_disabled_' . $this->all_menu_IDs[ $role ], false ) ? 'off' : 'on';
+
+									?>
+									<tr>
+										<td>
+											<?php echo $this->translate_id_to_name( $role ); ?>
+										</td>
+										<td>
+											<span class="cd-nav-menu-status <?php echo $on_off; ?>"></span>
+										</td>
+									</tr>
+								<?php
+								}
+								?>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+
 		</div>
+
 		<!-- /#menu-settings-column -->
 		<div id="menu-management-liquid" <?php echo $creating ? 'class="disabled"' : ''; ?>>
 			<div id="menu-management">

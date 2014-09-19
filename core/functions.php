@@ -403,6 +403,8 @@ abstract class ClientDash_Functions {
 	 * Strips out spaces and dashes and replaces them with underscores. Also
 	 * translates to lowercase.
 	 *
+	 * @since Client Dash 1.3
+	 *
 	 * @param string $name The name to be translated.
 	 *
 	 * @return string Translated ID.
@@ -410,6 +412,20 @@ abstract class ClientDash_Functions {
 	public function translate_name_to_id( $name ) {
 
 		return strtolower( str_replace( array( ' ', '-' ), '_', $name ) );
+	}
+
+	/**
+	 * Replaces underscores with spaces and capitalizes words.
+	 *
+	 * @since Client Dash 1.6
+	 *
+	 * @param string $ID The ID to be translated.
+	 *
+	 * @return string Translated name.
+	 */
+	public function translate_id_to_name( $ID ) {
+
+		return ucwords( str_replace( '_', ' ', $ID ) );
 	}
 
 	/**
