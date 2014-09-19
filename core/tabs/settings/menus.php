@@ -6,8 +6,6 @@
 // TODO Re-order methods
 // TODO Documentation
 
-// update_option( 'cd_adminmenu_disabled_4', 1 );
-
 /**
  * Class ClientDash_Core_Page_Settings_Tab_AdminMenu
  *

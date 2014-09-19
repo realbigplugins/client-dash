@@ -166,7 +166,7 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 							class="dashicons <?php echo ! empty( $item->cd_icon ) ? $item->cd_icon : 'dashicons-admin-generic';
 							echo $depth != 0 ? ' hidden' : '' ?>"></span>
 					<?php endif; ?>
-					<span class="menu-item-title"><?php echo esc_html( strip_tags( $item->title ) ); ?></span>
+					<span class="menu-item-title"><?php echo ! empty( $item->title ) ? esc_html( strip_tags( $item->title ) ) : '(no title)'; ?></span>
 					<span class="is-submenu" <?php echo $submenu_text; ?>><?php _e( 'sub item' ); ?></span>
 				</span>
 					<span class="item-controls">
@@ -279,6 +279,10 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 						       style="display: none;"/>
 					</label>
 				</p>
+			<?php else: ?>
+				<input type="hidden"
+				       name="menu-item-title[<?php echo $item->ID; ?>]"
+				       value="Separator"/>
 			<?php endif; ?>
 
 			<?php // TODO Enable this, because I do believe it's possible ?>
