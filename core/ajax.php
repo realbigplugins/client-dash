@@ -115,6 +115,13 @@ class ClientDash_AJAX {
 		wp_die();
 	}
 
+	public function get_role_admin_menu() {
+
+		global $something;
+		// Nothing here!
+		// AJAX is handled in ClientDash_Core_Page_Settings_Tab_Menus->get_role_admin_menu()
+	}
+
 	/**
 	 * Creates a nav menu item and it's sub-menus. Used for initial creation of nav menus.
 	 *

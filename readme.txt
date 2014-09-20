@@ -47,7 +47,7 @@ Using this plugin is very simple. All you have to do is:
 
 == Changelog ==
 
-= 1.6.0
+= 1.6.0 =
 * Added adminmenu customizing functionality under Settings -> Menus.
 
 = 1.5.5 =

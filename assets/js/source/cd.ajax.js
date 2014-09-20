@@ -86,42 +86,55 @@ var cdAJAX;
          */
         populate_nav_menu: function () {
 
-            // Get the total number of menu items (excluding children)
-            // And start the completed items at 0
-            var total_items = cdData.navMenusAJAX.menu_items.length,
-                completed_items = 0;
+            var data = {
+                action: 'cd_get_role_admin_menu',
+                role: cdData.navMenusAJAX.role,
+                get_role_admin_menu: true
+            };
 
-            // Cycle through all menu items data and send them off
-            for (var i = 0; i < total_items; i++) {
+            $.post(
+                ajaxurl, // already defined
+                data,
+                function (admin_menu) {
 
-                // Prepare our data to send
-                var data = {
-                    action: 'cd_populate_nav_menu',
-                    menu_item: cdData.navMenusAJAX.menu_items[i].menu_item,
-                    menu_item_position: cdData.navMenusAJAX.menu_items[i].menu_item_position,
-                    menu_ID: cdData.navMenusAJAX.menu_ID,
-                    role: cdData.navMenusAJAX.role
-                };
+                    // Get the total number of menu items (excluding children)
+                    // And start the completed items at 0
+                    var total_items = admin_menu.menu_items.length,
+                        completed_items = 0;
 
-                // Now send it off
-                $.post(
-                    ajaxurl, // already defined
-                    data,
-                    function () {
+                    // Cycle through all menu items data and send them off
+                    for (var i = 0; i < total_items; i++) {
 
-                        // Update the loader percentage
-                        completed_items++;
-                        var progress = Math.round(((100 / total_items) * completed_items));
-                        $('.cd-progress-bar-inner').css('right', 100 - progress + '%');
-                        $('.cd-progress-bar-percent').html(progress + '%');
+                        // Prepare our data to send
+                        var data = {
+                            action: 'cd_populate_nav_menu',
+                            menu_item: admin_menu.menu_items[i].menu_item,
+                            menu_item_position: admin_menu.menu_items[i].menu_item_position,
+                            menu_ID: cdData.navMenusAJAX.menu_ID,
+                            role: cdData.navMenusAJAX.role
+                        };
 
-                        // If we've cycled though ALL of the menu items, then we're done
-                        if (completed_items == total_items) {
-                            window.location.href = cdData.navMenusAJAX.url;
-                        }
+                        // Now send it off
+                        $.post(
+                            ajaxurl, // already defined
+                            data,
+                            function () {
+
+                                // Update the loader percentage
+                                completed_items++;
+                                var progress = Math.round(((100 / total_items) * completed_items));
+                                $('.cd-progress-bar-inner').css('right', 100 - progress + '%');
+                                $('.cd-progress-bar-percent').html(progress + '%');
+
+                                // If we've cycled though ALL of the menu items, then we're done
+                                if (completed_items == total_items) {
+                                    window.location.href = cdData.navMenusAJAX.url;
+                                }
+                            }
+                        )
                     }
-                )
-            }
+                }
+            );
         }
     };
 

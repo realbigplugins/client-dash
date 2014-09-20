@@ -1,5 +1,7 @@
 <?php
 
+
+// FIXME When changing dashboard title, CD sub-pages become un-viewable (permission denied)
 // FIXME When populating a new menu, get_orig_admin_menu does just that, gets the ADMIN menu, but I need to get the CONTRIB menu, or the SUBSCRIBER menu, etc.
 
 // TODO Clean up warnings, notices, and stricts
@@ -72,6 +74,8 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	);
 
 	public $matching_urls = [ ];
+
+	public $default_role_object;
 
 	/**
 	 * All WordPress core nav menu items (aside from post types).
@@ -308,6 +312,23 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 		global $ClientDash;
 
+		// For when getting a specific role's admin menu
+		if ( isset( $_POST['get_role_admin_menu'] ) ) {
+
+			// Make WP think the current role is the one we're creating (and then reset it)
+			add_action( 'init', array( $this, 'modify_role' ), 0.0001 );
+
+			// With requiring the menu.php file in WP Core, some complications arise. So to get
+			// rid of them, I add an action at the top of the next file it requires and kill it
+			add_action( '_admin_menu', array( $this, 'get_role_admin_menu' ) );
+
+			// These other two are fallbacks (though I don't think they ever are hit)
+			add_action ('_user_admin_menu', array( $this, 'get_role_admin_menu' ) );
+			add_action ('_network_admin_menu', array( $this, 'get_role_admin_menu' ) );
+
+			return;
+		}
+
 		// Get the original admin menus
 		add_action( 'admin_menu', array( $this, 'get_orig_admin_menu' ), 99990 );
 
@@ -502,6 +523,68 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	}
 
 	/**
+	 * Used when importing a role's default admin menu items.
+	 *
+	 * Tricks WP into thinking the current user's role is whatever role we're currently
+	 * importing admin menu items for. This way, the admin menu is properly populated with
+	 * that role's default menu items. This function also loads in the menu.php file that
+	 * creates the WP default admin menu (because it's not loaded during AJAX calls).
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public function modify_role() {
+
+		global $current_user, $wp_roles, $super_admins, $menu, $submenu;
+
+		// Save the defaults for later so we can reset it
+		$this->default_role_object['object'] = $current_user;
+		$this->default_role_object['super_admins'] = $super_admins;
+
+		// If we're changing the role to something that's not an administrator, we need to make sure
+		// that we make WP think the current user is NOT super admin, because that overrides all
+		// capabilities
+		if ( is_super_admin( $current_user->ID ) ) {
+			$super_admins = [ ];
+		}
+
+		$new_role = $_POST['role'];
+
+		// Otherwise modify the current user object
+		$current_user->allcaps  = $wp_roles->roles[ $new_role ]['capabilities'];
+		$current_user->roles[0] = strtolower( $new_role );
+		unset( $current_user->caps[ $this->get_user_role() ] );
+		$current_user->caps[ $new_role ] = true;
+
+		// Load the default WP Core admin menu
+		require(ABSPATH . 'wp-admin/menu.php');
+	}
+
+	/**
+	 * Get's the current role (that is, the role for which we are importing menu item's for) default
+	 * admin menu and sends it back to AJAX.
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public function get_role_admin_menu() {
+
+		// Get the freshly populated admin menu
+		$this->get_orig_admin_menu();
+
+		// Cycle through each item and create the nav menu accordingly
+		foreach ( $this->original_admin_menu as $position => $menu ) {
+
+			// Prepare AJAX data to send
+			$AJAX_output['menu_items'][] = array(
+				'menu_item'          => $menu,
+				'menu_item_position' => $position
+			);
+		}
+
+		// Send the data back
+		wp_send_json( $AJAX_output );
+	}
+
+	/**
 	 * Creates each role's nav menu for the first time.
 	 *
 	 * @since Client Dash 1.6
@@ -576,16 +659,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 		// Build the URL to be sent back
 		$AJAX_output['url'] = add_query_arg( 'menu', $this->menu_ID );
-
-		// Cycle through each item and create the nav menu accordingly
-		foreach ( $this->original_admin_menu as $position => $menu ) {
-
-			// Prepare AJAX data to send
-			$AJAX_output['menu_items'][] = array(
-				'menu_item'          => $menu,
-				'menu_item_position' => $position
-			);
-		}
 
 		// Send off the ajax data to be localized
 		$ClientDash->jsData['navMenusAJAX'] = $AJAX_output;
@@ -1025,7 +1098,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 				// If the comments page, get original html (because when there are new comments, the title changes)
 				if ( $menu_item->title == 'Comments' ) {
-					$menu_item->title = $this->original_admin_menu[20]['menu_title'];
+					$menu_item->title = isset( $this->original_admin_menu[20]['menu_title'] ) ? $this->original_admin_menu[20]['menu_title'] : 'Comments';
 				}
 
 				// If this was originally a sub-menu, we need to fix the link (unless the slug is already
@@ -1802,6 +1875,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 										<p><strong>Please do NOT leave this page.</strong></p>
 
+										<?php // TODO Make color match theme color ?>
 										<div class="cd-progress-bar">
 											<div class="cd-progress-bar-inner"></div>
 											<span class="cd-progress-bar-percent">0%</span>
