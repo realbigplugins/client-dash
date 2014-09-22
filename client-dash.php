@@ -13,6 +13,12 @@ Author URI: http://realbigmarketing.com/staff/kyle
 
 // FUTUREBUILD Only require page / tab specific files WHEN they are needed. Not always.
 
+// REMOVE
+register_sidebar( array(
+	'name' => 'Test',
+	'id' => 'test',
+));
+
 // Require the functions class first so we can extend it
 include_once( plugin_dir_path( __FILE__ ) . 'core/functions.php' );
 
