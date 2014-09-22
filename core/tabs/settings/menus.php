@@ -1,9 +1,5 @@
 <?php
 
-
-// FIXME When changing dashboard title, CD sub-pages become un-viewable (permission denied)
-// FIXME When populating a new menu, get_orig_admin_menu does just that, gets the ADMIN menu, but I need to get the CONTRIB menu, or the SUBSCRIBER menu, etc.
-
 // TODO Clean up warnings, notices, and stricts
 // TODO Re-order methods
 // TODO Documentation
@@ -313,18 +309,24 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		global $ClientDash;
 
 		// For when getting a specific role's admin menu
-		if ( isset( $_POST['get_role_admin_menu'] ) ) {
+		if ( isset( $_POST['cd_role_menu_items'] ) ) {
 
 			// Make WP think the current role is the one we're creating (and then reset it)
 			add_action( 'init', array( $this, 'modify_role' ), 0.0001 );
 
+			add_action( 'admin_menu', array( $this, 'get_orig_admin_menu' ), 999998 );
+
+			add_action( 'admin_menu', array( $this, 'get_role_menu_items' ), 999999 );
+
 			// With requiring the menu.php file in WP Core, some complications arise. So to get
 			// rid of them, I add an action at the top of the next file it requires and kill it
-			add_action( '_admin_menu', array( $this, 'get_role_admin_menu' ) );
+//			add_action( '_admin_menu', array( $this, 'get_role_admin_menu' ) );
+//
+//			// These other two are fallbacks (though I don't think they ever are hit)
+//			add_action ('_user_admin_menu', array( $this, 'get_role_admin_menu' ) );
+//			add_action ('_network_admin_menu', array( $this, 'get_role_admin_menu' ) );
 
-			// These other two are fallbacks (though I don't think they ever are hit)
-			add_action ('_user_admin_menu', array( $this, 'get_role_admin_menu' ) );
-			add_action ('_network_admin_menu', array( $this, 'get_role_admin_menu' ) );
+//			add_action( 'admin_menu', array( $this, 'populate_nav_menu' ) );
 
 			return;
 		}
@@ -337,8 +339,8 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			add_action( 'admin_menu', array( $this, 'delete_nav_menu' ), 99995 );
 		}
 
-		// Create if told so from POST
-		if ( isset( $_POST['cd_create_admin_menu'] ) ) {
+		// Create if told so from GET
+		if ( isset( $_GET['cd_create_admin_menu'] ) ) {
 			add_action( 'admin_menu', array( $this, 'create_nav_menu' ), 99995 );
 		}
 
@@ -547,16 +549,39 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			$super_admins = [ ];
 		}
 
-		$new_role = $_POST['role'];
+		$new_role = $_POST['cd_create_admin_menu'];
 
 		// Otherwise modify the current user object
 		$current_user->allcaps  = $wp_roles->roles[ $new_role ]['capabilities'];
 		$current_user->roles[0] = strtolower( $new_role );
 		unset( $current_user->caps[ $this->get_user_role() ] );
 		$current_user->caps[ $new_role ] = true;
+	}
 
-		// Load the default WP Core admin menu
-		require(ABSPATH . 'wp-admin/menu.php');
+	public function get_role_menu_items() {
+
+		// Cycle through each item and create the nav menu accordingly
+		foreach ( $this->original_admin_menu as $position => $menu ) {
+
+			// Prepare AJAX data to send
+			$menu_items[] = array(
+				'menu_item'          => $menu,
+				'menu_item_position' => $position
+			);
+		}
+
+		set_transient( 'cd_role_menu_items', $menu_items, 60 );
+
+		wp_redirect(
+			add_query_arg(
+				array(
+					'cd_create_admin_menu' => $_POST['cd_create_admin_menu' ],
+					'import_items' => '1',
+				),
+				remove_query_arg( 'menu' )
+			)
+		);
+		exit;
 	}
 
 	/**
@@ -592,19 +617,20 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	public function create_nav_menu() {
 
 		// The role name to create for
-		$role_name = $_POST['cd_create_admin_menu'];
+		$role_name = $_GET['cd_create_admin_menu'];
 
 		// Bail if it exists (fail-safe)
 		$menu_object = wp_get_nav_menu_object( "cd_admin_menu_$role_name" );
 		if ( ! empty( $menu_object ) ) {
-			return;
+			wp_redirect( remove_query_arg( array( 'import_items', 'cd_create_admin_menu' ) ) );
+			exit;
 		}
 
 		// Create the nav menu
 		$this->menu_ID = wp_create_nav_menu( "cd_admin_menu_$role_name" );
 
 		// Only import and save the existing menu items IF the checkbox is checked (default)
-		if ( isset( $_POST['import_items'] ) ) {
+		if ($_GET['import_items'] == '1' ) {
 
 			// Now populate it with menu items (this is a hefty memory toll)
 			$this->populate_nav_menu( $role_name );
@@ -658,7 +684,13 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		$AJAX_output['total']   = $this->total_menu_items;
 
 		// Build the URL to be sent back
-		$AJAX_output['url'] = add_query_arg( 'menu', $this->menu_ID );
+		$AJAX_output['url'] = add_query_arg(
+			'menu',
+			$this->menu_ID,
+			remove_query_arg( array( 'cd_create_admin_menu', 'import_items' ) )
+		);
+
+		$AJAX_output['menu_items'] = get_transient( 'cd_role_menu_items' );
 
 		// Send off the ajax data to be localized
 		$ClientDash->jsData['navMenusAJAX'] = $AJAX_output;
@@ -1050,7 +1082,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 */
 	public function add_modified_admin_menu() {
 
-		global $menu, $cd_parent_file, $_registered_pages, $plugin_page, $cd_submenu_file, $ClientDash;
+		global $menu, $cd_parent_file, $_registered_pages, $plugin_page, $cd_submenu_file, $ClientDash, $admin_page_hooks;
 
 		// This is a strange little hack. When moving a sub-menu page to a top-level page, there are some
 		// caveats. One being, WordPress doesn't know what the heck to do!... You will get a permissions
@@ -1101,14 +1133,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 					$menu_item->title = isset( $this->original_admin_menu[20]['menu_title'] ) ? $this->original_admin_menu[20]['menu_title'] : 'Comments';
 				}
 
-				// If this was originally a sub-menu, we need to fix the link (unless the slug is already
-				// a hardlink)
-				if ( strpos( $menu_item->url, '.php' ) === false
-				     && ( $parent_slug = ! empty( $menu_item->cd_submenu_parent ) ? $menu_item->cd_submenu_parent : false )
-				) {
-					$menu_item->url = $parent_slug . ( strpos( $parent_slug, '?' ) !== false ? '&' : '?' ) . "page=$menu_item->url";
-				}
-
 				if ( strpos( $menu_item->url, 'separator' ) !== false ) {
 
 					// If a separator
@@ -1122,6 +1146,14 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 				} elseif ( $menu_item->menu_item_parent == 0 ) {
 
 					// If a parent
+
+					// If this was originally a sub-menu, we need to fix the link (unless the slug is already
+					// a hardlink)
+					if ( strpos( $menu_item->url, '.php' ) === false
+					     && ( $parent_slug = ! empty( $menu_item->cd_submenu_parent ) ? $menu_item->cd_submenu_parent : false )
+					) {
+						$menu_item->url = $parent_slug . ( strpos( $parent_slug, '?' ) !== false ? '&' : '?' ) . "page=$menu_item->url";
+					}
 
 					// If extra parameters are set, add them on
 					if ( ! empty( $menu_item->cd_params ) ) {
@@ -1164,11 +1196,21 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 						// TODO Use correct capability
 						'read',
 						$menu_item->url,
-						// TODO Use correct callback
 						'',
 						$menu_item->cd_icon,
 						$menu_item->menu_order
 					);
+
+					// Here's the deal... When we add the menu page here, we've already done it once (from other plugins
+					// and such), so the callbacks are already set. BUT, the callbacks are used by adding an action, the
+					// action hookname is based off of the menu title and the menu slug. SO, it's okay that we don't add
+					// the callback here again (because it's already been added before we removed it), but the problem is,
+					// if we change the title then the hookname that WP is now looking for doesn't match the one that was
+					// already created. SO, if the title was changed, we need to modify the global $admin_page_hooks so
+					// that the action name matches the ORIGINAL title, not the new title. WHEW!
+					if ( $menu_item->original_title != $menu_item->title ) {
+						$admin_page_hooks[ $menu_item->url ] = strtolower( $menu_item->original_title );
+					}
 				} else {
 
 					// If a sub-menu
@@ -1220,7 +1262,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 						// TODO Use correct capability
 						'read',
 						$menu_item->url,
-						// TODO Use correct callback
 						''
 					);
 				}
@@ -1620,7 +1661,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		$this->populate_side_sortables();
 
 		// If we're creating a menu via AJAX currently
-		$creating = isset( $_POST['cd_create_admin_menu'] ) ? true : false;
+		$creating = isset( $_GET['cd_create_admin_menu'] ) ? true : false;
 
 		// Skip all this garbage if we're creating
 		if ( ! $creating ) {
@@ -1789,6 +1830,9 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 										}
 										?>
 									<?php else : ?>
+
+										<input type="hidden" name="cd_role_menu_items" value="1" />
+
 										<span>Choose which role to create a menu for:</span>
 										<select name="cd_create_admin_menu">
 											<?php
@@ -1814,6 +1858,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 										<?php // Tells us whether to import items (default) or just start blank ?>
 										<label for="import_items">
+											<input type="hidden" name="import_items" value="0" />
 											<input type="checkbox" id="import_items" name="import_items" value="1"
 											       checked/>
 											Import role's existing menu items?

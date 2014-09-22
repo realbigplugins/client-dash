@@ -117,7 +117,6 @@ class ClientDash_AJAX {
 
 	public function get_role_admin_menu() {
 
-		global $something;
 		// Nothing here!
 		// AJAX is handled in ClientDash_Core_Page_Settings_Tab_Menus->get_role_admin_menu()
 	}

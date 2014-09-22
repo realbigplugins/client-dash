@@ -8,6 +8,9 @@ Author: Kyle Maurer
 Author URI: http://realbigmarketing.com/staff/kyle
 */
 
+// NEXTUPDATE 1.7 - Themes
+// NEXTUPDATE 1.7 -
+
 // TODO Only require page / tab specific files WHEN they are needed. Not always.
 
 // Require the functions class first so we can extend it
@@ -362,7 +365,7 @@ class ClientDash extends ClientDash_Functions {
 			'cd-main',
 			plugin_dir_url( __FILE__ ) . 'assets/js/clientdash.min.js',
 			array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable', 'jquery-effects-shake' ),
-			$this->version
+			WP_DEBUG == false ? $this->version : time()
 		);
 
 		wp_localize_script( 'cd-main', 'cdData', $this->jsData );
@@ -372,7 +375,7 @@ class ClientDash extends ClientDash_Functions {
 			'cd-main',
 			plugins_url( 'assets/css/clientdash.min.css', __FILE__ ),
 			array(),
-			$this->version
+			WP_DEBUG == false ? $this->version : time()
 		);
 	}
 
