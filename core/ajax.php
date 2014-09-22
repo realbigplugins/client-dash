@@ -61,8 +61,22 @@ class ClientDash_AJAX {
 			delete_option( "cd_$name" );
 		}
 
-		// Remove the modified nav menu
-		wp_delete_nav_menu( 'cd_admin_menu' );
+		// Remove all modified admin menus
+		foreach ( get_editable_roles() as $role_ID => $role ) {
+
+			// Get the menu object
+			$menu_object = wp_get_nav_menu_object( "cd_admin_menu_$role_ID" );
+
+			// If it doesn't exist, it returns false. So skip
+			if ( ! $menu_object ) {
+				continue;
+			}
+
+			wp_delete_nav_menu( "cd_admin_menu_$role_ID" );                  // Delete the nav menu
+			delete_transient( "cd_adminmenu_output_$menu_object->term_id" ); // Cached menu info
+			delete_option( "{$menu_object->name}_modified" );                // Menu output
+			delete_option( "cd_adminmenu_disabled_$menu_object->term_id" );  // Menu disable option
+		}
 
 		echo 'Settings successfully reset!';
 
@@ -92,7 +106,7 @@ class ClientDash_AJAX {
 		foreach ( (array) $item_ids as $menu_item_id ) {
 			$menu_obj = get_post( $menu_item_id );
 			if ( ! empty( $menu_obj->ID ) ) {
-				$menu_obj = wp_setup_nav_menu_item( $menu_obj );
+				$menu_obj     = wp_setup_nav_menu_item( $menu_obj );
 				$menu_items[] = $menu_obj;
 			}
 		}
@@ -103,22 +117,16 @@ class ClientDash_AJAX {
 		// Output the newly populated nav menu
 		if ( ! empty( $menu_items ) ) {
 			$args = array(
-				'after' => '',
-				'before' => '',
-				'link_after' => '',
+				'after'       => '',
+				'before'      => '',
+				'link_after'  => '',
 				'link_before' => '',
-				'walker' => new Walker_Nav_Menu_Edit_CD(),
+				'walker'      => new Walker_Nav_Menu_Edit_CD(),
 			);
 			echo walk_nav_menu_tree( $menu_items, 0, (object) $args );
 		}
 
 		wp_die();
-	}
-
-	public function get_role_admin_menu() {
-
-		// Nothing here!
-		// AJAX is handled in ClientDash_Core_Page_Settings_Tab_Menus->get_role_admin_menu()
 	}
 
 	/**
@@ -128,19 +136,13 @@ class ClientDash_AJAX {
 	 */
 	public function populate_nav_menu() {
 
-		// TODO Prevent duplicate separators from being added
+		// MAYBETODO Prevent duplicate separators from being added
 
 		// Get our POST data from AJAX
 		$menu_item          = $_POST['menu_item'];
 		$menu_item_position = $_POST['menu_item_position'];
 		$menu_ID            = $_POST['menu_ID'];
 		$role               = $_POST['role'];
-
-		// Skip links
-		// TODO Figure out how to better deal with this
-		if ( $menu_item['menu_title'] == 'Links' ) {
-			die();
-		}
 
 		// Get the role object (for capabilities)
 		$role = get_role( $role );
@@ -181,7 +183,7 @@ class ClientDash_AJAX {
 
 				// Make it a child IF it has a parent, otherwise make it top-level
 				if ( ! $no_parent ) {
-					$args['parent-id'] = $ID;
+					$args['parent-id']         = $ID;
 					$args['cd-submenu-parent'] = $submenu_item['parent_slug'];
 				}
 

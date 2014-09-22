@@ -1,7 +1,5 @@
 <?php
 
-// TODO Only show items available for given role
-
 /**
  * Class CD_AdminMenu_AvailableItems_Callbacks
  *
@@ -506,10 +504,12 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 						continue;
 					}
 
-					// If in the WP Core list, this isn't a plugin page, so set it to disabled
-					// Also skip Client Dash settings page
+					// Only add if not a WP Core or CD Core item
+					// Variable webmaster title
+					$title = $submenu_item['menu_slug'] == 'cd_webmaster' ? 'webmaster' : strtolower( $submenu_item['menu_title'] );
 					if ( isset( $ClientDash_Core_Page_Settings_Tab_Menus::$wp_core[ $menu_item['menu_title'] ]['submenus'] )
 					     && ! array_key_exists( $submenu_item['menu_title'], $ClientDash_Core_Page_Settings_Tab_Menus::$wp_core[ $menu_item['menu_title'] ]['submenus'] )
+					     && ! array_key_exists( $title, ClientDash::$core_files )
 					) {
 						$menu_item['submenus'][] = $submenu_item;
 					}
@@ -732,7 +732,6 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 	 * @since Client Dash 1.6
 	 */
 	public static function custom_link() {
-		// TODO Clear fields when adding a link
 		?>
 		<div id="custom-link" class="posttypediv">
 

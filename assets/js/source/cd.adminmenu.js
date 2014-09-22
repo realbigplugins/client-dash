@@ -17,6 +17,7 @@ var cdAdminMenu;
             this.separator_checkbox();
             this.link_checkbox();
             this.addItemToMenu();
+            this.icon_selector();
         },
         /**
          * Replaces wpNavMenu.addItemToMenu() (nav-menu.js:~918).
@@ -135,6 +136,7 @@ var cdAdminMenu;
                             'menu-item-title',
                             'menu-item-original-title',
                             'menu-item-url',
+                            'menu-item-classes',
                             //
                             // CD added
                             'menu-item-cd-type',
@@ -430,6 +432,29 @@ var cdAdminMenu;
                 body.removeClass('menu-max-depth-' + menuMaxDepth).addClass('menu-max-depth-' + newDepth);
                 menuMaxDepth = newDepth;
             }
+        },
+        icon_selector: function () {
+
+            // Show on click
+            $('.edit-menu-item-cd-icon').click(function (e) {
+                e.stopPropagation();
+                if ($(this).is(':focus')) {
+                    $(this).closest('.cd-menu-icon-field').find('.cd-menu-icon-selector').show();
+                }
+            });
+
+            // Hide on click
+            $('body').click(function () {
+                $('.cd-menu-icon-selector').hide();
+            });
+
+            // Use new icon val on click
+            $('.cd-menu-icon-selector').find('li').click(function () {
+                var icon = $(this).attr('data-icon');
+
+                $(this).closest('.cd-menu-icon-field').find('input[type="text"]').val(icon);
+                $(this).closest('.menu-item').find('.item-title').find('.dashicons').attr('class', 'dashicons ' + icon);
+            });
         }
     };
 

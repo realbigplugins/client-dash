@@ -1,9 +1,5 @@
 <?php
 
-// TODO Clean up warnings, notices, and stricts
-// TODO Re-order methods
-// TODO Documentation
-
 /**
  * Class ClientDash_Core_Page_Settings_Tab_AdminMenu
  *
@@ -53,6 +49,12 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 */
 	public $all_menu_IDs;
 
+	/**
+	 * A list of available menu item options and their defaults. Only items placed here will actually
+	 * be saved to the db.
+	 *
+	 * @since Client Dash 1.6
+	 */
 	public static $menu_item_defaults = array(
 		'db-id'             => 0,
 		'parent-id'         => 0,
@@ -60,6 +62,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		'title'             => '',
 		'original-title'    => '',
 		'url'               => '',
+		'classes'           => '',
 		//
 		// Added by CD
 		'cd-type'           => '',
@@ -69,9 +72,12 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		'cd-params'         => '',
 	);
 
+	/**
+	 * A list of all urls (from each menu item) that match the current page.
+	 *
+	 * @since Client Dash 1.6
+	 */
 	public $matching_urls = [ ];
-
-	public $default_role_object;
 
 	/**
 	 * All WordPress core nav menu items (aside from post types).
@@ -96,13 +102,11 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 				),
 				'My Sites' => array(
 					'url'        => 'my-sites.php',
-					// TODO Find real cap
 					'capability' => 'read',
 				),
 				'Updates'  => array(
 					'url'        => 'update-core.php',
-					// TODO Find real cap
-					'capability' => 'read',
+					'capability' => 'update_core',
 				),
 			),
 		),
@@ -159,16 +163,10 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 				),
 			),
 		),
-		'Links'      => array(
-			'url'        => 'links.php',
-			'icon'       => 'dashicons-admin-links',
-			'capability' => 'edit_pages',
-		),
 		'Comments'   => array(
 			'url'        => 'edit-comments.php',
 			'icon'       => 'dashicons-admin-comments',
 			'capability' => 'edit_posts',
-			// TODO Find better way to deal with this
 			'submenus'   => array(
 				'All Comments' => array(
 					'url'        => 'index.php',
@@ -199,8 +197,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 				),
 				'Editor'    => array(
 					'url'        => 'theme-editor.php',
-					// TODO Get real cap
-					'capability' => 'edit_theme_options',
+					'capability' => 'edit_files',
 				),
 			),
 		),
@@ -219,8 +216,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 				),
 				'Editor'            => array(
 					'url'        => 'plugin-editor.php',
-					// TODO Get real cap
-					'capability' => 'activate_plugins',
+					'capability' => 'edit_files',
 				),
 			),
 		),
@@ -318,16 +314,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 			add_action( 'admin_menu', array( $this, 'get_role_menu_items' ), 999999 );
 
-			// With requiring the menu.php file in WP Core, some complications arise. So to get
-			// rid of them, I add an action at the top of the next file it requires and kill it
-//			add_action( '_admin_menu', array( $this, 'get_role_admin_menu' ) );
-//
-//			// These other two are fallbacks (though I don't think they ever are hit)
-//			add_action ('_user_admin_menu', array( $this, 'get_role_admin_menu' ) );
-//			add_action ('_network_admin_menu', array( $this, 'get_role_admin_menu' ) );
-
-//			add_action( 'admin_menu', array( $this, 'populate_nav_menu' ) );
-
 			return;
 		}
 
@@ -385,7 +371,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			add_filter( 'cd_submit', '__return_false' );
 
 			// Add nav-menus body class for our custom CD page
-			add_filter( 'admin_body_class', array( $this, 'my_class_names' ) );
+			add_filter( 'admin_body_class', array( $this, 'add_nav_menu_class' ) );
 
 			// Save menus (only when updating)
 			if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'update' ) {
@@ -438,6 +424,11 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		global $menu, $submenu;
 
 		foreach ( $menu as $menu_location => $menu_item ) {
+
+			// Skip links
+			if ( $menu_item['menu_title'] == 'Links' ) {
+				continue;
+			}
 
 			$menu_array = array(
 				'menu_title' => isset( $menu_item[0] ) ? $menu_item[0] : null,
@@ -538,10 +529,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 		global $current_user, $wp_roles, $super_admins, $menu, $submenu;
 
-		// Save the defaults for later so we can reset it
-		$this->default_role_object['object'] = $current_user;
-		$this->default_role_object['super_admins'] = $super_admins;
-
 		// If we're changing the role to something that's not an administrator, we need to make sure
 		// that we make WP think the current user is NOT super admin, because that overrides all
 		// capabilities
@@ -558,6 +545,12 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		$current_user->caps[ $new_role ] = true;
 	}
 
+	/**
+	 * Now that the role has been modified to whatever role we're building a menu for, let's
+	 * get store that role's menu items for populating the nav menu on the next page.
+	 *
+	 * @since Client Dash 1.6
+	 */
 	public function get_role_menu_items() {
 
 		// Cycle through each item and create the nav menu accordingly
@@ -673,8 +666,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 */
 	public function populate_nav_menu( $role ) {
 
-		// TODO Remove side by side separators
-
 		global $ClientDash;
 
 		$AJAX_output = [ ];
@@ -706,6 +697,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 		// Get the nav menu for each role
 		$roles = get_editable_roles();
+		$no_menus = true;
 		foreach ( $roles as $role_ID => $role ) {
 
 			$menu_object = wp_get_nav_menu_object( "cd_admin_menu_$role_ID" );
@@ -714,8 +706,21 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			if ( ! $menu_object ) {
 				$this->all_menu_IDs[ $role_ID ] = false;
 			} else {
+				$no_menus = false;
 				$this->all_menu_IDs[ $role_ID ] = $menu_object->term_id;
 			}
+		}
+
+		// If no menus exist
+		if ( $no_menus ) {
+			$this->menu_ID = false;
+
+			// If no menus exist and the url contains an int for a menu, redirect and remove the menu param
+			if ( isset( $_GET['menu'] ) && ( strcspn( $_GET['menu'], '0123456789' ) != strlen( $_GET['menu'] ) ) ) {
+				wp_redirect( remove_query_arg( 'menu' ) );
+			}
+
+			return;
 		}
 
 		$this->get_current_menu();
@@ -781,21 +786,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		}
 	}
 
-	// TODO Is this function necessary? It's not populating the menu
-	public static function return_cd_nav_menu() {
-		// Get our nav menu (if it exists)
-		$term = get_term_by( 'name', 'cd_admin_menu', 'nav_menu' );
-
-		$term_id = $term->term_id;
-
-		// If it doesn't exist, create it
-		if ( ! $term ) {
-			$term_id = wp_create_nav_menu( 'cd_admin_menu' );
-		}
-
-		return $term_id;
-	}
-
 	/**
 	 * Filters the walker class used on the CD admin menu page.
 	 *
@@ -819,8 +809,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		// Includes our modified walker class for when ajax-actions.php tries to call it
 		include_once( $ClientDash->path . '/core/tabs/settings/menus/walkerclass.php' );
 
-		// TODO Address PHP notices in AJAX response
-
 		if ( isset( $_POST['menu-item'] ) ) {
 			$menu_item = reset( $_POST['menu-item'] );
 		}
@@ -832,6 +820,16 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		return $walker;
 	}
 
+	/**
+	 * The nav menu system uses a modified menu object (adding some params). Here I customize that further
+	 * by adding some CD specific properties and removing properties that are no longer used (cuz why not?)
+	 *
+	 * @since Client Dash 1.6
+	 *
+	 * @param object $menu_item The old menu item.
+	 *
+	 * @return mixed The new menu item.
+	 */
 	public function modify_menu_item( $menu_item ) {
 
 		if ( $menu_item->type != 'cd_nav_menu' ) {
@@ -844,7 +842,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			'target',
 			'attr_title',
 			'description',
-			'classes',
 			'xfn',
 		);
 		foreach ( $remove as $property ) {
@@ -1082,7 +1079,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 */
 	public function add_modified_admin_menu() {
 
-		global $menu, $cd_parent_file, $_registered_pages, $plugin_page, $cd_submenu_file, $ClientDash, $admin_page_hooks;
+		global $menu, $submenu, $cd_parent_file, $_registered_pages, $plugin_page, $cd_submenu_file, $ClientDash, $admin_page_hooks;
 
 		// This is a strange little hack. When moving a sub-menu page to a top-level page, there are some
 		// caveats. One being, WordPress doesn't know what the heck to do!... You will get a permissions
@@ -1193,13 +1190,15 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 					add_menu_page(
 						$menu_item->cd_page_title,
 						$menu_item->title,
-						// TODO Use correct capability
 						'read',
 						$menu_item->url,
 						'',
 						$menu_item->cd_icon,
 						$menu_item->menu_order
 					);
+
+					// Add classes
+					$menu[ $menu_item->menu_order ][4] .= ' ' . esc_attr( implode( ' ', $menu_item->classes ) );
 
 					// Here's the deal... When we add the menu page here, we've already done it once (from other plugins
 					// and such), so the callbacks are already set. BUT, the callbacks are used by adding an action, the
@@ -1259,7 +1258,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 						$menu_items[ (int) $menu_item->menu_item_parent ]->url,
 						$menu_item->cd_page_title,
 						$menu_item->title,
-						// TODO Use correct capability
 						'read',
 						$menu_item->url,
 						''
@@ -1337,9 +1335,11 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	}
 
 	/**
-	 * Add specific CSS class by filter
+	 * Adds the nav-menu body class (which is normally present on the nav-menus page and necessary).
+	 *
+	 * @since Client Dash 1.6
 	 */
-	public function my_class_names( $classes ) {
+	public function add_nav_menu_class( $classes ) {
 		return $classes . ' nav-menus-php cd-nav-menu';
 	}
 
@@ -1349,7 +1349,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 * @since Client Dash 1.6
 	 */
 	public function save_menu() {
-		// TODO Secure page better with nonce
 
 		// Remove the transient so it resets
 		delete_transient( "cd_adminmenu_output_$this->menu_ID" );
@@ -1533,6 +1532,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			update_post_meta( $menu_item_db_id, '_menu_item_url', $args['url'] );
 			update_post_meta( $menu_item_db_id, '_menu_item_cd_icon', $args['cd-icon'] );
 			update_post_meta( $menu_item_db_id, '_menu_item_cd_params', $args['cd-params'] );
+			update_post_meta( $menu_item_db_id, '_menu_item_classes', $args['classes'] );
 		} else {
 
 			// Else update it
@@ -1544,6 +1544,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			update_post_meta( $menu_item_db_id, '_menu_item_menu_item_parent', strval( (int) $args['parent-id'] ) );
 			update_post_meta( $menu_item_db_id, '_menu_item_url', $args['url'] );
 			update_post_meta( $menu_item_db_id, '_menu_item_cd_params', $args['cd-params'] );
+			update_post_meta( $menu_item_db_id, '_menu_item_classes', $args['classes'] );
 			update_post_meta( $menu_item_db_id, '_menu_item_cd_icon', $args['cd-icon'] );
 		}
 
@@ -1669,7 +1670,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			// Get our menu items!
 			$menu_info = $this->get_current_menu_items();
 
-			// TODO Remove extract
 			$edit_markup = $menu_info['edit_markup'];
 			$errors = $menu_info['errors'];
 			$menu_items = $menu_info['menu_items'];
@@ -1920,7 +1920,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 										<p><strong>Please do NOT leave this page.</strong></p>
 
-										<?php // TODO Make color match theme color ?>
 										<div class="cd-progress-bar">
 											<div class="cd-progress-bar-inner"></div>
 											<span class="cd-progress-bar-percent">0%</span>

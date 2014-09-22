@@ -1,7 +1,5 @@
 <?php
 
-// TODO Document
-
 /**
  * Class ClientDash_Functions
  *
@@ -29,9 +27,9 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string HTML of toggle switch.
 	 */
-	public function toggle_switch( $name, $value, $current_val, $horizontal = false, $echo = true, $invert = false, $atts = false ) {
+	public static function toggle_switch( $name, $value, $current_val, $horizontal = false, $echo = true, $invert = false, $atts = false ) {
 
-		// TODO Use this function across the entire plugin
+		// FUTUREBUILD Use this function across the entire plugin
 
 		// Setup orientation
 		if ( $horizontal ) {
@@ -63,6 +61,7 @@ abstract class ClientDash_Functions {
 			return $html;
 		}
 	}
+
 	/**
 	 * Outputs a helpful tip that can be closed.
 	 *
@@ -74,7 +73,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string The tip.
 	 */
-	public function pointer( $content, $position = 'left', $classes = null ) {
+	public static function pointer( $content, $position = 'left', $classes = null ) {
 
 		return "<span class='$classes' data-cd-pointer-position='$position'>$content<span class='cd-tip-close'>X</span></span>";
 	}
@@ -86,7 +85,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @param string $page The page we're on. Default 'account'.
 	 */
-	public function the_page_title( $page = 'account' ) {
+	public static function the_page_title( $page = 'account' ) {
 
 		global $ClientDash;
 
@@ -106,7 +105,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.0
 	 */
-	public function create_tab_page() {
+	public static function create_tab_page() {
 
 		global $ClientDash;
 
@@ -129,7 +128,7 @@ abstract class ClientDash_Functions {
 
 		// If no content on this page, show error and bail
 		if ( empty( $ClientDash->content_sections[ $current_page ] ) ) {
-			$this->error_nag( 'This page has no content' );
+			self::error_nag( 'This page has no content' );
 
 			return;
 		}
@@ -205,7 +204,7 @@ abstract class ClientDash_Functions {
 		} else {
 
 			// Let the user know the tab doesn't exist
-			$this->error_nag( 'This tab doesn\'t seem to exist! Sorry about that.' );
+			self::error_nag( 'This tab doesn\'t seem to exist! Sorry about that.' );
 
 			// Also need to remove the submit button if on settings pages
 			if ( $_GET['page'] == 'cd_settings' ) {
@@ -226,7 +225,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @param array $content_section All of the arguments for the function.
 	 */
-	public function add_content_section( $content_section ) {
+	public static function add_content_section( $content_section ) {
 
 		global $ClientDash;
 
@@ -235,13 +234,13 @@ abstract class ClientDash_Functions {
 		}
 
 		// Generate the content section ID
-		$ID = $this->translate_name_to_id( $content_section['name'] );
+		$ID = self::translate_name_to_id( $content_section['name'] );
 
 		// Fix up the tab name (to allow spaces and such)
-		$tab_ID = $this->translate_name_to_id( $content_section['tab'] );
+		$tab_ID = self::translate_name_to_id( $content_section['tab'] );
 
 		// Fix up the page name (to allow spaces and such)
-		$page = $this->translate_name_to_id( $content_section['page'] );
+		$page = self::translate_name_to_id( $content_section['page'] );
 
 		// Add to the array
 		$ClientDash->content_sections[ $page ][ $tab_ID ]['name'] = $content_section['tab'];
@@ -269,7 +268,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @param array $widget The new widget to add.
 	 */
-	public function add_widget( $widget ) {
+	public static function add_widget( $widget ) {
 
 		global $ClientDash;
 
@@ -303,7 +302,7 @@ abstract class ClientDash_Functions {
 	 * @param bool $disabled Whether or not the inputs should be disabled.
 	 * @param bool $draggable Whether or not these should be draggable.
 	 */
-	public function widget_loop( $widgets, $disabled = false, $draggable = false ) {
+	public static function widget_loop( $widgets, $disabled = false, $draggable = false ) {
 
 		$i = - 1;
 		foreach ( $widgets as $key => $widget ) {
@@ -311,7 +310,7 @@ abstract class ClientDash_Functions {
 
 			if ( ! isset( $widget['ID'] ) ) {
 				if ( isset( $widget['cd_core'] ) ) {
-					$widget['ID'] = $this->translate_name_to_id( $widget['title'] );
+					$widget['ID'] = self::translate_name_to_id( $widget['title'] );
 				} else {
 					$widget['ID'] = $key;
 				}
@@ -384,7 +383,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @param bool $force Whether or not to overrite existing values.
 	 */
-	public function reset_settings( $force = false ) {
+	public static function reset_settings( $force = false ) {
 
 		global $ClientDash;
 
@@ -409,7 +408,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string Translated ID.
 	 */
-	public function translate_name_to_id( $name ) {
+	public static function translate_name_to_id( $name ) {
 
 		return strtolower( str_replace( array( ' ', '-' ), '_', $name ) );
 	}
@@ -423,7 +422,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string Translated name.
 	 */
-	public function translate_id_to_name( $ID ) {
+	public static function translate_id_to_name( $ID ) {
 
 		return ucwords( str_replace( '_', ' ', $ID ) );
 	}
@@ -437,7 +436,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return array Current color scheme
 	 */
-	public function get_color_scheme( $which_color = null ) {
+	public static function get_color_scheme( $which_color = null ) {
 
 		global $ClientDash;
 
@@ -475,7 +474,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return mixed
 	 */
-	public function get_dir_size( $path ) {
+	public static function get_dir_size( $path ) {
 
 		$totalsize  = 0;
 		$totalcount = 0;
@@ -486,7 +485,7 @@ abstract class ClientDash_Functions {
 				if ( $file != '.' && $file != '..' && ! is_link( $nextpath ) ) {
 					if ( is_dir( $nextpath ) ) {
 						$dircount ++;
-						$result = $this->get_dir_size( $nextpath );
+						$result = self::get_dir_size( $nextpath );
 						$totalsize += $result['size'];
 						$totalcount += $result['count'];
 						$dircount += $result['dircount'];
@@ -514,7 +513,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string
 	 */
-	public function format_dir_size( $size ) {
+	public static function format_dir_size( $size ) {
 
 		if ( $size < 1024 ) {
 			return $size . " bytes";
@@ -543,7 +542,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return bool The result.
 	 */
-	public function array_key_exists_r( $needle, $haystack ) {
+	public static function array_key_exists_r( $needle, $haystack ) {
 
 		$result = array_key_exists( $needle, $haystack );
 		if ( $result ) {
@@ -551,7 +550,7 @@ abstract class ClientDash_Functions {
 		}
 		foreach ( $haystack as $v ) {
 			if ( is_array( $v ) ) {
-				$result = $this->array_key_exists_r( $needle, $v );
+				$result = self::array_key_exists_r( $needle, $v );
 			}
 			if ( $result ) {
 				return $result;
@@ -568,7 +567,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return mixed The role.
 	 */
-	public function get_user_role() {
+	public static function get_user_role() {
 
 		global $current_user;
 		$user_roles = $current_user->roles;
@@ -592,7 +591,7 @@ abstract class ClientDash_Functions {
 	 * @return string The error.
 	 * is 'read'.
 	 */
-	public function error_nag( $message, $caps = 'read', $echo = true ) {
+	public static function error_nag( $message, $caps = 'read', $echo = true ) {
 
 		if ( current_user_can( $caps ) ) {
 			if ( $echo ) {
@@ -616,7 +615,7 @@ abstract class ClientDash_Functions {
 	 * @param string $caps . Optional. A WordPress recognized capability. Default
 	 * is 'read'.
 	 */
-	public function update_nag( $message, $caps = 'read' ) {
+	public static function update_nag( $message, $caps = 'read' ) {
 
 		if ( current_user_can( $caps ) ) {
 			echo "<div class='updated inline cd-message'><p>$message</p></div>";
@@ -633,7 +632,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string
 	 */
-	public function get_settings_url( $tab = null, $section = null ) {
+	public static function get_settings_url( $tab = null, $section = null ) {
 
 		return get_admin_url() . 'options-general.php?page=cd_settings' . ( $tab ? "&tab=$tab" : '' ) . ( $section ? "&section=$section" : '' );
 	}
@@ -648,7 +647,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string
 	 */
-	public function get_account_url( $tab = null, $section = null ) {
+	public static function get_account_url( $tab = null, $section = null ) {
 
 		return get_admin_url() . 'index.php?page=cd_account' . ( $tab ? "&tab=$tab" : '' ) . ( $section ? "&section=$section" : '' );
 	}
@@ -663,7 +662,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string
 	 */
-	public function get_help_url( $tab = null, $section = null ) {
+	public static function get_help_url( $tab = null, $section = null ) {
 
 		return get_admin_url() . 'index.php?page=cd_help' . ( $tab ? "&tab=$tab" : '' ) . ( $section ? "&section=$section" : '' );
 	}
@@ -678,7 +677,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string
 	 */
-	public function get_reports_url( $tab = null, $section = null ) {
+	public static function get_reports_url( $tab = null, $section = null ) {
 
 		return get_admin_url() . 'index.php?page=cd_reports' . ( $tab ? "&tab=$tab" : '' ) . ( $section ? "&section=$section" : '' );
 	}
@@ -693,7 +692,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string
 	 */
-	public function get_webmaster_url( $tab = null, $section = null ) {
+	public static function get_webmaster_url( $tab = null, $section = null ) {
 
 		return get_admin_url() . 'index.php?page=cd_webmaster' . ( $tab ? "&tab=$tab" : '' ) . ( $section ? "&section=$section" : '' );
 	}
@@ -705,7 +704,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.5
 	 */
-	public function return_1() {
+	public static function return_1() {
 
 		return 1;
 	}
@@ -719,7 +718,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @return string Upped count.
 	 */
-	public function replace_count( $matches ) {
+	public static function replace_count( $matches ) {
 
 		$n = intval( $matches[2] ) + 1;
 

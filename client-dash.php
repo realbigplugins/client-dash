@@ -11,7 +11,7 @@ Author URI: http://realbigmarketing.com/staff/kyle
 // NEXTUPDATE 1.7 - Themes
 // NEXTUPDATE 1.7 -
 
-// TODO Only require page / tab specific files WHEN they are needed. Not always.
+// FUTUREBUILD Only require page / tab specific files WHEN they are needed. Not always.
 
 // Require the functions class first so we can extend it
 include_once( plugin_dir_path( __FILE__ ) . 'core/functions.php' );
@@ -224,7 +224,7 @@ class ClientDash extends ClientDash_Functions {
 						'subscriber'  => 'hidden'
 					)
 				),
-				'feed'      => array(
+				'feed' => array(
 					'feed' => array(
 						'editor'      => 'hidden',
 						'author'      => 'hidden',
@@ -259,14 +259,14 @@ class ClientDash extends ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.5
 	 */
-	public $content_sections = [];
+	public $content_sections = [ ];
 
 	/**
 	 * A duplicate of content sections that is NOT filtered.
 	 *
 	 * @since Client Dash 1.5
 	 */
-	public $content_sections_unmodified = [];
+	public $content_sections_unmodified = [ ];
 
 	/**
 	 * The semi-magical widget property.
@@ -276,14 +276,14 @@ class ClientDash extends ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.5
 	 */
-	public $widgets = [];
+	public $widgets = [ ];
 
 	/**
 	 * Data to be sent to the main JS file.
 	 *
 	 * @since Client Dash 1.6
 	 */
-	public $jsData = [];
+	public $jsData = [ ];
 
 	/**
 	 * Constructs the class.
@@ -422,18 +422,27 @@ class ClientDash extends ClientDash_Functions {
 		// Build style array
 		$styles = array(
 			'.cd-icon'                                   => array(
-				'color' => $active_theme['primary']
+				'color' => $active_theme['primary'],
 			),
 			'.cd-icon:hover'                             => array(
-				'color' => $active_theme['secondary']
+				'color' => $active_theme['secondary'],
 			),
 			'.cd-dashicons-grid-item.active .container'  => array(
 				'background-color' => $active_theme['tertiary'],
-				'color'            => '#eee'
+				'color'            => '#eee',
 			),
 			'#cd-dashicons-selections .dashicons.active' => array(
-				'color' => $active_theme['secondary']
-			)
+				'color' => $active_theme['secondary'],
+			),
+			'.cd-progress-bar .cd-progress-bar-inner'                     => array(
+				'background-color' => $active_theme['secondary'],
+			),
+			'.cd-menu-icon-selector li:hover .dashicons' => array(
+				'color' => $active_theme['secondary'] . '!important',
+			),
+			'.cd-menu-icon-selector .active .dashicons' => array(
+				'color' => $active_theme['secondary'] . '!important',
+			),
 		);
 
 		// Build our styles
@@ -664,7 +673,7 @@ class ClientDash extends ClientDash_Functions {
 	 */
 	public function content_sections_init() {
 
-		$current_role           = $this->get_user_role();
+		$current_role = $this->get_user_role();
 		if ( $current_role == 'administrator' ) {
 			return;
 		}
@@ -677,7 +686,7 @@ class ClientDash extends ClientDash_Functions {
 				foreach ( $props['content-sections'] as $ID => $info ) {
 
 					// Get our values for easier use
-					$option_value  = $content_sections_roles[ $page ][ $tab ][ $ID ][ $current_role ];
+					$option_value = $content_sections_roles[ $page ][ $tab ][ $ID ][ $current_role ];
 
 					// See if this is disabled
 					if ( $option_value == 'hidden' ) {
@@ -819,7 +828,11 @@ class ClientDash extends ClientDash_Functions {
 			?>
 			<div class="error">
 				<p>
-					It seems that there are either new roles, or some roles have been deleted, or the roles have been modified in some other way. Please visit the <a href="<?php echo $this->get_settings_url( 'display' ); ?>">Display Settings</a> and confirm that the role display settings are still to your liking. (this message will go away once you hit "Save Changes" on the display settings page).
+					It seems that there are either new roles, or some roles have been deleted, or the roles have been
+					modified in some other way. Please visit the <a
+						href="<?php echo $this->get_settings_url( 'display' ); ?>">Display Settings</a> and confirm that
+					the role display settings are still to your liking. (this message will go away once you hit "Save
+					Changes" on the display settings page).
 				</p>
 			</div>
 		<?php

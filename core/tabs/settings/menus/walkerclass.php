@@ -1,9 +1,7 @@
 <?php
 
-// TODO When adding post type sub-menu items (add new, list all, tax, etc.), display what post type each item belongs to somewhere in the title
-// TODO Client Dash items highlight red when disabled for specific role (from display)
-// TODO Pretty icon selector
-// TODO Duplicate parent slug checking (not meta though, just a global error, if possible)
+// MAYBETODO When adding post type sub-menu items (add new, list all, tax, etc.), display what post type each item belongs to somewhere in the title
+// MAYBETODO Use screen options tab instead of dropdowns
 
 /**
  * Create HTML list of nav menu input items (MODIFIED FOR CD).
@@ -56,9 +54,7 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 	 */
 	function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
 
-		// TODO Remove excess
-
-		global $errors, $ClientDash, $cd_current_menu_role;
+		global $errors, $ClientDash, $cd_current_menu_role, $ClientDash_Core_Page_Settings_Tab_Icons;
 
 		// Add disabled visual cue for CD Core pages that are currently disabled for current role
 		// If Administrator menu, skip because all items are visible always
@@ -166,7 +162,8 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 							class="dashicons <?php echo ! empty( $item->cd_icon ) ? $item->cd_icon : 'dashicons-admin-generic';
 							echo $depth != 0 ? ' hidden' : '' ?>"></span>
 					<?php endif; ?>
-					<span class="menu-item-title"><?php echo ! empty( $item->title ) ? esc_html( strip_tags( $item->title ) ) : '(no title)'; ?></span>
+					<span
+						class="menu-item-title"><?php echo ! empty( $item->title ) ? esc_html( strip_tags( $item->title ) ) : '(no title)'; ?></span>
 					<span class="is-submenu" <?php echo $submenu_text; ?>><?php _e( 'sub item' ); ?></span>
 				</span>
 					<span class="item-controls">
@@ -256,13 +253,36 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 					</label>
 				</p>
 
-				<p class="description description-thin">
-					<label for="edit-menu-item-cd-icon-<?php echo $item->ID; ?>">
-						<?php _e( 'Menu Icon' ); ?><br/>
-						<input type="text" id="edit-menu-item-cd-icon-<?php echo $item->ID; ?>"
-						       class="widefat edit-menu-item-cd-icon"
-						       name="menu-item-cd-icon[<?php echo $item->ID; ?>]"
-						       value="<?php echo esc_html( ! empty( $item->cd_icon ) ? $item->cd_icon : '' ); ?>"/>
+				<div class="cd-menu-icon-field">
+					<p class="description description-thin">
+						<label for="edit-menu-item-cd-icon-<?php echo $item->ID; ?>">
+							<?php _e( 'Menu Icon' ); ?><br/>
+							<input type="text" id="edit-menu-item-cd-icon-<?php echo $item->ID; ?>"
+							       class="widefat edit-menu-item-cd-icon"
+							       name="menu-item-cd-icon[<?php echo $item->ID; ?>]"
+							       value="<?php echo esc_html( ! empty( $item->cd_icon ) ? $item->cd_icon : '' ); ?>"/>
+						</label>
+					</p>
+					<ul class="cd-menu-icon-selector">
+						<?php foreach ( $ClientDash_Core_Page_Settings_Tab_Icons::$icons as $icon ) : ?>
+							<li data-icon="<?php echo $icon; ?>">
+								<span class="dashicons <?php echo $icon; ?>"></span>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				</div>
+
+				<p class="field-css-classes description description-wide">
+					<label for="edit-menu-item-classes-<?php echo $item->ID; ?>">
+							<span class="cd-extra-params"
+							      onclick="cdMain.updown('edit-menu-item-classes-<?php echo $item->ID; ?>')">
+						<?php _e( 'CSS Classes (only applies to top-level menu items)' ); ?>
+								</span>
+						<input type="text" id="edit-menu-item-classes-<?php echo $item->ID; ?>"
+						       class="widefat code edit-menu-item-classes"
+						       name="menu-item-classes[<?php echo $item->ID; ?>]"
+						       value="<?php echo esc_attr( implode( ' ', $item->classes ) ); ?>"
+						       style="display: none;"/>
 					</label>
 				</p>
 
@@ -284,20 +304,6 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 				       name="menu-item-title[<?php echo $item->ID; ?>]"
 				       value="Separator"/>
 			<?php endif; ?>
-
-			<?php // TODO Enable this, because I do believe it's possible ?>
-			<?php // Not using for now because I can't figure out how to attach classes to the menu items ?>
-			<!--			<p class="field-css-classes description description-thin">-->
-			<!--				<label for="edit-menu-item-classes---><?php //echo $item->ID; ?><!--">-->
-			<!--					--><?php //_e( 'CSS Classes (optional)' ); ?><!--<br/>-->
-			<!--					<input type="text" id="edit-menu-item-classes--->
-			<?php //echo $item->ID; ?><!--"-->
-			<!--					       class="widefat code edit-menu-item-classes"-->
-			<!--					       name="menu-item-classes[--><?php //echo $item->ID; ?><!--]"-->
-			<!--					       value="-->
-			<?php //echo esc_attr( implode( ' ', $item->classes ) ); ?><!--"/>-->
-			<!--				</label>-->
-			<!--			</p>-->
 
 			<p class="field-move hide-if-no-js description description-wide">
 				<label>
@@ -343,22 +349,12 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 				?>#menu-item-settings-<?php echo $item->ID; ?>"><?php _e( 'Cancel' ); ?></a>
 		</div>
 
-		<?php //TODO Remove these? ?>
 		<input class="menu-item-data-db-id" type="hidden" name="menu-item-db-id[<?php echo $item->ID; ?>]"
 		       value="<?php echo $item->ID; ?>"/>
-		<!--			<input class="menu-item-data-object-id" type="hidden" name="menu-item-object-id[-->
-		<?php //echo $item->ID; ?><!--]"-->
-		<!--			       value="--><?php //echo esc_attr( $item->object_id ); ?><!--"/>-->
-		<!--			<input class="menu-item-data-object" type="hidden" name="menu-item-object[-->
-		<?php //echo $item->ID; ?><!--]"-->
-		<!--			       value="--><?php //echo esc_attr( $item->object ); ?><!--"/>-->
 		<input class="menu-item-data-parent-id" type="hidden" name="menu-item-parent-id[<?php echo $item->ID; ?>]"
 		       value="<?php echo esc_attr( $item->menu_item_parent ); ?>"/>
 		<input class="menu-item-data-position" type="hidden" name="menu-item-position[<?php echo $item->ID; ?>]"
 		       value="<?php echo esc_attr( $item->menu_order ); ?>"/>
-		<!--			<input class="menu-item-data-type" type="hidden" name="menu-item-type[-->
-		<?php //echo $item->ID; ?><!--]"-->
-		<!--			       value="custom"/>-->
 	</div>
 	<!-- .menu-item-settings-->
 	<ul class="menu-item-transport"></ul>
