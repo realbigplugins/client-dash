@@ -386,6 +386,23 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	}
 
 	/**
+	 * Gets properties of the class.
+	 *
+	 * @since Client Dash 1.6
+	 *
+	 * @param string $property The property to retrieve.
+	 *
+	 * @return mixed The property.
+	 */
+	public static function _get( $property ) {
+		if ( property_exists( __CLASS__, $property ) ) {
+
+			$vars = get_class_vars( __CLASS__ );
+			return $vars[ $property ];
+		}
+	}
+
+	/**
 	 * Allows filtering of the object's properties.
 	 *
 	 * @since Client Dash 1.6
