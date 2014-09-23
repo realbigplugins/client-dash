@@ -12,21 +12,21 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     min-height: 300px;
+
     .hndle {
       cursor: default !important;
       font-size: 20px;
       text-align: center;
     }
+
     .handlediv {
       display: none !important;
     }
-    .inside {
-      display: block !important;
-      text-align: center;
-    }
+
     h3 {
       border-bottom: 1px solid #eee !important;
     }
+
     .cd-icon {
       width: auto;
       height: auto;
@@ -37,6 +37,14 @@
     }
     @media screen and (max-width: 600px) {
       width: 100%;
+    }
+  }
+
+  // CD Core
+  #cd_account, #cd_reports, #cd_help, #cd_webmaster {
+    .inside {
+      display: block !important;
+      text-align: center;
     }
   }
 }
