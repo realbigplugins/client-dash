@@ -24,7 +24,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 	public static function loop( $i = - 1, $label = '', $options_args = array() ) {
 
 		// Set up the defaults and the inputs to output
-		$options = wp_parse_args( $options_args, self::$menu_item_defaults );
+		$options = wp_parse_args( $options_args, self::_get( 'menu_item_defaults' ) );
 
 		echo '<li>';
 
@@ -276,7 +276,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 									'url'     => "edit-tags.php?taxonomy={$taxonomy->name}",
 									'cd-icon' => isset( $icon[ $post_type['id'] ] ) ? $icon[ $post_type['id'] ] : 'dashicons-admin-post',
 									'cd-type' => 'taxonomy',
-								), self::$menu_item_defaults );
+								), self::_get( 'menu_item_defaults' ) );
 
 								// Output the checkbox and inputs HTML
 								self::loop( $i, $taxonomy->labels->name, $options );
@@ -341,7 +341,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					<?php
 
 					$i = 0;
-					foreach ( ClientDash_Core_Page_Settings_Tab_Menus::$wp_core as $item_title => $item ) {
+					foreach ( self::_get( 'wp_core' ) as $item_title => $item ) {
 						$i --;
 
 						// Skip if no cap
@@ -369,9 +369,9 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 			<div id="tabs-panel-wordpress-core-submenu" class="tabs-panel tabs-panel-inactive">
 				<ul id="posttypechecklist-wordpress-core" class="categorychecklist form-no-clear">
 					<?php
-					$core_items = ClientDash_Core_Page_Settings_Tab_Menus::$wp_core;
+					$core_items = self::_get( 'wp_core' );
 
-					foreach ( ClientDash_Core_Page_Settings_Tab_Menus::$wp_core as $item_title => $item ) {
+					foreach ( self::_get( 'wp_core' ) as $item_title => $item ) {
 
 						if ( isset( $item['submenus'] ) ) {
 
@@ -451,6 +451,9 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 		$role = get_role( $cd_current_menu_role ? $cd_current_menu_role : 'administrator' );
 
+		// Get core items
+		$wp_core = self::_get( 'wp_core' );
+
 		// Separate out only the items added by plugins
 		$menu_items = [ ];
 		$i          = 0;
@@ -483,7 +486,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 			}
 
 			// If in the WP Core list, this isn't a plugin page, so set it to disabled
-			if ( array_key_exists( $menu_item['menu_title'], $ClientDash_Core_Page_Settings_Tab_Menus::$wp_core ) ) {
+			if ( array_key_exists( $menu_item['menu_title'], $wp_core ) ) {
 				$menu_item['disabled'] = true;
 			}
 
@@ -507,8 +510,8 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					// Only add if not a WP Core or CD Core item
 					// Variable webmaster title
 					$title = $submenu_item['menu_slug'] == 'cd_webmaster' ? 'webmaster' : strtolower( $submenu_item['menu_title'] );
-					if ( isset( $ClientDash_Core_Page_Settings_Tab_Menus::$wp_core[ $menu_item['menu_title'] ]['submenus'] )
-					     && ! array_key_exists( $submenu_item['menu_title'], $ClientDash_Core_Page_Settings_Tab_Menus::$wp_core[ $menu_item['menu_title'] ]['submenus'] )
+					if ( isset( $wp_core[ $menu_item['menu_title'] ]['submenus'] )
+					     && ! array_key_exists( $submenu_item['menu_title'], $wp_core[ $menu_item['menu_title'] ]['submenus'] )
 					     && ! array_key_exists( $title, ClientDash::$core_files )
 					) {
 						$menu_item['submenus'][] = $submenu_item;
