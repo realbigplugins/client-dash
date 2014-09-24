@@ -59,8 +59,8 @@ class ClientDash_RequireFiles extends ClientDash {
 		}
 
 		// Core widget files
-		foreach ( $this->core_widgets as $widget ) {
-			include_once( plugin_dir_path( __FILE__ ) . 'widgets/' . $widget . '.php' );
+		foreach ( $this::$_cd_widgets as $widget_ID => $widget ) {
+			include_once( plugin_dir_path( __FILE__ ) . 'widgets/' . str_replace( 'cd_', '', $widget_ID ) . '.php' );
 		}
 	}
 }

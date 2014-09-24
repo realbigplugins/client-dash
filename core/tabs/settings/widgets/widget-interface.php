@@ -28,7 +28,7 @@ class CD_Widget extends WP_Widget {
 	 *
 	 * @since Client Dash 1.6
 	 */
-	public $description = 'Widget description';
+	public $description = null;
 
 	/**
 	 * The callback to use for the frontend output.
@@ -58,6 +58,15 @@ class CD_Widget extends WP_Widget {
 	public $_cd_core = '0';
 
 	/**
+	 * Tells us if this was a widget added by a plugin / theme / WP Core.
+	 *
+	 * Private.
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public $_plugin = '0';
+
+	/**
 	 * Instantiates the parent class.
 	 *
 	 * @since Client Dash 1.6
@@ -80,6 +89,7 @@ class CD_Widget extends WP_Widget {
 			$this->_callback          = isset( $widget['callback'] ) ? $widget['callback'] : $this->_callback;
 			$this->_settings_callback = isset( $widget['settings_callback'] ) ? $widget['settings_callback'] : $this->_settings_callback;
 			$this->_cd_core           = isset( $widget['cd_core'] ) ? $widget['cd_core'] : $this->_cd_core;
+			$this->_plugin           = isset( $widget['plugin'] ) ? $widget['plugin'] : $this->_plugin;
 		}
 
 		// Instantiate the parent object
@@ -98,7 +108,7 @@ class CD_Widget extends WP_Widget {
 	public function form( $instance ) {
 
 		// Title
-		$title = isset( $instance['title'] ) ? $instance['title'] : $this->title;
+		$title = isset( $instance['title'] ) ? $instance['title'] : '';
 		?>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>">Title</label>
@@ -106,6 +116,13 @@ class CD_Widget extends WP_Widget {
 			       name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $title; ?>"/>
 		</p>
 		<?php
+
+		// Extra title input for use when outputting widgets. This is here because when initially creating
+		// a widget, you don't have to supply a title. But if you don't, then this widget will have no title
+		// associated with it when we try to use it on our dashboard. So I have an extra hidden field here
+		// that will use the original title and provide a fallback.
+		$_original_title = $this->title;
+		echo "<input type='hidden' name='" . $this->get_field_name( '_original_title' ) . "' value='$_original_title' />";
 
 		// Do the settings callback if it's set
 		$_settings_callback = isset( $instance['_settings_callback'] ) ? $instance['_settings_callback'] : $this->_settings_callback;
@@ -116,7 +133,6 @@ class CD_Widget extends WP_Widget {
 
 				call_user_func( array( $object, $_settings_callback[1] ) );
 			} else {
-
 				call_user_func( $_settings_callback );
 			}
 		}
@@ -150,6 +166,9 @@ class CD_Widget extends WP_Widget {
 			echo "<input type='hidden' name='" . $this->get_field_name( '_settings_callback' ) . "' value='$_settings_callback' />";
 		}
 
+		// Plugin (private)
+		echo '<input type="hidden" name="' . $this->get_field_name( '_plugin' ) . "\" value='$this->_plugin' />";
+
 		// CD Core (private
 		echo '<input type="hidden" name="' . $this->get_field_name( '_cd_core' ) . "\" value='$this->_cd_core' />";
 	}
@@ -171,6 +190,7 @@ class CD_Widget extends WP_Widget {
 		// Update fields
 		$fields = array(
 			'title',
+			'_original_title',
 			'_callback',
 			'_callback[0]',
 			'_callback[1]',
@@ -180,6 +200,7 @@ class CD_Widget extends WP_Widget {
 			'_settings_callback[1]',
 			'_settings_is_object',
 			'_cd_core',
+			'_plugin',
 		);
 		foreach ( $fields as $field ) {
 

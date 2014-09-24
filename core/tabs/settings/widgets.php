@@ -15,36 +15,6 @@
 class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 
 	/**
-	 * Client Dash Core available widgets.
-	 *
-	 * Private.
-	 *
-	 * @since Client Dash 1.6
-	 */
-	public static $_cd_widgets = array(
-		'account'   => array(
-			'title'       => 'Client Dash Account',
-			'description' => 'The core Client Dash account page.',
-			'callback'    => array( 'ClientDash_Widget_Account', 'widget_content' ),
-		),
-		'help'      => array(
-			'title'       => 'Client Dash Help',
-			'description' => 'The core Client Dash help page.',
-			'callback'    => array( 'ClientDash_Widget_Help', 'widget_content' ),
-		),
-		'reports'   => array(
-			'title'       => 'Client Dash Reports',
-			'description' => 'The core Client Dash reports page.',
-			'callback'    => array( 'ClientDash_Widget_Reports', 'widget_content' ),
-		),
-		'webmaster' => array(
-			'title'       => 'Client Dash Webmaster',
-			'description' => 'The core Client Dash webmaster page.',
-			'callback'    => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
-		),
-	);
-
-	/**
 	 * Available widgets.
 	 *
 	 * @since Client Dash 1.6
@@ -52,23 +22,61 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	public $widgets = [ ];
 
 	/**
+	 * The sidebars for the dashboard.
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public $sidebars = array(
+		0 => array(
+			'id' => 'cd-dashboard',
+			'name' => 'Dashboard',
+		),
+	);
+
+	/**
+	 * Whether or not the widgets section is currently active or not.
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public static $_active = false;
+
+	/**
 	 * The main construct function.
 	 *
-	 * @since Client Dash 1.5
+	 * @since Client Dash 1.6
 	 */
 	function __construct() {
 
 		global $ClientDash;
 
-		// Anything in here will ONLY apply to this particular settings page
+		// Anything in here will ONLY apply to this particular settings page OR if there is a POST
+		// value set of 'cd-widgets' (for when using AJAX)
 		if ( ( isset( $_GET['page'] ) && $_GET['page'] == 'cd_settings'
 		       && isset( $_GET['tab'] ) && $_GET['tab'] == 'widgets'
 		     ) || isset( $_POST['cd-widgets'] )
 		) {
 
-			// Remove form wrap and submit button
-			add_filter( 'cd_settings_form_wrap', '__return_false' );
-			add_filter( 'cd_submit', '__return_false' );
+			// Set the widgets area to currently active
+			$this->active = true;
+
+
+			// Include widget interface
+			include_once( $ClientDash->path . 'core/tabs/settings/widgets/widget-interface.php' );
+
+			// Register a sidebar for each role
+			add_action( 'admin_init', array( $this, 'register_sidebars' ), 10 );
+
+			// Add default widgets to empty sidebars
+			add_action( 'admin_init', array( $this, 'populate_sidebars' ), 11 );
+
+			// Remove all existing widgets
+			add_action( 'widgets_init', array( $this, 'remove_existing_widgets' ), 99 );
+
+			// Create widgets from CD Core
+			add_action( 'widgets_init', array( $this, 'create_cd_core_widgets' ), 100 );
+
+			// Create widgets from existing dashboard widgets
+			add_action( 'widgets_init', array( $this, 'create_existing_dashboard_widgets' ), 100 );
 
 			// Necessary scripts
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -76,26 +84,12 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 			// Add nav-menus body class for our custom CD page
 			add_filter( 'admin_body_class', array( $this, 'add_nav_menu_class' ) );
 
-			// Remove all existing widgets
-			add_action( 'widgets_init', array( $this, 'remove_existing_widgets' ), 99 );
+			// Remove form wrap and submit button
+			add_filter( 'cd_settings_form_wrap', '__return_false' );
+			add_filter( 'cd_submit', '__return_false' );
 
 			// Add extra field(s) to the widget form
 			add_action( 'in_widget_form', array( $this, 'add_extra_fields' ), 10, 2 );
-
-			// Register our dashboard
-			register_sidebar( array(
-				'id'   => 'cd-dashboard',
-				'name' => 'Dashboard',
-			) );
-
-			// Include widget interface
-			include_once( $ClientDash->path . 'core/tabs/settings/widgets/widget-interface.php' );
-
-			// Create widgets from CD Core
-			add_action( 'widgets_init', array( $this, 'create_cd_core_widgets' ), 100 );
-
-			// Create widgets from existing dashboard widgets
-			add_action( 'widgets_init', array( $this, 'create_existing_dashboard_widgets' ), 100 );
 		}
 
 		$this->add_content_section( array(
@@ -107,32 +101,120 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	}
 
 	/**
-	 * Include necessary scripts for the page.
+	 * Registers all sidebars for each role.
 	 *
 	 * @since Client Dash 1.6
 	 */
-	public function enqueue_scripts() {
+	public function register_sidebars() {
 
-		$scripts = array(
-			'admin-widgets',
-			'jquery-ui-widgets',
-			'jquery-ui-draggable',
-			'jquery-ui-sortable',
-			'jquery-effects-shake',
-		);
+		// Create a sidebar area for each sidebar that's been set
+		foreach ( $this->sidebars as $sidebar ) {
 
-		foreach ( $scripts as $script ) {
-			wp_enqueue_script( $script );
+			register_sidebar( array(
+				'id'   => $sidebar['id'],
+				'name' => $sidebar['name'],
+			) );
 		}
 	}
 
 	/**
-	 * Adds the nav-menu body class (which is normally present on the nav-menus page and necessary).
+	 * Populates the empty sidebars with default widgets.
 	 *
 	 * @since Client Dash 1.6
 	 */
-	public function add_nav_menu_class( $classes ) {
-		return $classes . ' cd-widgets widgets-php';
+	public function populate_sidebars() {
+
+		// Don't populate on AJAX
+		if ( defined ( 'DOING_AJAX' ) && DOING_AJAX == true ) {
+			return;
+		}
+
+//		delete_option( 'sidebars_widgets' );
+//		delete_option( 'widget_cd_account' );
+//		delete_option( 'widget_cd_webmaster' );
+//		delete_option( 'widget_cd_reports' );
+//		delete_option( 'widget_cd_help' );
+//		delete_option( 'cd_populate_dashboard_widgets' );
+//		return;
+
+		// Don't do this more than once
+		if ( get_option( 'cd_populate_dashboard_widgets' ) ) {
+			return;
+		}
+		update_option( 'cd_populate_dashboard_widgets', true );
+
+		$active_widgets = get_option( 'sidebars_widgets' );
+
+		$cd_widgets_update = [ ];
+
+		// Cycle through each sidebar to populate
+		$i = 1;
+		$update = false;
+		foreach ( $this->sidebars as $sidebar ) {
+			$i ++;
+
+			// Pass over if widgets already have been added
+			if ( ! empty( $active_widgets[ $sidebar['id'] ] ) ) {
+				continue;
+			}
+
+			$update = true;
+
+			// Add our CD Core widgets
+			foreach ( $this::$_cd_widgets as $widget_ID => $widget ) {
+
+				$active_widgets[ $sidebar['id'] ][] = "$widget_ID-$i";
+
+				$cd_widgets_update[ $widget_ID ][ $i ] = array(
+//					'title' => $this::$_cd_widgets[ $widget_ID ]['title'],
+					'_callback' => $this::$_cd_widgets[ $widget_ID ]['_callback'],
+					'_cd_core' => '1',
+				);
+			}
+		}
+
+		// Update options
+		foreach ( $cd_widgets_update as $widget_ID => $widget ) {
+			update_option( "widget_$widget_ID", $widget );
+		}
+
+		if ( $update ) {
+			update_option( 'sidebars_widgets', $active_widgets );
+		}
+
+		// Add an action to make sure they show right away
+		add_action( 'dynamic_sidebar_before', array( $this, 'make_populated_widgets_show' ), 10, 1 );
+	}
+
+	public function make_populated_widgets_show( $index ) {
+
+		global $wp_registered_widgets, $wp_registered_widget_controls;
+
+		$active_widgets = get_option( 'sidebars_widgets' );
+
+		foreach ( $active_widgets[ $index ] as $widget_ID ) {
+
+			if ( ! array_key_exists( $widget_ID, $wp_registered_widgets ) ) {
+
+				preg_match( '/\D*/', $widget_ID, $_widget_ID );
+
+				foreach ( $wp_registered_widgets as $registered_widget_ID => $registered_widget ) {
+
+					preg_match( '/\D*/', $registered_widget_ID, $_registered_widget );
+
+					if ( $_registered_widget[0] == $_widget_ID[0] ) {
+
+						$wp_registered_widgets[ $widget_ID ] = $registered_widget;
+						$wp_registered_widgets[ $widget_ID ]['id'] = $widget_ID;
+
+						$wp_registered_widget_controls[ $widget_ID ] = $wp_registered_widget_controls[ $registered_widget_ID ];
+						$wp_registered_widget_controls[ $widget_ID ]['id'] = $widget_ID;
+					}
+				}
+			}
+		}
+
+		$i = 1;
 	}
 
 	/**
@@ -180,10 +262,10 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 			 * @since Client Dash 1.6
 			 */
 			$args = apply_filters( 'cd_widgets_available_cd_core', array(
-				'id'          => "cd_$widget_ID",
+				'id'          => $widget_ID,
 				'title'       => $widget['title'],
 				'description' => $widget['description'],
-				'callback'    => $widget['callback'],
+				'callback'    => $widget['_callback'],
 				'cd_core'     => '1',
 			) );
 
@@ -210,6 +292,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 				'title'       => $widget['title'],
 				'description' => null,
 				'callback'    => $widget['callback'],
+				'plugin'      => '1',
 			) );
 
 			$this->register_widget( $args );
@@ -223,15 +306,49 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	 *
 	 * @param array $args Args for the available widget.
 	 */
-	public function register_widget( $args ) {
+	public function register_widget( $args = [ ] ) {
 
 		global $wp_widget_factory;
+
+		// Only allow this function to fire if widgets are currently active
+		if ( ! $this->active ) {
+			return;
+		}
 
 		// Add our new widget to the array that the interface will be pulling from
 		$this->widgets[] = $args;
 
 		// Now add the widget into the WP Widget Factory
 		$wp_widget_factory->widgets[ $args['id'] ] = new CD_Widget();
+	}
+
+	/**
+	 * Include necessary scripts for the page.
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public function enqueue_scripts() {
+
+		$scripts = array(
+			'admin-widgets',
+			'jquery-ui-widgets',
+			'jquery-ui-draggable',
+			'jquery-ui-sortable',
+			'jquery-effects-shake',
+		);
+
+		foreach ( $scripts as $script ) {
+			wp_enqueue_script( $script );
+		}
+	}
+
+	/**
+	 * Adds the nav-menu body class (which is normally present on the nav-menus page and necessary).
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public function add_nav_menu_class( $classes ) {
+		return $classes . ' cd-widgets widgets-php';
 	}
 
 	/**
@@ -297,11 +414,29 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 		<div class="widget-liquid-right">
 			<div id="widgets-right" class="single-sidebar">
 				<div class="sidebars-column-1">
-				</div>
-				<div class="sidebars-col 0-umn-2">
-					<div class="widgets-holder-wrap">
-						<?php wp_list_widget_controls( 'cd-dashboard', 'Dashboard' ); ?>
-					</div>
+					<?php
+
+					$i = 0;
+					foreach ( $this->sidebars as $sidebar ) {
+
+						$wrap_class = 'widgets-holder-wrap';
+						if ( ! empty( $registered_sidebar['class'] ) ) {
+							$wrap_class .= ' sidebar-' . $registered_sidebar['class'];
+						}
+
+						if ( $i > 0 ) {
+							$wrap_class .= ' closed';
+						}
+
+						?>
+						<div class="<?php echo esc_attr( $wrap_class ); ?>">
+							<?php wp_list_widget_controls( $sidebar['id'], $sidebar['name'] ); ?>
+						</div>
+						<?php
+
+						$i ++;
+					}
+					?>
 				</div>
 			</div>
 		</div>

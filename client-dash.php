@@ -80,15 +80,33 @@ class ClientDash extends ClientDash_Functions {
 	);
 
 	/**
-	 * Declaring all widgets that exist within Client Dash.
+	 * Client Dash Core available widgets.
 	 *
-	 * @since Client Dash 1.1
+	 * Private.
+	 *
+	 * @since Client Dash 1.6
 	 */
-	public $core_widgets = array(
-		'account',
-		'help',
-		'reports',
-		'webmaster'
+	public static $_cd_widgets = array(
+		'cd_account'   => array(
+			'title'       => 'Client Dash Account',
+			'description' => 'The core Client Dash account page.',
+			'_callback'    => array( 'ClientDash_Widget_Account', 'widget_content' ),
+		),
+		'cd_help'      => array(
+			'title'       => 'Client Dash Help',
+			'description' => 'The core Client Dash help page.',
+			'_callback'    => array( 'ClientDash_Widget_Help', 'widget_content' ),
+		),
+		'cd_reports'   => array(
+			'title'       => 'Client Dash Reports',
+			'description' => 'The core Client Dash reports page.',
+			'_callback'    => array( 'ClientDash_Widget_Reports', 'widget_content' ),
+		),
+		'cd_webmaster' => array(
+			'title'       => 'Client Dash Webmaster',
+			'description' => 'The core Client Dash webmaster page.',
+			'_callback'    => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
+		),
 	);
 
 	/**
@@ -586,15 +604,18 @@ class ClientDash extends ClientDash_Functions {
 
 		$sidebars = get_option( 'sidebars_widgets' );
 
+		$current_sidebar = apply_filters( 'cd_dashboard_widgets_sidebar', "cd-dashboard" );
+
 		// If no widgets have been set up yet, just use default ones. Otherwise, the new
 		// widgets need to be translated
-		if ( empty( $sidebars['cd-dashboard'] ) ) {
+		if ( empty( $sidebars[ $current_sidebar ] ) ) {
 
-			$new_widgets = $this->option_defaults['widgets'];
+			// MAYBETODO Make widgets init on startup so this can just be a "return;"
+			$new_widgets = $this::$_cd_widgets;
 		} else {
 
 			// Cycle through each widget
-			foreach ( $sidebars['cd-dashboard'] as $ID ) {
+			foreach ( $sidebars[ $current_sidebar ] as $ID ) {
 
 				// Break apart the ID
 				preg_match_all( "/(.*)(-\d+)/", $ID, $matches );
@@ -611,25 +632,36 @@ class ClientDash extends ClientDash_Functions {
 				$widget['ID'] = $ID_base;
 
 				// Add it on
-				$new_widgets[] = $widget;
+				$new_widgets[ $widget['ID'] ] = $widget;
+
+				// Remove ID
+				unset( $new_widgets[ $widget['ID'] ]['ID'] );
 			}
 		}
 
 		if ( ! empty( $new_widgets ) ) {
-			foreach ( $new_widgets as $widget ) {
+			foreach ( $new_widgets as $widget_ID => $widget ) {
+
+				// Pass over if is a plugin / theme / WP Core widget and didn't original exist for current user
+				if ( $widget['plugin'] == '1' && ! array_key_exists( $widget_ID, $this->active_widgets ) ) {
+					return;
+				}
 
 				// Remove old value
 				unset( $new_ID );
 
+				// Figure out the title
+				$title = ! empty( $widget['title'] ) ? $widget['title'] : $widget['_original_title'];
+
 				// Client Dash core widgets conditional visibility
 				if ( isset( $widget['_cd_core'] ) && $widget['_cd_core'] === '1' ) {
-					if ( ! isset( $this->content_sections[ str_replace( 'cd_', '', $widget['ID'] ) ] ) ) {
+					if ( ! isset( $this->content_sections[ str_replace( 'cd_', '', $widget_ID ) ] ) ) {
 						continue;
 					}
 				}
 
 				// If this ID already exists, change the ID to something new
-				if ( ! empty( $wp_meta_boxes ) && $this->array_key_exists_r( $widget['ID'], $wp_meta_boxes ) ) {
+				if ( ! empty( $wp_meta_boxes ) && $this->array_key_exists_r( $widget_ID, $wp_meta_boxes ) ) {
 
 					// If the ID contains "_duplicate_{n}", then we need another new ID, so
 					// we use a prep_replace_callback to replace the "_duplicate_{n}" with
@@ -638,7 +670,7 @@ class ClientDash extends ClientDash_Functions {
 					foreach ( $wp_meta_boxes['dashboard'] as $context ) {
 						foreach ( $context as $priority ) {
 							foreach ( $priority as $ID => $wp_widget ) {
-								if ( strpos( $ID, $widget['ID'] ) !== false ) {
+								if ( strpos( $ID, $widget_ID ) !== false ) {
 									if ( preg_match( '/(_duplicate_)(\d+)/', $ID ) ) {
 										$new_ID = preg_replace_callback(
 											'/(_duplicate_)(\d+)/',
@@ -655,30 +687,26 @@ class ClientDash extends ClientDash_Functions {
 				}
 
 				// For webmaster widget
-				if ( $widget['ID'] == 'cd_webmaster' ) {
-					$widget['title'] = get_option( 'cd_webmaster_name', $this->option_defaults['webmaster_name'] );
+				if ( $widget_ID == 'cd_webmaster' ) {
+					$title = get_option( 'cd_webmaster_name', $this->option_defaults['webmaster_name'] );
 				}
 
 				// If callback should be an object
-				if ( isset( $widget['is_object'] ) ) {
-					if ( ! class_exists( $widget['callback'][0] ) ) {
+				if ( isset( $widget['_is_object'] ) && $widget['_is_object'] === '1' ) {
+					if ( ! class_exists( $widget['_callback'][0] ) ) {
 						continue;
 					}
-					$widget['callback'][0] = new $widget['callback'][0];
+					$widget['_callback'][0] = new $widget['_callback'][0];
 				}
 
-				if ( array_key_exists( $widget['ID'], $this->active_widgets )
-				     || ( isset( $widget['_cd_core'] ) && $widget['_cd_core'] === '1' )
-				) {
-					add_meta_box(
-						isset( $new_ID ) ? $new_ID : $widget['ID'],
-						$widget['title'],
-						$widget['_callback'],
-						'dashboard',
-						'normal',
-						'core'
-					);
-				}
+				add_meta_box(
+					isset( $new_ID ) ? $new_ID : $widget_ID,
+					$title,
+					$widget['_callback'],
+					'dashboard',
+					'normal',
+					'core'
+				);
 			}
 		}
 	}

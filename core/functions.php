@@ -13,6 +13,36 @@
 abstract class ClientDash_Functions {
 
 	/**
+	 * Checks to see if we're on a specific page and tab.
+	 *
+	 * @since Client Dash 1.6
+	 *
+	 * @param string $page The page to check.
+	 * @param bool/string $tab If supplied, will also check that the given tab is active.
+	 *
+	 * @return bool True of on the page (and tab), false otherwise.
+	 */
+	public static function is_cd_page( $page, $tab = false ) {
+
+		// Check the page
+		if ( isset( $_GET['page'] ) && $_GET['page'] == $page ) {
+
+			// If also set a tab, check that
+			if ( $tab ) {
+				if ( isset( $_GET['tab'] ) && $tab == $tab ) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Outputs the default Client Dash toggle switch (on|off).
 	 *
 	 * @since Client Dash 1.6
