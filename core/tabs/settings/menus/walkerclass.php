@@ -8,8 +8,12 @@
  *
  * @package WordPress
  * @subpackage Client Dash
- * @since 1.6.0
+ *
+ * @category Menus
+ *
  * @uses Walker_Nav_Menu
+ *
+ * @since Client Dash1.6.0
  */
 class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 	/**

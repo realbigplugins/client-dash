@@ -10,6 +10,8 @@
  * @package WordPress
  * @subpackage ClientDash
  *
+ * @category Widgets
+ *
  * @since Client Dash 1.5
  */
 class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
@@ -28,7 +30,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	 */
 	public $sidebars = array(
 		0 => array(
-			'id' => 'cd-dashboard',
+			'id'   => 'cd-dashboard',
 			'name' => 'Dashboard',
 		),
 	);
@@ -58,7 +60,6 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 
 			// Set the widgets area to currently active
 			$this->active = true;
-
 
 			// Include widget interface
 			include_once( $ClientDash->path . 'core/tabs/settings/widgets/widget-interface.php' );
@@ -125,7 +126,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	public function populate_sidebars() {
 
 		// Don't populate on AJAX
-		if ( defined ( 'DOING_AJAX' ) && DOING_AJAX == true ) {
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX == true ) {
 			return;
 		}
 
@@ -148,7 +149,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 		$cd_widgets_update = [ ];
 
 		// Cycle through each sidebar to populate
-		$i = 1;
+		$i      = 1;
 		$update = false;
 		foreach ( $this->sidebars as $sidebar ) {
 			$i ++;
@@ -166,9 +167,8 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 				$active_widgets[ $sidebar['id'] ][] = "$widget_ID-$i";
 
 				$cd_widgets_update[ $widget_ID ][ $i ] = array(
-//					'title' => $this::$_cd_widgets[ $widget_ID ]['title'],
 					'_callback' => $this::$_cd_widgets[ $widget_ID ]['_callback'],
-					'_cd_core' => '1',
+					'_cd_core'  => '1',
 				);
 			}
 		}
@@ -186,14 +186,28 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 		add_action( 'dynamic_sidebar_before', array( $this, 'make_populated_widgets_show' ), 10, 1 );
 	}
 
+	/**
+	 * Makes sure widgets show on initial population.
+	 *
+	 * Because I'm populating the widgets in a strange way, on initial load, WP won't
+	 * show them without a refresh. This little "hack" adds our newly saved widget into
+	 * a couple globals that WP looks for when displaying the sidebar, thus showing the
+	 * widget without another refresh.
+	 *
+	 * @since Client Dash 1.6
+	 *
+	 * @param string $index The currently being populated sidebar.
+	 */
 	public function make_populated_widgets_show( $index ) {
 
 		global $wp_registered_widgets, $wp_registered_widget_controls;
 
 		$active_widgets = get_option( 'sidebars_widgets' );
 
+		// Cycle through each added widget in the sidebar
 		foreach ( $active_widgets[ $index ] as $widget_ID ) {
 
+			// Find which widget this matches and then add it to both global arrays
 			if ( ! array_key_exists( $widget_ID, $wp_registered_widgets ) ) {
 
 				preg_match( '/\D*/', $widget_ID, $_widget_ID );
@@ -204,10 +218,10 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 
 					if ( $_registered_widget[0] == $_widget_ID[0] ) {
 
-						$wp_registered_widgets[ $widget_ID ] = $registered_widget;
+						$wp_registered_widgets[ $widget_ID ]       = $registered_widget;
 						$wp_registered_widgets[ $widget_ID ]['id'] = $widget_ID;
 
-						$wp_registered_widget_controls[ $widget_ID ] = $wp_registered_widget_controls[ $registered_widget_ID ];
+						$wp_registered_widget_controls[ $widget_ID ]       = $wp_registered_widget_controls[ $registered_widget_ID ];
 						$wp_registered_widget_controls[ $widget_ID ]['id'] = $widget_ID;
 					}
 				}
@@ -388,68 +402,70 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 		// From wp-admin/widgets.php. Modified for CD use.
 		?>
 
-		<div class="widget-liquid-left">
-			<div id="widgets-left">
-				<div id="available-widgets" class="widgets-holder-wrap">
-					<div class="sidebar-name">
-						<div class="sidebar-name-arrow"><br/></div>
-						<h3><?php _e( 'Available Widgets' ); ?> <span
-								id="removing-widget"><?php _ex( 'Deactivate', 'removing-widget' ); ?>
-								<span></span></span></h3>
-					</div>
-					<div class="widget-holder">
-						<div class="sidebar-description">
-							<p class="description"><?php _e( 'To activate a widget drag it to a sidebar or click on it. To deactivate a widget and delete its settings, drag it back.' ); ?></p>
+		<div id="cd-widgets">
+			<div class="widget-liquid-left">
+				<div id="widgets-left">
+					<div id="available-widgets" class="widgets-holder-wrap">
+						<div class="sidebar-name">
+							<div class="sidebar-name-arrow"><br/></div>
+							<h3><?php _e( 'Available Widgets' ); ?> <span
+									id="removing-widget"><?php _ex( 'Deactivate', 'removing-widget' ); ?>
+									<span></span></span></h3>
 						</div>
-						<div id="widget-list">
-							<?php wp_list_widgets(); ?>
+						<div class="widget-holder">
+							<div class="sidebar-description">
+								<p class="description"><?php _e( 'To activate a widget drag it to a sidebar or click on it. To deactivate a widget and delete its settings, drag it back.' ); ?></p>
+							</div>
+							<div id="widget-list">
+								<?php wp_list_widgets(); ?>
+							</div>
+							<br class='clear'/>
 						</div>
-						<br class='clear'/>
+						<br class="clear"/>
 					</div>
-					<br class="clear"/>
 				</div>
 			</div>
-		</div>
 
-		<div class="widget-liquid-right">
-			<div id="widgets-right" class="single-sidebar">
-				<div class="sidebars-column-1">
-					<?php
-
-					$i = 0;
-					foreach ( $this->sidebars as $sidebar ) {
-
-						$wrap_class = 'widgets-holder-wrap';
-						if ( ! empty( $registered_sidebar['class'] ) ) {
-							$wrap_class .= ' sidebar-' . $registered_sidebar['class'];
-						}
-
-						if ( $i > 0 ) {
-							$wrap_class .= ' closed';
-						}
-
-						?>
-						<div class="<?php echo esc_attr( $wrap_class ); ?>">
-							<?php wp_list_widget_controls( $sidebar['id'], $sidebar['name'] ); ?>
-						</div>
+			<div class="widget-liquid-right">
+				<div id="widgets-right" class="single-sidebar">
+					<div class="sidebars-column-1">
 						<?php
 
-						$i ++;
-					}
-					?>
+						$i = 0;
+						foreach ( $this->sidebars as $sidebar ) {
+
+							$wrap_class = 'widgets-holder-wrap';
+							if ( ! empty( $registered_sidebar['class'] ) ) {
+								$wrap_class .= ' sidebar-' . $registered_sidebar['class'];
+							}
+
+							if ( $i > 0 ) {
+								$wrap_class .= ' closed';
+							}
+
+							?>
+							<div class="<?php echo esc_attr( $wrap_class ); ?>">
+								<?php wp_list_widget_controls( $sidebar['id'], $sidebar['name'] ); ?>
+							</div>
+							<?php
+
+							$i ++;
+						}
+						?>
+					</div>
 				</div>
 			</div>
-		</div>
-		<form action="" method="post">
-			<?php wp_nonce_field( 'save-sidebar-widgets', '_wpnonce_widgets', false ); ?>
-		</form>
-		<br class="clear"/>
+			<form action="" method="post">
+				<?php wp_nonce_field( 'save-sidebar-widgets', '_wpnonce_widgets', false ); ?>
+			</form>
+			<br class="clear"/>
 
-		<div class="widgets-chooser">
-			<ul class="widgets-chooser-sidebars"></ul>
-			<div class="widgets-chooser-actions">
-				<button class="button-secondary"><?php _e( 'Cancel' ); ?></button>
-				<button class="button-primary"><?php _e( 'Add Widget' ); ?></button>
+			<div class="widgets-chooser">
+				<ul class="widgets-chooser-sidebars"></ul>
+				<div class="widgets-chooser-actions">
+					<button class="button-secondary"><?php _e( 'Cancel' ); ?></button>
+					<button class="button-primary"><?php _e( 'Add Widget' ); ?></button>
+				</div>
 			</div>
 		</div>
 	<?php

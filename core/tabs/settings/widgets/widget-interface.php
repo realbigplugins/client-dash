@@ -5,6 +5,11 @@
  *
  * The framework for creating a custom CD Widget. Extend this class to do so.
  *
+ * @package WordPress
+ * @subpackage ClientDash
+ *
+ * @category Widgets
+ *
  * @since Client Dash 1.6
  */
 class CD_Widget extends WP_Widget {
@@ -29,6 +34,13 @@ class CD_Widget extends WP_Widget {
 	 * @since Client Dash 1.6
 	 */
 	public $description = null;
+
+	/**
+	 * This where a widget can add extra fields to be saved and used.
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public $extra_fields = [ ];
 
 	/**
 	 * The callback to use for the frontend output.
@@ -128,7 +140,7 @@ class CD_Widget extends WP_Widget {
 		$_settings_callback = isset( $instance['_settings_callback'] ) ? $instance['_settings_callback'] : $this->_settings_callback;
 		if ( $_settings_callback ) {
 
-			if ( $instance['_settings_is_object'] ) {
+			if ( isset( $instance['_settings_is_object'] ) ) {
 				$object = new $_settings_callback[0];
 
 				call_user_func( array( $object, $_settings_callback[1] ) );

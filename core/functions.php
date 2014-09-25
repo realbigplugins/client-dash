@@ -8,6 +8,8 @@
  * @package WordPress
  * @subpackage ClientDash
  *
+ * @category Base Functionality
+ *
  * @since Client Dash 1.5
  */
 abstract class ClientDash_Functions {
@@ -674,4 +676,6 @@ abstract class ClientDash_Functions {
 
 		return min( $chr );
 	}
+
+	// Widget specific functions
 }

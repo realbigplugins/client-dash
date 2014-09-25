@@ -8,6 +8,8 @@
  * @package WordPress
  * @subpackage ClientDash
  *
+ * @category Base Functionality
+ *
  * @since Client Dash 1.5
  */
 class ClientDash_AJAX {

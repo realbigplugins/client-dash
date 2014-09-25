@@ -9,6 +9,8 @@
  * @package WordPress
  * @subpackage ClientDash
  *
+ * @category Widgets
+ *
  * @since Client Dash 1.5
  */
 class ClientDash_Widget_Account extends ClientDash {

@@ -25,6 +25,8 @@ include_once( plugin_dir_path( __FILE__ ) . 'core/functions.php' );
  * @package WordPress
  * @subpackage ClientDash
  *
+ * @category Base Functionality
+ *
  * @since Client Dash 1.5
  */
 class ClientDash extends ClientDash_Functions {
@@ -250,7 +252,7 @@ class ClientDash extends ClientDash_Functions {
 					)
 				)
 			)
-		)
+		),
 	);
 
 	/**

@@ -5,10 +5,12 @@
  *
  * Contains all callbacks for the admin menu available items.
  *
- * @since 1.6
- *
  * @package WordPress
  * @subpackage ClientDash
+ *
+ * @category Menus
+ *
+ * @since Client Dash 1.6
  */
 class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Settings_Tab_Menus {
 
@@ -651,7 +653,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 						// If not admin, don't show settings
 						if ( ! array_key_exists( 'manage_options', $role->capabilities ) && $item_title == 'settings' ) {
-							return;
+							continue;
 						}
 
 						// Set specific options

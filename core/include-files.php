@@ -9,6 +9,8 @@
  * @package WordPress
  * @subpackage ClientDash
  *
+ * @category Base Functionality
+ *
  * @since Client Dash 1.5
  */
 class ClientDash_RequireFiles extends ClientDash {
@@ -34,6 +36,11 @@ class ClientDash_RequireFiles extends ClientDash {
 
 		// Require our deprecated file
 		include_once( $ClientDash->path . '/core/deprecated.php' );
+
+		// API's
+		include_once( $ClientDash->path . '/core/extension-apis/widgets-api.php' );
+		include_once( $ClientDash->path . '/core/extension-apis/settings-api.php' );
+		include_once( $ClientDash->path . '/core/extension-apis/menus-api.php' );
 
 		// Core page and tab files
 		foreach ( $this::$core_files as $page => $tabs ) {
