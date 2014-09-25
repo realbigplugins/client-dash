@@ -631,7 +631,7 @@ class ClientDash extends ClientDash_Functions {
 				$widget = $widgets[ $ID_number ];
 
 				// Set the ID
-				$widget['ID'] = $ID_base;
+				$widget['ID'] = isset( $widget['_cd_extension'] ) && $widget['_cd_extension'] == '1' ? $ID : $ID_base;
 
 				// Add it on
 				$new_widgets[ $widget['ID'] ] = $widget;

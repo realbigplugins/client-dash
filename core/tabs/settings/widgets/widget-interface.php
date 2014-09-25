@@ -70,6 +70,15 @@ class CD_Widget extends WP_Widget {
 	public $_cd_core = '0';
 
 	/**
+	 * Tells us whether or not the current widget is a CD extension.
+	 *
+	 * Private.
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public $_cd_extension = '0';
+
+	/**
 	 * Tells us if this was a widget added by a plugin / theme / WP Core.
 	 *
 	 * Private.
@@ -101,7 +110,8 @@ class CD_Widget extends WP_Widget {
 			$this->_callback          = isset( $widget['callback'] ) ? $widget['callback'] : $this->_callback;
 			$this->_settings_callback = isset( $widget['settings_callback'] ) ? $widget['settings_callback'] : $this->_settings_callback;
 			$this->_cd_core           = isset( $widget['cd_core'] ) ? $widget['cd_core'] : $this->_cd_core;
-			$this->_plugin           = isset( $widget['plugin'] ) ? $widget['plugin'] : $this->_plugin;
+			$this->_cd_extension      = isset( $widget['cd_extension'] ) ? $widget['cd_extension'] : $this->_cd_extension;
+			$this->_plugin            = isset( $widget['plugin'] ) ? $widget['plugin'] : $this->_plugin;
 		}
 
 		// Instantiate the parent object
@@ -145,7 +155,7 @@ class CD_Widget extends WP_Widget {
 
 				call_user_func( array( $object, $_settings_callback[1] ) );
 			} else {
-				call_user_func( $_settings_callback );
+				call_user_func( $_settings_callback, $this->id );
 			}
 		}
 
@@ -178,11 +188,14 @@ class CD_Widget extends WP_Widget {
 			echo "<input type='hidden' name='" . $this->get_field_name( '_settings_callback' ) . "' value='$_settings_callback' />";
 		}
 
+		// CD Core (private)
+		echo '<input type="hidden" name="' . $this->get_field_name( '_cd_core' ) . "\" value='$this->_cd_core' />";
+
+		// CD Extension (private)
+		echo '<input type="hidden" name="' . $this->get_field_name( '_cd_extension' ) . "\" value='$this->_cd_extension' />";
+
 		// Plugin (private)
 		echo '<input type="hidden" name="' . $this->get_field_name( '_plugin' ) . "\" value='$this->_plugin' />";
-
-		// CD Core (private
-		echo '<input type="hidden" name="' . $this->get_field_name( '_cd_core' ) . "\" value='$this->_cd_core' />";
 	}
 
 	/**
@@ -212,6 +225,7 @@ class CD_Widget extends WP_Widget {
 			'_settings_callback[1]',
 			'_settings_is_object',
 			'_cd_core',
+			'_cd_extension',
 			'_plugin',
 		);
 		foreach ( $fields as $field ) {
