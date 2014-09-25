@@ -9,26 +9,11 @@
  * @package WordPress
  * @subpackage ClientDash
  *
+ * @category Widgets
+ *
  * @since Client Dash 1.5
  */
 class ClientDash_Widget_Help extends ClientDash {
-
-	/**
-	 * The main construct function.
-	 *
-	 * @since Client Dash 1.5
-	 */
-	public function __construct() {
-
-		$this->add_widget( array(
-			'ID'            => 'help',
-			'title'         => 'Help',
-			'description'   => 'The core Help widget',
-			'callback'      => array( 'ClientDash_Widget_Help', 'widget_content' ),
-			'edit_callback' => false,
-			'cd_page'       => 'help'
-		) );
-	}
 
 	/**
 	 * The content of the widget.

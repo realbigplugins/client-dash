@@ -8,6 +8,8 @@
  * @package WordPress
  * @subpackage ClientDash
  *
+ * @category Pages
+ *
  * @since Client Dash 1.5
  */
 class ClientDash_Page_Webmaster extends ClientDash {

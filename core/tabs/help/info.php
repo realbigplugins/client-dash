@@ -8,6 +8,8 @@
  * @package WordPress
  * @subpackage ClientDash
  *
+ * @category Tabs
+ *
  * @since Client Dash 1.5
  */
 class ClientDash_Core_Page_Help_Tab_Info extends ClientDash {

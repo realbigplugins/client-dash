@@ -8,6 +8,8 @@
  * @package WordPress
  * @subpackage ClientDash
  *
+ * @category Pages
+ *
  * @since Client Dash 1.5
  */
 class ClientDash_Page_Settings extends ClientDash {
@@ -102,12 +104,12 @@ class ClientDash_Page_Settings extends ClientDash {
 			<?php
 			// Default to wrapping everything in the form, but allow to be disabled
 			if ( apply_filters( 'cd_settings_form_wrap', true ) ) {
+
 				echo '<form method="post" action="options.php">';
-			}
-			?>
-				<?php
+
 				// Prepare cd_settings
 				settings_fields( 'cd_options_' . $tab );
+			}
 
 			?>
 			<h2 class="cd-title"><span class="dashicons dashicons-admin-settings cd-icon"></span><span class="cd-title-text">Client Dash Settings</span></h2>

@@ -8,6 +8,8 @@
  * @package WordPress
  * @subpackage ClientDash
  *
+ * @category Tabs
+ *
  * @since Client Dash 1.5
  */
 class ClientDash_Core_Page_Webmaster_Tab_Feed extends ClientDash {

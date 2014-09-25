@@ -9,28 +9,11 @@
  * @package WordPress
  * @subpackage ClientDash
  *
+ * @category Widgets
+ *
  * @since Client Dash 1.5
  */
 class ClientDash_Widget_Webmaster extends ClientDash {
-
-	/**
-	 * The main construct function.
-	 *
-	 * @since Client Dash 1.5
-	 */
-	public function __construct() {
-
-		$webmaster = get_option( 'cd_webmaster_name', $this->option_defaults['webmaster_name'] );
-
-		$this->add_widget( array(
-			'ID'            => 'webmaster',
-			'title'         => $webmaster,
-			'description'   => 'The core Webmaster widget',
-			'callback'      => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
-			'edit_callback' => false,
-			'cd_page'       => 'webmaster'
-		) );
-	}
 
 	/**
 	 * The content of the widget.

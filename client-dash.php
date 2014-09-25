@@ -13,12 +13,6 @@ Author URI: http://realbigmarketing.com/staff/kyle
 
 // FUTUREBUILD Only require page / tab specific files WHEN they are needed. Not always.
 
-// REMOVE
-register_sidebar( array(
-	'name' => 'Test',
-	'id' => 'test',
-));
-
 // Require the functions class first so we can extend it
 include_once( plugin_dir_path( __FILE__ ) . 'core/functions.php' );
 
@@ -30,6 +24,8 @@ include_once( plugin_dir_path( __FILE__ ) . 'core/functions.php' );
  *
  * @package WordPress
  * @subpackage ClientDash
+ *
+ * @category Base Functionality
  *
  * @since Client Dash 1.5
  */
@@ -86,15 +82,33 @@ class ClientDash extends ClientDash_Functions {
 	);
 
 	/**
-	 * Declaring all widgets that exist within Client Dash.
+	 * Client Dash Core available widgets.
 	 *
-	 * @since Client Dash 1.1
+	 * Private.
+	 *
+	 * @since Client Dash 1.6
 	 */
-	public $core_widgets = array(
-		'account',
-		'help',
-		'reports',
-		'webmaster'
+	public static $_cd_widgets = array(
+		'cd_account'   => array(
+			'title'       => 'Client Dash Account',
+			'description' => 'The core Client Dash account page.',
+			'_callback'    => array( 'ClientDash_Widget_Account', 'widget_content' ),
+		),
+		'cd_help'      => array(
+			'title'       => 'Client Dash Help',
+			'description' => 'The core Client Dash help page.',
+			'_callback'    => array( 'ClientDash_Widget_Help', 'widget_content' ),
+		),
+		'cd_reports'   => array(
+			'title'       => 'Client Dash Reports',
+			'description' => 'The core Client Dash reports page.',
+			'_callback'    => array( 'ClientDash_Widget_Reports', 'widget_content' ),
+		),
+		'cd_webmaster' => array(
+			'title'       => 'Client Dash Webmaster',
+			'description' => 'The core Client Dash webmaster page.',
+			'_callback'    => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
+		),
 	);
 
 	/**
@@ -138,41 +152,40 @@ class ClientDash extends ClientDash_Functions {
 		// Default widgets
 		'widgets'                    => array(
 			array(
-				'ID'            => 'cd_account',
-				'title'         => 'Account',
-				'callback'      => array( 'ClientDash_Widget_Account', 'widget_content' ),
-				'edit_callback' => false,
-				'cd_core'       => true,
-				'cd_page'       => 'account'
+				'ID'                => 'cd_account',
+				'title'             => 'Account',
+				'callback'          => array( 'ClientDash_Widget_Account', 'widget_content' ),
+				'settings_callback' => false,
+				'cd_core'           => true,
+				'cd_page'           => 'account'
 			),
 			array(
-				'ID'            => 'cd_reports',
-				'title'         => 'Reports',
-				'callback'      => array( 'ClientDash_Widget_Reports', 'widget_content' ),
-				'edit_callback' => false,
-				'cd_core'       => true,
-				'cd_page'       => 'reports'
+				'ID'                => 'cd_reports',
+				'title'             => 'Reports',
+				'callback'          => array( 'ClientDash_Widget_Reports', 'widget_content' ),
+				'settings_callback' => false,
+				'cd_core'           => true,
+				'cd_page'           => 'reports'
 			),
 			array(
-				'ID'            => 'cd_help',
-				'title'         => 'Help',
-				'callback'      => array( 'ClientDash_Widget_Help', 'widget_content' ),
-				'edit_callback' => false,
-				'cd_core'       => true,
-				'cd_page'       => 'help'
+				'ID'                => 'cd_help',
+				'title'             => 'Help',
+				'callback'          => array( 'ClientDash_Widget_Help', 'widget_content' ),
+				'settings_callback' => false,
+				'cd_core'           => true,
+				'cd_page'           => 'help'
 			),
 			array(
-				'ID'            => 'cd_webmaster',
-				'title'         => 'Webmaster',
-				'callback'      => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
-				'edit_callback' => false,
-				'cd_core'       => true,
-				'cd_page'       => 'webmaster'
-			)
+				'ID'                => 'cd_webmaster',
+				'title'             => 'Webmaster',
+				'callback'          => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
+				'settings_callback' => false,
+				'cd_core'           => true,
+				'cd_page'           => 'webmaster'
+			),
 		),
 		//
-		// This one is big. It's the default visibility of core
-		// content sections by role. "0" is showing and "1" is hidden.
+		// This one is big. It's the default visibility of core content sections by role.
 		// It is VERY important that these names all match EXACTLY
 		'content_sections_roles'     => array(
 			'account'   => array(
@@ -239,7 +252,7 @@ class ClientDash extends ClientDash_Functions {
 					)
 				)
 			)
-		)
+		),
 	);
 
 	/**
@@ -275,21 +288,18 @@ class ClientDash extends ClientDash_Functions {
 	public $content_sections_unmodified = [ ];
 
 	/**
-	 * The semi-magical widget property.
-	 *
-	 * This property will be populated with ALL widgets. It allows extensions
-	 * to add widgets with little effort.
-	 *
-	 * @since Client Dash 1.5
-	 */
-	public $widgets = [ ];
-
-	/**
 	 * Data to be sent to the main JS file.
 	 *
 	 * @since Client Dash 1.6
 	 */
 	public $jsData = [ ];
+
+	/**
+	 * Widgets that are active by default.
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public $active_widgets = [ ];
 
 	/**
 	 * Constructs the class.
@@ -336,10 +346,13 @@ class ClientDash extends ClientDash_Functions {
 		add_action( 'admin_menu', array( $this, 'remove_toolbar_items' ), 999 );
 
 		// Save all of the active widgets into an option for use on non-dashboard pages
-		add_action( 'wp_dashboard_setup', array( $this, 'get_active_widgets' ), 100 );
+		add_action( 'wp_dashboard_setup', array( $this, 'get_active_widgets' ), 997 );
 
 		// Removes default dashboard widgets
-		add_action( 'wp_dashboard_setup', array( $this, 'remove_default_dashboard_widgets' ), 1000 );
+		add_action( 'wp_dashboard_setup', array( $this, 'remove_default_dashboard_widgets' ), 998 );
+
+		// Initializes the dashboard widgets
+		add_action( 'wp_dashboard_setup', array( $this, 'add_new_widgets' ), 999 );
 
 		// Removes the WordPress welcome panel from the dashboard
 		remove_action( 'welcome_panel', 'wp_welcome_panel' );
@@ -351,9 +364,6 @@ class ClientDash extends ClientDash_Functions {
 		// NOTE: this is intentionally not "admin_init". This needs to fire before "admin_menu",
 		// but unfortunately "admin_init" fires after "admin_menu". Which is dumb.
 		add_action( 'init', array( $this, 'content_sections_init' ) );
-
-		// Initializes the dashboard widgets
-		add_action( 'wp_dashboard_setup', array( $this, 'widgets_init' ), 1010 );
 
 		// Shows any admin notices
 		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
@@ -440,13 +450,13 @@ class ClientDash extends ClientDash_Functions {
 			'#cd-dashicons-selections .dashicons.active' => array(
 				'color' => $active_theme['secondary'],
 			),
-			'.cd-progress-bar .cd-progress-bar-inner'                     => array(
+			'.cd-progress-bar .cd-progress-bar-inner'    => array(
 				'background-color' => $active_theme['secondary'],
 			),
 			'.cd-menu-icon-selector li:hover .dashicons' => array(
 				'color' => $active_theme['secondary'] . '!important',
 			),
-			'.cd-menu-icon-selector .active .dashicons' => array(
+			'.cd-menu-icon-selector .active .dashicons'  => array(
 				'color' => $active_theme['secondary'] . '!important',
 			),
 		);
@@ -544,64 +554,26 @@ class ClientDash extends ClientDash_Functions {
 
 		global $wp_meta_boxes;
 
-		// Initialize
-		$active_widgets = array();
-
 		// This lovely, crazy loop is what gathers all of the widgets and organizes it into MY array
 		foreach ( $wp_meta_boxes['dashboard'] as $context => $priorities ) {
 			foreach ( $priorities as $priority => $widgets ) {
 				foreach ( $widgets as $id => $values ) {
-					$active_widgets[ $id ]['title']    = $values['title'];
-					$active_widgets[ $id ]['context']  = $context;
-					$active_widgets[ $id ]['priority'] = $priority;
-					$active_widgets[ $id ]['callback'] = $values['callback'];
+					$this->active_widgets[ $id ]['title']    = $values['title'];
+					$this->active_widgets[ $id ]['context']  = $context;
+					$this->active_widgets[ $id ]['priority'] = $priority;
+					$this->active_widgets[ $id ]['callback'] = $values['callback'];
 				}
 			}
 		}
-
-		// Unset OUR widgets
-		foreach ( $this->core_widgets as $widget ) {
-			unset( $active_widgets[ 'cd-' . $widget ] );
-		}
-
-		// Save visible widgets for the current user
-		update_user_meta( get_current_user_id(), 'cd_visible_widgets', $active_widgets );
 
 		// Only update for Admin
 		if ( current_user_can( 'manage_options' ) ) {
-			// For use on widgets page
+
+			// Update these values so that we can signal the user on the widgets page to come back here
 			$active_plugins = get_option( 'active_plugins' );
 			update_option( 'cd_active_plugins', $active_plugins );
-
-			update_option( 'cd_active_widgets', $active_widgets );
-
-			// If a plugin as been deactivated, we need to mark that in our "cd_widgets"
-			// option for later use in the settings page.
-			$cd_widgets        = get_option( 'cd_widgets', $this->option_defaults['widgets'] );
-			$cd_widgets_update = $cd_widgets;
-
-			foreach ( $cd_widgets as $key => $cd_widget ) {
-				// Skip CD core widgets, they can't be deactivated
-				// OR if it is an active widget
-				if ( isset( $cd_widget['cd_core'] ) || isset( $active_widgets[ $cd_widget['ID'] ] ) ) {
-
-					// If it was previously deactivated, unset that
-					if ( isset( $cd_widgets[ $key ]['deactivated'] ) ) {
-						unset( $cd_widgets_update[ $key ]['deactivated'] );
-					}
-					continue;
-				}
-
-				// Oh boy, looks like the plugin for the widget is deactivated
-				$cd_widgets_update[ $key ]['deactivated'] = true;
-			}
-
-			// Update our option if it's changed
-			if ( $cd_widgets != $cd_widgets_update ) {
-				update_option( 'cd_widgets', $cd_widgets_update );
-			}
+			update_option( 'cd_active_widgets', $this->active_widgets );
 		}
-
 	}
 
 	/**
@@ -613,28 +585,132 @@ class ClientDash extends ClientDash_Functions {
 
 		global $wp_meta_boxes;
 
-		$active_widgets = get_option( 'cd_active_widgets', null );
-
-		// If no active widgets (which is never...), bail
-		if ( ! $active_widgets ) {
-			return;
-		}
-
-		// Don't remove selected widgets
-		$dont_remove = get_option( 'cd_remove_which_widgets' );
-		if ( $dont_remove ) {
-			foreach ( $dont_remove as $widget ) {
-				unset( $active_widgets[ $widget ] );
-			}
-		}
-
 		// Allow removing/adding of widgets to ditch externally
-		$active_widgets = apply_filters( 'cd_remove_widgets', $active_widgets );
+		$active_widgets = apply_filters( 'cd_remove_widgets', $this->active_widgets );
 
 		foreach ( $active_widgets as $widget => $values ) {
 			remove_meta_box( $widget, 'dashboard', $values['context'] );
 		}
-		$wp_meta_boxes = null;
+
+		$wp_meta_boxes = [ ];
+	}
+
+	/**
+	 * Adds our widgets to the dashboard.
+	 *
+	 * @since Client Dash 1.5
+	 */
+	public function add_new_widgets() {
+
+		global $wp_meta_boxes;
+
+		$sidebars = get_option( 'sidebars_widgets' );
+
+		$current_sidebar = apply_filters( 'cd_dashboard_widgets_sidebar', "cd-dashboard" );
+
+		// If no widgets have been set up yet, just use default ones. Otherwise, the new
+		// widgets need to be translated
+		if ( empty( $sidebars[ $current_sidebar ] ) ) {
+
+			// MAYBETODO Make widgets init on startup so this can just be a "return;"
+			$new_widgets = $this::$_cd_widgets;
+		} else {
+
+			// Cycle through each widget
+			foreach ( $sidebars[ $current_sidebar ] as $ID ) {
+
+				// Break apart the ID
+				preg_match_all( "/(.*)(-\d+)/", $ID, $matches );
+				$ID_base   = $matches[1][0];
+				$ID_number = str_replace( '-', '', $matches[2][0] );
+
+				// Get all widgets of this type
+				$widgets = get_option( "widget_{$ID_base}" );
+
+				// Get the current widget
+				$widget = $widgets[ $ID_number ];
+
+				// Set the ID
+				$widget['ID'] = isset( $widget['_cd_extension'] ) && $widget['_cd_extension'] == '1' ? $ID : $ID_base;
+
+				// Add it on
+				$new_widgets[ $widget['ID'] ] = $widget;
+
+				// Remove ID
+				unset( $new_widgets[ $widget['ID'] ]['ID'] );
+			}
+		}
+
+		if ( ! empty( $new_widgets ) ) {
+			foreach ( $new_widgets as $widget_ID => $widget ) {
+
+				// Pass over if is a plugin / theme / WP Core widget and didn't original exist for current user
+				if ( $widget['plugin'] == '1' && ! array_key_exists( $widget_ID, $this->active_widgets ) ) {
+					return;
+				}
+
+				// Remove old value
+				unset( $new_ID );
+
+				// Figure out the title
+				$title = ! empty( $widget['title'] ) ? $widget['title'] : $widget['_original_title'];
+
+				// Client Dash core widgets conditional visibility
+				if ( isset( $widget['_cd_core'] ) && $widget['_cd_core'] === '1' ) {
+					if ( ! isset( $this->content_sections[ str_replace( 'cd_', '', $widget_ID ) ] ) ) {
+						continue;
+					}
+				}
+
+				// If this ID already exists, change the ID to something new
+				if ( ! empty( $wp_meta_boxes ) && $this->array_key_exists_r( $widget_ID, $wp_meta_boxes ) ) {
+
+					// If the ID contains "_duplicate_{n}", then we need another new ID, so
+					// we use a prep_replace_callback to replace the "_duplicate_{n}" with
+					// "_duplicate_{n+1}". Otherwise, just add on the "_duplicate_1" to the
+					// end
+					foreach ( $wp_meta_boxes['dashboard'] as $context ) {
+						foreach ( $context as $priority ) {
+							foreach ( $priority as $ID => $wp_widget ) {
+								if ( strpos( $ID, $widget_ID ) !== false ) {
+									if ( preg_match( '/(_duplicate_)(\d+)/', $ID ) ) {
+										$new_ID = preg_replace_callback(
+											'/(_duplicate_)(\d+)/',
+											array( $this, 'replace_count' ),
+											$ID
+										);
+									} else {
+										$new_ID = "$widget[ID]_duplicate_1";
+									}
+								}
+							}
+						}
+					}
+				}
+
+				// For webmaster widget
+				if ( $widget_ID == 'cd_webmaster' ) {
+					$title = get_option( 'cd_webmaster_name', $this->option_defaults['webmaster_name'] );
+				}
+
+				// If callback should be an object
+				if ( isset( $widget['_is_object'] ) && $widget['_is_object'] === '1' ) {
+					if ( ! class_exists( $widget['_callback'][0] ) ) {
+						continue;
+					}
+					$widget['_callback'][0] = new $widget['_callback'][0];
+				}
+
+				add_meta_box(
+					isset( $new_ID ) ? $new_ID : $widget_ID,
+					$title,
+					$widget['_callback'],
+					'dashboard',
+					'normal',
+					'core'
+				);
+			}
+		}
 	}
 
 	/**
@@ -710,88 +786,6 @@ class ClientDash extends ClientDash_Functions {
 							unset( $this->content_sections[ $page ] );
 						}
 					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Adds our widgets to the dashboard.
-	 *
-	 * @since Client Dash 1.5
-	 */
-	public function widgets_init() {
-
-		$widgets = get_option( 'cd_widgets', $this->option_defaults['widgets'] );
-
-		if ( ! empty( $widgets ) ) {
-			foreach ( $widgets as $widget ) {
-				// Remove old value
-				unset( $new_ID );
-
-				// Client Dash core widgets conditional visibility
-				if ( isset( $widget['cd_core'] ) && $widget['cd_core'] ) {
-					if ( ! isset( $this->content_sections[ $widget['cd_page'] ] ) ) {
-						continue;
-					}
-				}
-
-				// Get user meta for which widgets should show.
-				// Some users don't have privileges to see widgets. So in order to keep it this way
-				// for WP core and other plugin widgets, I've stored the shown widgets before they
-				// were erased, and now I'm comparing that against what's about to show. If anything
-				// that is about to show does not exist in our stored data, don't show it.
-				$user_visible_widgets = get_user_meta( get_current_user_id(), 'cd_visible_widgets', true );
-
-				global $wp_meta_boxes;
-
-				// If this ID already exists, change the ID to something new
-				if ( ! empty( $wp_meta_boxes ) && $this->array_key_exists_r( $widget['ID'], $wp_meta_boxes ) ) {
-					// If the ID contains "_duplicate_{n}", then we need another new ID, so
-					// we use a prep_replace_callback to replace the "_duplicate_{n}" with
-					// "_duplicate_{n+1}". Otherwise, just add on the "_duplicate_1" to the
-					// end
-					foreach ( $wp_meta_boxes['dashboard'] as $context ) {
-						foreach ( $context as $priority ) {
-							foreach ( $priority as $ID => $wp_widget ) {
-								if ( strpos( $ID, $widget['ID'] ) !== false ) {
-									if ( preg_match( '/(_duplicate_)(\d+)/', $ID ) ) {
-										$new_ID = preg_replace_callback(
-											'/(_duplicate_)(\d+)/',
-											array( $this, 'replace_count' ),
-											$ID
-										);
-									} else {
-										$new_ID = $widget['ID'] . '_duplicate_1';
-									}
-								}
-							}
-						}
-					}
-				}
-
-				// For webmaster widget
-				if ( $widget['ID'] == 'cd_webmaster' ) {
-					$widget['title'] = get_option( 'cd_webmaster_name', $this->option_defaults['webmaster_name'] );
-				}
-
-				// If callback should be an object
-				if ( isset( $widget['is_object'] ) ) {
-					if ( ! class_exists( $widget['callback'][0] ) ) {
-						continue;
-					}
-					$widget['callback'][0] = new $widget['callback'][0];
-				}
-
-				if ( array_key_exists( $widget['ID'], $user_visible_widgets ) || isset( $widget['cd_core'] ) ) {
-					add_meta_box(
-						isset( $new_ID ) ? $new_ID : $widget['ID'],
-						$widget['title'],
-						$widget['callback'],
-						'dashboard',
-						'normal',
-						'core'
-					);
 				}
 			}
 		}

@@ -9,26 +9,11 @@
  * @package WordPress
  * @subpackage ClientDash
  *
+ * @category Widgets
+ *
  * @since Client Dash 1.5
  */
 class ClientDash_Widget_Reports extends ClientDash {
-
-	/**
-	 * The main construct function.
-	 *
-	 * @since Client Dash 1.5
-	 */
-	public function __construct() {
-
-		$this->add_widget( array(
-			'ID'            => 'reports',
-			'title'         => 'Reports',
-			'description'   => 'The core Reports widget',
-			'callback'      => array( 'ClientDash_Widget_Reports', 'widget_content' ),
-			'edit_callback' => false,
-			'cd_page'       => 'reports'
-		) );
-	}
 
 	/**
 	 * The content of the widget.

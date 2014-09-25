@@ -8,9 +8,41 @@
  * @package WordPress
  * @subpackage ClientDash
  *
+ * @category Base Functionality
+ *
  * @since Client Dash 1.5
  */
 abstract class ClientDash_Functions {
+
+	/**
+	 * Checks to see if we're on a specific page and tab.
+	 *
+	 * @since Client Dash 1.6
+	 *
+	 * @param string $page The page to check.
+	 * @param bool/string $tab If supplied, will also check that the given tab is active.
+	 *
+	 * @return bool True of on the page (and tab), false otherwise.
+	 */
+	public static function is_cd_page( $page, $tab = false ) {
+
+		// Check the page
+		if ( isset( $_GET['page'] ) && $_GET['page'] == $page ) {
+
+			// If also set a tab, check that
+			if ( $tab ) {
+				if ( isset( $_GET['tab'] ) && $tab == $tab ) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		return false;
+	}
 
 	/**
 	 * Outputs the default Client Dash toggle switch (on|off).
@@ -229,6 +261,13 @@ abstract class ClientDash_Functions {
 
 		global $ClientDash;
 
+		/**
+		 * Filter each content section that is added.
+		 *
+		 * @since Client Dash 1.6
+		 */
+		$content_section = apply_filters( 'cd_add_content_section', $content_section );
+
 		if ( ! isset( $content_section['priority'] ) ) {
 			$content_section['priority'] = 10;
 		}
@@ -259,121 +298,6 @@ abstract class ClientDash_Functions {
 			'callback' => $content_section['callback'],
 			'priority' => $content_section['priority']
 		);
-	}
-
-	/**
-	 * Adds a widget to be available under Settings -> Widgets.
-	 *
-	 * @since Client Dash 1.5
-	 *
-	 * @param array $widget The new widget to add.
-	 */
-	public static function add_widget( $widget ) {
-
-		global $ClientDash;
-
-		$widgets = array(
-			'ID'            => 'cd_' . $widget['ID'],
-			'title'         => $widget['title'],
-			'callback'      => $widget['callback'],
-			'edit_callback' => $widget['edit_callback'],
-			'description'   => $widget['description'],
-			'cd_core'       => true,
-			'cd_page'       => $widget['cd_page']
-		);
-
-		// Make sure something is there!
-		if ( empty( $ClientDash->widgets ) ) {
-			$ClientDash->widgets = array();
-		}
-		array_push( $ClientDash->widgets, $widgets );
-	}
-
-	/**
-	 * Displays widgets for Settings -> Widgets.
-	 *
-	 * Loops through all widgets supplied and outputs them accordingly. This is
-	 * used for the Settings -> Widgets page for both the "Available Dashboard Widgets"
-	 * and "Dashboard" sections.
-	 *
-	 * @since Client Dash 1.5
-	 *
-	 * @param array $widgets All widgets to display.
-	 * @param bool $disabled Whether or not the inputs should be disabled.
-	 * @param bool $draggable Whether or not these should be draggable.
-	 */
-	public static function widget_loop( $widgets, $disabled = false, $draggable = false ) {
-
-		$i = - 1;
-		foreach ( $widgets as $key => $widget ) {
-			$i ++;
-
-			if ( ! isset( $widget['ID'] ) ) {
-				if ( isset( $widget['cd_core'] ) ) {
-					$widget['ID'] = self::translate_name_to_id( $widget['title'] );
-				} else {
-					$widget['ID'] = $key;
-				}
-			}
-			?>
-			<li class="cd-dash-widget<?php echo $draggable ? ' ui-draggable' : '';
-			echo isset( $widget['deactivated'] ) ? ' deactivated' : ''; ?>">
-				<h4 class="cd-dash-widget-title">
-					<?php echo $widget['title']; ?>
-					<span class="cd-up-down"></span>
-				</h4>
-
-				<div class="cd-dash-widget-settings">
-					<?php
-					if ( isset( $widget['edit_callback'] ) && $widget['edit_callback'] ) {
-						call_user_func( $widget['edit_callback'][0] . '::' . $widget['edit_callback'][1] );
-					} else {
-						echo 'No settings';
-					}
-					?>
-
-					<div class="cd-dash-widget-footer">
-						<a href="#" class="cd-dash-widget-delete"
-						   onclick="cdWidgets.remove(this); return false;">
-							Delete
-						</a>
-					</div>
-				</div>
-
-				<p class="cd-dash-widget-description">
-					<?php echo isset( $widget['description'] ) ? $widget['description'] : ''; ?>
-				</p>
-
-				<?php
-				foreach ( $widget as $name => $value ) {
-					$disabled = $disabled ? 'disabled' : '';
-
-					// This is account for the callback value, which is an array
-					if ( is_array( $value ) ) {
-
-						// Sometimes an object gets saved instead of the class name, this
-						// accounts for that possibility
-						if ( is_object( $value[0] ) ) {
-							echo "<input type='hidden' name='cd_widgets[$i][$name][0]' value='" . get_class( $value[0] ) . "' $disabled />";
-							echo "<input type='hidden' name='cd_widgets[$i][is_object]' value='1' $disabled/>";
-						} else {
-							// If the plugin is deactivated, we will get an incomplete class error
-							if ( ! is_object( $value[0] ) && gettype( $value[0] ) == 'object' ) {
-								continue;
-							}
-
-							echo "<input type='hidden' name='cd_widgets[$i][$name][0]' value='$value[0]' $disabled />";
-						}
-
-						echo "<input type='hidden' name='cd_widgets[$i][$name][1]' value='$value[1]' $disabled />";
-					} else {
-						echo "<input type='hidden' name='cd_widgets[$i][$name]' value='$value' $disabled />";
-					}
-				}
-				?>
-			</li>
-		<?php
-		}
 	}
 
 	/**
@@ -752,4 +676,6 @@ abstract class ClientDash_Functions {
 
 		return min( $chr );
 	}
+
+	// Widget specific functions
 }

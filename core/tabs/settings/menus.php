@@ -1,12 +1,14 @@
 <?php
 
 /**
- * Class ClientDash_Core_Page_Settings_Tab_AdminMenu
+ * Class ClientDash_Core_Page_Settings_Tab_Menus
  *
  * Adds the core content section for Settings -> Admin Menu.
  *
  * @package WordPress
  * @subpackage ClientDash
+ *
+ * @category Menus
  *
  * @since Client Dash 1.6
  */
@@ -55,7 +57,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 *
 	 * @since Client Dash 1.6
 	 */
-	public $menu_item_defaults = array(
+	public static $menu_item_defaults = array(
 		'db-id'             => 0,
 		'parent-id'         => 0,
 		'position'          => 0,
@@ -296,6 +298,44 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	);
 
 	/**
+	 * These are what populate the side sortables area on the left.
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public $side_sortables = array(
+		'add-post-type'    => array(
+			'id'       => 'add-post-types',
+			'title'    => 'Post Types',
+			'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'post_types' ),
+		),
+		'add-wp-core'      => array(
+			'id'       => 'add-wp-core',
+			'title'    => 'WordPress',
+			'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'wp_core' ),
+		),
+		'add-plugin'       => array(
+			'id'       => 'add-plugin',
+			'title'    => 'Plugin / Theme',
+			'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'plugin' ),
+		),
+		'add-cd-core'      => array(
+			'id'       => 'add-cd-core',
+			'title'    => 'Client Dash',
+			'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'cd_core' ),
+		),
+		'add-custom-links' => array(
+			'id'       => 'add-custom-links',
+			'title'    => 'Custom Link',
+			'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'custom_link' ),
+		),
+		'add-separator'    => array(
+			'id'       => 'add-separator',
+			'title'    => 'Separator',
+			'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'separator' ),
+		),
+	);
+
+	/**
 	 * The main construct function.
 	 *
 	 * @since Client Dash 1.6
@@ -385,6 +425,15 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		}
 	}
 
+	public static function _get( $property ) {
+		if ( property_exists( __CLASS__, $property ) ) {
+
+			$vars = get_class_vars( __CLASS__ );
+
+			return $vars[ $property ];
+		}
+	}
+
 	/**
 	 * Gets properties of the class.
 	 *
@@ -415,7 +464,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		 *
 		 * @since Client Dash 1.6
 		 */
-		$this->menu_item_defaults = apply_filters( 'cd_nav_menu_item_defaults', $this->menu_item_defaults );
+		$this::$menu_item_defaults = apply_filters( 'cd_nav_menu_item_defaults', $this::$menu_item_defaults );
 
 		/**
 		 * Add or remove items from the CD default WP Core menu item list.
@@ -870,7 +919,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			 *
 			 * @param int $menu_ID The current CD menu ID.
 			 */
-			return apply_filters( 'cd_nav_menu_walker', 'Walker_Nav_Menu_Edit_CD', $menu_ID );
+			return apply_filters( 'cd_nav_menu_walker', 'Walker_Nav_Menu_Edit_CD', $this->menu_ID );
 		}
 
 		return $walker;
@@ -1640,41 +1689,9 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		 *
 		 * @since Client Dash 1.6
 		 *
-		 * @param int $this->menu_ID The currently being edited menu ID (false if no menu).
+		 * @param int $this ->menu_ID The currently being edited menu ID (false if no menu).
 		 */
-		$side_sortables = apply_filters( 'cd_nav_menu_side_sortables', array(
-				'add-post-type'    => array(
-					'id'       => 'add-post-types',
-					'title'    => 'Post Types',
-					'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'post_types' ),
-				),
-				'add-wp-core'      => array(
-					'id'       => 'add-wp-core',
-					'title'    => 'WordPress',
-					'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'wp_core' ),
-				),
-				'add-plugin'       => array(
-					'id'       => 'add-plugin',
-					'title'    => 'Plugin / Theme',
-					'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'plugin' ),
-				),
-				'add-cd-core'      => array(
-					'id'       => 'add-cd-core',
-					'title'    => 'Client Dash',
-					'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'cd_core' ),
-				),
-				'add-custom-links' => array(
-					'id'       => 'add-custom-links',
-					'title'    => 'Custom Link',
-					'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'custom_link' ),
-				),
-				'add-separator'    => array(
-					'id'       => 'add-separator',
-					'title'    => 'Separator',
-					'callback' => array( 'CD_AdminMenu_AvailableItems_Callbacks', 'separator' ),
-				),
-			), $this->menu_ID
-		);
+		$side_sortables = apply_filters( 'cd_nav_menu_side_sortables', $this->side_sortables, $this->menu_ID );
 
 		$wp_meta_boxes = array(
 			'nav-menus' => array(
@@ -1715,7 +1732,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			// Our modified walker class
 			include_once( $ClientDash->path . '/core/tabs/settings/menus/walkerclass.php' );
 
-			$menu_items = wp_get_nav_menu_items( $this->menu_ID, array( 'post_status' => 'any' ) );
+			$menu_items  = wp_get_nav_menu_items( $this->menu_ID, array( 'post_status' => 'any' ) );
 			$edit_markup = wp_get_nav_menu_to_edit( $this->menu_ID );
 
 			$output = array(

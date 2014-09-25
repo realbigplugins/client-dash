@@ -8,6 +8,8 @@
  * @package WordPress
  * @subpackage ClientDash
  *
+ * @category Icons
+ *
  * @since Client Dash 1.5
  */
 class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
