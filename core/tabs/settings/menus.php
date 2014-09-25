@@ -425,15 +425,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		}
 	}
 
-	public static function _get( $property ) {
-		if ( property_exists( __CLASS__, $property ) ) {
-
-			$vars = get_class_vars( __CLASS__ );
-
-			return $vars[ $property ];
-		}
-	}
-
 	/**
 	 * Gets properties of the class.
 	 *
@@ -444,6 +435,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 * @return mixed The property.
 	 */
 	public static function _get( $property ) {
+
 		if ( property_exists( __CLASS__, $property ) ) {
 
 			$vars = get_class_vars( __CLASS__ );
