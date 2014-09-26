@@ -296,6 +296,11 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 
 		foreach ( get_option( 'cd_active_widgets', array() ) as $widget_ID => $widget ) {
 
+			// Issue with html in quick press title
+			if ( strpos( $widget['title'], 'Quick Draft' ) !== false ) {
+				$widget['title'] = 'Quick Draft';
+			}
+
 			/**
 			 * Allows filtering of supplied values for plugin / theme / WP Core available widgets.
 			 *

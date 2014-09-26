@@ -8,6 +8,10 @@ Author: Kyle Maurer
 Author URI: http://realbigmarketing.com/staff/kyle
 */
 
+// FIXED Add nag on icons page if under wp 3.9 because not all icons will show
+// TODO Allow dashboard meta box styling to be disabled (possibly extension?)
+// TODO Correctly line break documentation to PHP guideline
+
 // NEXTUPDATE 1.7 - Themes
 // NEXTUPDATE 1.7 -
 
@@ -634,18 +638,15 @@ class ClientDash extends ClientDash_Functions {
 				$widget['ID'] = isset( $widget['_cd_extension'] ) && $widget['_cd_extension'] == '1' ? $ID : $ID_base;
 
 				// Add it on
-				$new_widgets[ $widget['ID'] ] = $widget;
-
-				// Remove ID
-				unset( $new_widgets[ $widget['ID'] ]['ID'] );
+				$new_widgets[ ] = $widget;
 			}
 		}
 
 		if ( ! empty( $new_widgets ) ) {
-			foreach ( $new_widgets as $widget_ID => $widget ) {
+			foreach ( $new_widgets as $widget ) {
 
 				// Pass over if is a plugin / theme / WP Core widget and didn't original exist for current user
-				if ( $widget['plugin'] == '1' && ! array_key_exists( $widget_ID, $this->active_widgets ) ) {
+				if ( $widget['plugin'] == '1' && ! array_key_exists( $widget['ID'], $this->active_widgets ) ) {
 					return;
 				}
 
@@ -657,13 +658,13 @@ class ClientDash extends ClientDash_Functions {
 
 				// Client Dash core widgets conditional visibility
 				if ( isset( $widget['_cd_core'] ) && $widget['_cd_core'] === '1' ) {
-					if ( ! isset( $this->content_sections[ str_replace( 'cd_', '', $widget_ID ) ] ) ) {
+					if ( ! isset( $this->content_sections[ str_replace( 'cd_', '', $widget['ID'] ) ] ) ) {
 						continue;
 					}
 				}
 
 				// If this ID already exists, change the ID to something new
-				if ( ! empty( $wp_meta_boxes ) && $this->array_key_exists_r( $widget_ID, $wp_meta_boxes ) ) {
+				if ( ! empty( $wp_meta_boxes ) && $this->array_key_exists_r( $widget['ID'], $wp_meta_boxes ) ) {
 
 					// If the ID contains "_duplicate_{n}", then we need another new ID, so
 					// we use a prep_replace_callback to replace the "_duplicate_{n}" with
@@ -672,7 +673,7 @@ class ClientDash extends ClientDash_Functions {
 					foreach ( $wp_meta_boxes['dashboard'] as $context ) {
 						foreach ( $context as $priority ) {
 							foreach ( $priority as $ID => $wp_widget ) {
-								if ( strpos( $ID, $widget_ID ) !== false ) {
+								if ( strpos( $ID, $widget['ID'] ) !== false ) {
 									if ( preg_match( '/(_duplicate_)(\d+)/', $ID ) ) {
 										$new_ID = preg_replace_callback(
 											'/(_duplicate_)(\d+)/',
@@ -689,7 +690,7 @@ class ClientDash extends ClientDash_Functions {
 				}
 
 				// For webmaster widget
-				if ( $widget_ID == 'cd_webmaster' ) {
+				if ( $widget['ID'] == 'cd_webmaster' ) {
 					$title = get_option( 'cd_webmaster_name', $this->option_defaults['webmaster_name'] );
 				}
 
@@ -702,7 +703,7 @@ class ClientDash extends ClientDash_Functions {
 				}
 
 				add_meta_box(
-					isset( $new_ID ) ? $new_ID : $widget_ID,
+					isset( $new_ID ) ? $new_ID : $widget['ID'],
 					$title,
 					$widget['_callback'],
 					'dashboard',

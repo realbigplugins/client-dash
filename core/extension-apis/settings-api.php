@@ -134,7 +134,7 @@ abstract class ClientDash_Settings_API extends ClientDash_Functions {
 			$classes = explode( ' ', $atts['class'] );
 		}
 
-		$checked = isset( $value ) ? 'checked' : '';
+		$checked = $value === '1' ? 'checked' : '';
 
 		$html = '';
 

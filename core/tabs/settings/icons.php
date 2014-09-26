@@ -242,10 +242,17 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 	 */
 	public function block_output() {
 
+		global $wp_version;
+
 		$account_dashicon   = get_option( 'cd_dashicon_account', $this->option_defaults['dashicon_account'] );
 		$reports_dashicon   = get_option( 'cd_dashicon_reports', $this->option_defaults['dashicon_reports'] );
 		$help_dashicon      = get_option( 'cd_dashicon_help', $this->option_defaults['dashicon_help'] );
 		$webmaster_dashicon = get_option( 'cd_dashicon_webmaster', $this->option_defaults['dashicon_webmaster'] );
+
+		// Show nag if not up to date, because not all icons exist in WP pre 1.9
+		if ( floatval( $wp_version ) < 3.9 ) {
+			self::error_nag( 'You are currently running a version of WordPress below 1.9. Not all icons exist before 1.9 and will not show here properly. Please update WordPress as soon as you can.' );
+		}
 		?>
 
 		<input type="hidden" id="cd_dashicon_account" name="cd_dashicon_account"

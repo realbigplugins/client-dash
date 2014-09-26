@@ -161,6 +161,7 @@ class ClientDash_AJAX {
 		// Pass over if current role doesn't have the capabilities
 		$no_parent = false;
 		if ( array_key_exists( $menu_item['capability'], $role->capabilities ) ) {
+
 			$args = ClientDash_Core_Page_Settings_Tab_Menus::sort_original_admin_menu( $menu_item );
 
 			// Predefined menu position

@@ -49,6 +49,10 @@ Using this plugin is very simple. All you have to do is:
 
 = 1.6.0 =
 * Added adminmenu customizing functionality under Settings -> Menus.
+* Revised widgets area to properly use the WP Widget API.
+* Made core much more extensible.
+* Created Widgets, Menus, and Settings API for Client Dash.
+* Other bug fixes and improvements.
 
 = 1.5.5 =
 * Fixed PHP notice error.

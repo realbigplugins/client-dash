@@ -514,7 +514,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					$title = $submenu_item['menu_slug'] == 'cd_webmaster' ? 'webmaster' : strtolower( $submenu_item['menu_title'] );
 					if ( isset( $wp_core[ $menu_item['menu_title'] ]['submenus'] )
 					     && ! array_key_exists( $submenu_item['menu_title'], $wp_core[ $menu_item['menu_title'] ]['submenus'] )
-					     && ! array_key_exists( $title, ClientDash::$core_files )
+					     && ! array_key_exists( $title, ClientDash::$core_files ) && $title != 'client dash'
 					) {
 						$menu_item['submenus'][] = $submenu_item;
 					}
@@ -737,6 +737,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 	 * @since Client Dash 1.6
 	 */
 	public static function custom_link() {
+		// MAYBETODO Sanitize url
 		?>
 		<div id="custom-link" class="posttypediv">
 
@@ -747,7 +748,8 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 							<p id="menu-item-url-wrap">
 								<label class="howto" for="menu-item-url">
 									<span>URL</span>
-									<input type="text" class="menu-item-url code" placeholder="Link"
+									<input type="text" class="menu-item-url code"
+									       placeholder="Link"
 									       name="menu-item[-1][menu-item-url]" value="">
 								</label>
 							</p>

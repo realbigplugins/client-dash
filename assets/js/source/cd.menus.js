@@ -8,9 +8,9 @@
  *
  * @since ClientDash 1.6
  */
-var cdAdminMenu;
+var cdMenus;
 (function ($) {
-    cdAdminMenu = {
+    cdMenus = {
         init: function () {
             this.modify_max_menu_depth();
             this.jQuery_extensions();
@@ -282,12 +282,14 @@ var cdAdminMenu;
                     else
                         subMenuTitle.hide();
 
+                    // CD {
                     // Hide or show icon
-                    menuIcon = ui.item.find('.dashicons');
+                    menuIcon = ui.item.find('.item-title .dashicons');
                     if (currentDepth == 0)
                         menuIcon.removeClass('hidden');
                     else
                         menuIcon.addClass('hidden');
+                    // } End CD
 
                     // Update depth classes
                     if (0 !== depthChange) {
@@ -437,7 +439,9 @@ var cdAdminMenu;
 
             // Show on click
             $('.edit-menu-item-cd-icon').click(function (e) {
+
                 e.stopPropagation();
+
                 if ($(this).is(':focus')) {
                     $(this).closest('.cd-menu-icon-field').find('.cd-menu-icon-selector').show();
                 }
@@ -450,10 +454,13 @@ var cdAdminMenu;
 
             // Use new icon val on click
             $('.cd-menu-icon-selector').find('li').click(function () {
-                var icon = $(this).attr('data-icon');
+
+                var icon = $(this).attr('data-icon'),
+                    new_class = $(this).closest('.menu-item').hasClass('menu-item-depth-1') ? 'dashicons hidden ' + icon : 'dashicons ' + icon;
 
                 $(this).closest('.cd-menu-icon-field').find('input[type="text"]').val(icon);
-                $(this).closest('.menu-item').find('.item-title').find('.dashicons').attr('class', 'dashicons ' + icon);
+
+                $(this).closest('.menu-item').find('.item-title').find('.dashicons').attr('class', new_class);
             });
         }
     };
@@ -461,7 +468,7 @@ var cdAdminMenu;
     $(function () {
         // Only initialize if on CD page and if the page isn't "disabled"
         if ($('body').hasClass('cd-nav-menu') && !$('#menu-settings-column').hasClass('metabox-holder-disabled')) {
-            cdAdminMenu.init();
+            cdMenus.init();
         }
     });
 })(jQuery);

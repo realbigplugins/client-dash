@@ -42,6 +42,11 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 */
 	public $create_new = false;
 
+	/**
+	 * Counts the total menu items. Used for when importing via AJAX.
+	 *
+	 * @since Client Dash 1.6
+	 */
 	public $total_menu_items;
 
 	/**
@@ -84,7 +89,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	/**
 	 * All WordPress core nav menu items (aside from post types).
 	 *
-	 * Unfortunatley, there's no good way to get this dynamically BECAUSE I can't tell the
+	 * Unfortunately, there's no good way to get this dynamically BECAUSE I can't tell the
 	 * difference between an item added by WP Core and an item added by a plugin. So my
 	 * work-around is to define WP Core items and have the rest automatically fall into the
 	 * plugin / theme category. This is fine, we just need to make sure this array is always
@@ -92,7 +97,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 *
 	 * @since Client Dash 1.6
 	 */
-	public $wp_core = array(
+	public static $wp_core = array(
 		'Dashboard'  => array(
 			'url'        => 'index.php',
 			'icon'       => 'dashicons-dashboard',
@@ -369,14 +374,17 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 		// Create if told so from GET
 		if ( isset( $_GET['cd_create_admin_menu'] ) ) {
-			add_action( 'admin_menu', array( $this, 'create_nav_menu' ), 99995 );
+			add_action( 'admin_menu', array( $this, 'create_nav_menu' ), 99996 );
 		}
 
 		// Create/Get CD nav menu
-		add_action( 'admin_menu', array( $this, 'get_cd_nav_menus' ), 99996 );
+		add_action( 'admin_menu', array( $this, 'get_cd_nav_menus' ), 99997 );
 
-		// Remove the original admin menu (and also add the modified menu)
-		add_action( 'admin_menu', array( $this, 'remove_orig_admin_menu' ), 99999 );
+		// Remove the original admin menu
+		add_action( 'admin_menu', array( $this, 'remove_orig_admin_menu' ), 99998 );
+
+		// Add the modified menu
+		add_action( 'admin_menu', array( $this, 'add_modified_admin_menu' ), 99999 );
 
 		// Hide the CD nav menu from the normal nav menu page
 		add_filter( 'wp_get_nav_menus', array( $this, 'hide_cd_nav_menu' ) );
@@ -463,7 +471,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		 *
 		 * @since Client Dash 1.6
 		 */
-		$this->wp_core = apply_filters( 'cd_nav_menu_wp_core_items', $this->wp_core );
+		$this::$wp_core = apply_filters( 'cd_nav_menu_wp_core_items', $this::$wp_core );
 	}
 
 	/**
@@ -618,6 +626,11 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 		global $current_user, $wp_roles, $super_admins, $menu, $submenu;
 
+		// Don't bother for admin
+		if ( $_POST['cd_create_admin_menu'] == 'administrator' ) {
+			return;
+		}
+
 		// If we're changing the role to something that's not an administrator, we need to make sure
 		// that we make WP think the current user is NOT super admin, because that overrides all
 		// capabilities
@@ -630,7 +643,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		// Otherwise modify the current user object
 		$current_user->allcaps  = $wp_roles->roles[ $new_role ]['capabilities'];
 		$current_user->roles[0] = strtolower( $new_role );
-		unset( $current_user->caps[ $this->get_user_role() ] );
+		unset( $current_user->caps[ self::get_user_role() ] );
 		$current_user->caps[ $new_role ] = true;
 	}
 
@@ -652,13 +665,13 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			);
 		}
 
-		set_transient( 'cd_role_menu_items', $menu_items, 60 );
+		set_transient( 'cd_role_menu_items', isset( $menu_items ) ? $menu_items : '', 60 );
 
 		wp_redirect(
 			add_query_arg(
 				array(
 					'cd_create_admin_menu' => $_POST['cd_create_admin_menu'],
-					'import_items'         => '1',
+					'import_items'         => $_POST['import_items'],
 				),
 				remove_query_arg( 'menu' )
 			)
@@ -688,7 +701,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		}
 
 		// Send the data back
-		wp_send_json( $AJAX_output );
+		wp_send_json( isset( $AJAX_output ) ? $AJAX_output : array( 'no_items' => true ) );
 	}
 
 	/**
@@ -1164,9 +1177,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 				}
 			}
 		}
-
-		// We removed it, now add it
-		$this->add_modified_admin_menu();
 	}
 
 	/**
@@ -1222,9 +1232,12 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 					$menu_item->cd_page_title = get_option( 'cd_webmaster_name', $ClientDash->option_defaults['webmaster_name'] );
 				}
 
-				// If the comments page, get original html (because when there are new comments, the title changes)
+				// If the comments page, get the html generated mimicked from WP core (/wp-admin/menus.php:~94)
 				if ( $menu_item->title == 'Comments' ) {
-					$menu_item->title = isset( $this->original_admin_menu[20]['menu_title'] ) ? $this->original_admin_menu[20]['menu_title'] : 'Comments';
+
+					$awaiting_mod = wp_count_comments();
+					$awaiting_mod = $awaiting_mod->moderated;
+					$menu_item->title = sprintf( __('Comments %s'), "<span class='awaiting-mod count-$awaiting_mod'><span class='pending-count'>" . number_format_i18n($awaiting_mod) . "</span></span>" );
 				}
 
 				if ( strpos( $menu_item->url, 'separator' ) !== false ) {

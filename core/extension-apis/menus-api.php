@@ -50,10 +50,12 @@ abstract class ClientDash_Menus_API extends ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.6
 	 *
-	 * @param string $ID The unique ID of this menu group.
+	 * @param string $name The unique name of this menu group.
 	 * @param array $items Array of tabs and items.
 	 */
-	public static function group_output( $ID, $items ) {
+	public static function group_output( $name, $items ) {
+
+		$ID = self::translate_name_to_id( $name );
 		?>
 		<div id="<?php echo $ID; ?>" class="posttypediv">
 
