@@ -1,7 +1,7 @@
 === Client Dash ===
 
 Contributors: BrashRebel, joelworsham
-Tags: client, portal, dashboard, admin, users, webmaster
+Tags: client, portal, dashboard, admin, users, webmaster, admin menu, widgets, dashboard widgets, customize admin, menu, change admin
 Requires at least: 3.8.0
 Tested up to: 4.0.0
 Stable tag: 1.6.0
@@ -10,16 +10,43 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-= Webmasters rejoice! =
+= Take control of the WordPress dashboard =
 
-At long last, a vastly improved interface for clients has arrived. Client Dash seeks to provide a simplified and intuitive admin user experience for customers who login to WordPress sites which were developed and are managed by an agency/webmaster.
+With Client Dash, WordPress webmasters have full control of the WP-Admin area. With an end goal of helping improve the User Experience within WordPress specifically for clients, we've created and implemented numerous powerful features for simplifying and customizing the dashboard.
 
-= What does Client Dash do? =
+Here are some of the major features:
 
-Upon activation, Client Dash modifies the wp-admin in the following ways:
+= Customize the Admin Menu =
+
+As of version 1.6, you are now able to completely customize the WordPress admin menu using the built in, drag and drop menu system you are already familiar with. This will enable you to:
+
+* Reorder all menu items
+* Rearrange menu items
+* Remove menu items
+* Customize menu items (label, link, icon, etc.)
+* Add new menu items
+
+Customizing the admin menu previously was very complicated and no elegant, intuitive solutions existed. With Client Dash, it is now so easy that anyone familiar with the existing WordPress menu system can do it.
+
+Admin menus are also controlled on a per role basis so you are able to completely control the admin menu for each individual role.
+
+= Dashboard Widget Manager =
+
+Have you ever wished you could customize the WordPress dashboard a little more? Well if you are capable of using the built in WordPress widget manager than with Client Dash you've found your solution.
+
+We implemented a powerful dashboard widget control feature which works exactly the same as the WordPress widget manager you're already familiar with. So now, adding, removing, rearranging and customizing WP dashboard widgets is easier than ever before.
+
+= Extremely Extensible =
+
+From the start, Client Dash has been created with developers in mind. We've worked very hard to make extending Client Dash as easy as possible. To that end, we've created an Extension Boilerplate which does almost all of the work for you...and that is only the beginning!
+
+If you are a developer and want to learn more about extending Client Dash, please subscribe to our [mailing list](http://eepurl.com/3KR1D). We'll be sharing our documentation, tips, features and beta releases that way.
+
+= What else does Client Dash do? =
+
+Upon activation, Client Dash modifies the `wp-admin` in the following ways:
 
 * Removes all default dashboard widgets
-* Provides options for selectively adding back dashboard widgets
 * Creates several new admin pages and adds their links under Dashboard in the admin menu
 * Creates new dashboard widgets with large buttons that direct users to these new pages
 * Adds tabs with helpful information on each of these new pages
@@ -27,9 +54,14 @@ Upon activation, Client Dash modifies the wp-admin in the following ways:
 * (Multisite) Removes the My Sites menu from the toolbar and the admin menu
 * (Multisite) Moves the My Sites information to a tab on the Account page
 
-There is a lot more to come from this plugin in the future. Client Dash has been designed from day 1 to be as flexible as possible so if you are a developer you will absolutely love it. In the near future we will be publishing detailed documentation on how this plugin can be modified and extended. We will also be releasing numerous extensions of our own which will integrate with a variety of useful external tools to help you provide even more value to your customers.
+Also included under Client Dash settings are:
 
-We are also extremely receptive to suggestions, feature requests and collaborations so if you have anything to add or that you would like to see included in Client Dash, please visit the support forum here and engage us. Also, stay tuned as we are working on lots of new updates to this plugin and are also actively developing some exciting add-ons.
+* Controls for restricting access to content on Client Dash pages for specific roles
+* An intuitive icon selector for changing the dashicons used for Client Dash pages and dashboard widgets
+* An option to reset all Client Dash settings to their defaults
+* A directory of existing add-ons for Client Dash
+
+We are also extremely receptive to suggestions, feature requests and collaborations so if you have anything to add or that you would like to see included in Client Dash, please visit the support forum here and engage us. Also, stay tuned as we are working on lots of new updates to this plugin and are also actively developing some exciting add-ons. Lots more to come!
 
 == Installation ==
 
@@ -48,9 +80,9 @@ Using this plugin is very simple. All you have to do is:
 == Changelog ==
 
 = 1.6.0 =
-* Added adminmenu customizing functionality under Settings -> Menus.
+* Added admin menu customizing functionality under Settings -> Menus.
 * Revised widgets area to properly use the WP Widget API.
-* Made core much more extensible.
+* Made Client Dash core much more extensible for developers.
 * Created Widgets, Menus, and Settings API for Client Dash.
 * Other bug fixes and improvements.
 
