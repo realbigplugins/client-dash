@@ -64,7 +64,8 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 		}
 
 		// Get options
-		$content_sections_roles = get_option( 'cd_content_sections_roles', $this->option_defaults['content_sections_roles'] );
+		$option_defaults = $ClientDash->option_defaults['content_sections_roles'];
+		$content_sections_roles = get_option( 'cd_content_sections_roles', $option_defaults );
 
 		// Get roles
 		$roles = get_editable_roles();
@@ -138,14 +139,23 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 					// Create checkboxes for all roles
 					foreach ( $roles as $role_ID => $props_role ) {
 
-						// Get these values so we can save space later
-						$option_value  = $content_sections_roles[ $page ][ $tab ][ $block_ID ][ $role_ID ];
+						// FIXED PHP Notice because administrator was included in checkboxes on CD Settings -> Display.
 
 						// If the current checkbox being generated is the current user (which
 						// should always be admin), skip it
 						$current_role = $this->get_user_role();
 						if ( strtolower( $current_role ) == strtolower( ( $props_role['name'] ) ) ) {
 							continue;
+						}
+
+						// FIXED Added conditional to have each checkbox check for its option default before defaulting to hidden on CD Settings -> Display.
+						// Get these values so we can save space later
+						if ( isset( $content_sections_roles[ $page ][ $tab ][ $block_ID ][ $role_ID ] ) ) {
+							$option_value  = $content_sections_roles[ $page ][ $tab ][ $block_ID ][ $role_ID ];
+						} elseif ( isset( $option_defaults[ $page ][ $tab ][ $block_ID ][ $role_ID ] ) ) {
+							$option_value = $option_defaults[ $page ][ $tab ][ $block_ID ][ $role_ID ];
+						} else {
+							$option_value = 'hidden';
 						}
 
 						echo '<span class="cd-display-grid-checkbox">';

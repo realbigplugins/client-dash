@@ -398,7 +398,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 						if ( isset( $item['submenus'] ) ) {
 
-							echo '<li class="wp-core-title">' . $item_title . '</li>';
+							echo '<li class="cd-availableitems-separator">' . $item_title . '</li>';
 
 							$i = 0;
 							foreach ( $item['submenus'] as $submenu_item_title => $submenu_item ) {
@@ -464,7 +464,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 			// Pass over if current role (for menu) doesn't have the capability
 			if ( ! array_key_exists( $menu['capability'], $role->capabilities ) ) {
-				continue;
+				$menu_item['disabled'] = true;
 			}
 
 			$menu_item = $menu;
@@ -485,6 +485,11 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 			// Skip if a separator
 			if ( $menu_item['menu_title'] == 'Separator' || strpos( $menu_item['menu_slug'], 'separator' ) !== false ) {
 				continue;
+			}
+
+			// If icon is using "none" or "div", set accordingly
+			if ( isset( $menu_item['icon_url'] ) && ( $menu_item['icon_url'] == 'none' || $menu_item['icon_url'] == 'div' ) ) {
+				unset( $menu_item['icon_url'] );
 			}
 
 			// If in the WP Core list, this isn't a plugin page, so set it to disabled
@@ -567,7 +572,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 						$options = array(
 							'title'   => $item['menu_title'],
 							'url'     => $item['menu_slug'],
-							'cd-icon' => $item['icon_url'],
+							'cd-icon' => isset( $item['icon_url'] ) ? $item['icon_url'] : '',
 							'cd-type' => 'plugin',
 						);
 
@@ -588,7 +593,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 						if ( isset( $item['submenus'] ) ) {
 
-							echo '<li class="plugin-title">' . $item['menu_title'] . '</li>';
+							echo '<li class="cd-availableitems-separator">' . $item['menu_title'] . '</li>';
 
 							$i = 0;
 							foreach ( $item['submenus'] as $submenu_item ) {

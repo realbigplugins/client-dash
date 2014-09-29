@@ -281,8 +281,10 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 
 		global $wp_widget_factory;
 
+		// FIXED Notice of undefined property for widgets API
+
 		// Only allow this function to fire if widgets are currently active
-		if ( ! $this->active ) {
+		if ( ! isset( $this->active ) || ! $this->active ) {
 			return;
 		}
 

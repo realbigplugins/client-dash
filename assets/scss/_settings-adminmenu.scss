@@ -87,20 +87,10 @@
       }
     }
 
-    // WordPress Core sub-menu items
-    #tabs-panel-wordpress-core-submenu {
-      .wp-core-title {
-        font-style: italic;
-        color: #888;
-      }
-    }
-
-    // Plugin / Theme sub-menu items
-    #tabs-panel-plugin-submenu {
-      .plugin-title {
-        font-style: italic;
-        color: #888;
-      }
+    // Separators
+    .cd-availableitems-separator {
+      font-style: italic;
+      color: #888;
     }
   }
 

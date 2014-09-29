@@ -264,7 +264,8 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 							<input type="text" id="edit-menu-item-cd-icon-<?php echo $item->ID; ?>"
 							       class="widefat edit-menu-item-cd-icon"
 							       name="menu-item-cd-icon[<?php echo $item->ID; ?>]"
-							       value="<?php echo esc_html( ! empty( $item->cd_icon ) ? $item->cd_icon : '' ); ?>"/>
+							       value="<?php echo esc_html( ! empty( $item->cd_icon ) ? $item->cd_icon : '' ); ?>"
+							       placeholder="dashicons-admin-generic" />
 						</label>
 					</p>
 					<ul class="cd-menu-icon-selector">

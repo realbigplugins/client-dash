@@ -73,7 +73,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		//
 		// Added by CD
 		'cd-type'           => '',
-		'cd-icon'           => 'dashicons-admin-generic',
+		'cd-icon'           => '',
 		'cd-page-title'     => '',
 		'cd-submenu-parent' => '',
 		'cd-params'         => '',
@@ -1093,7 +1093,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		$args = array(
 			'title'         => $menu['menu_title'],
 			'url'           => $menu['menu_slug'],
-			'cd-icon'       => isset( $menu['icon_url'] ) ? $menu['icon_url'] : 'dashicons-admin-generic',
+			'cd-icon'       => isset( $menu['icon_url'] ) ? $menu['icon_url'] : '',
 			'cd-page-title' => $menu['page_title'],
 		);
 
@@ -1155,11 +1155,15 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	}
 
 	/**
-	 * Removes the original admin menu.
+	 * Determines if the current role's CD admin menu is active or not.
 	 *
-	 * @since Client Dash 1.6
+	 * @since Client Dash 1.6.4
+	 *
+	 * @return bool True if current CD admin menu is active, false otherwise.
 	 */
-	public function remove_orig_admin_menu() {
+	private function is_current_adminmenu_active() {
+
+		// FIXED Admin menu on/off switch was not working
 
 		// Don't replace the default admin menu if the current user's role does NOT have
 		// a menu ready, OR if the menu is disabled, OR if it has no items
@@ -1169,6 +1173,20 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		     || get_option( "cd_adminmenu_disabled_{$this->all_menu_IDs[$current_role]}" )
 		     || empty( $menu_items )
 		) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Removes the original admin menu.
+	 *
+	 * @since Client Dash 1.6
+	 */
+	public function remove_orig_admin_menu() {
+
+		if ( ! self::is_current_adminmenu_active() ) {
 			return;
 		}
 
@@ -1195,6 +1213,10 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	public function add_modified_admin_menu() {
 
 		global $menu, $submenu, $cd_parent_file, $_registered_pages, $plugin_page, $cd_submenu_file, $ClientDash, $admin_page_hooks;
+
+		if ( ! self::is_current_adminmenu_active() ) {
+			return;
+		}
 
 		// This is a strange little hack. When moving a sub-menu page to a top-level page, there are some
 		// caveats. One being, WordPress doesn't know what the heck to do!... You will get a permissions

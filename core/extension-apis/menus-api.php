@@ -137,6 +137,15 @@ abstract class ClientDash_Menus_API extends ClientDash_Functions {
 
 		$i = 0;
 		foreach ( $items as $item_label => $item ) {
+
+			// FIXED Added separator capability within the menus API
+
+			// Separator
+			if ( is_string( $item) && strtolower( $item ) == 'separator' ) {
+				echo '<li class="cd-availableitems-separator">' . $item_label . '</li>';
+				continue;
+			}
+
 			$i --;
 
 			$options = array(
