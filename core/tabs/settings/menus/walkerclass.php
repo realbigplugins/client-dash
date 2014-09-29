@@ -136,7 +136,7 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 		}
 
 		// Item errors
-		$item_errors = [ ];
+		$item_errors = array();
 
 		if ( ! $visible ) {
 			$item_errors[] = $ClientDash->error_nag( 'This page has no content visible for the current menu\'s role. To correct this, please visit <a href="' . $ClientDash->get_settings_url( 'display' ) . '">Display Settings</a>', 'read', false );

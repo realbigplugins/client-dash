@@ -35,6 +35,18 @@ Using this plugin is very simple. All you have to do is:
 
 ## Changelog
 
+### [1.6.3](https://github.com/brashrebel/client-dash/releases/tag/v1.6.3)
+* Dashboard sidebar widgets erased after messing with core widget area
+* Add nag on icons page if under wp 3.9 because not all icons will show
+* Syntax error on PHP 5.3 and previous
+* Network activated or activated on main site of multi-site causes CD styles to exist on network admin dashboard
+* Dashboard widget CD Core items visibility not dynamic on initial install
+* Webmaster widget custom title modifications no longer allowed from CD Settings -> Widgets
+* Altering CD widgets erases WP widgets and vice versa
+
+### [1.6.2](https://github.com/brashrebel/client-dash/releases/tag/v1.6.2)
+* Small bug with widgets on initial install.
+
 ### [1.6.0](https://github.com/brashrebel/client-dash/releases/tag/v1.6.0)
 * Added adminmenu customizing functionality under Settings -> Menus.
 * Revised widgets area to properly use the WP Widget API.

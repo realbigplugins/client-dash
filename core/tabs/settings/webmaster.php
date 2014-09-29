@@ -36,19 +36,18 @@ class ClientDash_Core_Page_Settings_Tab_Webmaster extends ClientDash {
 	 */
 	public function block_output() {
 
-		global $ClientDash;
-
 		// Get the options
-		$webmaster_name             = get_option( 'cd_webmaster_name', $ClientDash->option_defaults['webmaster_name'] );
+		$webmaster_name             = get_option( 'cd_webmaster_name', $this->option_defaults['webmaster_name'] );
 		$webmaster_main_tab_content = get_option( 'cd_webmaster_main_tab_content' );
-		$webmaster_main_tab_name    = get_option( 'cd_webmaster_main_tab_name', $ClientDash->option_defaults['webmaster_main_tab_name'] );
-		$webmaster_feed             = get_option( 'cd_webmaster_feed', $ClientDash->option_defaults['webmaster_feed'] );
+		$webmaster_main_tab_name    = get_option( 'cd_webmaster_main_tab_name', $this->option_defaults['webmaster_main_tab_name'] );
+		$webmaster_feed             = get_option( 'cd_webmaster_feed', $this->option_defaults['webmaster_feed'] );
 		$webmaster_feed_url         = get_option( 'cd_webmaster_feed_url', null );
-		$webmaster_feed_count       = get_option( 'cd_webmaster_feed_count', $ClientDash->option_defaults['webmaster_feed_count'] );
+		$webmaster_feed_count       = get_option( 'cd_webmaster_feed_count', $this->option_defaults['webmaster_feed_count'] );
 
 		// If empty, delete
-		if ( ! $webmaster_name ) {
+		if ( empty( $webmaster_name ) ) {
 			delete_option( 'cd_webmaster_name' );
+			$webmaster_name = $this->option_defaults['webmaster_name'];
 		}
 		?>
 

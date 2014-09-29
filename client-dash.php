@@ -3,12 +3,11 @@
 /*
 Plugin Name: Client Dash
 Description: Creating a more intuitive admin interface for clients.
-Version: 1.6.0
+Version: 1.6.3
 Author: Kyle Maurer
 Author URI: http://realbigmarketing.com/staff/kyle
 */
 
-// FIXED Add nag on icons page if under wp 3.9 because not all icons will show
 // TODO Allow dashboard meta box styling to be disabled (possibly extension?)
 // TODO Correctly line break documentation to PHP guideline
 
@@ -40,7 +39,7 @@ class ClientDash extends ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.5
 	 */
-	public $version = '1.6.0';
+	public $version = '1.6.1';
 
 	/**
 	 * The path to the plugin.
@@ -95,23 +94,31 @@ class ClientDash extends ClientDash_Functions {
 	public static $_cd_widgets = array(
 		'cd_account'   => array(
 			'title'       => 'Client Dash Account',
+			'ID'          => 'cd_account',
 			'description' => 'The core Client Dash account page.',
-			'_callback'    => array( 'ClientDash_Widget_Account', 'widget_content' ),
+			'_cd_core'    => '1',
+			'_callback'   => array( 'ClientDash_Widget_Account', 'widget_content' ),
 		),
 		'cd_help'      => array(
 			'title'       => 'Client Dash Help',
+			'ID'          => 'cd_help',
 			'description' => 'The core Client Dash help page.',
-			'_callback'    => array( 'ClientDash_Widget_Help', 'widget_content' ),
+			'_cd_core'    => '1',
+			'_callback'   => array( 'ClientDash_Widget_Help', 'widget_content' ),
 		),
 		'cd_reports'   => array(
 			'title'       => 'Client Dash Reports',
+			'ID'          => 'cd_reports',
 			'description' => 'The core Client Dash reports page.',
-			'_callback'    => array( 'ClientDash_Widget_Reports', 'widget_content' ),
+			'_cd_core'    => '1',
+			'_callback'   => array( 'ClientDash_Widget_Reports', 'widget_content' ),
 		),
 		'cd_webmaster' => array(
 			'title'       => 'Client Dash Webmaster',
+			'ID'          => 'cd_webmaster',
 			'description' => 'The core Client Dash webmaster page.',
-			'_callback'    => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
+			'_cd_core'    => '1',
+			'_callback'   => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
 		),
 	);
 
@@ -282,28 +289,28 @@ class ClientDash extends ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.5
 	 */
-	public $content_sections = [ ];
+	public $content_sections = array();
 
 	/**
 	 * A duplicate of content sections that is NOT filtered.
 	 *
 	 * @since Client Dash 1.5
 	 */
-	public $content_sections_unmodified = [ ];
+	public $content_sections_unmodified = array();
 
 	/**
 	 * Data to be sent to the main JS file.
 	 *
 	 * @since Client Dash 1.6
 	 */
-	public $jsData = [ ];
+	public $jsData = array();
 
 	/**
 	 * Widgets that are active by default.
 	 *
 	 * @since Client Dash 1.6
 	 */
-	public $active_widgets = [ ];
+	public $active_widgets = array();
 
 	/**
 	 * Constructs the class.
@@ -405,6 +412,13 @@ class ClientDash extends ClientDash_Functions {
 	 * @since Client Dash 1.0
 	 */
 	public function enqueue_scripts() {
+
+		$screen = get_current_screen();
+
+		// Don't add scripts for network admin
+		if ( is_multisite() && ! empty( $screen ) && $screen->in_admin( 'network' ) ) {
+			return;
+		}
 
 		wp_enqueue_script( 'cd-main' );
 		wp_enqueue_style( 'cd-main' );
@@ -596,7 +610,7 @@ class ClientDash extends ClientDash_Functions {
 			remove_meta_box( $widget, 'dashboard', $values['context'] );
 		}
 
-		$wp_meta_boxes = [ ];
+		$wp_meta_boxes = array();
 	}
 
 	/**
@@ -615,6 +629,7 @@ class ClientDash extends ClientDash_Functions {
 		// If no widgets have been set up yet, just use default ones. Otherwise, the new
 		// widgets need to be translated
 		if ( empty( $sidebars[ $current_sidebar ] ) ) {
+
 
 			// MAYBETODO Make widgets init on startup so this can just be a "return;"
 			$new_widgets = $this::$_cd_widgets;
@@ -638,7 +653,7 @@ class ClientDash extends ClientDash_Functions {
 				$widget['ID'] = isset( $widget['_cd_extension'] ) && $widget['_cd_extension'] == '1' ? $ID : $ID_base;
 
 				// Add it on
-				$new_widgets[ ] = $widget;
+				$new_widgets[] = $widget;
 			}
 		}
 
@@ -646,7 +661,7 @@ class ClientDash extends ClientDash_Functions {
 			foreach ( $new_widgets as $widget ) {
 
 				// Pass over if is a plugin / theme / WP Core widget and didn't original exist for current user
-				if ( $widget['plugin'] == '1' && ! array_key_exists( $widget['ID'], $this->active_widgets ) ) {
+				if ( isset( $widget['plugin'] ) && $widget['plugin'] == '1' && ! array_key_exists( $widget['ID'], $this->active_widgets ) ) {
 					return;
 				}
 
@@ -767,6 +782,11 @@ class ClientDash extends ClientDash_Functions {
 		foreach ( $this->content_sections as $page => $tabs ) {
 			foreach ( $tabs as $tab => $props ) {
 				foreach ( $props['content-sections'] as $ID => $info ) {
+
+					// Move on if it's been unset
+					if ( ! isset( $content_sections_roles[ $page ][ $tab ][ $ID ][ $current_role ] ) ) {
+						continue;
+					}
 
 					// Get our values for easier use
 					$option_value = $content_sections_roles[ $page ][ $tab ][ $ID ][ $current_role ];

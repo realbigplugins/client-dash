@@ -84,7 +84,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 *
 	 * @since Client Dash 1.6
 	 */
-	public $matching_urls = [ ];
+	public $matching_urls = array();
 
 	/**
 	 * All WordPress core nav menu items (aside from post types).
@@ -447,6 +447,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		if ( property_exists( __CLASS__, $property ) ) {
 
 			$vars = get_class_vars( __CLASS__ );
+
 			return $vars[ $property ];
 		}
 	}
@@ -635,7 +636,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		// that we make WP think the current user is NOT super admin, because that overrides all
 		// capabilities
 		if ( is_super_admin( $current_user->ID ) ) {
-			$super_admins = [ ];
+			$super_admins = array();
 		}
 
 		$new_role = $_POST['cd_create_admin_menu'];
@@ -770,7 +771,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 		global $ClientDash;
 
-		$AJAX_output = [ ];
+		$AJAX_output = array();
 
 		$AJAX_output['menu_ID'] = $this->menu_ID;
 		$AJAX_output['role']    = $role;
@@ -836,6 +837,13 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	public function get_current_menu() {
 
 		global $cd_current_menu_id, $cd_current_menu_role;
+
+		// If creating, things are different
+		if ( isset( $_GET['cd_create_admin_menu'] ) ) {
+			$this->menu_ID = false;
+			$this->role = $_GET['cd_create_admin_menu'];
+			return;
+		}
 
 		// If a menu isn't set, just take the first one that exists. Otherwise, get it from the url
 		if ( isset( $_GET['menu'] ) ) {
@@ -1208,7 +1216,14 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 				'output_key' => 'ID',
 			)
 		);
-		$menu_items          = array();
+
+		// Bail if no items
+		if ( empty( $unsorted_menu_items ) ) {
+			return;
+		}
+
+		$menu_items = array();
+
 		foreach ( $unsorted_menu_items as $_item ) {
 			$menu_items[ $_item->db_id ] = $_item;
 		}
@@ -1235,9 +1250,9 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 				// If the comments page, get the html generated mimicked from WP core (/wp-admin/menus.php:~94)
 				if ( $menu_item->title == 'Comments' ) {
 
-					$awaiting_mod = wp_count_comments();
-					$awaiting_mod = $awaiting_mod->moderated;
-					$menu_item->title = sprintf( __('Comments %s'), "<span class='awaiting-mod count-$awaiting_mod'><span class='pending-count'>" . number_format_i18n($awaiting_mod) . "</span></span>" );
+					$awaiting_mod     = wp_count_comments();
+					$awaiting_mod     = $awaiting_mod->moderated;
+					$menu_item->title = sprintf( __( 'Comments %s' ), "<span class='awaiting-mod count-$awaiting_mod'><span class='pending-count'>" . number_format_i18n( $awaiting_mod ) . "</span></span>" );
 				}
 
 				if ( strpos( $menu_item->url, 'separator' ) !== false ) {
@@ -1600,7 +1615,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 		$args = wp_parse_args( $menu_item_data, $defaults );
 
-		// Some defaults for when updating
+		// Some defaults for when creating
 		if ( ! $update && empty( $args['original-title'] ) ) {
 			$args['original-title'] = $args['title'];
 		}
@@ -1626,8 +1641,8 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 		// Create the new post item
 		if ( ! $update ) {
-			$post['ID']      = 0;
-			$menu_item_db_id = wp_insert_post( $post );
+			unset( $post['ID'] );
+			$menu_item_db_id = wp_insert_post( $post, true );
 			$menu_item_db_id = (int) $menu_item_db_id;
 
 			// Set all of the post meta

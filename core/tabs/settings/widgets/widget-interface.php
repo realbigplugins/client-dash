@@ -40,7 +40,7 @@ class CD_Widget extends WP_Widget {
 	 *
 	 * @since Client Dash 1.6
 	 */
-	public $extra_fields = [ ];
+	public $extra_fields = array();
 
 	/**
 	 * The callback to use for the frontend output.
@@ -114,6 +114,11 @@ class CD_Widget extends WP_Widget {
 			$this->_plugin            = isset( $widget['plugin'] ) ? $widget['plugin'] : $this->_plugin;
 		}
 
+		// Account for CD Webmaster dynamic title
+		if ( $this->title == 'Client Dash Webmaster' && get_option( 'cd_webmaster_name') ) {
+			$this->title = $this->title . ' (' . get_option( 'cd_webmaster_name', '' ) . ')';
+		}
+
 		// Instantiate the parent object
 		parent::__construct( $this->id, $this->title, array( 'description' => $this->description ) );
 	}
@@ -129,15 +134,25 @@ class CD_Widget extends WP_Widget {
 	 */
 	public function form( $instance ) {
 
-		// Title
-		$title = isset( $instance['title'] ) ? $instance['title'] : '';
-		?>
-		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>">Title</label>
-			<input type="text" id="<?php echo $this->get_field_id( 'title' ); ?>" class="widefat"
-			       name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $title; ?>"/>
-		</p>
+		global $ClientDash;
+
+		// Don't show title if webmaster widget
+		if ( $this->title != 'Client Dash Webmaster' . ' (' . get_option( 'cd_webmaster_name', '' ) . ')'
+		     && $this->title != 'Client Dash Webmaster'
+		) {
+
+			// Title
+			$title = isset( $instance['title'] ) ? $instance['title'] : '';
+			?>
+			<p>
+				<label for="<?php echo $this->get_field_id( 'title' ); ?>">Title</label>
+				<input type="text" id="<?php echo $this->get_field_id( 'title' ); ?>" class="widefat"
+				       name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $title; ?>"/>
+			</p>
 		<?php
+		} else {
+			$ClientDash::error_nag( 'Title set in <a href="' . $ClientDash::get_settings_url( 'webmaster' ) . '">Webmaster</a> page.' );
+		}
 
 		// Extra title input for use when outputting widgets. This is here because when initially creating
 		// a widget, you don't have to supply a title. But if you don't, then this widget will have no title

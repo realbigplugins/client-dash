@@ -21,7 +21,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	 *
 	 * @since Client Dash 1.6
 	 */
-	public $widgets = [ ];
+	public $widgets = array();
 
 	/**
 	 * The sidebars for the dashboard.
@@ -51,6 +51,9 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 
 		global $ClientDash;
 
+		// Filter the sidebars_widgets option
+		add_filter( 'pre_update_option_sidebars_widgets', array( $this, 'sync_widgets' ), 10, 2 );
+
 		// Anything in here will ONLY apply to this particular settings page OR if there is a POST
 		// value set of 'cd-widgets' (for when using AJAX)
 		if ( ( isset( $_GET['page'] ) && $_GET['page'] == 'cd_settings'
@@ -61,11 +64,11 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 			// Set the widgets area to currently active
 			$this->active = true;
 
-			// Include widget interface
-			include_once( $ClientDash->path . 'core/tabs/settings/widgets/widget-interface.php' );
-
 			// Register a sidebar for each role
 			add_action( 'admin_init', array( $this, 'register_sidebars' ), 10 );
+
+			// Include widget interface
+			include_once( $ClientDash->path . 'core/tabs/settings/widgets/widget-interface.php' );
 
 			// Add default widgets to empty sidebars
 			add_action( 'admin_init', array( $this, 'populate_sidebars' ), 11 );
@@ -130,14 +133,6 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 			return;
 		}
 
-//		delete_option( 'sidebars_widgets' );
-//		delete_option( 'widget_cd_account' );
-//		delete_option( 'widget_cd_webmaster' );
-//		delete_option( 'widget_cd_reports' );
-//		delete_option( 'widget_cd_help' );
-//		delete_option( 'cd_populate_dashboard_widgets' );
-//		return;
-
 		// Don't do this more than once
 		if ( get_option( 'cd_populate_dashboard_widgets' ) ) {
 			return;
@@ -146,7 +141,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 
 		$active_widgets = get_option( 'sidebars_widgets' );
 
-		$cd_widgets_update = [ ];
+		$cd_widgets_update = array();
 
 		// Cycle through each sidebar to populate
 		$i      = 1;
@@ -167,8 +162,9 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 				$active_widgets[ $sidebar['id'] ][] = "$widget_ID-$i";
 
 				$cd_widgets_update[ $widget_ID ][ $i ] = array(
-					'_callback' => $this::$_cd_widgets[ $widget_ID ]['_callback'],
-					'_cd_core'  => '1',
+					'_original_title' => $this::$_cd_widgets[ $widget_ID ]['title'],
+					'_callback'       => $this::$_cd_widgets[ $widget_ID ]['_callback'],
+					'_cd_core'        => '1',
 				);
 			}
 		}
@@ -182,53 +178,9 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 			update_option( 'sidebars_widgets', $active_widgets );
 		}
 
-		// Add an action to make sure they show right away
-		add_action( 'dynamic_sidebar_before', array( $this, 'make_populated_widgets_show' ), 10, 1 );
-	}
-
-	/**
-	 * Makes sure widgets show on initial population.
-	 *
-	 * Because I'm populating the widgets in a strange way, on initial load, WP won't
-	 * show them without a refresh. This little "hack" adds our newly saved widget into
-	 * a couple globals that WP looks for when displaying the sidebar, thus showing the
-	 * widget without another refresh.
-	 *
-	 * @since Client Dash 1.6
-	 *
-	 * @param string $index The currently being populated sidebar.
-	 */
-	public function make_populated_widgets_show( $index ) {
-
-		global $wp_registered_widgets, $wp_registered_widget_controls;
-
-		$active_widgets = get_option( 'sidebars_widgets' );
-
-		// Cycle through each added widget in the sidebar
-		foreach ( $active_widgets[ $index ] as $widget_ID ) {
-
-			// Find which widget this matches and then add it to both global arrays
-			if ( ! array_key_exists( $widget_ID, $wp_registered_widgets ) ) {
-
-				preg_match( '/\D*/', $widget_ID, $_widget_ID );
-
-				foreach ( $wp_registered_widgets as $registered_widget_ID => $registered_widget ) {
-
-					preg_match( '/\D*/', $registered_widget_ID, $_registered_widget );
-
-					if ( $_registered_widget[0] == $_widget_ID[0] ) {
-
-						$wp_registered_widgets[ $widget_ID ]       = $registered_widget;
-						$wp_registered_widgets[ $widget_ID ]['id'] = $widget_ID;
-
-						$wp_registered_widget_controls[ $widget_ID ]       = $wp_registered_widget_controls[ $registered_widget_ID ];
-						$wp_registered_widget_controls[ $widget_ID ]['id'] = $widget_ID;
-					}
-				}
-			}
-		}
-
-		$i = 1;
+		// Redirect now that they're added (so they will show up)
+		wp_redirect( $_SERVER["REQUEST_URI"] );
+		exit();
 	}
 
 	/**
@@ -325,7 +277,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	 *
 	 * @param array $args Args for the available widget.
 	 */
-	public function register_widget( $args = [ ] ) {
+	public function register_widget( $args = array() ) {
 
 		global $wp_widget_factory;
 
@@ -378,6 +330,60 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	public function add_extra_fields() {
 
 		echo '<input type="hidden" name="cd-widgets" value="1" />';
+	}
+
+	/**
+	 * Makes sure sidebars don't get removed from this option.
+	 *
+	 * When on the CD widgets page, WP sidebars don't exist, and would normally get erased when updating this option.
+	 * Vice versa also applies. So to keep them both in sync with each other, I simply merge them here.
+	 *
+	 * @since Client Dash 1.6.3
+	 *
+	 * @param mixed $sidebars The new option value.
+	 * @param mixed $old_sidebars The old option value.
+	 *
+	 * @return array The new sidebars array.
+	 */
+	public function sync_widgets( $sidebars, $old_sidebars ) {
+
+		/**
+		 * Allows the disabling of this filter.
+		 *
+		 * @since Client Dash 1.6.3
+		 */
+		if ( ! apply_filters( 'cd_sync_widgets', true ) ) {
+			return $sidebars;
+		}
+
+		// Get rid of the array version
+		unset( $sidebars['array_version'] );
+		unset( $old_sidebars['array_version'] );
+
+		// If a sidebar has been improperly emptied, just remove it
+		foreach ( $sidebars as $key => $sidebar ) {
+
+			if ( is_array( $sidebar ) && empty( $sidebar ) ) {
+				unset( $sidebars[ $key ] );
+			}
+		}
+
+		// If the # of sidebars don't match, OR the keys aren't identical, merge them
+		if ( count( $sidebars ) != count( $old_sidebars ) ||
+		     count( array_intersect_key( $sidebars, $old_sidebars ) ) != count( $sidebars ) ) {
+
+			foreach ( $sidebars as $sidebar_ID => $sidebar ) {
+				unset( $old_sidebars[ $sidebar_ID ] );
+			}
+
+			if ( empty( $sidebars ) ) {
+				$sidebars = $old_sidebars;
+			} elseif ( ! empty( $old_sidebars ) ) {
+				$sidebars = array_merge( $sidebars, $old_sidebars );
+			}
+		}
+
+		return $sidebars;
 	}
 
 	/**

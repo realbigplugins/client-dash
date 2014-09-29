@@ -48,7 +48,7 @@ abstract class ClientDash_Widgets_API extends ClientDash_Functions {
 	 *
 	 * @return string The text field html.
 	 */
-	public static function text_field( $ID, $field, $title = '', $atts = [ ] ) {
+	public static function text_field( $ID, $field, $title = '', $atts = array() ) {
 
 		// Update and retrieve the new value if updating
 		$value = self::_update_field( $ID, $field );
@@ -121,7 +121,7 @@ abstract class ClientDash_Widgets_API extends ClientDash_Functions {
 	 *
 	 * @return string The checkbox field html.
 	 */
-	public static function checkbox_field( $ID, $field, $title, $atts = [ ] ) {
+	public static function checkbox_field( $ID, $field, $title, $atts = array() ) {
 
 		// Update and retrieve the new value if updating
 		$value = self::_update_field( $ID, $field );
@@ -198,7 +198,7 @@ abstract class ClientDash_Widgets_API extends ClientDash_Functions {
 	 *
 	 * @return string The textarea field html.
 	 */
-	public static function textarea_field( $ID, $field, $title, $atts = [ ] ) {
+	public static function textarea_field( $ID, $field, $title, $atts = array() ) {
 
 		// Update and retrieve the new value if updating
 		$value = self::_update_field( $ID, $field );
@@ -273,7 +273,7 @@ abstract class ClientDash_Widgets_API extends ClientDash_Functions {
 	 *
 	 * @return string The select box field html.
 	 */
-	public static function select_field( $ID, $field, $title, array $options, array $atts = [ ] ) {
+	public static function select_field( $ID, $field, $title, array $options, array $atts = array() ) {
 
 		// Update and retrieve the new value if updating
 		$value = self::_update_field( $ID, $field );
@@ -425,7 +425,6 @@ abstract class ClientDash_Widgets_API extends ClientDash_Functions {
 	 * @return string The name of the field with the given ID and field name.
 	 */
 	private static function _get_field_name( $ID, $field ) {
-
 
 		return "cd_custom_widget_{$ID}[$field]";
 	}

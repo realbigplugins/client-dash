@@ -91,7 +91,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 			'public' => true
 		) );
 
-		$post_types = [ ];
+		$post_types = array();
 		// Construct an array for later use
 		foreach ( $all_post_types as $post_type ) {
 
@@ -457,7 +457,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 		$wp_core = self::_get( 'wp_core' );
 
 		// Separate out only the items added by plugins
-		$menu_items = [ ];
+		$menu_items = array();
 		$i          = 0;
 		foreach ( $ClientDash_Core_Page_Settings_Tab_Menus->original_admin_menu as $menu ) {
 			$i ++;

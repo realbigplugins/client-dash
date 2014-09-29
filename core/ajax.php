@@ -56,7 +56,7 @@ class ClientDash_AJAX {
 	 */
 	public function reset_all_settings() {
 
-		global $ClientDash;
+		global $ClientDash, $ClientDash_Core_Page_Settings_Tab_Widgets;
 
 		// Cycle through all option defaults and delete them
 		foreach ( $ClientDash->option_defaults as $name => $value ) {
@@ -78,6 +78,26 @@ class ClientDash_AJAX {
 			delete_transient( "cd_adminmenu_output_$menu_object->term_id" ); // Cached menu info
 			delete_option( "{$menu_object->name}_modified" );                // Menu output
 			delete_option( "cd_adminmenu_disabled_$menu_object->term_id" );  // Menu disable option
+		}
+
+		// Remove all of the widgets
+
+		// Prevent widget syncing
+		add_filter( 'cd_sync_widgets', '__return_false' );
+
+		// This forces the widgets to be reset
+		delete_option( 'cd_populate_dashboard_widgets' );
+
+		// Remove each CD sidebar settings
+		$sidebars = get_option( 'sidebars_widgets' );
+		foreach ( $ClientDash_Core_Page_Settings_Tab_Widgets->sidebars as $sidebar ) {
+			unset( $sidebars[ $sidebar['id'] ] );
+		}
+		update_option( 'sidebars_widgets', $sidebars );
+
+		// Remove individual widget settings
+		foreach ( $ClientDash::$_cd_widgets as $widget_ID => $widget ) {
+			delete_option( "widget_$widget_ID" );
 		}
 
 		echo 'Settings successfully reset!';
@@ -176,6 +196,10 @@ class ClientDash_AJAX {
 		if ( isset( $menu_item['submenus'] ) && ! empty( $menu_item['submenus'] ) ) {
 
 			foreach ( $menu_item['submenus'] as $position => $submenu_item ) {
+
+				if ( ! isset( $ID ) ) {
+					continue;
+				}
 
 				// Pass over if current role doesn't have the capabilities
 				if ( ! array_key_exists( $submenu_item['capability'], $role->capabilities ) ) {
