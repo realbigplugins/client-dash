@@ -28,7 +28,7 @@ As of version 1.6, you are now able to completely customize the WordPress admin 
 
 Customizing the admin menu previously was very complicated and no elegant, intuitive solutions existed. With Client Dash, it is now so easy that anyone familiar with the existing WordPress menu system can do it.
 
-Admin menus are also controlled on a per role basis so you are able to completely control the admin menu for each individual role (including custom roles!).
+Admin menus are also controlled on a per role basis so you are able to completely control the admin menu for each individual role.
 
 = Dashboard Widget Manager =
 
