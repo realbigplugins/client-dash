@@ -3,7 +3,7 @@
 /*
 Plugin Name: Client Dash
 Description: Creating a more intuitive admin interface for clients.
-Version: 1.6.3
+Version: 1.6.4
 Author: Kyle Maurer
 Author URI: http://realbigmarketing.com/staff/kyle
 */
@@ -12,7 +12,6 @@ Author URI: http://realbigmarketing.com/staff/kyle
 // TODO Correctly line break documentation to PHP guideline
 
 // NEXTUPDATE 1.7 - Themes
-// NEXTUPDATE 1.7 -
 
 // FUTUREBUILD Only require page / tab specific files WHEN they are needed. Not always.
 
@@ -39,7 +38,7 @@ class ClientDash extends ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.5
 	 */
-	public $version = '1.6.1';
+	public $version = '1.6.4';
 
 	/**
 	 * The path to the plugin.

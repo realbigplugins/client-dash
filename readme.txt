@@ -4,7 +4,7 @@ Contributors: BrashRebel, joelworsham
 Tags: client, portal, dashboard, admin, users, webmaster
 Requires at least: 3.8.0
 Tested up to: 4.0.0
-Stable tag: 1.6.3
+Stable tag: 1.6.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -90,6 +90,11 @@ Using this plugin is very simple. All you have to do is:
 7. Client Dash has a few addons available, and many more to come!
 
 == Changelog ==
+
+= 1.6.4 =
+* Default dashboard widgets for CD Core had "Client Dash" in them. Removed that.
+* Made link visibility in Reports -> Site dependent on user capabilities.
+* Fixed "Plugins 0" on menus page to be "Plugins".
 
 = 1.6.3 =
 * Dashboard sidebar widgets erased after messing with core widget area

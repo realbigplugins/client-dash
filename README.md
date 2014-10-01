@@ -35,6 +35,11 @@ Using this plugin is very simple. All you have to do is:
 
 ## Changelog
 
+### [1.6.4](https://github.com/brashrebel/client-dash/releases/tag/v1.6.4)
+* Default dashboard widgets for CD Core had "Client Dash" in them. Removed that.
+* Made link visibility in Reports -> Site dependent on user capabilities.
+* Fixed "Plugins 0" on menus page to be "Plugins".
+
 ### [1.6.3](https://github.com/brashrebel/client-dash/releases/tag/v1.6.3)
 * Dashboard sidebar widgets erased after messing with core widget area
 * Add nag on icons page if under wp 3.9 because not all icons will show
