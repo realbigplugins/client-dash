@@ -115,7 +115,7 @@ class CD_Widget extends WP_Widget {
 		}
 
 		// Account for CD Webmaster dynamic title
-		if ( $this->title == 'Client Dash Webmaster' && get_option( 'cd_webmaster_name') ) {
+		if ( $this->title == 'Webmaster' && get_option( 'cd_webmaster_name') ) {
 			$this->title = $this->title . ' (' . get_option( 'cd_webmaster_name', '' ) . ')';
 		}
 
@@ -137,8 +137,8 @@ class CD_Widget extends WP_Widget {
 		global $ClientDash;
 
 		// Don't show title if webmaster widget
-		if ( $this->title != 'Client Dash Webmaster' . ' (' . get_option( 'cd_webmaster_name', '' ) . ')'
-		     && $this->title != 'Client Dash Webmaster'
+		if ( $this->title != 'Webmaster' . ' (' . get_option( 'cd_webmaster_name', '' ) . ')'
+		     && $this->title != 'Webmaster'
 		) {
 
 			// Title

@@ -2,6 +2,8 @@
 
 // MAYBETODO Translate pre-1.6 widgets to post
 
+// TODO Make adding widgets from extensions use a filter
+
 /**
  * Class ClientDash_Page_Settings_Tab_Widgets
  *

@@ -93,28 +93,28 @@ class ClientDash extends ClientDash_Functions {
 	 */
 	public static $_cd_widgets = array(
 		'cd_account'   => array(
-			'title'       => 'Client Dash Account',
+			'title'       => 'Account',
 			'ID'          => 'cd_account',
 			'description' => 'The core Client Dash account page.',
 			'_cd_core'    => '1',
 			'_callback'   => array( 'ClientDash_Widget_Account', 'widget_content' ),
 		),
 		'cd_help'      => array(
-			'title'       => 'Client Dash Help',
+			'title'       => 'Help',
 			'ID'          => 'cd_help',
 			'description' => 'The core Client Dash help page.',
 			'_cd_core'    => '1',
 			'_callback'   => array( 'ClientDash_Widget_Help', 'widget_content' ),
 		),
 		'cd_reports'   => array(
-			'title'       => 'Client Dash Reports',
+			'title'       => 'Reports',
 			'ID'          => 'cd_reports',
 			'description' => 'The core Client Dash reports page.',
 			'_cd_core'    => '1',
 			'_callback'   => array( 'ClientDash_Widget_Reports', 'widget_content' ),
 		),
 		'cd_webmaster' => array(
-			'title'       => 'Client Dash Webmaster',
+			'title'       => 'Webmaster',
 			'ID'          => 'cd_webmaster',
 			'description' => 'The core Client Dash webmaster page.',
 			'_cd_core'    => '1',

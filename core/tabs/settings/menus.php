@@ -1,5 +1,7 @@
 <?php
 
+// TODO Make adding menu items from extensions use a filter
+
 /**
  * Class ClientDash_Core_Page_Settings_Tab_Menus
  *
