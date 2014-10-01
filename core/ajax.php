@@ -178,6 +178,11 @@ class ClientDash_AJAX {
 		// Deal with "Plugins" having an extra space
 		$menu_item['menu_title'] = trim( $menu_item['menu_title'] );
 
+		// Deal with "Plugins" having html
+		if ( strpos( $menu_item['menu_title'], 'Plugins') !== false ) {
+			$menu_item['menu_title'] = 'Plugins';
+		}
+
 		// If icon is using "none" or "div", set accordingly
 		if ( $menu_item['icon_url'] == 'none' || $menu_item['icon_url'] == 'div' ) {
 			unset( $menu_item['icon_url'] );

@@ -54,20 +54,41 @@ class ClientDash_Core_Page_Reports_Tab_Site extends ClientDash {
 					?>
 					<tr valign="top">
 						<th scope="row">
-							<a href="<?php echo $link; ?>">
+							<?php if ( current_user_can( 'edit_posts' ) ) : ?>
+								<a href="<?php echo $link; ?>"><?php echo $nice_name; ?></a>
+							<?php else: ?>
 								<?php echo $nice_name; ?>
-							</a>
+							<?php endif; ?>
 						</th>
 						<td>
 							<ul>
 								<li>
-									<a href="<?php echo $link . '&post_status=publish'; ?>"><?php echo $count->publish; ?>
-										published</a></li>
+									<?php if ( current_user_can( 'edit_posts' ) ) : ?>
+										<a href="<?php echo $link . '&post_status=publish'; ?>"><?php echo $count->publish; ?>
+											published</a>
+									<?php else: ?>
+										<?php echo $count->publish; ?> published
+									<?php endif; ?>
+
+								</li>
 								<li>
-									<a href="<?php echo $link . '&post_status=pending'; ?>"><?php echo $count->pending; ?>
-										pending</a></li>
-								<li><a href="<?php echo $link . '&post_status=draft'; ?>"><?php echo $count->draft; ?>
-										drafts</a></li>
+									<?php if ( current_user_can( 'edit_posts' ) ) : ?>
+										<a href="<?php echo $link . '&post_status=pending'; ?>"><?php echo $count->pending; ?>
+											pending</a>
+									<?php else: ?>
+										<?php echo $count->pending; ?> pending
+									<?php endif; ?>
+
+								</li>
+								<li>
+									<?php if ( current_user_can( 'edit_posts' ) ) : ?>
+										<a href="<?php echo $link . '&post_status=draft'; ?>"><?php echo $count->draft; ?>
+											drafts</a>
+									<?php else: ?>
+										<?php echo $count->draft; ?> drafts
+									<?php endif; ?>
+
+								</li>
 							</ul>
 						</td>
 					</tr>
@@ -76,29 +97,49 @@ class ClientDash_Core_Page_Reports_Tab_Site extends ClientDash {
 			} ?>
 			<tr valign="top">
 				<th scope="row">
-					<a href="<?php echo get_admin_url(); ?>edit-comments.php">
+					<?php if ( current_user_can( 'moderate_comments' ) ) : ?>
+						<a href="<?php echo get_admin_url(); ?>edit-comments.php">
+							Comments
+						</a>
+					<?php else: ?>
 						Comments
-					</a>
+					<?php endif; ?>
 				</th>
 				<td>
 					<ul>
 						<li>
-							<a href="<?php echo get_admin_url() . 'edit-comments.php?comment_status=approved'; ?>"><?php echo $cd_count_comments->approved; ?>
-								approved</a></li>
+							<?php if ( current_user_can( 'moderate_comments' ) ) : ?>
+								<a href="<?php echo get_admin_url() . 'edit-comments.php?comment_status=approved'; ?>"><?php echo $cd_count_comments->approved; ?>
+									approved</a>
+							<?php else: ?>
+								<?php echo $cd_count_comments->approved; ?> approved
+							<?php endif; ?></li>
 						<li>
-							<a href="<?php echo get_admin_url() . 'edit-comments.php?comment_status=moderated'; ?>"><?php echo $cd_count_comments->moderated; ?>
-								pending</a></li>
+							<?php if ( current_user_can( 'moderate_comments' ) ) : ?>
+								<a href="<?php echo get_admin_url() . 'edit-comments.php?comment_status=moderated'; ?>"><?php echo $cd_count_comments->moderated; ?>
+									pending</a>
+							<?php else: ?>
+								<?php echo $cd_count_comments->moderated; ?>pending
+							<?php endif; ?></li>
 						<li>
-							<a href="<?php echo get_admin_url() . 'edit-comments.php?comment_status=spam'; ?>"><?php echo $cd_count_comments->spam; ?>
-								spam</a></li>
+							<?php if ( current_user_can( 'moderate_comments' ) ) : ?>
+								<a href="<?php echo get_admin_url() . 'edit-comments.php?comment_status=spam'; ?>"><?php echo $cd_count_comments->spam; ?>
+									spam</a>
+							<?php else: ?>
+								<?php echo $cd_count_comments->spam; ?> spam
+							<?php endif; ?></li>
 					</ul>
 				</td>
 			</tr>
 			<tr valign="top">
 				<th scope="row">
-					<a href="<?php echo get_admin_url(); ?>upload.php">
+					<?php if ( current_user_can( 'upload_files' ) ) : ?>
+						<a href="<?php echo get_admin_url(); ?>upload.php">
+							Media
+						</a>
+					<?php else: ?>
 						Media
-					</a>
+					<?php endif; ?>
 				</th>
 				<?php
 				$upload_dir  = wp_upload_dir();
@@ -112,7 +153,7 @@ class ClientDash_Core_Page_Reports_Tab_Site extends ClientDash {
 			</tr>
 			<tr valign="top">
 				<th scope="row">
-					<?php if ( current_user_can( 'manage_users' ) ) : ?>
+					<?php if ( current_user_can( 'list_users' ) ) : ?>
 						<a href="<?php echo get_admin_url(); ?>users.php">
 							Users
 						</a>

@@ -623,7 +623,12 @@ class ClientDash extends ClientDash_Functions {
 		global $wp_meta_boxes;
 
 		$sidebars = get_option( 'sidebars_widgets' );
-
+		
+		/**
+		 * This allows the currently visible dashboard "sidebar" to be changed from the default.
+		 *
+		 * @since Client Dash 1.6.4
+		 */
 		$current_sidebar = apply_filters( 'cd_dashboard_widgets_sidebar', "cd-dashboard" );
 
 		// If no widgets have been set up yet, just use default ones. Otherwise, the new
