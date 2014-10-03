@@ -395,7 +395,7 @@ class ClientDash extends ClientDash_Functions {
 			'cd-main',
 			plugin_dir_url( __FILE__ ) . 'assets/js/clientdash.min.js',
 			array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable', 'jquery-effects-shake' ),
-			WP_DEBUG == false ? $this->version : time()
+			WP_DEBUG == false ? $this::$version : time()
 		);
 
 		wp_localize_script( 'cd-main', 'cdData', $this->jsData );
@@ -405,7 +405,7 @@ class ClientDash extends ClientDash_Functions {
 			'cd-main',
 			plugins_url( 'assets/css/clientdash.min.css', __FILE__ ),
 			array(),
-			WP_DEBUG == false ? $this->version : time()
+			WP_DEBUG == false ? $this::$version : time()
 		);
 	}
 
