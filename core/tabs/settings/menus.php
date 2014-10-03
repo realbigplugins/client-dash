@@ -380,13 +380,14 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		}
 
 		// Create/Get CD nav menu
-		add_action( 'admin_menu', array( $this, 'get_cd_nav_menus' ), 99997 );
+		add_action( 'admin_menu', array( $this, 'get_cd_nav_menus' ), 99990 );
 
 		// Remove the original admin menu
-		add_action( 'admin_menu', array( $this, 'remove_orig_admin_menu' ), 99998 );
+		add_action( 'admin_head', array( $this, 'remove_orig_admin_menu' ), 99999 );
 
-		// Add the modified menu
-		add_action( 'admin_menu', array( $this, 'add_modified_admin_menu' ), 99999 );
+		// Add the modified menu (note the hook is different, this is because I'm calling the admin menu output again
+		// and this is the action that fires immediately after the original menu is output)
+		add_action( 'adminmenu', array( $this, 'add_modified_admin_menu' ), 99999 );
 
 		// Hide the CD nav menu from the normal nav menu page
 		add_filter( 'wp_get_nav_menus', array( $this, 'hide_cd_nav_menu' ) );
@@ -994,8 +995,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 */
 	public function hide_cd_nav_menu( $menus ) {
 
-		// FIXED Made this apply to the filter always.
-
 		// Cycle through each available menu and remove it if it's name is cd_admin_menu
 		foreach ( $menus as $key => $menu_ID ) {
 			$menu = wp_get_nav_menu_object( $menu_ID );
@@ -1159,8 +1158,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 */
 	private function is_current_adminmenu_active() {
 
-		// FIXED Admin menu on/off switch was not working
-
 		// Don't replace the default admin menu if the current user's role does NOT have
 		// a menu ready, OR if the menu is disabled, OR if it has no items
 		$current_role = $this->get_user_role();
@@ -1208,7 +1205,9 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 */
 	public function add_modified_admin_menu() {
 
-		global $menu, $submenu, $cd_parent_file, $_registered_pages, $plugin_page, $cd_submenu_file, $ClientDash, $admin_page_hooks;
+		global $menu, $submenu, $self, $pagenow, $submenu_file, $parent_file, $cd_parent_file, $_registered_pages, $plugin_page, $cd_submenu_file, $ClientDash, $admin_page_hooks;
+
+		// FIXED Changed add_menu_page() and add_submenu_page() into adding into the global arrays instead
 
 		if ( ! self::is_current_adminmenu_active() ) {
 			return;
@@ -1330,18 +1329,25 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 						);
 					}
 
-					add_menu_page(
-						$menu_item->cd_page_title,
+					$hookname = get_plugin_page_hookname( $menu_item->url, '' );
+
+					if ( empty( $menu_item->cd_icon ) ) {
+						$icon_url = 'dashicons-admin-generic';
+						$icon_class = 'menu-icon-generic ';
+					} else {
+						$icon_url = set_url_scheme( $menu_item->cd_icon );
+						$icon_class = '';
+					}
+
+					$menu[ $menu_item->menu_order ] = array(
 						$menu_item->title,
 						'read',
 						$menu_item->url,
-						'',
-						$menu_item->cd_icon,
-						$menu_item->menu_order
+						$menu_item->cd_page_title,
+						'menu-top ' . $icon_class . $hookname . ' ' . esc_attr( implode( ' ', $menu_item->classes ) ),
+						$hookname,
+						$icon_url
 					);
-
-					// Add classes
-					$menu[ $menu_item->menu_order ][4] .= ' ' . esc_attr( implode( ' ', $menu_item->classes ) );
 
 					// Here's the deal... When we add the menu page here, we've already done it once (from other plugins
 					// and such), so the callbacks are already set. BUT, the callbacks are used by adding an action, the
@@ -1397,32 +1403,50 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 						);
 					}
 
-					add_submenu_page(
-						$menu_items[ (int) $menu_item->menu_item_parent ]->url,
-						$menu_item->cd_page_title,
+					$submenu[ $menu_items[ $menu_item->menu_item_parent ]->url ][ $menu_item->menu_order ] = array(
 						$menu_item->title,
 						'read',
 						$menu_item->url,
-						''
+						$menu_item->cd_page_title,
 					);
 				}
 			}
+		}
+
+		// Sort the menus and the sub-menus by array_key so they are in proper order
+		ksort( $menu );
+		foreach ( $submenu as $menu_parent => $sub_menus ) {
+			ksort( $submenu[ $menu_parent ] );
 		}
 
 		// In the case of a sub-menu item being moved to a parent item, WordPress will be confused
 		// about which menu item is active. So I compensate for this by overriding the "self" and
 		// "parent_file" globals with the new (previously sub-menu) slug. This corrects the issue.
 
-		// Get the most specific url (the biggest value)
-		// If no matching urls, then stop
-		if ( empty( $this->matching_urls ) ) {
-			return;
-		}
-		$url = max( $this->matching_urls );
+		// Get the most specific url (the biggest value). Only proceed if there is at least one matching url.
+		if ( ! empty( $this->matching_urls ) ) {
 
-		$cd_parent_file  = $url['parent'];
-		$cd_submenu_file = $url['submenu'];
-		add_filter( 'parent_file', array( $this, 'modify_self' ) );
+			$url = max( $this->matching_urls );
+
+			// FIXED Added $pagenow and $plugin_page into the mix to further trick WP into thinking our new parent item is active
+
+			// Set the self (or what WP thinks we're viewing) to the ENTIRE slug, not just the parent.
+			$self        = $url['parent'];
+			$pagenow     = $url['parent'];
+			$plugin_page = $url['parent'];
+			$parent_file = $url['parent'];
+
+			// Tell WP what our new submenu file is (because it's custom), otherwise, default to
+			// the parent
+			$submenu_file = ! empty( $url['submenu'] ) ? $url['submenu'] : $url['parent'];
+		}
+
+		// Instead of allowing WP to add its menu with this function, I've emptied the global $menu and $submenu variables
+		// when this is initially called. And then IMMEDIATELY after there is a hook "adminmenu" that I call the exact
+		// same function again, though I'm adding the 3rd param as false (normally true). This means that the parent
+		// menu items do NOT have to link to where the first sub-menu item goes to, which is normaly functionality.
+		// This is a private function, sorry WP!
+		_wp_menu_output( $menu, $submenu, false );
 	}
 
 	/**
@@ -1465,10 +1489,14 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 * @return mixed The parent file.
 	 */
 	public function modify_self() {
-		global $self, $cd_parent_file, $submenu_file, $cd_submenu_file;
+		global $self, $pagenow, $plugin_page, $cd_parent_file, $submenu_file, $cd_submenu_file;
+
+		// FIXED Added $pagenow and $plugin_page into the mix to further trick WP into thinking our new parent item is active
 
 		// Set the self (or what WP thinks we're viewing) to the ENTIRE slug, not just the parent.
 		$self = $cd_parent_file;
+		$pagenow = $cd_parent_file;
+		$plugin_page = $cd_parent_file;
 
 		// Tell WP what our new submenu file is (because it's custom), otherwise, default to
 		// the parent

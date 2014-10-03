@@ -169,12 +169,6 @@ class ClientDash_AJAX {
 		// Get the role object (for capabilities)
 		$role = get_role( $role );
 
-		// The WP Core "Appearance" sub-menu item "Customize" requires a capability that doesn't seem to exist...
-		// the capability of "customize". So I need to add it.
-		if ( $role->name == 'administrator' ) {
-			$role->capabilities['customize'] = true;
-		}
-
 		// Deal with "Plugins" having an extra space
 		$menu_item['menu_title'] = trim( $menu_item['menu_title'] );
 
@@ -188,9 +182,11 @@ class ClientDash_AJAX {
 			unset( $menu_item['icon_url'] );
 		}
 
-		// Pass over if current role doesn't have the capabilities
+		// FIXED Admin generated menus now get everything no matter what the caps
+
+		// Only add the item if the user is an administrator or if the user has the correct capabilities
 		$no_parent = false;
-		if ( array_key_exists( $menu_item['capability'], $role->capabilities ) ) {
+		if ( $role->has_cap( 'manage_options' ) || array_key_exists( $menu_item['capability'], $role->capabilities ) ) {
 
 			$args = ClientDash_Core_Page_Settings_Tab_Menus::sort_original_admin_menu( $menu_item );
 
@@ -211,8 +207,8 @@ class ClientDash_AJAX {
 					continue;
 				}
 
-				// Pass over if current role doesn't have the capabilities
-				if ( ! array_key_exists( $submenu_item['capability'], $role->capabilities ) ) {
+				// Pass over if current role doesn't have the capabilities, unless the role is an admin
+				if ( ! $role->has_cap( 'manage_options' ) && ! array_key_exists( $submenu_item['capability'], $role->capabilities ) ) {
 					continue;
 				}
 

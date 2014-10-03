@@ -109,8 +109,6 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 		) );
 	}
 
-	// FIXED Added a filtering function
-
 	/**
 	 * Houses some filters that allow modifications to the class.
 	 *
@@ -302,8 +300,6 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	public function register_widget( $args = array() ) {
 
 		global $wp_widget_factory;
-
-		// FIXED Notice of undefined property for widgets API
 
 		// Only allow this function to fire if widgets are currently active
 		if ( ! isset( $this->active ) || ! $this->active ) {

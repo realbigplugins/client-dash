@@ -157,19 +157,39 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 			$cd_webmaster = true;
 		}
 
+		// FIXED Now accepts images, svg, and icons
+
+		// Deal with the icon being an icon, an image, or a data image (taken from WP core)
+		// wp-admin/menu-header.php:~89
+		if ( ! empty( $item->cd_icon ) ) {
+			$img = '<img src="' . $item->cd_icon . '" alt="" />';
+
+			if ( 'none' === $item->cd_icon || 'div' === $item->cd_icon ) {
+				$img = '';
+			} elseif ( 0 === strpos( $item->cd_icon, 'data:image/svg+xml;base64,' ) ) {
+				$img = '';
+				$img_style = ' style="background-image:url(\'' . esc_attr( $item->cd_icon ) . '\')"';
+				$img_class = ' svg';
+			} elseif ( 0 === strpos( $item->cd_icon, 'dashicons-' ) ) {
+				$img = '';
+				$img_class = ' dashicons ' . sanitize_html_class( $item->cd_icon );
+			}
+		}
+
 		ob_start();
 		?>
 	<li id="menu-item-<?php echo $item->ID; ?>" class="<?php echo implode( ' ', $classes ); ?>">
 	<dl class="menu-item-bar">
 		<dt class="menu-item-handle">
 				<span class="item-title">
-					<?php if ( $item->cd_type != 'separator' ) : ?>
-						<span
-							class="dashicons <?php echo ! empty( $item->cd_icon ) ? $item->cd_icon : 'dashicons-admin-generic';
-							echo $depth != 0 ? ' hidden' : '' ?>"></span>
+					<?php if ( $item->cd_type != 'separator' && ! empty( $item->cd_icon ) ) : ?>
+						<span class='menu-item-icon<?php echo $img_class; echo $depth != 0 ? ' hidden' : ''; ?>'<?php echo $img_style; ?>>
+							<?php echo $img; ?>
+						</span>
 					<?php endif; ?>
-					<span
-						class="menu-item-title"><?php echo ! empty( $item->title ) ? esc_html( strip_tags( $item->title ) ) : '(no title)'; ?></span>
+					<span class="menu-item-title">
+						<?php echo ! empty( $item->title ) ? esc_html( strip_tags( $item->title ) ) : '(no title)'; ?>
+					</span>
 					<span class="is-submenu" <?php echo $submenu_text; ?>><?php _e( 'sub item' ); ?></span>
 				</span>
 					<span class="item-controls">

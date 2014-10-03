@@ -139,8 +139,6 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 					// Create checkboxes for all roles
 					foreach ( $roles as $role_ID => $props_role ) {
 
-						// FIXED PHP Notice because administrator was included in checkboxes on CD Settings -> Display.
-
 						// If the current checkbox being generated is the current user (which
 						// should always be admin), skip it
 						$current_role = $this->get_user_role();
@@ -148,7 +146,6 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 							continue;
 						}
 
-						// FIXED Added conditional to have each checkbox check for its option default before defaulting to hidden on CD Settings -> Display.
 						// Get these values so we can save space later
 						if ( isset( $content_sections_roles[ $page ][ $tab ][ $block_ID ][ $role_ID ] ) ) {
 							$option_value  = $content_sections_roles[ $page ][ $tab ][ $block_ID ][ $role_ID ];
