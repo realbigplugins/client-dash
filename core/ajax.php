@@ -182,8 +182,6 @@ class ClientDash_AJAX {
 			unset( $menu_item['icon_url'] );
 		}
 
-		// FIXED Admin generated menus now get everything no matter what the caps
-
 		// Only add the item if the user is an administrator or if the user has the correct capabilities
 		$no_parent = false;
 		if ( $role->has_cap( 'manage_options' ) || array_key_exists( $menu_item['capability'], $role->capabilities ) ) {

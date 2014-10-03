@@ -2,8 +2,6 @@
 
 // MAYBETODO Translate pre-1.6 widgets to post
 
-// TODO Make adding widgets from extensions use a filter
-
 /**
  * Class ClientDash_Page_Settings_Tab_Widgets
  *
@@ -31,7 +29,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	 * @since Client Dash 1.6
 	 */
 	public $sidebars = array(
-		0 => array(
+		array(
 			'id'   => 'cd-dashboard',
 			'name' => 'Dashboard',
 		),
@@ -54,7 +52,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 		global $ClientDash;
 
 		// Allow filtering of some properties
-		$this->filter_properties();
+		add_action( 'admin_init', array( $this, 'filter_properties' ) );
 
 		// Filter the sidebars_widgets option
 		add_filter( 'pre_update_option_sidebars_widgets', array( $this, 'sync_widgets' ), 10, 2 );
@@ -114,7 +112,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	 *
 	 * @since Client Dash 1.6.4
 	 */
-	private function filter_properties() {
+	public function filter_properties() {
 
 		/**
 		 * Allows the available sidebars in the CD Settings -> Widgets page to be modified.

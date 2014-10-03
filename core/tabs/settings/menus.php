@@ -1,7 +1,5 @@
 <?php
 
-// TODO Make adding menu items from extensions use a filter
-
 /**
  * Class ClientDash_Core_Page_Settings_Tab_Menus
  *
@@ -424,7 +422,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			add_filter( 'cd_submit', '__return_false' );
 
 			// Add nav-menus body class for our custom CD page
-			add_filter( 'admin_body_class', array( $this, 'add_nav_menu_class' ) );
+			add_filter( 'admin_body_class', array( $this, 'add_nav_menu_class' ), 99999 );
 
 			// Save menus (only when updating)
 			if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'update' ) {
@@ -476,6 +474,13 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		 * @since Client Dash 1.6
 		 */
 		$this::$wp_core = apply_filters( 'cd_nav_menu_wp_core_items', $this::$wp_core );
+
+		/**
+		 * Allows extensions to add to the available side sortables.
+		 *
+		 * @since Client Dash 1.6.5
+		 */
+		$this->side_sortables = apply_filters( 'cd_menus_side_sortables', $this->side_sortables );
 	}
 
 	/**
@@ -1207,8 +1212,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 		global $menu, $submenu, $self, $pagenow, $submenu_file, $parent_file, $cd_parent_file, $_registered_pages, $plugin_page, $cd_submenu_file, $ClientDash, $admin_page_hooks;
 
-		// FIXED Changed add_menu_page() and add_submenu_page() into adding into the global arrays instead
-
 		if ( ! self::is_current_adminmenu_active() ) {
 			return;
 		}
@@ -1428,8 +1431,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 			$url = max( $this->matching_urls );
 
-			// FIXED Added $pagenow and $plugin_page into the mix to further trick WP into thinking our new parent item is active
-
 			// Set the self (or what WP thinks we're viewing) to the ENTIRE slug, not just the parent.
 			$self        = $url['parent'];
 			$pagenow     = $url['parent'];
@@ -1490,8 +1491,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 */
 	public function modify_self() {
 		global $self, $pagenow, $plugin_page, $cd_parent_file, $submenu_file, $cd_submenu_file;
-
-		// FIXED Added $pagenow and $plugin_page into the mix to further trick WP into thinking our new parent item is active
 
 		// Set the self (or what WP thinks we're viewing) to the ENTIRE slug, not just the parent.
 		$self = $cd_parent_file;

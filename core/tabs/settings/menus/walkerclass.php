@@ -157,8 +157,6 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 			$cd_webmaster = true;
 		}
 
-		// FIXED Now accepts images, svg, and icons
-
 		// Deal with the icon being an icon, an image, or a data image (taken from WP core)
 		// wp-admin/menu-header.php:~89
 		if ( ! empty( $item->cd_icon ) ) {
