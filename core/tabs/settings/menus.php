@@ -986,8 +986,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	}
 
 	/**
-	 * Filters the returned nav menus on the nav menu edit screen to remove
-	 * the CD admin nav menu from the list.
+	 * Filters the returned nav menus on the nav menu edit screen to remove the CD admin nav menu from the list.
 	 *
 	 * @param array $menus The supplied available nav menus.
 	 *
@@ -995,12 +994,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 */
 	public function hide_cd_nav_menu( $menus ) {
 
-		// Get the current screen and make sure it's on the nav-menus.php page
-		global $current_screen;
-
-		if ( $current_screen->base != 'nav-menus' ) {
-			return $menus;
-		}
+		// FIXED Made this apply to the filter always.
 
 		// Cycle through each available menu and remove it if it's name is cd_admin_menu
 		foreach ( $menus as $key => $menu_ID ) {

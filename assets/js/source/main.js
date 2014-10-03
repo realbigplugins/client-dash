@@ -178,7 +178,7 @@ var cdMain;
             jQuery('.cd-tip *').click(function (e) {
                 e.stopPropagation();
             });
-        }
+        },
     };
 
     // Launch on ready

@@ -20,6 +20,41 @@ var cdMenus;
             this.icon_selector();
         },
         /**
+         * Adds a dropdown to the menu items icon field so the user can select an icon from a viewable list.
+         *
+         * @since Client Dash 1.6.0
+         */
+        icon_selector: function () {
+
+            // Show on click
+            $(document).on( 'click', '.edit-menu-item-cd-icon', function (e) {
+
+                console.log('test');
+
+                e.stopPropagation();
+
+                if ($(this).is(':focus')) {
+                    $(this).closest('.cd-menu-icon-field').find('.cd-menu-icon-selector').show();
+                }
+            });
+
+            // Hide on click
+            $('body').click(function () {
+                $('.cd-menu-icon-selector').hide();
+            });
+
+            // Use new icon val on click
+            $(document).on( 'click', '.cd-menu-icon-selector li', function () {
+
+                var icon = $(this).attr('data-icon'),
+                    new_class = $(this).closest('.menu-item').hasClass('menu-item-depth-1') ? 'dashicons hidden ' + icon : 'dashicons ' + icon;
+
+                $(this).closest('.cd-menu-icon-field').find('input[type="text"]').val(icon);
+
+                $(this).closest('.menu-item').find('.item-title').find('.dashicons').attr('class', new_class);
+            });
+        },
+        /**
          * Replaces wpNavMenu.addItemToMenu() (nav-menu.js:~918).
          *
          * I want to use my own save menu function. So I need to replace this function
@@ -434,34 +469,6 @@ var cdMenus;
                 body.removeClass('menu-max-depth-' + menuMaxDepth).addClass('menu-max-depth-' + newDepth);
                 menuMaxDepth = newDepth;
             }
-        },
-        icon_selector: function () {
-
-            // Show on click
-            $('.edit-menu-item-cd-icon').click(function (e) {
-
-                e.stopPropagation();
-
-                if ($(this).is(':focus')) {
-                    $(this).closest('.cd-menu-icon-field').find('.cd-menu-icon-selector').show();
-                }
-            });
-
-            // Hide on click
-            $('body').click(function () {
-                $('.cd-menu-icon-selector').hide();
-            });
-
-            // Use new icon val on click
-            $('.cd-menu-icon-selector').find('li').click(function () {
-
-                var icon = $(this).attr('data-icon'),
-                    new_class = $(this).closest('.menu-item').hasClass('menu-item-depth-1') ? 'dashicons hidden ' + icon : 'dashicons ' + icon;
-
-                $(this).closest('.cd-menu-icon-field').find('input[type="text"]').val(icon);
-
-                $(this).closest('.menu-item').find('.item-title').find('.dashicons').attr('class', new_class);
-            });
         }
     };
 

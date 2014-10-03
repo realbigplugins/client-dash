@@ -107,3 +107,39 @@
     z-index: 2;
   }
 }
+
+// Icon selector
+.cd-menu-icon-field {
+  float: left;
+  position: relative;
+  box-sizing: border-box;
+
+  * {
+    box-sizing: border-box;
+  }
+
+  .cd-menu-icon-selector {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 300px;
+    overflow: scroll;
+    background: #fff;
+    box-shadow: 0 0 20px rgba(#000, 0.5);
+    padding: 5px;
+
+    li {
+      float: left;
+      width: 25%;
+      text-align: center;
+      padding: 5px 0;
+      cursor: pointer;
+
+      .dashicons:before {
+        font-size: 20px;
+      }
+    }
+  }
+}

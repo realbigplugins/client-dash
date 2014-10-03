@@ -71,6 +71,8 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 			$role_options = get_option( 'cd_content_sections_roles', $ClientDash->option_defaults['content_sections_roles'] );
 			$role_options = $role_options[ strtolower( $item->original_title ) ];
 
+			// FIXME Apparently it's possible to get a non-array value as $role_options, which presents a warning
+
 			// Assume not visible until proven otherwise (if even one content section is visible, then
 			// the current page will also be visible)
 			$visible = false;

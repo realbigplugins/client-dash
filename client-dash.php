@@ -664,8 +664,10 @@ class ClientDash extends ClientDash_Functions {
 		if ( ! empty( $new_widgets ) ) {
 			foreach ( $new_widgets as $widget ) {
 
+				// FIXED Changed this from "plugin" to "_plugin"
+
 				// Pass over if is a plugin / theme / WP Core widget and didn't original exist for current user
-				if ( isset( $widget['plugin'] ) && $widget['plugin'] == '1' && ! array_key_exists( $widget['ID'], $this->active_widgets ) ) {
+				if ( isset( $widget['_plugin'] ) && $widget['_plugin'] == '1' && ! array_key_exists( $widget['ID'], $this->active_widgets ) ) {
 					return;
 				}
 
