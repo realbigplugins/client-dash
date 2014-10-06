@@ -1,12 +1,20 @@
 {
     "name": "ClientDash",
-    "version": "1.5.5",
+    "version": "1.6.6",
+    "description": "Creating a more intuitive admin interface for clients.",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/brashrebel/client-dash"
+    },
+    "author": "Joel Worsham",
+    "license": "GPLv2 or later",
     "devDependencies": {
         "grunt": "^0.4.5",
         "grunt-autoprefixer": "^1.0.0",
         "grunt-contrib-uglify": "~0.5.1",
         "grunt-contrib-watch": "~0.6.1",
         "grunt-sass": "^0.14.0",
+        "grunt-contrib-copy": "~0.6.0",
         "matchdep": "~0.3.0"
     }
 }
