@@ -1,0 +1,54 @@
+#cd-dashicons-selections {
+  text-align: center;
+  .dashicons {
+    font-size: 70px;
+    height: auto;
+    width: auto;
+    margin: 10px 0;
+  }
+  .cd-dashicons-title {
+    margin: 0;
+    font-size: 150%;
+  }
+}
+
+.cd-dashicons-grid-item {
+  display: inline-block;
+  width: 5%;
+  text-align: center;
+  padding: 0 10px;
+  margin: 10px -4px 10px 0;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  .container {
+    cursor: pointer;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    padding: 10px 0;
+    &:hover {
+      border-color: #888;
+    }
+  }
+  .dashicons {
+    font-size: 50px !important;
+    height: auto;
+    width: auto;
+  }
+  @media screen and (max-width: 1800px) {
+    width: 10%;
+  }
+  @media screen and (max-width: 1200px) {
+    width: 16.6666%;
+  }
+  @media screen and (max-width: 600px) {
+    width: 20%;
+  }
+  @media screen and (max-width: 450px) {
+    width: 25%;
+  }
+  @media screen and (max-width: 375px) {
+    width: 33.3333%;
+  }
+}
+
