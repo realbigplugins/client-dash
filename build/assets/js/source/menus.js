@@ -20,19 +20,6 @@ var cdMenus;
             this.icon_selector();
         },
         /**
-         * Removes the first instance of the admin menu collapse button.
-         *
-         * This is sort of a hack. The way I'm now adding my new admin menu causes there to be two "#collapse-menu"
-         * elements. Well, there should only be one, given the ID. So I'm removing the first one here by just calling
-         * "#collapse-menu". jQuery only looks for one instance of the ID, so it targets the first one on the page in
-         * the DOM (which is the one I want to get rid of), and then removes it and stops.
-         *
-         * @since Client Dash 1.6.5
-         */
-        remove_first_collapse: function () {
-            $('#collapse-menu').remove();
-        },
-        /**
          * Adds a dropdown to the menu items icon field so the user can select an icon from a viewable list.
          *
          * @since Client Dash 1.6.0
@@ -40,7 +27,7 @@ var cdMenus;
         icon_selector: function () {
 
             // Show on click
-            $(document).on( 'click', '.edit-menu-item-cd-icon', function (e) {
+            $(document).on('click', '.edit-menu-item-cd-icon', function (e) {
 
                 console.log('test');
 
@@ -57,7 +44,7 @@ var cdMenus;
             });
 
             // Use new icon val on click
-            $(document).on( 'click', '.cd-menu-icon-selector li', function () {
+            $(document).on('click', '.cd-menu-icon-selector li', function () {
 
                 var icon = $(this).attr('data-icon'),
                     new_class = $(this).closest('.menu-item').hasClass('menu-item-depth-1') ? 'dashicons hidden ' + icon : 'dashicons ' + icon;
@@ -81,8 +68,10 @@ var cdMenus;
                     nonce = $('#menu-settings-column-nonce').val(),
                     params;
 
-                processMethod = processMethod || function(){};
-                callback = callback || function(){};
+                processMethod = processMethod || function () {
+                };
+                callback = callback || function () {
+                };
 
                 params = {
                     'action': 'cd_add_menu_item',
@@ -91,17 +80,17 @@ var cdMenus;
                     'menu-item': menuItem
                 };
 
-                $.post( ajaxurl, params, function(menuMarkup) {
+                $.post(ajaxurl, params, function (menuMarkup) {
                     var ins = $('#menu-instructions');
 
-                    menuMarkup = $.trim( menuMarkup ); // Trim leading whitespaces
+                    menuMarkup = $.trim(menuMarkup); // Trim leading whitespaces
                     processMethod(menuMarkup, params);
 
                     // Make it stand out a bit more visually, by adding a fadeIn
-                    $( 'li.pending' ).hide().fadeIn('slow');
-                    $( '.drag-instructions' ).show();
-                    if( ! ins.hasClass( 'menu-instructions-inactive' ) && ins.siblings().length )
-                        ins.addClass( 'menu-instructions-inactive' );
+                    $('li.pending').hide().fadeIn('slow');
+                    $('.drag-instructions').show();
+                    if (!ins.hasClass('menu-instructions-inactive') && ins.siblings().length)
+                        ins.addClass('menu-instructions-inactive');
 
                     callback();
                 });
@@ -121,7 +110,7 @@ var cdMenus;
                 // Clear fields
                 setTimeout(function () {
                     wait_for_load();
-                }, 50 );
+                }, 50);
             });
 
             // Submit on enter
@@ -361,10 +350,10 @@ var cdMenus;
 
                     // CD {
                     // If is a separator AND was trying to be placed as a child, well, STOP IT!
-                    if (ui.item.hasClass('menu-item-separator') && currentDepth != 0){
+                    if (ui.item.hasClass('menu-item-separator') && currentDepth != 0) {
 
                         // Cancel the sort altogether
-                        wpNavMenu.menuList.sortable( 'cancel' );
+                        wpNavMenu.menuList.sortable('cancel');
 
                         // Reset some other properties that may have been improperly updated
                         // Make sure it's depth is at base level
@@ -486,12 +475,6 @@ var cdMenus;
     };
 
     $(function () {
-        // Only initialize if on CD page and if the page isn't "disabled"
-        if ($('body').hasClass('cd-nav-menu') && !$('#menu-settings-column').hasClass('metabox-holder-disabled')) {
-            cdMenus.init();
-        }
-
-        // Other functions needed globally
-        cdMenus.remove_first_collapse();
+        cdMenus.init();
     });
 })(jQuery);

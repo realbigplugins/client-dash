@@ -411,6 +411,15 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		     && isset( $_GET['tab'] ) && $_GET['tab'] == 'menus'
 		) {
 
+			// Add the necessary script
+			$ClientDash->assets['js'][] = array(
+				'name' => 'menus',
+				'deps' => array(
+					'cd-main',
+					'jquery-effects-shake'
+				),
+			);
+
 			// Required functions
 			include_once( ABSPATH . '/wp-admin/includes/nav-menu.php' );
 

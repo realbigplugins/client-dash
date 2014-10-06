@@ -3,7 +3,7 @@
 /*
 Plugin Name: Client Dash
 Description: Creating a more intuitive admin interface for clients.
-Version: 1.6.6
+Version: 1.6.6-alpha
 Author: Kyle Maurer
 Author URI: http://realbigmarketing.com/staff/kyle
 */
@@ -38,7 +38,7 @@ class ClientDash extends ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.5.0
 	 */
-	protected static $version = '1.6.5';
+	protected static $version = '1.6.6';
 
 	/**
 	 * The path to the plugin.
@@ -119,6 +119,26 @@ class ClientDash extends ClientDash_Functions {
 			'_cd_core'    => '1',
 			'_callback'   => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
 		),
+	);
+
+	public $assets = array(
+		'js' => array(
+			array(
+				'name' => 'main',
+				'deps' => array(
+					'jquery',
+				),
+			),
+			array(
+				'name' => 'ajax',
+				'deps' => array(
+					'cd-main',
+				),
+			),
+		),
+		'css' => array(
+			'clientdash',
+		)
 	);
 
 	/**
@@ -390,23 +410,49 @@ class ClientDash extends ClientDash_Functions {
 	 */
 	public function register_scripts() {
 
-		// The main script for Client Dash
-		wp_register_script(
-			'cd-main',
-			plugin_dir_url( __FILE__ ) . 'assets/js/clientdash.min.js',
-			array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable', 'jquery-effects-shake' ),
-			WP_DEBUG == false ? $this::$version : time()
-		);
+		// The file loop
+		foreach ( $this->assets as $type => $files ) {
+			foreach ( $files as $file ) {
+				if ( $type == 'js' ) {
+					if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+						wp_register_script(
+							"cd-$file[name]",
+							plugins_url( "assets/js/source/{$file['name']}.js", __FILE__ ),
+							isset( $file['deps'] ) ? $file['deps'] : null,
+							time(),
+							true
+						);
+					} else {
+						wp_register_script(
+							"cd-$file[name]",
+							plugins_url( "assets/js/clientdash.{$file['name']}.min.js", __FILE__ ),
+							isset( $file['deps'] ) ? $file['deps'] : null,
+							$this::$version,
+							true
+						);
+					}
+				}
+				if ( $type == 'css' ) {
+					if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+						wp_register_style(
+							"cd-$file",
+							plugins_url( "assets/css/$file.css", __FILE__ ),
+							null,
+							time()
+						);
+					} else {
+						wp_register_style(
+							"cd-$file",
+							plugins_url( "assets/css/$file.min.css", __FILE__ ),
+							null,
+							$this::$version
+						);
+					}
+				}
+			}
+		}
 
 		wp_localize_script( 'cd-main', 'cdData', $this->jsData );
-
-		// The main stylesheet for Client Dash
-		wp_register_style(
-			'cd-main',
-			plugins_url( 'assets/css/clientdash.min.css', __FILE__ ),
-			array(),
-			WP_DEBUG == false ? $this::$version : time()
-		);
 	}
 
 	/**
@@ -423,12 +469,16 @@ class ClientDash extends ClientDash_Functions {
 			return;
 		}
 
-		wp_enqueue_script( 'cd-main' );
-		wp_enqueue_style( 'cd-main' );
-
-		// Include widgets.js only on widgets page
-		if ( isset( $_GET['tab'] ) && $_GET['tab'] == 'widgets' ) {
-			wp_enqueue_script( 'cd-widgets' );
+		// The file loop
+		foreach ( $this->assets as $type => $files ) {
+			foreach ( $files as $file ) {
+				if ( $type == 'js' ) {
+					wp_enqueue_script( "cd-$file[name]" );
+				}
+				if ( $type == 'css' ) {
+					wp_enqueue_style( "cd-$file" );
+				}
+			}
 		}
 	}
 

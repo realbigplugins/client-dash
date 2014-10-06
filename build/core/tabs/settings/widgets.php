@@ -64,6 +64,14 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 		     ) || isset( $_POST['cd-widgets'] )
 		) {
 
+			// Add the necessary script
+			$ClientDash->assets['js'][] = array(
+				'name' => 'menus',
+				'deps' => array(
+					'cd-main'
+				),
+			);
+
 			// Set the widgets area to currently active
 			$this->active = true;
 

@@ -28,6 +28,20 @@ var cdMain;
             });
 
             this.tips_stop_propogation();
+            this.remove_first_collapse();
+        },
+        /**
+         * Removes the first instance of the admin menu collapse button.
+         *
+         * This is sort of a hack. The way I'm now adding my new admin menu causes there to be two "#collapse-menu"
+         * elements. Well, there should only be one, given the ID. So I'm removing the first one here by just calling
+         * "#collapse-menu". jQuery only looks for one instance of the ID, so it targets the first one on the page in
+         * the DOM (which is the one I want to get rid of), and then removes it and stops.
+         *
+         * @since Client Dash 1.6.5
+         */
+        remove_first_collapse: function () {
+            $('#collapse-menu').remove();
         },
         /**
          * Hides/shows element with given ID.
