@@ -1,6 +1,6 @@
 <?php
 
-// TODO Core CD Pages should use the icon set in CD -> Settings as the menu icon
+// FUTUREBUILD Core CD Pages should use the icon set in CD -> Settings as the menu icon
 
 /**
  * Class ClientDash_Core_Page_Settings_Tab_Menus
@@ -551,8 +551,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		// 0 => Menu Title, 1 => Capability, 2 => Slug, 3 => Page Title
 
 		foreach ( $menu as $menu_location => $menu_item ) {
-
-			// FIXED Check for the wp_filter as well to make sure links are NOT activated
 
 			// Skip links IF the link manager is not enabled
 			// Links are disabled as of WP 3.5, and only enabled with the presence of this filter being true. So if this

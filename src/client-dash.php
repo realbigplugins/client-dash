@@ -8,10 +8,9 @@ Author: Kyle Maurer
 Author URI: http://realbigmarketing.com/staff/kyle
 */
 
-// TODO Allow dashboard meta box styling to be disabled (possibly extension?)
-// TODO Correctly line break documentation to PHP guideline
-// TODO Revise widgets extension API
-
+// FUTUREBUILD Allow dashboard meta box styling to be disabled (possibly extension?)
+// FUTUREBUILD Correctly line break documentation to PHP guideline
+// FUTUREBUILD Revise widgets extension API
 // FUTUREBUILD Only require page / tab specific files WHEN they are needed. Not always.
 
 // Require the functions class first so we can extend it
@@ -390,8 +389,6 @@ class ClientDash extends ClientDash_Functions {
 	 */
 	public function register_scripts() {
 
-		// FIXED Fatal error from calling static property on an instantiated object
-
 		// The main script for Client Dash
 		wp_register_script(
 			'cd-main',
@@ -407,7 +404,7 @@ class ClientDash extends ClientDash_Functions {
 			'cd-main',
 			plugins_url( 'assets/css/clientdash.min.css', __FILE__ ),
 			array(),
-			WP_DEBUG == false ? self::$version : time()
+			WP_DEBUG == false? self::$version : time()
 		);
 	}
 
