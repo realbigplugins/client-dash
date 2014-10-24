@@ -36,54 +36,26 @@ module.exports = function (grunt) {
             }
         },
 
-        // SASS transpiling
+
+        // Ruby
+        // To use, make sure that the grunt-contrib-sass falls after grunt-sass and inside of foundation->_functions.scss
+        // change false to null.
         sass: {
-            src: {
-                options: {
-                    outputStyle: 'compressed'
-                },
-                files: [{
-                    expand: true,
-                    flatten: true,
-                    cwd: SOURCE_DIR,
-                    src: ['assets/scss/*.scss'],
-                    dest: SOURCE_DIR + 'assets/css',
-                    ext: '.min.css'
-                }]
+            options: {
+                style: 'compressed'
             },
-            src_uncompressed: {
-                options: {
-                    outputStyle: 'expanded'
-                },
-                files: [{
-                    expand: true,
-                    flatten: true,
-                    cwd: SOURCE_DIR,
-                    src: ['assets/scss/*.scss'],
-                    dest: SOURCE_DIR + 'assets/css',
-                    ext: '.css'
-                }]
+            dist: {
+                files: {
+                    'src/assets/css/clientdash.min.css': 'src/assets/scss/main.scss'
+                }
             }
         },
 
         // Minify and concatenate scripts
-        //uglify: {
-        //    src: {
-        //        files: [{
-        //            expand: true,
-        //            flatten: true,
-        //            cwd: SOURCE_DIR,
-        //            src: ['assets/js/source/*.js'],
-        //            dest: SOURCE_DIR + 'assets/js',
-        //            ext: '.min.js',
-        //            // Prepend "clientdash." to each file
-        //            rename: function (dest, src) {
-        //                return dest + '/clientdash.' + src;
-        //            }
-        //        }]
-        //    }
-        //},
         uglify: {
+            options: {
+                sourceMap: true
+            },
             src: {
                 files: {
                     'src/assets/js/clientdash.min.js': ['src/assets/js/source/*.js']
@@ -125,7 +97,8 @@ module.exports = function (grunt) {
                         src: [
                             '**',
                             '!**/.{svn,git}/**', // Ignore VCS settings
-                            '!**/.{idea}/**' // Ignore .idea project settings
+                            '!**/.{idea}/**', // Ignore .idea project settings
+                            '!**/*.map' // No maps
                         ],
                         dest: BUILD_DIR
                     }

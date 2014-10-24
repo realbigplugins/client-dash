@@ -313,7 +313,6 @@ class ClientDash extends ClientDash_Functions {
 	 * @since Client Dash 1.5
 	 */
 	function __construct() {
-		add_filter( 'pre_option_link_manager_enabled', '__return_true' );
 
 		// Update all options if not set
 		$init_reset = get_option( 'cd_initial_reset' );
