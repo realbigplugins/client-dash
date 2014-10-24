@@ -10,14 +10,14 @@
  *
  * @category Extensions
  *
- * @since Client Dash 1.6.0
+ * @since Client Dash 1.6
  */
 abstract class ClientDash_Widgets_API extends ClientDash_Functions {
 
 	/**
 	 * Opens a WP standard form table.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @return string HTML for opening a standard WP form table.
 	 */
@@ -28,7 +28,7 @@ abstract class ClientDash_Widgets_API extends ClientDash_Functions {
 	/**
 	 * Closes a WP standard form table.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @return string HTML for closing a standard WP form table.
 	 */
@@ -39,7 +39,7 @@ abstract class ClientDash_Widgets_API extends ClientDash_Functions {
 	/**
 	 * Outputs and manages a custom text field.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param string $ID The widget ID.
 	 * @param string $field The name of the field.
@@ -112,7 +112,7 @@ abstract class ClientDash_Widgets_API extends ClientDash_Functions {
 	/**
 	 * Outputs and manages a custom checkbox field.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param string $ID The widget ID.
 	 * @param string $field The name of the field.
@@ -189,7 +189,7 @@ abstract class ClientDash_Widgets_API extends ClientDash_Functions {
 	/**
 	 * Outputs and manages a custom text area field.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param string $ID The widget ID.
 	 * @param string $field The name of the field.
@@ -263,7 +263,7 @@ abstract class ClientDash_Widgets_API extends ClientDash_Functions {
 	/**
 	 * Outputs and manages a custom select box field.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param string $ID The widget ID.
 	 * @param string $field The name of the field.
@@ -347,7 +347,7 @@ abstract class ClientDash_Widgets_API extends ClientDash_Functions {
 	 * If you need to create an input field by hand (without using the supplied functions), then use
 	 * this function for the name attr so that updating is managed by CD.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param string $ID The widget ID.
 	 * @param string $field The field name.
@@ -364,7 +364,7 @@ abstract class ClientDash_Widgets_API extends ClientDash_Functions {
 	/**
 	 * Returns the CD standards field ID.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param string $ID The widget ID.
 	 * @param string $field The field name.
@@ -379,7 +379,7 @@ abstract class ClientDash_Widgets_API extends ClientDash_Functions {
 	/**
 	 * Returns the supplied field value.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param string $ID The widget ID.
 	 * @param string $field The field name.
@@ -403,7 +403,7 @@ abstract class ClientDash_Widgets_API extends ClientDash_Functions {
 	/**
 	 * Generates and returns a unique ID to be used for input labels and ID's.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @return string The unique ID.
 	 */
@@ -417,7 +417,7 @@ abstract class ClientDash_Widgets_API extends ClientDash_Functions {
 	 *
 	 * @access Private.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param string $ID The widget ID.
 	 * @param string $field The field name.
@@ -435,7 +435,7 @@ abstract class ClientDash_Widgets_API extends ClientDash_Functions {
 	 *
 	 * @access Private.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param string $ID The widget ID.
 	 * @param string $field The field name.
@@ -452,7 +452,7 @@ abstract class ClientDash_Widgets_API extends ClientDash_Functions {
 	 *
 	 * @access Private.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param string $ID The widget ID.
 	 * @param string $field The field name.

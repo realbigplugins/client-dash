@@ -10,7 +10,7 @@
  *
  * @category Icons
  *
- * @since Client Dash 1.5.0
+ * @since Client Dash 1.5
  */
 class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 
@@ -223,7 +223,7 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 	/**
 	 * The main construct function.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 */
 	function __construct() {
 
@@ -238,7 +238,7 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 	/**
 	 * The content for the content section.
 	 *
-	 * @since Client Dash 1.4.0
+	 * @since Client Dash 1.4
 	 */
 	public function block_output() {
 

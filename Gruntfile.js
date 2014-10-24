@@ -67,20 +67,27 @@ module.exports = function (grunt) {
         },
 
         // Minify and concatenate scripts
+        //uglify: {
+        //    src: {
+        //        files: [{
+        //            expand: true,
+        //            flatten: true,
+        //            cwd: SOURCE_DIR,
+        //            src: ['assets/js/source/*.js'],
+        //            dest: SOURCE_DIR + 'assets/js',
+        //            ext: '.min.js',
+        //            // Prepend "clientdash." to each file
+        //            rename: function (dest, src) {
+        //                return dest + '/clientdash.' + src;
+        //            }
+        //        }]
+        //    }
+        //},
         uglify: {
             src: {
-                files: [{
-                    expand: true,
-                    flatten: true,
-                    cwd: SOURCE_DIR,
-                    src: ['assets/js/source/*.js'],
-                    dest: SOURCE_DIR + 'assets/js',
-                    ext: '.min.js',
-                    // Prepend "clientdash." to each file
-                    rename: function (dest, src) {
-                        return dest + '/clientdash.' + src;
-                    }
-                }]
+                files: {
+                    'src/assets/js/clientdash.min.js': ['src/assets/js/source/*.js']
+                }
             }
         },
 
@@ -102,6 +109,14 @@ module.exports = function (grunt) {
         // Copy files from the src working directory to the build directory, with some file processing
         copy: {
             src: {
+                options: {
+                    process: function( content, src ) {
+
+                        // Remove all TODO items
+                        content = content.replace(/(\n|\s)?(.*\/\/.*)(TODO|MAYBETODO|FIXME|NEXTUPDATE|MAYBEFIX|FIXED|FUTUREBUILD|REMOVE)(.*)(\n|\s)?/g, '' );
+                        return content;
+                    }
+                },
                 files: [
                     {
                         dot: true,

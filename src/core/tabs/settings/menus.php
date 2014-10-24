@@ -12,49 +12,49 @@
  *
  * @category Menus
  *
- * @since Client Dash 1.6.0
+ * @since Client Dash 1.6
  */
 class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 	/**
 	 * The pre-modified admin menu.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public $original_admin_menu;
 
 	/**
 	 * The menu ID for the currently being edited cd_admin_menu nav menu.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public $menu_ID;
 
 	/**
 	 * The role that the current menu is for.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public $role;
 
 	/**
 	 * Lets us know if we're making a new menu.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public $create_new = false;
 
 	/**
 	 * Counts the total menu items. Used for when importing via AJAX.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public $total_menu_items;
 
 	/**
 	 * The ID's for all of the CD nav menus (one for each role).
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public $all_menu_IDs;
 
@@ -62,7 +62,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 * A list of available menu item options and their defaults. Only items placed here will actually
 	 * be saved to the db.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public static $menu_item_defaults = array(
 		'db-id'             => 0,
@@ -84,7 +84,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	/**
 	 * A list of all urls (from each menu item) that match the current page.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public $matching_urls = array();
 
@@ -97,7 +97,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 * plugin / theme category. This is fine, we just need to make sure this array is always
 	 * up to date.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public static $wp_core = array(
 		'Dashboard'  => array(
@@ -154,6 +154,25 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 				'Add New' => array(
 					'url'        => 'media-new.php',
 					'capability' => 'upload_files',
+				),
+			),
+		),
+		'Links'      => array(
+			'url'        => 'link-manager.php',
+			'icon'       => 'dashicons-admin-links',
+			'capability' => 'manage_links',
+			'submenus'   => array(
+				'All Links' => array(
+					'url'        => 'link-manager.php',
+					'capability' => 'manage_links',
+				),
+				'Add New' => array(
+					'url'        => 'link-add.php',
+					'capability' => 'manage_links',
+				),
+				'Link Categories' => array(
+					'url'        => 'edit-tags.php?taxonomy=link_category',
+					'capability' => 'manage_categories',
 				),
 			),
 		),
@@ -307,7 +326,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	/**
 	 * These are what populate the side sortables area on the left.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public $side_sortables = array(
 		'add-post-type'    => array(
@@ -345,7 +364,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	/**
 	 * The main construct function.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	function __construct() {
 
@@ -411,15 +430,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		     && isset( $_GET['tab'] ) && $_GET['tab'] == 'menus'
 		) {
 
-			// Add the necessary script
-			$ClientDash->assets['js'][] = array(
-				'name' => 'menus',
-				'deps' => array(
-					'cd-main',
-					'jquery-effects-shake'
-				),
-			);
-
 			// Required functions
 			include_once( ABSPATH . '/wp-admin/includes/nav-menu.php' );
 
@@ -448,7 +458,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	/**
 	 * Gets properties of the class.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param string $property The property to retrieve.
 	 *
@@ -467,7 +477,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	/**
 	 * Allows filtering of the object's properties.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	private function filter_data() {
 
@@ -475,14 +485,14 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		 * Add to this array in order to associate more custom data with each nav menu item. Default
 		 * menu item properties can be set here as well.
 		 *
-		 * @since Client Dash 1.6.0
+		 * @since Client Dash 1.6
 		 */
 		$this::$menu_item_defaults = apply_filters( 'cd_nav_menu_item_defaults', $this::$menu_item_defaults );
 
 		/**
 		 * Add or remove items from the CD default WP Core menu item list.
 		 *
-		 * @since Client Dash 1.6.0
+		 * @since Client Dash 1.6
 		 */
 		$this::$wp_core = apply_filters( 'cd_nav_menu_wp_core_items', $this::$wp_core );
 
@@ -497,7 +507,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	/**
 	 * Adds the WP Core script for the nav menu page.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function enqueue_nav_menu() {
 
@@ -528,11 +538,11 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	/**
 	 * Get the original, un-modified admin menu.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function get_orig_admin_menu() {
 
-		global $menu, $submenu;
+		global $menu, $submenu, $wp_filter;
 
 		// $menu
 		// 0 => Menu Title, 1 => Capability, 2 => Slug, 3 => Page Title, 4 => Classes, 5 => Hookname, 6 => Icon
@@ -542,8 +552,12 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 		foreach ( $menu as $menu_location => $menu_item ) {
 
-			// Skip links
-			if ( $menu_item[0] == 'Links' ) {
+			// FIXED Check for the wp_filter as well to make sure links are NOT activated
+
+			// Skip links IF the link manager is not enabled
+			// Links are disabled as of WP 3.5, and only enabled with the presence of this filter being true. So if this
+			// filter is set, we can pretty safely assume it's set to true.
+			if ( $menu_item[0] == 'Links' && $wp_filter['pre_option_link_manager_enabled'] === null ) {
 				continue;
 			}
 
@@ -605,7 +619,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	/**
 	 * Deletes the specified nav menu permanently.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function delete_nav_menu() {
 
@@ -640,7 +654,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 * that role's default menu items. This function also loads in the menu.php file that
 	 * creates the WP default admin menu (because it's not loaded during AJAX calls).
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function modify_role() {
 
@@ -671,7 +685,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 * Now that the role has been modified to whatever role we're building a menu for, let's
 	 * get store that role's menu items for populating the nav menu on the next page.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function get_role_menu_items() {
 
@@ -703,7 +717,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 * Get's the current role (that is, the role for which we are importing menu item's for) default
 	 * admin menu and sends it back to AJAX.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function get_role_admin_menu() {
 
@@ -727,7 +741,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	/**
 	 * Creates each role's nav menu for the first time.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function create_nav_menu() {
 
@@ -749,6 +763,8 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 			// Now populate it with menu items (this is a hefty memory toll)
 			$this->populate_nav_menu( $role_name );
+
+			$this->get_current_menu();
 		} else {
 
 			// If creating a blank menu and an admin, make sure the CD page is there
@@ -764,7 +780,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	/**
 	 * Adds the Client Dash menu item. Used when creating a blank menu for the admin.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function add_client_dash_menu_item() {
 
@@ -782,7 +798,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 * Prepares AJAX data with information from the original admin menu to be sent off
 	 * and create the new menu.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param string $role The role to create a menu for.
 	 */
@@ -813,7 +829,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 * Gets our main admin menu nav menu, and creates it if it doesn't already
 	 * exist.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function get_cd_nav_menus() {
 
@@ -851,7 +867,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	/**
 	 * Gets the menu being currently edited. Also gets current role.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function get_current_menu() {
 
@@ -947,7 +963,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			/**
 			 * Change this value to use a custom walker menu for the menu structure output.
 			 *
-			 * @since Client Dash 1.6.0
+			 * @since Client Dash 1.6
 			 *
 			 * @param int $menu_ID The current CD menu ID.
 			 */
@@ -961,7 +977,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 * The nav menu system uses a modified menu object (adding some params). Here I customize that further
 	 * by adding some CD specific properties and removing properties that are no longer used (cuz why not?)
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param object $menu_item The old menu item.
 	 *
@@ -1026,7 +1042,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	/**
 	 * Returns the original, un-modified admin menu.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public static function return_orig_admin_menu() {
 		global $menu, $submenu;
@@ -1079,7 +1095,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	/**
 	 * Takes the given menu item and determines basic properties about it.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param array $menu The menu item to sort.
 	 * @param bool|array $is_submenu Optional. The array of the PARENT menu item.
@@ -1191,7 +1207,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	/**
 	 * Removes the original admin menu.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function remove_orig_admin_menu() {
 
@@ -1217,7 +1233,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	/**
 	 * Adds the new, modified admin menu.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function add_modified_admin_menu() {
 
@@ -1465,7 +1481,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 * Returns the current url without the WP base and stripped of all query args, except
 	 * those specified.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @return string The filtered current url.
 	 */
@@ -1496,7 +1512,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 * $submenu_file. These 3 globals tell WP what we're currently viewing. Because of the strange
 	 * URL's and moving around of menus, I have to let WP know accordingly what's going on.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @return mixed The parent file.
 	 */
@@ -1518,7 +1534,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	/**
 	 * Adds the nav-menu body class (which is normally present on the nav-menus page and necessary).
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function add_nav_menu_class( $classes ) {
 		return $classes . ' nav-menus-php cd-nav-menu';
@@ -1527,7 +1543,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	/**
 	 * Saves the admin menu.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function save_menu() {
 
@@ -1584,7 +1600,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 *
 	 * @param int $menu_ID The ID of the nav menu to save to.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public static function update_menu_items( $menu_ID ) {
 
@@ -1652,7 +1668,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 *
 	 * Taken and modified for Client Dash needs from wp-includes/nav-menu.php:~311
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param int $menu_ID The menu to save to.
 	 * @param int $menu_item_db_id The existing nav menu item db ID.
@@ -1733,7 +1749,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		 * Fires immediately after all nav menu item data is updated. Use this if you want to update
 		 * more custom data.
 		 *
-		 * @since Client Dash 1.6.0
+		 * @since Client Dash 1.6
 		 */
 		do_action( 'cd_nav_menu_update_item' );
 
@@ -1750,7 +1766,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 * Populates the global $wp_meta_boxes variable which is used when populating the
 	 * side sortables area (on the left).
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function populate_side_sortables() {
 
@@ -1763,7 +1779,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		 * array key isn't important, but the 3 params are. The ID must be unique, the title is what
 		 * the users will see, and the callback is a function to output the content of the block.
 		 *
-		 * @since Client Dash 1.6.0
+		 * @since Client Dash 1.6
 		 *
 		 * @param int $this ->menu_ID The currently being edited menu ID (false if no menu).
 		 */
@@ -1781,7 +1797,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	/**
 	 * Returns the available menu items.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @return array|bool The menu items, if they exist, otherwise false.
 	 */
@@ -1792,7 +1808,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		/**
 		 * Whether or not to use transients in getting the menu output. (big time saver)
 		 *
-		 * @since Client Dash 1.6.0
+		 * @since Client Dash 1.6
 		 */
 		$use_transients = apply_filters( 'cd_nav_menu_transients', true );
 
@@ -1829,7 +1845,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	/**
 	 * The content for the content section.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function block_output() {
 

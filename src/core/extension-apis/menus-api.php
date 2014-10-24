@@ -10,14 +10,14 @@
  *
  * @category Extensions
  *
- * @since Client Dash 1.6.0
+ * @since Client Dash 1.6
  */
 abstract class ClientDash_Menus_API extends ClientDash_Functions {
 
 	/**
 	 * Adds another drop down to the menu group on the left of Settings -> Menus.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param string $name The name of the drop down.
 	 * @param string|array $callback The callback function that provides HTML to the dropdown.
@@ -38,7 +38,7 @@ abstract class ClientDash_Menus_API extends ClientDash_Functions {
 	 *
 	 * This function is well documented there in the file /core/tabs/settings/menus/availableitems-callbacks.php.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public static function loop( $i, $label, $options_args ) {
 
@@ -48,7 +48,7 @@ abstract class ClientDash_Menus_API extends ClientDash_Functions {
 	/**
 	 * Handles all HTML output of menu items for the side sortables area.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param string $name The unique name of this menu group.
 	 * @param array $items Array of tabs and items.
@@ -122,7 +122,7 @@ abstract class ClientDash_Menus_API extends ClientDash_Functions {
 	/**
 	 * Adds the menu items from the initial $items array provided above.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param array $items An array of all tabs and items.
 	 */

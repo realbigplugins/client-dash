@@ -20,47 +20,12 @@ var cdMenus;
             this.icon_selector();
         },
         /**
-         * Adds a dropdown to the menu items icon field so the user can select an icon from a viewable list.
-         *
-         * @since Client Dash 1.6.0
-         */
-        icon_selector: function () {
-
-            // Show on click
-            $(document).on('click', '.edit-menu-item-cd-icon', function (e) {
-
-                console.log('test');
-
-                e.stopPropagation();
-
-                if ($(this).is(':focus')) {
-                    $(this).closest('.cd-menu-icon-field').find('.cd-menu-icon-selector').show();
-                }
-            });
-
-            // Hide on click
-            $('body').click(function () {
-                $('.cd-menu-icon-selector').hide();
-            });
-
-            // Use new icon val on click
-            $(document).on('click', '.cd-menu-icon-selector li', function () {
-
-                var icon = $(this).attr('data-icon'),
-                    new_class = $(this).closest('.menu-item').hasClass('menu-item-depth-1') ? 'dashicons hidden ' + icon : 'dashicons ' + icon;
-
-                $(this).closest('.cd-menu-icon-field').find('input[type="text"]').val(icon);
-
-                $(this).closest('.menu-item').find('.item-title').find('.dashicons').attr('class', new_class);
-            });
-        },
-        /**
          * Replaces wpNavMenu.addItemToMenu() (nav-menu.js:~918).
          *
          * I want to use my own save menu function. So I need to replace this function
          * in order to change the post action.
          *
-         * @since Client Dash 1.6.0
+         * @since Client Dash 1.6
          */
         addItemToMenu: function () {
             wpNavMenu.addItemToMenu = function (menuItem, processMethod, callback) {
@@ -68,10 +33,8 @@ var cdMenus;
                     nonce = $('#menu-settings-column-nonce').val(),
                     params;
 
-                processMethod = processMethod || function () {
-                };
-                callback = callback || function () {
-                };
+                processMethod = processMethod || function(){};
+                callback = callback || function(){};
 
                 params = {
                     'action': 'cd_add_menu_item',
@@ -80,17 +43,17 @@ var cdMenus;
                     'menu-item': menuItem
                 };
 
-                $.post(ajaxurl, params, function (menuMarkup) {
+                $.post( ajaxurl, params, function(menuMarkup) {
                     var ins = $('#menu-instructions');
 
-                    menuMarkup = $.trim(menuMarkup); // Trim leading whitespaces
+                    menuMarkup = $.trim( menuMarkup ); // Trim leading whitespaces
                     processMethod(menuMarkup, params);
 
                     // Make it stand out a bit more visually, by adding a fadeIn
-                    $('li.pending').hide().fadeIn('slow');
-                    $('.drag-instructions').show();
-                    if (!ins.hasClass('menu-instructions-inactive') && ins.siblings().length)
-                        ins.addClass('menu-instructions-inactive');
+                    $( 'li.pending' ).hide().fadeIn('slow');
+                    $( '.drag-instructions' ).show();
+                    if( ! ins.hasClass( 'menu-instructions-inactive' ) && ins.siblings().length )
+                        ins.addClass( 'menu-instructions-inactive' );
 
                     callback();
                 });
@@ -99,7 +62,7 @@ var cdMenus;
         /**
          * Keeps the checkbox checked! (required by WP AJAX call) Also submit form on enter.
          *
-         * @since Client Dash 1.6.0
+         * @since Client Dash 1.6
          */
         link_checkbox: function () {
 
@@ -110,7 +73,7 @@ var cdMenus;
                 // Clear fields
                 setTimeout(function () {
                     wait_for_load();
-                }, 50);
+                }, 50 );
             });
 
             // Submit on enter
@@ -126,7 +89,7 @@ var cdMenus;
             /**
              * Checks if the spinner is visible, and waits until it's not. Then clears the input fields.
              *
-             * @since Client Dash 1.6.0
+             * @since Client Dash 1.6
              */
             function wait_for_load() {
                 if ($('#add-custom-links').find('.spinner').is(':visible')) {
@@ -139,7 +102,7 @@ var cdMenus;
         /**
          * Keeps the checkbox checked! (required by WP AJAX call)
          *
-         * @since Client Dash 1.6.0
+         * @since Client Dash 1.6
          */
         separator_checkbox: function () {
             $('#submit-separator').click(function () {
@@ -155,7 +118,7 @@ var cdMenus;
          * input fields to be passed through AJAX. Sigh. So I've had to override this function
          * in order to add to the list my own custom input values.
          *
-         * @since Client Dash 1.6.0
+         * @since Client Dash 1.6
          */
         jQuery_extensions: function () {
             $.fn.extend({
@@ -225,7 +188,7 @@ var cdMenus;
          *
          * IMPORTANT: It is crucial to keep this script up to date.
          *
-         * @since Client Dash 1.6.0
+         * @since Client Dash 1.6
          */
         modify_max_menu_depth: function () {
 
@@ -350,10 +313,10 @@ var cdMenus;
 
                     // CD {
                     // If is a separator AND was trying to be placed as a child, well, STOP IT!
-                    if (ui.item.hasClass('menu-item-separator') && currentDepth != 0) {
+                    if (ui.item.hasClass('menu-item-separator') && currentDepth != 0){
 
                         // Cancel the sort altogether
-                        wpNavMenu.menuList.sortable('cancel');
+                        wpNavMenu.menuList.sortable( 'cancel' );
 
                         // Reset some other properties that may have been improperly updated
                         // Make sure it's depth is at base level
@@ -471,10 +434,41 @@ var cdMenus;
                 body.removeClass('menu-max-depth-' + menuMaxDepth).addClass('menu-max-depth-' + newDepth);
                 menuMaxDepth = newDepth;
             }
+        },
+        icon_selector: function () {
+
+            // Show on click
+            $('.edit-menu-item-cd-icon').click(function (e) {
+
+                e.stopPropagation();
+
+                if ($(this).is(':focus')) {
+                    $(this).closest('.cd-menu-icon-field').find('.cd-menu-icon-selector').show();
+                }
+            });
+
+            // Hide on click
+            $('body').click(function () {
+                $('.cd-menu-icon-selector').hide();
+            });
+
+            // Use new icon val on click
+            $('.cd-menu-icon-selector').find('li').click(function () {
+
+                var icon = $(this).attr('data-icon'),
+                    new_class = $(this).closest('.menu-item').hasClass('menu-item-depth-1') ? 'dashicons hidden ' + icon : 'dashicons ' + icon;
+
+                $(this).closest('.cd-menu-icon-field').find('input[type="text"]').val(icon);
+
+                $(this).closest('.menu-item').find('.item-title').find('.dashicons').attr('class', new_class);
+            });
         }
     };
 
     $(function () {
-        cdMenus.init();
+        // Only initialize if on CD page and if the page isn't "disabled"
+        if ($('body').hasClass('cd-nav-menu') && !$('#menu-settings-column').hasClass('metabox-holder-disabled')) {
+            cdMenus.init();
+        }
     });
 })(jQuery);

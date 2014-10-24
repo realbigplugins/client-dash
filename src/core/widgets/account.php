@@ -11,14 +11,14 @@
  *
  * @category Widgets
  *
- * @since Client Dash 1.5.0
+ * @since Client Dash 1.5
  */
 class ClientDash_Widget_Account extends ClientDash {
 
 	/**
 	 * The content of the widget.
 	 *
-	 * @since Client Dash 1.2.0
+	 * @since Client Dash 1.2
 	 */
 	public static function widget_content() {
 

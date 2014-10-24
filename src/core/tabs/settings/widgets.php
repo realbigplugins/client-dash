@@ -12,21 +12,21 @@
  *
  * @category Widgets
  *
- * @since Client Dash 1.5.0
+ * @since Client Dash 1.5
  */
 class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 
 	/**
 	 * Available widgets.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public $widgets = array();
 
 	/**
 	 * The sidebars for the dashboard.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public $sidebars = array(
 		array(
@@ -38,14 +38,14 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	/**
 	 * Whether or not the widgets section is currently active or not.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public static $_active = false;
 
 	/**
 	 * The main construct function.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	function __construct() {
 
@@ -63,14 +63,6 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 		       && isset( $_GET['tab'] ) && $_GET['tab'] == 'widgets'
 		     ) || isset( $_POST['cd-widgets'] )
 		) {
-
-			// Add the necessary script
-			$ClientDash->assets['js'][] = array(
-				'name' => 'menus',
-				'deps' => array(
-					'cd-main'
-				),
-			);
 
 			// Set the widgets area to currently active
 			$this->active = true;
@@ -133,7 +125,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	/**
 	 * Registers all sidebars for each role.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function register_sidebars() {
 
@@ -150,7 +142,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	/**
 	 * Populates the empty sidebars with default widgets.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function populate_sidebars() {
 
@@ -212,7 +204,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	/**
 	 * Removes existing widgets.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function remove_existing_widgets() {
 
@@ -229,7 +221,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 			 * Allows specific default available widgets to not be removed. Simply return false after
 			 * checking if the current widget is the one you want to keep.
 			 *
-			 * @since Client Dash 1.6.0
+			 * @since Client Dash 1.6
 			 */
 			if ( ! apply_filters( 'cd_widgets_remove_default', true, $widget_class, $widget ) ) {
 				return;
@@ -242,7 +234,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	/**
 	 * Adds CD Core widgets to available widgets.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function create_cd_core_widgets() {
 
@@ -251,7 +243,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 			/**
 			 * Allows filtering of supplied values for CD Core available widgets.
 			 *
-			 * @since Client Dash 1.6.0
+			 * @since Client Dash 1.6
 			 */
 			$args = apply_filters( 'cd_widgets_available_cd_core', array(
 				'id'          => $widget_ID,
@@ -268,7 +260,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	/**
 	 * Adds plugin / theme / WP Core widgets to available widgets.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function create_existing_dashboard_widgets() {
 
@@ -282,7 +274,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 			/**
 			 * Allows filtering of supplied values for plugin / theme / WP Core available widgets.
 			 *
-			 * @since Client Dash 1.6.0
+			 * @since Client Dash 1.6
 			 */
 			$args = apply_filters( 'cd_widgets_available_plugin', array(
 				'id'          => $widget_ID,
@@ -299,7 +291,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	/**
 	 * Registers a widget, CD style.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param array $args Args for the available widget.
 	 */
@@ -322,7 +314,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	/**
 	 * Include necessary scripts for the page.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function enqueue_scripts() {
 
@@ -342,7 +334,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	/**
 	 * Adds the nav-menu body class (which is normally present on the nav-menus page and necessary).
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function add_nav_menu_class( $classes ) {
 		return $classes . ' cd-widgets widgets-php';
@@ -351,7 +343,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	/**
 	 * Adds this extra field on initial saving of widgets so on AJAX loads, this class still gets loaded.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function add_extra_fields() {
 
@@ -415,7 +407,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	/**
 	 * The content for the content section.
 	 *
-	 * @since Client Dash 1.4.0
+	 * @since Client Dash 1.4
 	 */
 	public function block_output() {
 

@@ -3,7 +3,7 @@
 /**
  * This file contains all functions that could be deprecated.
  *
- * @since Client Dash 1.5.0
+ * @since Client Dash 1.5
  */
 
 /**

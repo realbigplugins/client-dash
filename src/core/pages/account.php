@@ -10,14 +10,14 @@
  *
  * @category Pages
  *
- * @since Client Dash 1.5.0
+ * @since Client Dash 1.5
  */
 class ClientDash_Page_Account extends ClientDash {
 
 	/**
 	 * The main construct function.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 */
 	function __construct() {
 
@@ -28,7 +28,7 @@ class ClientDash_Page_Account extends ClientDash {
 	/**
 	 * Adds the sub-menu item to the toolbar.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 */
 	public function add_submenu_page() {
 
@@ -51,7 +51,7 @@ class ClientDash_Page_Account extends ClientDash {
 	/**
 	 * The page content.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 */
 	public function page_output() {
 

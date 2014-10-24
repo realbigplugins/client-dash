@@ -91,6 +91,10 @@ Using this plugin is very simple. All you have to do is:
 
 == Changelog ==
 
+= 1.6.6 =
+* Allowed the Links menu item to be available in Client Dash only when the link manager functionality is enabled.
+* Fixed edge-case fatal error due to some inconsistency in the code.
+
 = 1.6.5 =
 * Made jQuery live for the icon-selector dropdown in CD Settings -> Menus so that it would also work for newly added menu items.
 * Made sure the filter that removes CD admin menu nav menus from WP Core lists applies everywhere (they were showing in the customizer in the custom menu widget).

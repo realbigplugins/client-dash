@@ -3,15 +3,14 @@
 /*
 Plugin Name: Client Dash
 Description: Creating a more intuitive admin interface for clients.
-Version: 1.6.6-alpha
+Version: 1.6.6
 Author: Kyle Maurer
 Author URI: http://realbigmarketing.com/staff/kyle
 */
 
 // TODO Allow dashboard meta box styling to be disabled (possibly extension?)
 // TODO Correctly line break documentation to PHP guideline
-
-// NEXTUPDATE 1.7 - Themes
+// TODO Revise widgets extension API
 
 // FUTUREBUILD Only require page / tab specific files WHEN they are needed. Not always.
 
@@ -29,21 +28,21 @@ include_once( plugin_dir_path( __FILE__ ) . 'core/functions.php' );
  *
  * @category Base Functionality
  *
- * @since Client Dash 1.5.0
+ * @since Client Dash 1.5
  */
 class ClientDash extends ClientDash_Functions {
 
 	/**
 	 * Current version of Client Dash.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 */
 	protected static $version = '1.6.6';
 
 	/**
 	 * The path to the plugin.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public $path;
 
@@ -54,7 +53,7 @@ class ClientDash extends ClientDash_Functions {
 	 * property will directly impact file loading. The order of this is also the order
 	 * of the output pages and tabs.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 */
 	public static $core_files = array(
 		'account'   => array(
@@ -88,7 +87,7 @@ class ClientDash extends ClientDash_Functions {
 	 *
 	 * Private.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public static $_cd_widgets = array(
 		'cd_account'   => array(
@@ -121,37 +120,17 @@ class ClientDash extends ClientDash_Functions {
 		),
 	);
 
-	public $assets = array(
-		'js' => array(
-			array(
-				'name' => 'main',
-				'deps' => array(
-					'jquery',
-				),
-			),
-			array(
-				'name' => 'ajax',
-				'deps' => array(
-					'cd-main',
-				),
-			),
-		),
-		'css' => array(
-			'clientdash',
-		)
-	);
-
 	/**
 	 * The current admin color scheme.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 */
 	public $admin_colors;
 
 	/**
 	 * Default option settings for Client Dash options (settings).
 	 *
-	 * @since Client Dash 1.0.0
+	 * @since Client Dash 1.0
 	 */
 	public $option_defaults = array(
 		// The default webmaster title that shows up all over the place
@@ -288,7 +267,7 @@ class ClientDash extends ClientDash_Functions {
 	/**
 	 * Items to remove from the WP admin bar by default.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 */
 	public $remove_menu_items = array(
 		'menu'    => array(),
@@ -306,28 +285,28 @@ class ClientDash extends ClientDash_Functions {
 	 * This property will be populated with ALL content. It allows extensions
 	 * to add content with little effort.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 */
 	public $content_sections = array();
 
 	/**
 	 * A duplicate of content sections that is NOT filtered.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 */
 	public $content_sections_unmodified = array();
 
 	/**
 	 * Data to be sent to the main JS file.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public $jsData = array();
 
 	/**
 	 * Widgets that are active by default.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public $active_widgets = array();
 
@@ -337,9 +316,10 @@ class ClientDash extends ClientDash_Functions {
 	 * Here we will include ALL necessary files as well as perform ALL
 	 * necessary actions and filters.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 */
 	function __construct() {
+		add_filter( 'pre_option_link_manager_enabled', '__return_true' );
 
 		// Update all options if not set
 		$init_reset = get_option( 'cd_initial_reset' );
@@ -406,59 +386,35 @@ class ClientDash extends ClientDash_Functions {
 	/**
 	 * Registers all Client Dash scripts.
 	 *
-	 * @since Client Dash 1.0.0
+	 * @since Client Dash 1.0
 	 */
 	public function register_scripts() {
 
-		// The file loop
-		foreach ( $this->assets as $type => $files ) {
-			foreach ( $files as $file ) {
-				if ( $type == 'js' ) {
-					if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-						wp_register_script(
-							"cd-$file[name]",
-							plugins_url( "assets/js/source/{$file['name']}.js", __FILE__ ),
-							isset( $file['deps'] ) ? $file['deps'] : null,
-							time(),
-							true
-						);
-					} else {
-						wp_register_script(
-							"cd-$file[name]",
-							plugins_url( "assets/js/clientdash.{$file['name']}.min.js", __FILE__ ),
-							isset( $file['deps'] ) ? $file['deps'] : null,
-							$this::$version,
-							true
-						);
-					}
-				}
-				if ( $type == 'css' ) {
-					if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-						wp_register_style(
-							"cd-$file",
-							plugins_url( "assets/css/$file.css", __FILE__ ),
-							null,
-							time()
-						);
-					} else {
-						wp_register_style(
-							"cd-$file",
-							plugins_url( "assets/css/$file.min.css", __FILE__ ),
-							null,
-							$this::$version
-						);
-					}
-				}
-			}
-		}
+		// FIXED Fatal error from calling static property on an instantiated object
+
+		// The main script for Client Dash
+		wp_register_script(
+			'cd-main',
+			plugin_dir_url( __FILE__ ) . 'assets/js/clientdash.min.js',
+			array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable', 'jquery-effects-shake' ),
+			WP_DEBUG == false ? self::$version : time()
+		);
 
 		wp_localize_script( 'cd-main', 'cdData', $this->jsData );
+
+		// The main stylesheet for Client Dash
+		wp_register_style(
+			'cd-main',
+			plugins_url( 'assets/css/clientdash.min.css', __FILE__ ),
+			array(),
+			WP_DEBUG == false ? self::$version : time()
+		);
 	}
 
 	/**
 	 * Enqueues all Client Dash scripts.
 	 *
-	 * @since Client Dash 1.0.0
+	 * @since Client Dash 1.0
 	 */
 	public function enqueue_scripts() {
 
@@ -469,16 +425,12 @@ class ClientDash extends ClientDash_Functions {
 			return;
 		}
 
-		// The file loop
-		foreach ( $this->assets as $type => $files ) {
-			foreach ( $files as $file ) {
-				if ( $type == 'js' ) {
-					wp_enqueue_script( "cd-$file[name]" );
-				}
-				if ( $type == 'css' ) {
-					wp_enqueue_style( "cd-$file" );
-				}
-			}
+		wp_enqueue_script( 'cd-main' );
+		wp_enqueue_style( 'cd-main' );
+
+		// Include widgets.js only on widgets page
+		if ( isset( $_GET['tab'] ) && $_GET['tab'] == 'widgets' ) {
+			wp_enqueue_script( 'cd-widgets' );
 		}
 	}
 
@@ -488,7 +440,7 @@ class ClientDash extends ClientDash_Functions {
 	 * Normally, WordPress ditches these global variables and makes them
 	 * unavailable, not sure why. So I'm storing them in my own variables.
 	 *
-	 * @since Client Dash 1.0.0
+	 * @since Client Dash 1.0
 	 */
 	public function save_admin_colors() {
 
@@ -499,7 +451,7 @@ class ClientDash extends ClientDash_Functions {
 	/**
 	 * Assigns all the admin colors to Client Dash classes.
 	 *
-	 * @since Client Dash 1.1.0
+	 * @since Client Dash 1.1
 	 */
 	public function assign_admin_colors() {
 
@@ -550,7 +502,7 @@ class ClientDash extends ClientDash_Functions {
 	/**
 	 * Force dashboard widgets to one column.
 	 *
-	 * @since Client Dash 1.4.0
+	 * @since Client Dash 1.4
 	 *
 	 * @param array $columns The supplied columns.
 	 *
@@ -566,7 +518,7 @@ class ClientDash extends ClientDash_Functions {
 	/**
 	 * Purges all dashboard widget settings that may have been set.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 */
 	public function remove_dashboard_settings() {
 
@@ -580,7 +532,7 @@ class ClientDash extends ClientDash_Functions {
 	/**
 	 * Removes some default admin items.
 	 *
-	 * @since Client Dash 1.0.0
+	 * @since Client Dash 1.0
 	 *
 	 * @param mixed $wp_admin_bar The supplied admin bar object.
 	 */
@@ -598,7 +550,7 @@ class ClientDash extends ClientDash_Functions {
 	/**
 	 * Removes the WordPress logo from the admin bar.
 	 *
-	 * @since Client Dash 1.0.0
+	 * @since Client Dash 1.0
 	 */
 	public function remove_wp_logo() {
 
@@ -609,7 +561,7 @@ class ClientDash extends ClientDash_Functions {
 	/**
 	 * Removes default toolbar items.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 */
 	public function remove_toolbar_items() {
 
@@ -619,7 +571,7 @@ class ClientDash extends ClientDash_Functions {
 	/**
 	 * Gets all of the active dashboard widgets.
 	 *
-	 * @since Client Dash 1.1.0
+	 * @since Client Dash 1.1
 	 */
 	public function get_active_widgets() {
 
@@ -650,7 +602,7 @@ class ClientDash extends ClientDash_Functions {
 	/**
 	 * Removes all default dashboard widgets.
 	 *
-	 * @since Client Dash 1.1.0
+	 * @since Client Dash 1.1
 	 */
 	public function remove_default_dashboard_widgets() {
 
@@ -669,7 +621,7 @@ class ClientDash extends ClientDash_Functions {
 	/**
 	 * Adds our widgets to the dashboard.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 */
 	public function add_new_widgets() {
 
@@ -790,7 +742,7 @@ class ClientDash extends ClientDash_Functions {
 	/**
 	 * Remove Screen Options and Help on Dashboard.
 	 *
-	 * @since Client Dash 1.2.0
+	 * @since Client Dash 1.2
 	 */
 	public function remove_screen_options() {
 
@@ -804,7 +756,7 @@ class ClientDash extends ClientDash_Functions {
 	/**
 	 * Removes the help tab.
 	 *
-	 * @since Client Dash 1.2.0
+	 * @since Client Dash 1.2
 	 *
 	 * @param $old_help
 	 * @param $screen_id
@@ -825,7 +777,7 @@ class ClientDash extends ClientDash_Functions {
 	 * Cycles through all content sections that have been set and removes any
 	 * that should not be available to the current role.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 */
 	public function content_sections_init() {
 
@@ -873,7 +825,7 @@ class ClientDash extends ClientDash_Functions {
 	/**
 	 * Adds admin notices based on pre-specified query args.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 */
 	public function admin_notices() {
 

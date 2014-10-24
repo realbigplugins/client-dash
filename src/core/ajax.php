@@ -10,14 +10,14 @@
  *
  * @category Base Functionality
  *
- * @since Client Dash 1.5.0
+ * @since Client Dash 1.5
  */
 class ClientDash_AJAX {
 
 	/**
 	 * Constructs the class.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 */
 	function __construct() {
 
@@ -36,7 +36,7 @@ class ClientDash_AJAX {
 	/**
 	 * Resets all of the roles settings to default.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 */
 	public function reset_roles() {
 
@@ -52,7 +52,7 @@ class ClientDash_AJAX {
 	/**
 	 * Resets ALL Client Dash settings by deleting them.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function reset_all_settings() {
 
@@ -108,7 +108,7 @@ class ClientDash_AJAX {
 	/**
 	 * Replaces wp_ajax_add_menu_item() (wp-admin/includes/ajax-actions.php:~1056).
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function add_menu_item() {
 
@@ -154,7 +154,7 @@ class ClientDash_AJAX {
 	/**
 	 * Creates a nav menu item and it's sub-menus. Used for initial creation of nav menus.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function populate_nav_menu() {
 

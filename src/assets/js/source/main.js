@@ -28,25 +28,11 @@ var cdMain;
             });
 
             this.tips_stop_propogation();
-            this.remove_first_collapse();
-        },
-        /**
-         * Removes the first instance of the admin menu collapse button.
-         *
-         * This is sort of a hack. The way I'm now adding my new admin menu causes there to be two "#collapse-menu"
-         * elements. Well, there should only be one, given the ID. So I'm removing the first one here by just calling
-         * "#collapse-menu". jQuery only looks for one instance of the ID, so it targets the first one on the page in
-         * the DOM (which is the one I want to get rid of), and then removes it and stops.
-         *
-         * @since Client Dash 1.6.5
-         */
-        remove_first_collapse: function () {
-            $('#collapse-menu').remove();
         },
         /**
          * Hides/shows element with given ID.
          *
-         * @since Client Dash 1.1.0
+         * @since Client Dash 1.1
          *
          * @param id The ID of the element to hide/show.
          */
@@ -60,7 +46,7 @@ var cdMain;
         /**
          * Toggles the pages on the Settings -> Roles page.
          *
-         * @since Client Dash 1.4.0
+         * @since Client Dash 1.4
          *
          * @param e_self
          */
@@ -79,7 +65,7 @@ var cdMain;
          *
          * Used on Settings -> Icons.
          *
-         * @since Client Dash 1.3.0
+         * @since Client Dash 1.3
          *
          * @param id
          */
@@ -102,7 +88,7 @@ var cdMain;
          *
          * Used on Settings -> Icons.
          *
-         * @since Client Dash 1.3.0
+         * @since Client Dash 1.3
          *
          * @param dashicon
          * @param e
@@ -130,7 +116,7 @@ var cdMain;
         /**
          * Disable the ability to drag dashboard widgets.
          *
-         * @since Client Dash 1.4.0
+         * @since Client Dash 1.4
          */
         disable_drag: function () {
             var dash_widgets = jQuery('#dashboard-widgets');
@@ -144,7 +130,7 @@ var cdMain;
         /**
          * Toggles the on/off switches on the Roles page.
          *
-         * @since Client Dash 1.5.0
+         * @since Client Dash 1.5
          *
          * @param e The supplied object.
          */
@@ -166,7 +152,7 @@ var cdMain;
         /**
          * Cycles through all tips and shows them on page load.
          *
-         * @since Client Dash 1.5.0
+         * @since Client Dash 1.5
          */
         show_tips: function () {
             jQuery('.cd-tip').each(function () {
@@ -176,7 +162,7 @@ var cdMain;
         /**
          * Closes the help tip.
          *
-         * @since Client Dash 1.5.0
+         * @since Client Dash 1.5
          *
          * @param e The supplied object.
          */
@@ -186,13 +172,13 @@ var cdMain;
         /**
          * Make sure clicking on items inside tips don't propogate up the DOM tree.
          *
-         * @since Client Dash 1.5.0
+         * @since Client Dash 1.5
          */
         tips_stop_propogation: function () {
             jQuery('.cd-tip *').click(function (e) {
                 e.stopPropagation();
             });
-        },
+        }
     };
 
     // Launch on ready

@@ -10,14 +10,14 @@
  *
  * @category Menus
  *
- * @since Client Dash 1.6.0
+ * @since Client Dash 1.6
  */
 class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Settings_Tab_Menus {
 
 	/**
 	 * Outputs the checkbox, its label, and all of the hidden inputs.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param int $i The current iteration (in negative).
 	 * @param string $label The label that will show next to the checkbox.
@@ -71,7 +71,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 	/**
 	 * All menu / sub-menu pages created by added post types: Add New, View All, Taxonomies.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public static function post_types() {
 
@@ -312,7 +312,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 	/**
 	 * All default admin menu items added by core (or potentially added).
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public static function wp_core() {
 
@@ -343,7 +343,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					<?php
 
 					$i = 0;
-					foreach ( self::_get( 'wp_core' ) as $item_title => $item ) {
+					foreach ( self::$wp_core as $item_title => $item ) {
 						$i --;
 
 						// Skip if no cap
@@ -371,9 +371,9 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 			<div id="tabs-panel-wordpress-core-submenu" class="tabs-panel tabs-panel-inactive">
 				<ul id="posttypechecklist-wordpress-core" class="categorychecklist form-no-clear">
 					<?php
-					$core_items = self::_get( 'wp_core' );
+					$core_items = self::$wp_core;
 
-					foreach ( self::_get( 'wp_core' ) as $item_title => $item ) {
+					foreach ( self::$wp_core as $item_title => $item ) {
 
 						if ( isset( $item['submenus'] ) ) {
 
@@ -444,7 +444,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 	/**
 	 * All other items present in the admin menu (from plugins or themes).
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public static function plugin() {
 
@@ -454,7 +454,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 		$role = get_role( $cd_current_menu_role ? $cd_current_menu_role : 'administrator' );
 
 		// Get core items
-		$wp_core = self::_get( 'wp_core' );
+		$wp_core = self::$wp_core;
 
 		// Separate out only the items added by plugins
 		$menu_items = array();
@@ -639,7 +639,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 	/**
 	 * Client Dash core pages: Account, Help, Reports, Webmaster, Settings.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public static function cd_core() {
 		global $ClientDash, $cd_current_menu_role;
@@ -699,7 +699,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 	/**
 	 * The separator admin menu item.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public static function separator() {
 		?>
@@ -739,7 +739,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 	/**
 	 * Custom absolute uri's.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public static function custom_link() {
 		// MAYBETODO Sanitize url

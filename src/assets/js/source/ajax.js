@@ -12,7 +12,7 @@ var cdAJAX;
         /**
          * Calls an AJAX function to reset all role settings.
          *
-         * @since Client Dash 1.5.0
+         * @since Client Dash 1.5
          */
         reset_roles: function () {
             // Setup
@@ -41,7 +41,7 @@ var cdAJAX;
         /**
          * Calls an AJAX function to reset all settings.
          *
-         * @since Client Dash 1.5.0
+         * @since Client Dash 1.5
          */
         reset_all_settings: function () {
             // AJAX
@@ -61,7 +61,7 @@ var cdAJAX;
         /**
          * Calls an AJAX function to reset the admin menu.
          *
-         * @since Client Dash 1.5.0
+         * @since Client Dash 1.5
          */
         reset_admin_menu: function () {
             // AJAX
@@ -82,7 +82,7 @@ var cdAJAX;
         /**
          * Sends off all AJAX requests to populate the nav menu. Also updates the progress bar.
          *
-         * @since Client Dash 1.6.0
+         * @since Client Dash 1.6
          */
         populate_nav_menu: function () {
 

@@ -10,14 +10,14 @@
  *
  * @category Tabs
  *
- * @since Client Dash 1.5.0
+ * @since Client Dash 1.5
  */
 class ClientDash_Core_Page_Account_Tab_Sites extends ClientDash {
 
 	/**
 	 * The main construct function.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 */
 	function __construct() {
 
@@ -34,7 +34,7 @@ class ClientDash_Core_Page_Account_Tab_Sites extends ClientDash {
 	/**
 	 * The content for the content section.
 	 *
-	 * @since Client Dash 1.4.0
+	 * @since Client Dash 1.4
 	 */
 	public function block_output() {
 

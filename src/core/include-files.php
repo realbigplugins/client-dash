@@ -11,7 +11,7 @@
  *
  * @category Base Functionality
  *
- * @since Client Dash 1.5.0
+ * @since Client Dash 1.5
  */
 class ClientDash_RequireFiles extends ClientDash {
 
@@ -20,7 +20,7 @@ class ClientDash_RequireFiles extends ClientDash {
 	 *
 	 * Also initiates all page and tab classes.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 */
 	function __construct() {
 

@@ -10,14 +10,14 @@
  *
  * @category Base Functionality
  *
- * @since Client Dash 1.5.0
+ * @since Client Dash 1.5
  */
 abstract class ClientDash_Functions {
 
 	/**
 	 * Checks to see if we're on a specific page and tab.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param string $page The page to check.
 	 * @param bool/string $tab If supplied, will also check that the given tab is active.
@@ -47,7 +47,7 @@ abstract class ClientDash_Functions {
 	/**
 	 * Outputs the default Client Dash toggle switch (on|off).
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param string $name The name of the input.
 	 * @param string|int $value The value for the input to output.
@@ -97,7 +97,7 @@ abstract class ClientDash_Functions {
 	/**
 	 * Outputs a helpful tip that can be closed.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 *
 	 * @param string $content The content of the tip.
 	 * @param string $position The position of the tip. (left or right)
@@ -113,7 +113,7 @@ abstract class ClientDash_Functions {
 	/**
 	 * Outputs the page title with Client Dash standards.
 	 *
-	 * @since Client Dash 1.2.0
+	 * @since Client Dash 1.2
 	 *
 	 * @param string $page The page we're on. Default 'account'.
 	 */
@@ -135,7 +135,7 @@ abstract class ClientDash_Functions {
 	/**
 	 * The main function for building the CD pages.
 	 *
-	 * @since Client Dash 1.0.0
+	 * @since Client Dash 1.0
 	 */
 	public static function create_tab_page() {
 
@@ -253,7 +253,7 @@ abstract class ClientDash_Functions {
 	 * This function creates a content section for Client Dash. It can be set to
 	 * go into a specific tab in a specific tab.
 	 *
-	 * @since Client Dash 1.4.0
+	 * @since Client Dash 1.4
 	 *
 	 * @param array $content_section All of the arguments for the function.
 	 */
@@ -264,7 +264,7 @@ abstract class ClientDash_Functions {
 		/**
 		 * Filter each content section that is added.
 		 *
-		 * @since Client Dash 1.6.0
+		 * @since Client Dash 1.6
 		 */
 		$content_section = apply_filters( 'cd_add_content_section', $content_section );
 
@@ -326,7 +326,7 @@ abstract class ClientDash_Functions {
 	 * Strips out spaces and dashes and replaces them with underscores. Also
 	 * translates to lowercase.
 	 *
-	 * @since Client Dash 1.3.0
+	 * @since Client Dash 1.3
 	 *
 	 * @param string $name The name to be translated.
 	 *
@@ -340,7 +340,7 @@ abstract class ClientDash_Functions {
 	/**
 	 * Replaces underscores with spaces and capitalizes words.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param string $ID The ID to be translated.
 	 *
@@ -354,7 +354,7 @@ abstract class ClientDash_Functions {
 	/**
 	 * Gets the current color scheme.
 	 *
-	 * @since Client Dash 1.2.0
+	 * @since Client Dash 1.2
 	 *
 	 * @param $which_color
 	 *
@@ -431,7 +431,7 @@ abstract class ClientDash_Functions {
 	/**
 	 * Correctly formats the bytes size into a more readable size.
 	 *
-	 * @since Client Dash 1.1.0
+	 * @since Client Dash 1.1
 	 *
 	 * @param int $size Size in bytes
 	 *
@@ -459,7 +459,7 @@ abstract class ClientDash_Functions {
 	/**
 	 * This allows us to use array_key_exists recursively.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 *
 	 * @param string $needle The array key to search for.
 	 * @param array $haystack The array to search in.
@@ -487,7 +487,7 @@ abstract class ClientDash_Functions {
 	/**
 	 * Get's the current user's role.
 	 *
-	 * @since Client Dash 1.4.0
+	 * @since Client Dash 1.4
 	 *
 	 * @return mixed The role.
 	 */
@@ -506,7 +506,7 @@ abstract class ClientDash_Functions {
 	 * are defined by the second parameter. This defaults to allowing
 	 * everybody to see the message.
 	 *
-	 * @since Client Dash 1.4.0
+	 * @since Client Dash 1.4
 	 *
 	 * @param string $message The message to show.
 	 * @param string $caps Optional. A WordPress recognized capability.
@@ -533,7 +533,7 @@ abstract class ClientDash_Functions {
 	 * are defined by the second parameter. This defaults to allowing
 	 * everybody to see the message.
 	 *
-	 * @since Client Dash 1.4.0
+	 * @since Client Dash 1.4
 	 *
 	 * @param string $message The message to show.
 	 * @param string $caps . Optional. A WordPress recognized capability. Default
@@ -549,7 +549,7 @@ abstract class ClientDash_Functions {
 	/**
 	 * Returns the settings url.
 	 *
-	 * @since Client Dash 1.2.0
+	 * @since Client Dash 1.2
 	 *
 	 * @param string $tab The tab to link to.
 	 * @param string $section The content section to link to.
@@ -564,7 +564,7 @@ abstract class ClientDash_Functions {
 	/**
 	 * Returns the account url.
 	 *
-	 * @since Client Dash 1.2.0
+	 * @since Client Dash 1.2
 	 *
 	 * @param string $tab The tab to link to.
 	 * @param string $section The content section to link to.
@@ -579,7 +579,7 @@ abstract class ClientDash_Functions {
 	/**
 	 * Returns the help url.
 	 *
-	 * @since Client Dash 1.2.0
+	 * @since Client Dash 1.2
 	 *
 	 * @param string $tab The tab to link to.
 	 * @param string $section The content section to link to.
@@ -594,7 +594,7 @@ abstract class ClientDash_Functions {
 	/**
 	 * Returns the reports url.
 	 *
-	 * @since Client Dash 1.2.0
+	 * @since Client Dash 1.2
 	 *
 	 * @param string $tab The tab to link to.
 	 * @param string $section The content section to link to.
@@ -609,7 +609,7 @@ abstract class ClientDash_Functions {
 	/**
 	 * Returns the webmaster url.
 	 *
-	 * @since Client Dash 1.2.0
+	 * @since Client Dash 1.2
 	 *
 	 * @param string $tab The tab to link to.
 	 * @param string $section The content section to link to.
@@ -626,7 +626,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * Built for use in turning the dashboard columns into one.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 */
 	public static function return_1() {
 
@@ -636,7 +636,7 @@ abstract class ClientDash_Functions {
 	/**
 	 * Used in widgets_init.
 	 *
-	 * @since Client Dash 1.5.0
+	 * @since Client Dash 1.5
 	 *
 	 * @param mixed $matches Matches from a preg_replace_callback.
 	 *
@@ -652,7 +652,7 @@ abstract class ClientDash_Functions {
 	/**
 	 * Allows an array of needles instead of just one.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @author Binyamin (stackoverflow)
 	 *

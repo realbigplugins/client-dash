@@ -1,5 +1,7 @@
 ![banner](https://raw.githubusercontent.com/brashrebel/client-dash/master/assets/static/banner.png)
 
+# v1.6.6
+
 [Releases](https://github.com/brashrebel/client-dash/releases)
 
 At long last, a vastly improved interface for clients has arrived. Client Dash seeks to provide a simplified and intuitive admin user experience for customers who login to WordPress sites which were developed and are managed by an agency/webmaster.
@@ -34,6 +36,10 @@ Using this plugin is very simple. All you have to do is:
 3. Configure settings by going to Settings - >Client Dash
 
 ## Changelog
+
+### [1.6.6](https://github.com/brashrebel/client-dash/releases/tag/v1.6.6)
+* Allowed the Links menu item to be available in Client Dash only when the link manager functionality is enabled.
+* Fixed edge-case fatal error due to some inconsistency in the code.
 
 ### [1.6.5](https://github.com/brashrebel/client-dash/releases/tag/v1.6.5)
 * Made jQuery live for the icon-selector dropdown in CD Settings -> Menus so that it would also work for newly added menu items.

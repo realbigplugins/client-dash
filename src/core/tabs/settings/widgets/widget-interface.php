@@ -10,35 +10,35 @@
  *
  * @category Widgets
  *
- * @since Client Dash 1.6.0
+ * @since Client Dash 1.6
  */
 class CD_Widget extends WP_Widget {
 
 	/**
 	 * The ID of the widget.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public $id = 'cd_widget';
 
 	/**
 	 * The title of the widget.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public $title = 'CD Widget';
 
 	/**
 	 * The description of the widget.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public $description = null;
 
 	/**
 	 * This where a widget can add extra fields to be saved and used.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public $extra_fields = array();
 
@@ -47,7 +47,7 @@ class CD_Widget extends WP_Widget {
 	 *
 	 * Private.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public $_callback = false;
 
@@ -56,7 +56,7 @@ class CD_Widget extends WP_Widget {
 	 *
 	 * Private.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public $_settings_callback = false;
 
@@ -65,7 +65,7 @@ class CD_Widget extends WP_Widget {
 	 *
 	 * Private.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public $_cd_core = '0';
 
@@ -74,7 +74,7 @@ class CD_Widget extends WP_Widget {
 	 *
 	 * Private.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public $_cd_extension = '0';
 
@@ -83,14 +83,14 @@ class CD_Widget extends WP_Widget {
 	 *
 	 * Private.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public $_plugin = '0';
 
 	/**
 	 * Instantiates the parent class.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 */
 	public function __construct() {
 
@@ -126,7 +126,7 @@ class CD_Widget extends WP_Widget {
 	/**
 	 * Output for the widget settings area.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param array $instance The widget instance.
 	 *
@@ -216,7 +216,7 @@ class CD_Widget extends WP_Widget {
 	/**
 	 * Performed when hitting the save button and also when initially added. Saves new values.
 	 *
-	 * @since Client Dash 1.6.0
+	 * @since Client Dash 1.6
 	 *
 	 * @param array $new_instance The new widget instance.
 	 * @param array $old_instance The old widget instance.

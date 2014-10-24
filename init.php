@@ -8,6 +8,8 @@ Author: Kyle Maurer
 Author URI: http://realbigmarketing.com/staff/kyle
 */
 
+//define( 'SCRIPT_DEBUG', true );
+
 define( 'CD_DEVELOPMENT', true );
 
 include_once( 'tools/development-database.php' );
