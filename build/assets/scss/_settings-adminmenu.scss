@@ -1,0 +1,199 @@
+.cd-content-section {
+
+  // Manage menus
+  .manage-menus {
+
+    // Disabled
+    &.disabled {
+      opacity: 0.5;
+    }
+  }
+
+  // Left side nav menus status
+  #cd-nav-menu-statuses {
+    margin-top: 20px;
+
+    .cd-nav-menu-statuses-table {
+      width: 100%;
+      text-align: left;
+
+      .cd-nav-menu-status {
+        position: relative;
+        width: 12px;
+        height: 12px;
+        display: inline-block;
+        border-radius: 8px;
+
+        &:before {
+          content: "";
+          width: 16px;
+          height: 16px;
+          border-radius: 8px;
+          position: absolute;
+          left: -2px;
+          top: -2px;
+          background-color: #ccc;
+        }
+
+        &:after {
+          content: "";
+          width: 10px;
+          height: 10px;
+          border-radius: 8px;
+          position: absolute;
+          left: 1px;
+          top: 1px;
+        }
+
+        &.on:after {
+          background-color: #71ff6a;
+          box-shadow: 0 0 10px 1px #71ff6a;
+        }
+
+        &.off:after {
+          background-color: #ff462e;
+          box-shadow: 0 0 10px 1px #ff462e;
+        }
+      }
+
+      th {
+        padding-bottom: 5px;
+      }
+
+      td, th {
+
+        &:last-of-type {
+          text-align: right;
+        }
+      }
+    }
+  }
+
+  // Left side
+  #menu-settings-column {
+
+    // Post Types tab items (they wouldn't fit before)
+    #posttype-page-tabs {
+      > li {
+        padding: 3px 2px !important;
+      }
+    }
+
+    // Taxonomy items
+    #tabs-panel-posttype-taxonomies {
+      .taxonomy-title {
+        font-style: italic;
+        color: #888;
+      }
+    }
+
+    // Separators
+    .cd-availableitems-separator {
+      font-style: italic;
+      color: #888;
+    }
+  }
+
+  // Right side
+  #menu-management-liquid {
+
+    // Icon selector
+    .cd-menu-icon-field {
+      float: left;
+      position: relative;
+      box-sizing: border-box;
+
+      * {
+        box-sizing: border-box;
+      }
+
+      .cd-menu-icon-selector {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        height: 300px;
+        overflow: scroll;
+        background: #fff;
+        box-shadow: 0 0 20px rgba(#000, 0.5);
+        padding: 5px;
+
+        li {
+          float: left;
+          width: 25%;
+          text-align: center;
+          padding: 5px 0;
+          cursor: pointer;
+
+          .dashicons:before {
+            font-size: 20px;
+          }
+        }
+      }
+    }
+
+    // Extra params arrow
+    .cd-extra-params:after {
+      content: "";
+      border-top: 6px solid #aaa;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      display: inline-block;
+    }
+
+    // Align the switch
+    .cd-toggle-switch {
+      margin-top: 2px;
+    }
+
+    // Progress when creating a nav menu
+    #cd-creating-nav-menu-progress {
+      font-size: 40px;
+    }
+
+    // Separator
+    .menu-item-separator {
+      .menu-item-handle {
+        background: darken(#fafafa, 10%); // Original background color
+        border-color: darken(#dfdfdf, 10%); // Original border color
+        color: lighten(#222, 40%) // Original font color
+      }
+    }
+
+    // Items with duplicate parent slugs
+    // Also disabled items due to CD Core page visibility
+    .duplicate-parent-slug, .menu-item-cd-disabled {
+      .menu-item-handle {
+        background: #ffc5bf;
+        border-color: darken(#ffc5bf, 10%);
+      }
+    }
+
+    // Icons
+    .dashicons {
+      color: #555;
+    }
+
+    // Some gross whitespace
+    #post-body {
+      padding: 10px !important;
+    }
+    #post-body-content {
+      margin-bottom: 0;
+    }
+
+    // The nav menu title
+    .cd-nav-menu-title {
+      font-style: normal;
+      font-weight: bold;
+      color: #222;
+      font-size: 125%;
+    }
+  }
+
+  // When the separator shakes, the container is too big
+  .ui-effects-wrapper {
+    width: 0 !important;
+  }
+}

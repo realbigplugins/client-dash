@@ -1,0 +1,145 @@
+// To prevent people from clicking during AJAX
+#cd-ajax-cover {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  opacity: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+// Toggle switches
+.cd-toggle-switch {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  margin-right: 10px;
+  vertical-align: middle;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.cd-toggle-switch:before, .cd-toggle-switch:after {
+  display: block;
+  font-size: 10px;
+  padding: 5px 3px;
+  color: #fff;
+  background-color: #aaa;
+}
+
+.cd-toggle-switch.horizontal {
+  &:before, &:after {
+    display: inline-block;
+    padding: 0 3px;
+    border: none !important;
+    float: left;
+  }
+}
+
+.cd-toggle-switch:before {
+  content: "ON";
+  border-bottom: 1px solid #ddd;
+}
+
+.cd-toggle-switch:after {
+  content: "OFF";
+}
+
+.cd-toggle-switch.on:before {
+  background-color: #1c7b09;
+}
+
+.cd-toggle-switch.off:after {
+  background-color: #b60508;
+}
+
+// Up-down arrows
+.cd-up-down {
+  float: right;
+}
+
+.cd-up-down:after {
+  content: "";
+  display: inline-block;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 15px solid rgba(0, 0, 0, 0.2);
+
+  -webkit-transition: all 200ms;
+  -moz-transition: all 200ms;
+  -ms-transition: all 200ms;
+  -o-transition: all 200ms;
+  transition: all 200ms;
+}
+
+.cd-up-down.open:after {
+  border-top: none;
+  border-bottom: 15px solid rgba(0, 0, 0, 0.2);
+}
+
+// Progress bar
+.cd-progress-bar {
+  position: relative;
+  text-align: center;
+  width: 100%;
+  height: 30px;
+  border: 1px solid #aaa;
+
+  // The moving bar
+  .cd-progress-bar-inner {
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 100%;
+    background-color: rgb(96, 203, 229);
+    z-index: 1;
+
+    transition: right 300ms ease;
+  }
+
+  // The completed text
+  .cd-progress-bar-percent {
+    position: relative;
+    line-height: 30px;
+    z-index: 2;
+  }
+}
+
+// Icon selector
+.cd-menu-icon-field {
+  float: left;
+  position: relative;
+  box-sizing: border-box;
+
+  * {
+    box-sizing: border-box;
+  }
+
+  .cd-menu-icon-selector {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 300px;
+    overflow: scroll;
+    background: #fff;
+    box-shadow: 0 0 20px rgba(#000, 0.5);
+    padding: 5px;
+
+    li {
+      float: left;
+      width: 25%;
+      text-align: center;
+      padding: 5px 0;
+      cursor: pointer;
+
+      .dashicons:before {
+        font-size: 20px;
+      }
+    }
+  }
+}

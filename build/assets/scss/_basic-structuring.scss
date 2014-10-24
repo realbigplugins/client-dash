@@ -1,0 +1,23 @@
+// Client Dash columns
+[class^="cd-col-"], [class*=" cd-col-"] {
+  display: inline-block;
+  margin-right: -4px !important;
+  vertical-align: top;
+
+  /* Natural box layout */
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.cd-col-four {
+  width: 25%;
+}
+
+.cd-col-three {
+  width: 33.3333%;
+}
+
+.cd-col-two {
+  width: 50%;
+}

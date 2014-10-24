@@ -1,0 +1,81 @@
+.cd-tip {
+  position: absolute;
+  top: 50%;
+  margin-top: -25px;
+  width: 200px;
+  padding: 10px;
+  background: #fff;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+  font-weight: normal;
+
+  -webkit-transition: all 500ms;
+  -moz-transition: all 500ms;
+  -o-transition: all 500ms;
+  transition: all 500ms;
+  &:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    margin-top: -10px;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+  }
+}
+
+.cd-tip-hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.cd-tip-left {
+  left: 100%;
+  margin-left: 8px;
+  text-align: left;
+  .cd-tip-hidden {
+    margin-left: -10px;
+  }
+  .cd-tip-close {
+    right: 2px;
+  }
+  &:after {
+    left: 0;
+    margin-left: -10px;
+    border-right: 10px solid #fff;
+  }
+}
+
+.cd-tip-right {
+  right: 100%;
+  margin-right: 8px;
+  text-align: right;
+  .cd-tip-hidden {
+    margin-right: -10px;
+  }
+  .cd-tip-close {
+    left: 2px;
+  }
+  &:after {
+    right: 0;
+    margin-right: -10px;
+    border-left: 10px solid #fff;
+  }
+}
+
+.cd-tip-close {
+  position: absolute;
+  top: -2px;
+  color: #aaa;
+  &:hover {
+    color: #c64444;
+  }
+}
+
+/* Individual tips */
+.cd-tip-webmaster-off {
+  margin-top: -19px !important;
+}
+
+.cd-tip-all-disabled {
+  margin-top: -31px !important;
+}

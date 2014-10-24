@@ -1,0 +1,50 @@
+#dashboard-widgets {
+  // Override WP default media queries
+  .postbox-container {
+    width: 100% !important;
+  }
+  .postbox {
+    float: left;
+    width: 50%;
+    padding: 13px;
+    margin: 0;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    min-height: 300px;
+
+    .hndle {
+      cursor: default !important;
+      font-size: 20px;
+      text-align: center;
+    }
+
+    .handlediv {
+      display: none !important;
+    }
+
+    h3 {
+      border-bottom: 1px solid #eee !important;
+    }
+
+    .cd-icon {
+      width: auto;
+      height: auto;
+      font-size: 260px;
+      &:before {
+        font-size: inherit !important;
+      }
+    }
+    @media screen and (max-width: 600px) {
+      width: 100%;
+    }
+  }
+
+  // CD Core
+  #cd_account, #cd_reports, #cd_help, #cd_webmaster {
+    .inside {
+      display: block !important;
+      text-align: center;
+    }
+  }
+}

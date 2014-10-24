@@ -1,0 +1,88 @@
+.cd-display-grid-item {
+  margin-bottom: 10px;
+  .cd-display-grid-item * {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+}
+
+.cd-display-grid-page {
+  padding: 20px;
+  margin: 0;
+  border: 1px solid #ddd;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  &:hover {
+    border-color: #bbb;
+  }
+  > .cd-display-grid-title:after {
+    content: "page";
+    margin-left: 10px;
+    font-size: 65%;
+    font-weight: normal;
+  }
+}
+
+.cd-display-grid-tab {
+  background: #fff;
+  margin: 0;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-top: none;
+  > .cd-display-grid-title {
+    border-bottom: 2px dashed #ddd;
+    font-size: 18px;
+    margin-bottom: 10px;
+    &:after {
+      content: "tab";
+      margin-left: 10px;
+      font-size: 65%;
+      font-weight: normal;
+      vertical-align: text-bottom;
+    }
+    &:hover {
+      border-color: #bbb;
+    }
+  }
+}
+
+.cd-display-grid-block {
+  border-color: rgba(0, 0, 0, 0.3);
+  > .cd-display-grid-title {
+    font-size: 16px;
+    font-weight: normal;
+  }
+}
+
+.cd-display-grid-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+  cursor: pointer;
+}
+
+.cd-display-grid-checkbox {
+  margin-right: 20px;
+}
+
+.button.cd-reset-display {
+  margin-left: 10px;
+  color: #FFE;
+  background-color: #F66;
+  border-color: #CC4242;
+  -webkit-box-shadow: inset 0 1px 0 rgba(230, 120, 120, 0.5), 0 1px 0 rgba(0, 0, 0, .15);
+  box-shadow: inset 0 1px 0 rgba(230, 120, 120, 0.5), 0 1px 0 rgba(0, 0, 0, .15);
+  &:hover, &:focus {
+    background: darken(#F66, 10%);
+    border-color: darken(#CC4242, 10%);
+    color: #fff;
+  }
+  &:active {
+    background: darken(#F66, 20%) !important;
+    border-color: darken(#CC4242, 20%);
+    color: #fff;
+  }
+}
