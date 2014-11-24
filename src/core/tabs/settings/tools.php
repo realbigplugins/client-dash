@@ -1,7 +1,5 @@
 <?php
 
-// FUTUREBUILD Make some sort of loading animation while AJAX is working
-
 /**
  * Class ClientDash_Page_Settings_Tab_Tools
  *

@@ -1,7 +1,5 @@
 <?php
 
-// FUTUREBUILD Core CD Pages should use the icon set in CD -> Settings as the menu icon
-
 /**
  * Class ClientDash_Core_Page_Settings_Tab_Menus
  *
@@ -487,14 +485,14 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		 *
 		 * @since Client Dash 1.6
 		 */
-		$this::$menu_item_defaults = apply_filters( 'cd_nav_menu_item_defaults', $this::$menu_item_defaults );
+		self::$menu_item_defaults = apply_filters( 'cd_nav_menu_item_defaults', self::$menu_item_defaults );
 
 		/**
 		 * Add or remove items from the CD default WP Core menu item list.
 		 *
 		 * @since Client Dash 1.6
 		 */
-		$this::$wp_core = apply_filters( 'cd_nav_menu_wp_core_items', $this::$wp_core );
+		self::$wp_core = apply_filters( 'cd_nav_menu_wp_core_items', self::$wp_core );
 
 		/**
 		 * Allows extensions to add to the available side sortables.
@@ -1846,8 +1844,6 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 * @since Client Dash 1.6
 	 */
 	public function block_output() {
-
-		// MAYBEFIX Error nag not showing for subscriber with duplicate parent slugs
 
 		// Populate the side sortables area
 		$this->populate_side_sortables();

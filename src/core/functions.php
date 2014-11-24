@@ -61,8 +61,6 @@ abstract class ClientDash_Functions {
 	 */
 	public static function toggle_switch( $name, $value, $current_val, $horizontal = false, $echo = true, $invert = false, $atts = false ) {
 
-		// FUTUREBUILD Use this function across the entire plugin
-
 		// Setup orientation
 		if ( $horizontal ) {
 			$horizontal = 'horizontal';

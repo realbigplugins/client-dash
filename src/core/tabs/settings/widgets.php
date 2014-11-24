@@ -1,7 +1,5 @@
 <?php
 
-// MAYBETODO Translate pre-1.6 widgets to post
-
 /**
  * Class ClientDash_Page_Settings_Tab_Widgets
  *
@@ -175,13 +173,13 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 			$update = true;
 
 			// Add our CD Core widgets
-			foreach ( $this::$_cd_widgets as $widget_ID => $widget ) {
+			foreach ( self::$_cd_widgets as $widget_ID => $widget ) {
 
 				$active_widgets[ $sidebar['id'] ][] = "$widget_ID-$i";
 
 				$cd_widgets_update[ $widget_ID ][ $i ] = array(
-					'_original_title' => $this::$_cd_widgets[ $widget_ID ]['title'],
-					'_callback'       => $this::$_cd_widgets[ $widget_ID ]['_callback'],
+					'_original_title' => self::$_cd_widgets[ $widget_ID ]['title'],
+					'_callback'       => self::$_cd_widgets[ $widget_ID ]['_callback'],
 					'_cd_core'        => '1',
 				);
 			}
@@ -238,7 +236,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 	 */
 	public function create_cd_core_widgets() {
 
-		foreach ( $this::$_cd_widgets as $widget_ID => $widget ) {
+		foreach ( self::$_cd_widgets as $widget_ID => $widget ) {
 
 			/**
 			 * Allows filtering of supplied values for CD Core available widgets.

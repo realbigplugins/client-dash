@@ -307,7 +307,7 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 		// Begin grid
 		echo '<ul id="cd-dashicons-grid">';
 
-		foreach ( $this::$icons as $dashicon ) {
+		foreach ( self::$icons as $dashicon ) {
 			?>
 			<li class="cd-dashicons-grid-item <?php echo $account_dashicon == $dashicon ? 'active' : ''; ?>">
 				<div class="container" onclick="cdMain.dashicons_change('<?php echo $dashicon; ?>', this)">

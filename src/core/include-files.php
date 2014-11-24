@@ -43,7 +43,7 @@ class ClientDash_RequireFiles extends ClientDash {
 		include_once( $ClientDash->path . '/core/extension-apis/menus-api.php' );
 
 		// Core page and tab files
-		foreach ( $this::$core_files as $page => $tabs ) {
+		foreach ( self::$core_files as $page => $tabs ) {
 
 			// Include page file
 			include_once( plugin_dir_path( __FILE__ ) . 'pages/' . $page . '.php' );
@@ -66,7 +66,7 @@ class ClientDash_RequireFiles extends ClientDash {
 		}
 
 		// Core widget files
-		foreach ( $this::$_cd_widgets as $widget_ID => $widget ) {
+		foreach ( self::$_cd_widgets as $widget_ID => $widget ) {
 			include_once( plugin_dir_path( __FILE__ ) . 'widgets/' . str_replace( 'cd_', '', $widget_ID ) . '.php' );
 		}
 	}

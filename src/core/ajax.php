@@ -158,8 +158,6 @@ class ClientDash_AJAX {
 	 */
 	public function populate_nav_menu() {
 
-		// MAYBETODO Prevent duplicate separators from being added
-
 		// Get our POST data from AJAX
 		$menu_item          = $_POST['menu_item'];
 		$menu_item_position = $_POST['menu_item_position'];

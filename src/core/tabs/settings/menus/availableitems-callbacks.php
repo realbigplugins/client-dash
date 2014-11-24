@@ -741,9 +741,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 	 *
 	 * @since Client Dash 1.6
 	 */
-	public static function custom_link() {
-		// MAYBETODO Sanitize url
-		?>
+	public static function custom_link() {		?>
 		<div id="custom-link" class="posttypediv">
 
 			<div id="tabs-panel-custom-link" class="tabs-panel-active categorychecklist form-no-clear">

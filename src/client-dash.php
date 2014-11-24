@@ -8,11 +8,6 @@ Author: Kyle Maurer
 Author URI: http://realbigmarketing.com/staff/kyle
 */
 
-// FUTUREBUILD Allow dashboard meta box styling to be disabled (possibly extension?)
-// FUTUREBUILD Correctly line break documentation to PHP guideline
-// FUTUREBUILD Revise widgets extension API
-// FUTUREBUILD Only require page / tab specific files WHEN they are needed. Not always.
-
 // Require the functions class first so we can extend it
 include_once( plugin_dir_path( __FILE__ ) . 'core/functions.php' );
 
@@ -485,7 +480,7 @@ class ClientDash extends ClientDash_Functions {
 			echo '<!--Client Dash Colors-->';
 			echo '<style>';
 			foreach ( $styles as $selector => $properties ) {
-				echo "$selector {";
+				echo $selector . '{';
 				foreach ( $properties as $property => $value ) {
 					echo "$property: $value;";
 				}
@@ -636,9 +631,7 @@ class ClientDash extends ClientDash_Functions {
 		// widgets need to be translated
 		if ( empty( $sidebars[ $current_sidebar ] ) ) {
 
-
-			// MAYBETODO Make widgets init on startup so this can just be a "return;"
-			$new_widgets = $this::$_cd_widgets;
+			$new_widgets = self::$_cd_widgets;
 		} else {
 
 			// Cycle through each widget
