@@ -3,7 +3,7 @@
 /*
 Plugin Name: Client Dash DEVELOPMENT
 Description: The development build for Client Dash.
-Version: 1.6.6-alpha
+Version: 1.6.7-alpha
 Author: Kyle Maurer
 Author URI: http://realbigmarketing.com/staff/kyle
 */

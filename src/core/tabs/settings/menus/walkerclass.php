@@ -155,6 +155,8 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 		// Deal with the icon being an icon, an image, or a data image (taken from WP core)
 		// wp-admin/menu-header.php:~89
 		$img = '<img src="' . $item->cd_icon . '" alt="" />';
+		$img_style = '';
+		$img_class = '';
 		if ( 'none' === $item->cd_icon || 'div' === $item->cd_icon ) {
 			$img = '';
 		} elseif ( 0 === strpos( $item->cd_icon, 'data:image/svg+xml;base64,' ) ) {
@@ -339,7 +341,7 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 
 		<div class="menu-item-actions description-wide submitbox">
 
-			<?php if ( $item->original_title != $item->title && $item->original_title != 'Client Dash ORIG' && $type != 'separator' ) : ?>
+			<?php if ( $item->original_title != $item->title && $item->original_title != 'Client Dash ORIG' && $item->cd_type != 'separator' ) : ?>
 				<p class="link-to-original">
 					Original Title: <b style="font-style: normal;"><?php echo $item->original_title; ?></b>
 				</p>
