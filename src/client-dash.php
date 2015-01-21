@@ -2,10 +2,11 @@
 
 /*
 Plugin Name: Client Dash
+Plugin URI: http://clientdash.io
 Description: Creating a more intuitive admin interface for clients.
 Version: 1.6.7
 Author: Joel Worsham & Kyle Maurer
-Author URI: http://realbigmarketing.com/staff
+Author URI: http://realbigplugins.com
 */
 
 // Require the functions class first so we can extend it
@@ -370,6 +371,9 @@ class ClientDash extends ClientDash_Functions {
 
 		// Shows any admin notices
 		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
+
+		// Adds a few more action links to plugins list
+		add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), array( $this, 'action_links' ) );
 	}
 
 	public static function get_version() {
@@ -860,6 +864,22 @@ class ClientDash extends ClientDash_Functions {
 
 		// Ensure option is always unset (except right before the initial checking)
 		delete_option( 'cd_display_settings_updated' );
+	}
+
+	/**
+	 * Add a few links to the CD listing on plugins.php
+	 *
+	 * @since Client Dash 1.7
+	 *
+	 * @param $links
+	 *
+	 * @return array
+	 */
+	public function action_links( $links ) {
+		$links[] = '<a href="'. get_admin_url(null, 'options-general.php?page=cd_settings') .'">Settings</a>';
+		$links[] = '<a href="http://realbigplugins.com/?utm_source=Client%20Dash&utm_medium=Plugins%20list%20link&utm_campaign=Client%20Dash%20Plugin" target="_blank">More Real Big Plugins</a>';
+		$links[] = '<a href="http://realbigplugins.com/subscribe/?utm_source=Client%20Dash&utm_medium=Plugins%20list%20link&utm_campaign=Client%20Dash%20Plugin" target="_blank">Subscribe</a>';
+		return $links;
 	}
 }
 

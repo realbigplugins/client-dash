@@ -81,6 +81,14 @@ class ClientDash_Page_Settings extends ClientDash {
 	}
 
 	/**
+	 * Outputs prompt for users to rate the plugin and subscribe
+	 *
+	 * @since Client Dash 1.7
+	 */
+	public function subscribe() {
+		echo '<div>Like this plugin? Consider <a href="https://wordpress.org/support/view/plugin-reviews/client-dash?rate=5#postform">leaving us a rating</a>. Also, we make other cool plugins and share updates and special offers to anyone who <a href="http://realbigplugins.com/subscribe/?utm_source=Client%20Dash&utm_medium=Plugin%20settings%20footer%20link&utm_campaign=Client%20Dash%20Plugin">subscribes here</a>.</div>';
+	}
+	/**
 	 * The page content.
 	 *
 	 * @since Client Dash 1.5
@@ -126,6 +134,7 @@ class ClientDash_Page_Settings extends ClientDash {
 			if ( apply_filters( 'cd_settings_form_wrap', true ) ) {
 				echo '</form>';
 			}
+			$this->subscribe();
 			?>
 		</div>
 	<?php

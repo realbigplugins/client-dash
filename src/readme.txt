@@ -40,7 +40,7 @@ We implemented a powerful dashboard widget control feature which works exactly t
 
 From the start, Client Dash has been created with developers in mind. We've worked very hard to make extending Client Dash as easy as possible. To that end, we've created an Extension Boilerplate which does almost all of the work for you...and that is only the beginning!
 
-If you are a developer and want to learn more about extending Client Dash, please subscribe to our [mailing list](http://eepurl.com/3KR1D). We'll be sharing our documentation, tips, features and beta releases that way.
+If you are a developer and want to learn more about extending Client Dash, please subscribe to our [mailing list](http://realbigplugins.com/subscribe/?utm_source=Client%20Dash&utm_medium=Readme%20link&utm_campaign=Client%20Dash%20Plugin). We'll be sharing our documentation, tips, features and beta releases that way.
 
 = What else does Client Dash do? =
 
@@ -62,6 +62,10 @@ Also included under Client Dash settings are:
 * A directory of existing add-ons for Client Dash
 
 We are also extremely receptive to suggestions, feature requests and collaborations so if you have anything to add or that you would like to see included in Client Dash, please visit the support forum here and engage us. Also, stay tuned as we are working on lots of new updates to this plugin and are also actively developing some exciting add-ons. Lots more to come!
+
+= Like this plugin? =
+
+We love making plugins for WordPress! This is just one of the many we have released and are working on. If you'd like to stay informed about what we release and receive exclusive discounts on our premium plugins, [subscribe here](http://realbigplugins.com/subscribe/?utm_source=Client%20Dash&utm_medium=Readme%20link&utm_campaign=Client%20Dash%20Plugin). We've got some really cool stuff in the works so you'll be the first to know about all of it.
 
 == Installation ==
 
