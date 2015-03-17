@@ -1,13 +1,5 @@
 <?php
-
-/*
-Plugin Name: Client Dash
-Plugin URI: http://clientdash.io
-Description: Creating a more intuitive admin interface for clients.
-Version: 1.6.7
-Author: Joel Worsham & Kyle Maurer
-Author URI: http://realbigplugins.com
-*/
+//{{HEADER}}
 
 // Require the functions class first so we can extend it
 include_once( plugin_dir_path( __FILE__ ) . 'core/functions.php' );

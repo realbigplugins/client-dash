@@ -55,12 +55,12 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 	 */
 	function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
 
-		global $errors, $ClientDash, $cd_current_menu_role, $ClientDash_Core_Page_Settings_Tab_Icons;
+		global $errors, $ClientDash, $cd_current_menu_role;
 
 		// Add disabled visual cue for CD Core pages that are currently disabled for current role
 		// If Administrator menu, skip because all items are visible always
 		$visible = true;
-		if ( array_key_exists( strtolower( $item->original_title ), $ClientDash::$core_files )
+		if ( array_key_exists( strtolower( $item->original_title ), ClientDash::$core_files )
 		     && $cd_current_menu_role != 'administrator'
 		) {
 
@@ -286,7 +286,7 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 						</label>
 					</p>
 					<ul class="cd-menu-icon-selector">
-						<?php foreach ( $ClientDash_Core_Page_Settings_Tab_Icons::$icons as $icon ) : ?>
+						<?php foreach ( ClientDash_Core_Page_Settings_Tab_Icons::$icons as $icon ) : ?>
 							<li data-icon="<?php echo $icon; ?>">
 								<span class="dashicons <?php echo $icon; ?>"></span>
 							</li>

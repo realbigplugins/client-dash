@@ -1,5 +1,4 @@
 <?php
-
 /*
 Plugin Name: Client Dash DEVELOPMENT
 Description: The development build for Client Dash.
