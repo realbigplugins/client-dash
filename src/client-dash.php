@@ -315,6 +315,10 @@ class ClientDash extends ClientDash_Functions {
 	 */
 	function __construct() {
 
+		if ( file_exists( __DIR__ . '/update.php' ) ) {
+			require_once __DIR__ . '/update.php';
+		}
+
 		// Update all options if not set
 		$init_reset = get_option( 'cd_initial_reset' );
 		if ( empty( $init_reset ) ) {
