@@ -107,7 +107,6 @@ class CD_Widget extends WP_Widget {
 			$this->id                 = isset( $widget['id'] ) ? $widget['id'] : $this->id;
 			$this->title              = isset( $widget['title'] ) ? $widget['title'] : $this->title;
 			$this->description        = isset( $widget['description'] ) ? $widget['description'] : $this->description;
-			$this->_callback          = isset( $widget['callback'] ) ? $widget['callback'] : $this->_callback;
 			$this->_settings_callback = isset( $widget['settings_callback'] ) ? $widget['settings_callback'] : $this->_settings_callback;
 			$this->_cd_core           = isset( $widget['cd_core'] ) ? $widget['cd_core'] : $this->_cd_core;
 			$this->_cd_extension      = isset( $widget['cd_extension'] ) ? $widget['cd_extension'] : $this->_cd_extension;
@@ -159,7 +158,7 @@ class CD_Widget extends WP_Widget {
 		// associated with it when we try to use it on our dashboard. So I have an extra hidden field here
 		// that will use the original title and provide a fallback.
 		$_original_title = $this->title;
-		echo "<input type='hidden' name='" . $this->get_field_name( '_original_title' ) . "' value='$_original_title' />";
+		echo '<input type="hidden" name="' . $this->get_field_name( '_original_title' ) . '" value="' . htmlspecialchars( $_original_title ) . '" />';
 
 		// Do the settings callback if it's set
 		$_settings_callback = isset( $instance['_settings_callback'] ) ? $instance['_settings_callback'] : $this->_settings_callback;
@@ -172,21 +171,6 @@ class CD_Widget extends WP_Widget {
 			} else {
 				call_user_func( $_settings_callback, $this->id );
 			}
-		}
-
-		// The callback (private)
-		$_callback = $this->_callback;
-		if ( is_array( $_callback ) ) {
-
-			if ( is_object( $_callback[0] ) ) {
-				$_callback[0] = get_class( $_callback[0] );
-				echo "<input type='hidden' name='" . $this->get_field_name( '_is_object' ) . "' value='1' />";
-			}
-
-			echo "<input type='hidden' name='" . $this->get_field_name( '_callback' ) . "[0]' value='$_callback[0]' />";
-			echo "<input type='hidden' name='" . $this->get_field_name( '_callback' ) . "[1]' value='$_callback[1]' />";
-		} else {
-			echo "<input type='hidden' name='" . $this->get_field_name( '_callback' ) . "' value='$_callback' />";
 		}
 
 		// The settings callback (private)
@@ -231,9 +215,6 @@ class CD_Widget extends WP_Widget {
 		$fields = array(
 			'title',
 			'_original_title',
-			'_callback',
-			'_callback[0]',
-			'_callback[1]',
 			'_is_object',
 			'_settings_callback',
 			'_settings_callback[0]',

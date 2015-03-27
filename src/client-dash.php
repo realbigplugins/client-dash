@@ -712,18 +712,13 @@ class ClientDash extends ClientDash_Functions {
 					$title = get_option( 'cd_webmaster_name', $this->option_defaults['webmaster_name'] );
 				}
 
-				// If callback should be an object
-				if ( isset( $widget['_is_object'] ) && $widget['_is_object'] === '1' ) {
-					if ( ! class_exists( $widget['_callback'][0] ) ) {
-						continue;
-					}
-					$widget['_callback'][0] = new $widget['_callback'][0];
-				}
+				// Steal the callback from the already existing widget
+				$callback = $this->active_widgets[ $widget['ID'] ]['callback'];
 
 				add_meta_box(
 					isset( $new_ID ) ? $new_ID : $widget['ID'],
 					$title,
-					$widget['_callback'],
+					$callback,
 					'dashboard',
 					'normal',
 					'core'

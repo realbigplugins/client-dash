@@ -278,7 +278,6 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 				'id'          => $widget_ID,
 				'title'       => $widget['title'],
 				'description' => null,
-				'callback'    => $widget['callback'],
 				'plugin'      => '1',
 			) );
 

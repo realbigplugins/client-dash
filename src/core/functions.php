@@ -5,12 +5,12 @@
  *
  * The main, extensible class for all other classes within Client Dash.
  *
- * @package WordPress
+ * @package    WordPress
  * @subpackage ClientDash
  *
- * @category Base Functionality
+ * @category   Base Functionality
  *
- * @since Client Dash 1.5
+ * @since      Client Dash 1.5
  */
 abstract class ClientDash_Functions {
 
@@ -20,7 +20,7 @@ abstract class ClientDash_Functions {
 	 * @since Client Dash 1.6
 	 *
 	 * @param string $page The page to check.
-	 * @param bool/string $tab If supplied, will also check that the given tab is active.
+	 * @param        bool /string $tab If supplied, will also check that the given tab is active.
 	 *
 	 * @return bool True of on the page (and tab), false otherwise.
 	 */
@@ -49,13 +49,13 @@ abstract class ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.6
 	 *
-	 * @param string $name The name of the input.
-	 * @param string|int $value The value for the input to output.
+	 * @param string     $name       The name of the input.
+	 * @param string|int $value      The value for the input to output.
 	 * @param string|int $current_val The current value of whatever the input has output.
-	 * @param bool $horizontal Optional. Whether the switch is vertical or horizontal.
-	 * @param bool $echo Optional. Whether to echo the HTML or just return it.
-	 * @param bool $invert Optional. Whether to invert the relationship between the value and on|off.
-	 * @param bool|array $atts Optional. Additional attributes for the item.
+	 * @param bool       $horizontal Optional. Whether the switch is vertical or horizontal.
+	 * @param bool       $echo       Optional. Whether to echo the HTML or just return it.
+	 * @param bool       $invert     Optional. Whether to invert the relationship between the value and on|off.
+	 * @param bool|array $atts       Optional. Additional attributes for the item.
 	 *
 	 * @return string HTML of toggle switch.
 	 */
@@ -81,7 +81,7 @@ abstract class ClientDash_Functions {
 			}
 		}
 		$html .= '>';
-		$html .= "<input type='hidden' id='$name' name='$name' value='$value' " . ( $disabled && ! $invert || $invert && ! $disabled ? 'disabled' : '') . '/>';
+		$html .= "<input type='hidden' id='$name' name='$name' value='$value' " . ( $disabled && ! $invert || $invert && ! $disabled ? 'disabled' : '' ) . '/>';
 		$html .= '</span>';
 
 		// Echo by default, return if told so
@@ -459,8 +459,8 @@ abstract class ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.5
 	 *
-	 * @param string $needle The array key to search for.
-	 * @param array $haystack The array to search in.
+	 * @param string $needle   The array key to search for.
+	 * @param array  $haystack The array to search in.
 	 *
 	 * @return bool The result.
 	 */
@@ -494,6 +494,7 @@ abstract class ClientDash_Functions {
 		global $current_user;
 		$user_roles = $current_user->roles;
 		$user_role  = array_shift( $user_roles );
+
 		return $user_role;
 	}
 
@@ -508,7 +509,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @param string $message The message to show.
 	 * @param string $caps Optional. A WordPress recognized capability.
-	 * @param bool $echo Optional. Whether to echo or return the error.
+	 * @param bool   $echo Optional. Whether to echo or return the error.
 	 *
 	 * @return string The error.
 	 * is 'read'.
@@ -534,8 +535,8 @@ abstract class ClientDash_Functions {
 	 * @since Client Dash 1.4
 	 *
 	 * @param string $message The message to show.
-	 * @param string $caps . Optional. A WordPress recognized capability. Default
-	 * is 'read'.
+	 * @param string $caps    . Optional. A WordPress recognized capability. Default
+	 *                        is 'read'.
 	 */
 	public static function update_nag( $message, $caps = 'read' ) {
 
@@ -650,13 +651,13 @@ abstract class ClientDash_Functions {
 	/**
 	 * Allows an array of needles instead of just one.
 	 *
-	 * @since Client Dash 1.6
+	 * @since  Client Dash 1.6
 	 *
 	 * @author Binyamin (stackoverflow)
 	 *
-	 * @param $haystack
+	 * @param       $haystack
 	 * @param array $needles
-	 * @param int $offset
+	 * @param int   $offset
 	 *
 	 * @return bool|mixed
 	 */
@@ -673,6 +674,24 @@ abstract class ClientDash_Functions {
 		}
 
 		return min( $chr );
+	}
+
+	/**
+	 * Fixes incomplete classes.
+	 *
+	 * @since 1.6.8
+	 *
+	 * @param object $object The broken object.
+	 *
+	 * @return mixed The fixed object.
+	 */
+	public static function fix_object( &$object ) {
+
+		if ( ! is_object( $object ) && gettype( $object ) == 'object' ) {
+			return ( $object = unserialize( serialize( $object ) ) );
+		}
+
+		return $object;
 	}
 
 	// Widget specific functions
