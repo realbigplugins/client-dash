@@ -158,7 +158,7 @@ class CD_Widget extends WP_Widget {
 		// associated with it when we try to use it on our dashboard. So I have an extra hidden field here
 		// that will use the original title and provide a fallback.
 		$_original_title = $this->title;
-		echo '<input type="hidden" name="' . $this->get_field_name( '_original_title' ) . '" value="' . htmlspecialchars( $_original_title ) . '" />';
+		echo '<input type="hidden" name="' . $this->get_field_name( '_original_title' ) . '" value="' . htmlspecialchars( esc_attr( $_original_title ) ) . '" />';
 
 		// Do the settings callback if it's set
 		$_settings_callback = isset( $instance['_settings_callback'] ) ? $instance['_settings_callback'] : $this->_settings_callback;

@@ -89,29 +89,29 @@ class ClientDash extends ClientDash_Functions {
 			'title'       => 'Account',
 			'ID'          => 'cd_account',
 			'description' => 'The core Client Dash account page.',
+			'callback'   => array( 'ClientDash_Widget_Account', 'widget_content' ),
 			'_cd_core'    => '1',
-			'_callback'   => array( 'ClientDash_Widget_Account', 'widget_content' ),
 		),
 		'cd_help'      => array(
 			'title'       => 'Help',
 			'ID'          => 'cd_help',
 			'description' => 'The core Client Dash help page.',
+			'callback'   => array( 'ClientDash_Widget_Help', 'widget_content' ),
 			'_cd_core'    => '1',
-			'_callback'   => array( 'ClientDash_Widget_Help', 'widget_content' ),
 		),
 		'cd_reports'   => array(
 			'title'       => 'Reports',
 			'ID'          => 'cd_reports',
 			'description' => 'The core Client Dash reports page.',
+			'callback'   => array( 'ClientDash_Widget_Reports', 'widget_content' ),
 			'_cd_core'    => '1',
-			'_callback'   => array( 'ClientDash_Widget_Reports', 'widget_content' ),
 		),
 		'cd_webmaster' => array(
 			'title'       => 'Webmaster',
 			'ID'          => 'cd_webmaster',
 			'description' => 'The core Client Dash webmaster page.',
+			'callback'   => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
 			'_cd_core'    => '1',
-			'_callback'   => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
 		),
 	);
 
@@ -584,6 +584,11 @@ class ClientDash extends ClientDash_Functions {
 			}
 		}
 
+		// Add CD widgets to for continuity
+		foreach ( self::$_cd_widgets as $ID => $widget ) {
+			$this->active_widgets[ $ID ] = $widget;
+		}
+
 		// Only update for Admin
 		if ( current_user_can( 'manage_options' ) ) {
 
@@ -607,6 +612,12 @@ class ClientDash extends ClientDash_Functions {
 		$active_widgets = apply_filters( 'cd_remove_widgets', $this->active_widgets );
 
 		foreach ( $active_widgets as $widget => $values ) {
+
+			// Ignore CD core widgets
+			if ( isset( $this->active_widgets[ $widget ] ) ) {
+				continue;
+			}
+
 			remove_meta_box( $widget, 'dashboard', $values['context'] );
 		}
 
@@ -673,6 +684,7 @@ class ClientDash extends ClientDash_Functions {
 
 				// Figure out the title
 				$title = ! empty( $widget['title'] ) ? $widget['title'] : $widget['_original_title'];
+				$title = html_entity_decode( $title );
 
 				// Client Dash core widgets conditional visibility
 				if ( isset( $widget['_cd_core'] ) && $widget['_cd_core'] === '1' ) {

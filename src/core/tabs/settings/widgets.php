@@ -179,7 +179,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 
 				$cd_widgets_update[ $widget_ID ][ $i ] = array(
 					'_original_title' => self::$_cd_widgets[ $widget_ID ]['title'],
-					'_callback'       => self::$_cd_widgets[ $widget_ID ]['_callback'],
+					'_callback'       => self::$_cd_widgets[ $widget_ID ]['callback'],
 					'_cd_core'        => '1',
 				);
 			}
@@ -247,7 +247,7 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 				'id'          => $widget_ID,
 				'title'       => $widget['title'],
 				'description' => $widget['description'],
-				'callback'    => $widget['_callback'],
+				'callback'    => $widget['callback'],
 				'cd_core'     => '1',
 			) );
 
