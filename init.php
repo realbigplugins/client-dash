@@ -3,9 +3,9 @@
 /*
 Plugin Name: Client Dash DEVELOPMENT
 Description: The development build for Client Dash.
-Version: 1.6.7-alpha
-Author: Kyle Maurer
-Author URI: http://realbigmarketing.com/staff/kyle
+Version: 1.6.8
+Author: Joel Worsham & Kyle Maurer
+Author URI: http://realbigmarketing.com/about-us/#staff
 */
 
 //define( 'SCRIPT_DEBUG', true );
