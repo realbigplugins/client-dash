@@ -1,6 +1,6 @@
 ![banner](https://raw.githubusercontent.com/brashrebel/client-dash/master/assets/static/banner.png)
 
-# v1.6.7
+# v1.6.8
 
 [Releases](https://github.com/brashrebel/client-dash/releases)
 
@@ -39,6 +39,7 @@ Using this plugin is very simple. All you have to do is:
 
 ### [1.6.8](https://github.com/brashrebel/client-dash/releases/tag/v1.6.8)
 * Fixed potential fatal errors when using dashboard widgets.
+* Fix CD core widgets not working
 
 ### [1.6.7](https://github.com/brashrebel/client-dash/releases/tag/v1.6.7)
 * Very minor bug fixes.
