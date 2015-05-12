@@ -96,7 +96,7 @@ class ClientDash_AJAX {
 		update_option( 'sidebars_widgets', $sidebars );
 
 		// Remove individual widget settings
-		foreach ( $ClientDash::$_cd_widgets as $widget_ID => $widget ) {
+		foreach ( ClientDash::$_cd_widgets as $widget_ID => $widget ) {
 			delete_option( "widget_$widget_ID" );
 		}
 

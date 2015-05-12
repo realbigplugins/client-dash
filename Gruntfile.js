@@ -1,113 +1,254 @@
 'use strict';
 module.exports = function (grunt) {
 
-    var SOURCE_DIR = 'src/',
-        BUILD_DIR = 'build/',
-        VERSION = grunt.file.readJSON('package.json').version;
+    // Define the package
+    var pkg = grunt.file.readJSON('package.json'),
+        image_ignore = '**/*.{png,gif,jpg,ico,psd,svt,ttf,eot,woff}';
 
     // load all grunt tasks
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
     grunt.initConfig({
 
-        // Define the package
-        pkg: grunt.file.readJSON('package.json'),
-
-        // Watch for changes
+        /**
+         * Watch for changes and automatically fire tasks.
+         *
+         * @since 1.0.0
+         */
         watch: {
             options: {
                 livereload: true
             },
             sass: {
-                files: [SOURCE_DIR + 'assets/scss/**/*.scss'],
-                tasks: ['sass', 'autoprefixer']
+                files: ['src/assets/scss/**/*.scss', '!src/assets/scss/admin/**/*.scss'],
+                tasks: ['sass:src', 'autoprefixer', 'notify:sass']
+            },
+            sass_admin: {
+                files: ['src/assets/scss/admin/**/*.scss', 'src/assets/scss/_global.scss'],
+                tasks: ['sass:admin', 'autoprefixer', 'notify:sass_admin']
             },
             js: {
-                files: [SOURCE_DIR + 'assets/js/source/*.js'],
-                tasks: ['uglify:src']
+                files: ['src/assets/js/source/**/*.js', '!src/assets/js/source/admin/**/*.js'],
+                tasks: ['uglify:src', 'notify:js']
+            },
+            js_admin: {
+                files: ['src/assets/js/source/admin/*.js'],
+                tasks: ['uglify:admin', 'notify:js_admin']
             },
             livereload: {
                 files: [
-                    SOURCE_DIR + '**/*.html',
-                    SOURCE_DIR + '**/*.php',
-                    SOURCE_DIR + 'assets/images/**/*.{png,jpg,jpeg,gif,webp,svg}',
-                    SOURCE_DIR + '!**/*ajax.php'
+                    'src/**/*.html',
+                    'src/**/*.php',
+                    'src/assets/images/**/*.{png,jpg,jpeg,gif,webp,svg}',
+                    'src/!**/*ajax.php'
                 ]
             }
         },
 
-
-        // Ruby
-        // To use, make sure that the grunt-contrib-sass falls after grunt-sass and inside of foundation->_functions.scss
-        // change false to null.
-        sass: {
-            options: {
-                style: 'compressed'
-            },
-            dist: {
-                files: {
-                    'src/assets/css/clientdash.min.css': 'src/assets/scss/main.scss'
-                }
-            }
-        },
-
-        // Minify and concatenate scripts
+        /**
+         * Minify and concatenate javascript files.
+         *
+         * @since 1.0.0
+         */
         uglify: {
             options: {
                 sourceMap: true
             },
             src: {
                 files: {
-                    'src/assets/js/clientdash.min.js': ['src/assets/js/source/*.js']
+                    'src/assets/js/client-dash.min.js': ['src/assets/js/source/**/*.js', '!src/assets/js/source/admin/**/*.js']
+                }
+            },
+            admin: {
+                files: {
+                    'src/assets/js/client-dash-admin.min.js': ['src/assets/js/source/admin/*.js']
                 }
             }
         },
 
-        // Prefix the minified CSS
+        /**
+         * Transpile SASS to minified and concatenated CSS.
+         *
+         * @since 1.0.0
+         */
+        sass: {
+            options: {
+                style: 'compressed'
+            },
+            src: {
+                files: {
+                    'src/assets/css/client-dash.min.css': 'src/assets/scss/main.scss'
+                }
+            },
+            admin: {
+                files: {
+                    'src/assets/css/client-dash-admin.min.css': 'src/assets/scss/admin/admin.scss'
+                }
+            }
+        },
+
+        /**
+         * Add browser prefixes for old browser support.
+         *
+         * @since 1.0.0
+         */
         autoprefixer: {
             options: {
                 browsers: ['Android >= 2.1', 'Chrome >= 21', 'Explorer >= 7', 'Firefox >= 17', 'Opera >= 12.1', 'Safari >= 6.0']
             },
             src: {
                 expand: true,
-                cwd: SOURCE_DIR,
-                dest: SOURCE_DIR,
+                cwd: 'src/',
+                dest: 'src/',
                 src: [
                     'assets/css/*.css'
                 ]
             }
         },
 
-        // Copy files from the src working directory to the build directory, with some file processing
-        copy: {
-            src: {
-                options: {
-                    process: function( content, src ) {
-
-                        // Remove all TODO items
-                        content = content.replace(/(\n|\s)?(.*\/\/.*)(TODO|MAYBETODO|FIXME|NEXTUPDATE|MAYBEFIX|FIXED|FUTUREBUILD|REMOVE)(.*)(\n|\s)?/g, '' );
-                        return content;
-                    }
+        /**
+         * Automatically update version numbers throughout and add plugin header on build.
+         *
+         * @since 1.0.3
+         */
+        'string-replace': {
+            version: {
+                files: {
+                    'src/': ['src/**', '!' + image_ignore],
+                    'init.php': ['init.php', '!' + image_ignore],
+                    'README.md': ['README.md', '!' + image_ignore]
                 },
+                options: {
+                    replacements: [{
+                        // PHP doc versions
+                        pattern: /\{\{VERSION}}/g,
+                        replacement: pkg.version
+                    }, {
+                        // Version in init.php
+                        pattern: /(Version: ).*/,
+                        replacement: "$1" + pkg.version
+                    }, {
+                        // README.md version
+                        pattern: /(###.*?)\d\.\d\.\d/,
+                        replacement: "$1" + pkg.version
+                    }, {
+                        // readme.txt stable tag version
+                        pattern: /(Stable tag:.*?)\d\.\d\.\d/,
+                        replacement: "$1" + pkg.version
+                    }, {
+                        // Render constant version
+                        pattern: /(protected static \$version = ')\d\.\d\.\d/,
+                        replacement: "$1" + pkg.version
+                    }]
+                }
+            },
+            header: {
+                files: {
+                    'build/client-dash.php': ['build/client-dash.php', '!' + image_ignore]
+                },
+                options: {
+                    replacements: [{
+                        pattern: /\/\/\{\{HEADER}}/,
+                        replacement: '/*\n' +
+                        ' * Plugin Name: ' + pkg.name + '\n' +
+                        ' * Description: ' + pkg.description + '\n' +
+                        ' * Version: ' + pkg.version + '\n' +
+                        ' * Author: ' + pkg.author + '\n' +
+                        ' * Author URI: ' + pkg.author_uri + '\n' +
+                        ' * Plugin URI: ' + pkg.plugin_uri + '\n' +
+                        ' * Text Domain: Render\n' +
+                        ' * Domain Path: /languages/\n' +
+                        ' */'
+                    }]
+                }
+            }
+        },
+
+        /**
+         * Compresses images.
+         *
+         * @since 1.0.3
+         */
+        imagemin: {
+            build: {
+                expand: true,
+                cwd: 'src/',
+                src: ['**/*.{png,jpg,gif,jpeg}'],
+                dest: 'src/'
+            }
+        },
+
+        /**
+         * Copies src files to build and syncs build directory with src directory.
+         *
+         * @since 1.0.3
+         */
+        sync: {
+            options: {
+                // Don't eff up images!!!
+                processContentExclude: [
+                    image_ignore
+                ]
+            },
+            build: {
+                updateAndDelete: true,
                 files: [
                     {
                         dot: true,
                         expand: true,
-                        cwd: SOURCE_DIR,
+                        cwd: 'src/',
                         src: [
                             '**',
                             '!**/.{svn,git}/**', // Ignore VCS settings
                             '!**/.{idea}/**', // Ignore .idea project settings
-                            '!**/*.map' // No maps
+                            '!**/.DS_Store' // Ignore Mac OS dir settings
                         ],
-                        dest: BUILD_DIR
+                        dest: 'build/'
                     }
                 ]
+            }
+        },
+
+        /**
+         * Notifies me when tasks complete.
+         *
+         * @since 1.0.0
+         */
+        notify: {
+            sass: {
+                options: {
+                    title: pkg.name,
+                    message: 'SASS Completed'
+                }
+            },
+            sass_admin: {
+                options: {
+                    title: pkg.name,
+                    message: 'SASS Admin Completed'
+                }
+            },
+            js: {
+                options: {
+                    title: pkg.name,
+                    message: 'JS Completed'
+                }
+            },
+            js_admin: {
+                options: {
+                    title: pkg.name,
+                    message: 'JS Admin Completed'
+                }
+            },
+            build: {
+                options: {
+                    title: pkg.name,
+                    message: 'Build for ' + pkg.version + ' complete! Be sure to add to git.'
+                }
             }
         }
     });
 
     // Register tasks
     grunt.registerTask('Watch', ['watch']);
-    grunt.registerTask('Build', ['copy']);
+    grunt.registerTask('Build', ['imagemin:build', 'string-replace:version', 'sync', 'string-replace:header', 'notify:build']);
 };

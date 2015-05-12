@@ -653,7 +653,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 				<ul id="posttypechecklist-clientdash-core" class="categorychecklist form-no-clear">
 					<?php
 					$i = 0;
-					foreach ( $ClientDash::$core_files as $item_title => $submenus ) {
+					foreach ( ClientDash::$core_files as $item_title => $submenus ) {
 						$i --;
 
 						// If not admin, don't show settings
