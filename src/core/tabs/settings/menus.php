@@ -829,6 +829,10 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 */
 	public function get_cd_nav_menus() {
 
+		if ( ! function_exists( 'get_editable_roles' ) ) {
+			return false;
+		}
+
 		// Get the nav menu for each role
 		$roles    = get_editable_roles();
 		$no_menus = true;
@@ -933,6 +937,10 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 * @return string The new Walker class.
 	 */
 	public function return_new_walker_menu( $walker, $menu ) {
+
+		if ( ! $menu ) {
+			return $walker;
+		}
 
 		// Get our active menus
 		if ( ! isset( $this->all_menu_IDs ) || empty( $this->all_menu_IDs ) ) {
