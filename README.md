@@ -1,6 +1,6 @@
 ![banner](https://raw.githubusercontent.com/brashrebel/client-dash/master/assets/static/banner.png)
 
-# v1.6.8
+# v1.6.9
 
 [Releases](https://github.com/brashrebel/client-dash/releases)
 
@@ -36,6 +36,9 @@ Using this plugin is very simple. All you have to do is:
 3. Configure settings by going to Settings - >Client Dash
 
 ## Changelog
+
+### [1.6.9](https://github.com/brashrebel/client-dash/releases/tag/v1.6.9)
+* Fixed potential fatal error.
 
 ### [1.6.8](https://github.com/brashrebel/client-dash/releases/tag/v1.6.8)
 * Fixed potential fatal errors when using dashboard widgets.

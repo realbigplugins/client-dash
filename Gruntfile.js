@@ -250,5 +250,5 @@ module.exports = function (grunt) {
 
     // Register tasks
     grunt.registerTask('Watch', ['watch']);
-    grunt.registerTask('Build', ['imagemin:build', 'string-replace:version', 'sync', 'string-replace:header', 'notify:build']);
+    grunt.registerTask('Build', ['string-replace:version', 'sync', 'string-replace:header', 'notify:build']);
 };
