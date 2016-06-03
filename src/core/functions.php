@@ -49,13 +49,13 @@ abstract class ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.6
 	 *
-	 * @param string     $name       The name of the input.
-	 * @param string|int $value      The value for the input to output.
+	 * @param string $name The name of the input.
+	 * @param string|int $value The value for the input to output.
 	 * @param string|int $current_val The current value of whatever the input has output.
-	 * @param bool       $horizontal Optional. Whether the switch is vertical or horizontal.
-	 * @param bool       $echo       Optional. Whether to echo the HTML or just return it.
-	 * @param bool       $invert     Optional. Whether to invert the relationship between the value and on|off.
-	 * @param bool|array $atts       Optional. Additional attributes for the item.
+	 * @param bool $horizontal Optional. Whether the switch is vertical or horizontal.
+	 * @param bool $echo Optional. Whether to echo the HTML or just return it.
+	 * @param bool $invert Optional. Whether to invert the relationship between the value and on|off.
+	 * @param bool|array $atts Optional. Additional attributes for the item.
 	 *
 	 * @return string HTML of toggle switch.
 	 */
@@ -229,8 +229,8 @@ abstract class ClientDash_Functions {
 		echo '<div class="cd-content-section">';
 
 		// Only call the tab if it exists
-		if ( method_exists( $section_output['callback'][0], $section_output['callback'][1] ) ) {
-			call_user_func( array( $section_output['callback'][0], $section_output['callback'][1] ) );
+		if ( is_callable( $section_output['callback'] ) ) {
+			call_user_func( $section_output['callback'] );
 		} else {
 
 			// Let the user know the tab doesn't exist
@@ -459,8 +459,8 @@ abstract class ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.5
 	 *
-	 * @param string $needle   The array key to search for.
-	 * @param array  $haystack The array to search in.
+	 * @param string $needle The array key to search for.
+	 * @param array $haystack The array to search in.
 	 *
 	 * @return bool The result.
 	 */
@@ -509,7 +509,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @param string $message The message to show.
 	 * @param string $caps Optional. A WordPress recognized capability.
-	 * @param bool   $echo Optional. Whether to echo or return the error.
+	 * @param bool $echo Optional. Whether to echo or return the error.
 	 *
 	 * @return string The error.
 	 * is 'read'.
@@ -535,7 +535,7 @@ abstract class ClientDash_Functions {
 	 * @since Client Dash 1.4
 	 *
 	 * @param string $message The message to show.
-	 * @param string $caps    . Optional. A WordPress recognized capability. Default
+	 * @param string $caps . Optional. A WordPress recognized capability. Default
 	 *                        is 'read'.
 	 */
 	public static function update_nag( $message, $caps = 'read' ) {
@@ -657,7 +657,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @param       $haystack
 	 * @param array $needles
-	 * @param int   $offset
+	 * @param int $offset
 	 *
 	 * @return bool|mixed
 	 */
