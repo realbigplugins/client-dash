@@ -1,6 +1,6 @@
 ![banner](https://raw.githubusercontent.com/brashrebel/client-dash/master/assets/static/banner.png)
 
-# v1.6.9
+# v1.6.10
 
 [Releases](https://github.com/brashrebel/client-dash/releases)
 
@@ -36,6 +36,9 @@ Using this plugin is very simple. All you have to do is:
 3. Configure settings by going to Settings - >Client Dash
 
 ## Changelog
+
+### [1.6.10](https://github.com/brashrebel/client-dash/releases/tag/v1.6.10)
+* Fix issue with non-public post type menu items not showing in menu editor even when "show_in_menu" is true.
 
 ### [1.6.9](https://github.com/brashrebel/client-dash/releases/tag/v1.6.9)
 * Fixed potential fatal error.

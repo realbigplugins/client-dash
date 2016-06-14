@@ -88,7 +88,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 		// Get all of our post types
 		$all_post_types = get_post_types( array(
-			'public' => true
+			'show_in_menu' => true,
 		) );
 
 		$post_types = array();
