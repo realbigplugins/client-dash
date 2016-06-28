@@ -226,7 +226,7 @@ module.exports = function (grunt) {
                     title: pkg.name,
                     message: 'SASS Admin Completed'
                 }
-            },w
+            },
             js: {
                 options: {
                     title: pkg.name,
