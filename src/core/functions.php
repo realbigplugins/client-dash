@@ -363,6 +363,11 @@ abstract class ClientDash_Functions {
 		global $ClientDash;
 
 		$current_color = get_user_option( 'admin_color' );
+
+		if ( ! isset( $ClientDash->admin_colors[ $current_color ])) {
+			return false;
+		}
+
 		$colors        = $ClientDash->admin_colors[ $current_color ];
 
 		$output = array(
@@ -372,18 +377,10 @@ abstract class ClientDash_Functions {
 			'tertiary'     => $colors->colors[3]
 		);
 
-		if ( ! $which_color ) {
-			return $output;
-		} elseif ( $which_color == 'primary' ) {
-			return $output['primary'];
-		} elseif ( $which_color == 'primary-dark' ) {
-			return $output['primary-dark'];
-		} elseif ( $which_color == 'secondary' ) {
-			return $output['secondary'];
-		} elseif ( $which_color == 'tertiary' ) {
-			return $output['tertiary'];
+		if ( isset( $output[ $which_color ] ) ) {
+			return $output[ $which_color ];
 		} else {
-			return false;
+			return $output;
 		}
 	}
 
