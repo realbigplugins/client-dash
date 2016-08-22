@@ -1,6 +1,6 @@
 ![banner](https://raw.githubusercontent.com/brashrebel/client-dash/master/assets/static/banner.png)
 
-# v1.6.10
+# v1.6.11
 
 [Releases](https://github.com/brashrebel/client-dash/releases)
 
@@ -36,6 +36,10 @@ Using this plugin is very simple. All you have to do is:
 3. Configure settings by going to Settings - >Client Dash
 
 ## Changelog
+
+### [1.6.11](https://github.com/brashrebel/client-dash/releases/tag/v1.6.11)
+* Fix potential admin theme PHP notice.
+* Fix potential fatal error due to improper static method call.
 
 ### [1.6.10](https://github.com/brashrebel/client-dash/releases/tag/v1.6.10)
 * Fix issue with non-public post type menu items not showing in menu editor even when "show_in_menu" is true.
