@@ -15,6 +15,20 @@
 abstract class ClientDash_Settings_API extends ClientDash_Functions {
 
 	/**
+	 * Get a Gravatar
+	 *
+	 * @since Client Dash 1.6
+	 *
+	 * @param string $email The gravatar email address.
+	 * @param integer $size Gravatar size (default 200px).
+	 *
+	 * @return string HTML img tag for Gravatar
+	 */
+	public static function get_avatar($email, $size = 200) {
+		return '<img src="https://s.gravatar.com/avatar/' . md5($email) . '?s=' .$size. '" alt="">';
+	}
+	
+	/**
 	 * Opens a WP standard form table.
 	 *
 	 * @since Client Dash 1.6
