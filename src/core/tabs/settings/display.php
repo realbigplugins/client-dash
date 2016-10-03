@@ -66,6 +66,7 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 		// Get options
 		$option_defaults = $ClientDash->option_defaults['content_sections_roles'];
 		$content_sections_roles = get_option( 'cd_content_sections_roles', $option_defaults );
+		$unhide_screen_options = get_option( 'cd_unhide_screen_options', $ClientDash->option_defaults['unhide_screen_options'] );
 
 		// Get roles
 		$roles = get_editable_roles();
@@ -180,5 +181,19 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 		}
 
 		echo '</ul>'; // #cd-roles-grid
+		?>
+		<table class="form-table">
+			<tr valign="top">
+				<th scope="row">
+					<label for="cd_unhide_screen_options"><?php _e( 'Unhide Screen Options' ) ?></label>
+				</th>
+				<td>
+					<input type="checkbox" id="cd_unhide_screen_options"
+						   name="cd_unhide_screen_options"
+						   value="true"<?php checked( 'true', $unhide_screen_options ) ?>/>
+				</td>
+			</tr>
+		</table>
+		<?php
 	}
 }

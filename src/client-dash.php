@@ -144,6 +144,8 @@ class ClientDash extends ClientDash_Functions {
 		'dashicon_help'              => 'dashicons-editor-help',
 		'dashicon_webmaster'         => 'dashicons-businessman',
 		'dashicon_settings'          => 'dashicons-admin-settings',
+		// The Screen Option's visibility
+		'unhide_screen_options'		=> false,
 		//
 		// Default widgets
 		'widgets'                    => array(
@@ -745,8 +747,13 @@ class ClientDash extends ClientDash_Functions {
 		// Removes the "Help" button from the dashboard
 		add_filter( 'contextual_help', array( $this, 'remove_help_tab' ), 999, 3 );
 
-		// Removes the "Screen Options" from the dashboard
-		add_filter( 'screen_options_show_screen', '__return_false' );
+		$unhide_screen_options = get_option( 'cd_unhide_screen_options', $this->option_defaults['unhide_screen_options'] );
+
+		// See if this is disabled
+		if ( $unhide_screen_options === false || empty( $unhide_screen_options ) ) {
+			// Removes the "Screen Options" from the dashboard
+			add_filter( 'screen_options_show_screen', '__return_false' );
+		}
 	}
 
 	/**

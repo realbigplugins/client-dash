@@ -56,6 +56,7 @@ class ClientDash_Page_Settings extends ClientDash {
 		// Display Tab
 		register_setting( 'cd_options_display', 'cd_content_sections_roles' );
 		register_setting( 'cd_options_display', 'cd_display_settings_updated' );
+		register_setting( 'cd_options_display', 'cd_unhide_screen_options' );
 
 		// Widgets Tab
 		register_setting( 'cd_options_widgets', 'cd_widgets' );
