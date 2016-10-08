@@ -49,7 +49,8 @@ class ClientDash extends ClientDash_Functions {
 		),
 		'help'      => array(
 			'info',
-			'domain'
+			'domain',
+			'server',
 		),
 		'reports'   => array(
 			'site'
