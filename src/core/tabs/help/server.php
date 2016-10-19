@@ -42,19 +42,19 @@ class ClientDash_Core_Page_Help_Tab_Server extends ClientDash
         <h3>Server information <?php echo function_exists('php_uname') ? php_uname('s') . ' ' . php_uname('v') . ' ' . php_uname('m') : '' ?></h3>
         <table class="form-table">
             <tr valign="top">
-                <th scope="row">Server software version</th>
+                <th scope="row"><?php _e('Server software version', 'client-dash') ?></th>
                 <td><?php echo function_exists('filter_input') ? filter_input(INPUT_SERVER, 'SERVER_SOFTWARE', FILTER_SANITIZE_STRING) : $_SERVER['SERVER_SOFTWARE'] ?></td>
             </tr>
             <tr valign="top">
-                <th scope="row">PHP version</th>
-                <td><?php echo function_exists('phpversion') ? phpversion() : $this->error_msg ?></td>
+                <th scope="row"><?php _e('PHP version', 'client-dash') ?></th>
+                <td><?php echo function_exists('phpversion') ? phpversion() : __($this->error_msg, 'client-dash') ?></td>
             </tr>
             <tr valign="top">
-                <th scope="row">Memory limit</th>
-                <td><?php echo function_exists('ini_get') ? ini_get('memory_limit') : $this->error_msg; ?></td>
+                <th scope="row"><?php _e('Memory limit', 'client-dash') ?></th>
+                <td><?php echo function_exists('ini_get') ? ini_get('memory_limit') : __($this->error_msg, 'client-dash') ?></td>
             </tr>
             <tr valign="top">
-                <th scope="row">Your web browser</th>
+                <th scope="row"><?= __('Your web browser', 'client-dash') ?></th>
                 <td><?php echo function_exists('filter_input') ? filter_input(INPUT_SERVER, 'HTTP_USER_AGENT', FILTER_SANITIZE_STRING) : $_SERVER['HTTP_USER_AGENT'] ?></td>
             </tr>
 
