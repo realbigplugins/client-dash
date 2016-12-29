@@ -24,7 +24,7 @@ class ClientDash extends ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.5
 	 */
-	protected static $version = '1.6.10';
+	protected static $version = '1.6.11';
 
 	/**
 	 * The path to the plugin.
@@ -323,7 +323,7 @@ class ClientDash extends ClientDash_Functions {
 
 		// Register and enqueue our scripts / styles
 		add_action( 'admin_init', array( $this, 'register_scripts' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 100 );
 
 		// Save our color scheme and then use it
 		add_action( 'admin_init', array( $this, 'save_admin_colors' ) );

@@ -113,11 +113,22 @@ module.exports = function (grunt) {
          */
         'string-replace': {
             version: {
-                files: {
-                    'src/': ['src/**', '!' + image_ignore],
-                    'init.php': ['init.php', '!' + image_ignore],
-                    'README.md': ['README.md', '!' + image_ignore]
-                },
+                files: [{
+                    expand: true,
+                    cwd: 'src/',
+                    src: ['**/*', '!' + image_ignore],
+                    dest: 'src/'
+                }, {
+                    expand: true,
+                    cwd: './',
+                    src: 'init.php',
+                    dest: './'
+                }, {
+                    expand: true,
+                    cwd: './',
+                    src: 'README.md',
+                    dest: './'
+                }],
                 options: {
                     replacements: [{
                         // PHP doc versions
@@ -125,39 +136,37 @@ module.exports = function (grunt) {
                         replacement: pkg.version
                     }, {
                         // Version in init.php
-                        pattern: /(Version: ).*/,
-                        replacement: "$1" + pkg.version
+                        pattern: /Version: \d+\.\d+\.\d+/,
+                        replacement: "Version: " + pkg.version
                     }, {
                         // README.md version
-                        pattern: /(###.*?)\d\.\d\.\d/,
-                        replacement: "$1" + pkg.version
+                        pattern: /# v\d+\.\d+\.\d+/,
+                        replacement: "# v" + pkg.version
                     }, {
                         // readme.txt stable tag version
-                        pattern: /(Stable tag:.*?)\d\.\d\.\d/,
-                        replacement: "$1" + pkg.version
+                        pattern: /Stable tag: \d+\.\d+\.\d+/,
+                        replacement: "Stable tag: " + pkg.version
                     }, {
-                        // Render constant version
-                        pattern: /(protected static \$version = ')\d\.\d\.\d/,
+                        // Plugin version
+                        pattern: /protected static $version = '\d+\.\d+\.\d+';/,
                         replacement: "$1" + pkg.version
                     }]
                 }
             },
             header: {
                 files: {
-                    'build/client-dash.php': ['build/client-dash.php', '!' + image_ignore]
+                    'build/client-dash.php': ['build/client-dash.php']
                 },
                 options: {
                     replacements: [{
                         pattern: /\/\/\{\{HEADER}}/,
                         replacement: '/*\n' +
-                        ' * Plugin Name: ' + pkg.name + '\n' +
+                        ' * Plugin Name: Client Dash\n' +
                         ' * Description: ' + pkg.description + '\n' +
                         ' * Version: ' + pkg.version + '\n' +
                         ' * Author: ' + pkg.author + '\n' +
                         ' * Author URI: ' + pkg.author_uri + '\n' +
                         ' * Plugin URI: ' + pkg.plugin_uri + '\n' +
-                        ' * Text Domain: Render\n' +
-                        ' * Domain Path: /languages/\n' +
                         ' */'
                     }]
                 }

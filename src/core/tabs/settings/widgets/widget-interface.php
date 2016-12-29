@@ -114,7 +114,7 @@ class CD_Widget extends WP_Widget {
 		}
 
 		// Account for CD Webmaster dynamic title
-		if ( $this->title == 'Webmaster' && get_option( 'cd_webmaster_name') ) {
+		if ( $this->title == 'Webmaster' && get_option( 'cd_webmaster_name' ) ) {
 			$this->title = $this->title . ' (' . get_option( 'cd_webmaster_name', '' ) . ')';
 		}
 
@@ -133,8 +133,6 @@ class CD_Widget extends WP_Widget {
 	 */
 	public function form( $instance ) {
 
-		global $ClientDash;
-
 		// Don't show title if webmaster widget
 		if ( $this->title != 'Webmaster' . ' (' . get_option( 'cd_webmaster_name', '' ) . ')'
 		     && $this->title != 'Webmaster'
@@ -148,9 +146,11 @@ class CD_Widget extends WP_Widget {
 				<input type="text" id="<?php echo $this->get_field_id( 'title' ); ?>" class="widefat"
 				       name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $title; ?>"/>
 			</p>
-		<?php
+			<?php
 		} else {
-			$ClientDash::error_nag( 'Title set in <a href="' . $ClientDash::get_settings_url( 'webmaster' ) . '">Webmaster</a> page.' );
+			ClientDash_Functions::error_nag(
+				'Title set in <a href="' . ClientDash_Functions::get_settings_url( 'webmaster' ) . '">Webmaster</a> page.'
+			);
 		}
 
 		// Extra title input for use when outputting widgets. This is here because when initially creating
