@@ -21,6 +21,14 @@
 
     &:last-of-type {
       border-bottom-width: 1px;
+      background: url("../images/rbp-logo.png") no-repeat bottom center #fff;
+      padding-bottom: 83px;
+    }
+
+    p {
+      &:last-of-type {
+        margin-bottom: 0;
+      }
     }
 
     img {

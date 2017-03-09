@@ -179,10 +179,8 @@ class ClientDash_Page_Settings extends ClientDash {
 					<p>
 						<?php
 						printf(
-							__( 'Also, we make other cool plugins and share updates and special offers to anyone who ' .
-							    '%ssubscribes here%s.' ),
-							'<a href="http://realbigplugins.com/subscribe/?utm_source=Client%20Dash&utm_medium=Plugin' .
-							'%20settings%20sidebar%20link&utm_campaign=Client%20Dash%20Plugin" target="_blank">',
+							__( 'Need help? Visit our %ssupport forums%s.', 'clientdash' ),
+							'<a href="https://wordpress.org/support/plugin/client-dash">',
 							'</a>'
 						);
 						?>
@@ -193,8 +191,10 @@ class ClientDash_Page_Settings extends ClientDash {
 					<p>
 						<?php
 						printf(
-							__( 'Need help? Visit our %ssupport forums%s.', 'clientdash' ),
-							'<a href="https://wordpress.org/support/plugin/client-dash">',
+							__( 'Also, we make other cool plugins and share updates and special offers to anyone who ' .
+							    '%ssubscribes here%s.' ),
+							'<a href="http://realbigplugins.com/subscribe/?utm_source=Client%20Dash&utm_medium=Plugin' .
+							'%20settings%20sidebar%20link&utm_campaign=Client%20Dash%20Plugin" target="_blank">',
 							'</a>'
 						);
 						?>
