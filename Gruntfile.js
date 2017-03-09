@@ -56,12 +56,12 @@ module.exports = function (grunt) {
             },
             src: {
                 files: {
-                    'src/assets/js/client-dash.min.js': ['src/assets/js/source/**/*.js', '!src/assets/js/source/admin/**/*.js']
+                    'src/assets/js/clientdash.min.js': ['src/assets/js/source/**/*.js', '!src/assets/js/source/admin/**/*.js']
                 }
             },
             admin: {
                 files: {
-                    'src/assets/js/client-dash-admin.min.js': ['src/assets/js/source/admin/*.js']
+                    'src/assets/js/clientdash-admin.min.js': ['src/assets/js/source/admin/*.js']
                 }
             }
         },
@@ -77,12 +77,12 @@ module.exports = function (grunt) {
             },
             src: {
                 files: {
-                    'src/assets/css/client-dash.min.css': 'src/assets/scss/main.scss'
+                    'src/assets/css/clientdash.min.css': 'src/assets/scss/clientdash.scss'
                 }
             },
             admin: {
                 files: {
-                    'src/assets/css/client-dash-admin.min.css': 'src/assets/scss/admin/admin.scss'
+                    'src/assets/css/clientdash-admin.min.css': 'src/assets/scss/admin/admin.scss'
                 }
             }
         },
