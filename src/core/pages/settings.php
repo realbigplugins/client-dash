@@ -101,7 +101,7 @@ class ClientDash_Page_Settings extends ClientDash {
 
 		$rating_confirm = 'onclick="return confirm(\'' .
 		                  __( "Is there something we can do better?\\n\\nIf you\\'re having an issue with the " .
-		                      "plugin, please consider asking us in the support thread instead.\\n\\nIf you " .
+		                      "plugin, please consider asking us in the support forums instead.\\n\\nIf you " .
 		                      "still want to leave a low rating, please consider changing it in the future " .
 		                      "if we fix your issue. Thanks!" ) .
 		                  '\');"';
@@ -151,7 +151,7 @@ class ClientDash_Page_Settings extends ClientDash {
 					</p>
 
 					<p class="cd-product-info-sidebar-cta">
-						<a href=https://realbigplugins.com/plugins/client-dash-pro/?utm_source=Client%20Dash&utm_medium=Plugin%20settings%20sidebar%20link&utm_campaign=Client%20Dash%20Plugin" class="button">
+						<a href=https://realbigplugins.com/plugins/client-dash-pro/?utm_source=Client%20Dash&utm_medium=Plugin%20settings%20sidebar%20link&utm_campaign=Client%20Dash%20Plugin" class="button" target="_blank">
 							<?php _e( 'Check it out!', 'clientdash' ); ?>
 						</a>
 					</p>
@@ -182,7 +182,19 @@ class ClientDash_Page_Settings extends ClientDash {
 							__( 'Also, we make other cool plugins and share updates and special offers to anyone who ' .
 							    '%ssubscribes here%s.' ),
 							'<a href="http://realbigplugins.com/subscribe/?utm_source=Client%20Dash&utm_medium=Plugin' .
-							'%20settings%20sidebar%20link&utm_campaign=Client%20Dash%20Plugin">',
+							'%20settings%20sidebar%20link&utm_campaign=Client%20Dash%20Plugin" target="_blank">',
+							'</a>'
+						);
+						?>
+					</p>
+				</section>
+
+				<section class="cd-product-info-sidebar-section">
+					<p>
+						<?php
+						printf(
+							__( 'Need help? Visit our %ssupport forums%s.', 'clientdash' ),
+							'<a href="https://wordpress.org/support/plugin/client-dash">',
 							'</a>'
 						);
 						?>
