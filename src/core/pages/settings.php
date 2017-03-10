@@ -142,7 +142,7 @@ class ClientDash_Page_Settings extends ClientDash {
 				/**
 				 * Fires inside sidebar.
 				 *
-				 * @since {{VERSION}}
+				 * @since 1.6.13
 				 *
 				 * @hooked ClientDash_Page_Settings::sidebar_rbp_pro-prompt() 10
 				 * @hooked ClientDash_Page_Settings::sidebar_rbp_signup() 15
@@ -158,7 +158,7 @@ class ClientDash_Page_Settings extends ClientDash {
 	/**
 	 * Outputs the sidebar pro prompt section.
 	 *
-	 * @since {{VERSION}}
+	 * @since 1.6.13
 	 * @access private
 	 */
 	static function sidebar_pro_prompt() {
@@ -189,7 +189,7 @@ class ClientDash_Page_Settings extends ClientDash {
 	/**
 	 * Outputs the sidebar wordpress.org review/support links.
 	 *
-	 * @since {{VERSION}}
+	 * @since 1.6.13
 	 * @access private
 	 */
 	static function sidebar_review_support() {
@@ -236,7 +236,7 @@ class ClientDash_Page_Settings extends ClientDash {
 	/**
 	 * Outputs the sidebar Real Big Plugins signup section.
 	 *
-	 * @since {{VERSION}}
+	 * @since 1.6.13
 	 * @access private
 	 */
 	static function sidebar_rbp_signup() {
