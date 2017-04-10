@@ -572,6 +572,13 @@ class ClientDash extends ClientDash_Functions {
 		foreach ( $wp_meta_boxes['dashboard'] as $context => $priorities ) {
 			foreach ( $priorities as $priority => $widgets ) {
 				foreach ( $widgets as $id => $values ) {
+
+                    // Prevent some weirdness with "empty" or "disabled" widgets.
+					if ( empty( $values ) ) {
+
+						continue;
+					}
+
 					$this->active_widgets[ $id ]['title']    = $values['title'];
 					$this->active_widgets[ $id ]['context']  = $context;
 					$this->active_widgets[ $id ]['priority'] = $priority;
