@@ -77,8 +77,8 @@ class ClientDash_Page_Settings extends ClientDash {
 
 		add_submenu_page(
 			'options-general.php',
-			'Client Dash Settings',
-			'Client Dash',
+			__( 'Client Dash Settings', 'client-dash' ),
+			__( 'Client Dash', 'client-dash' ),
 			'manage_options',
 			'cd_settings',
 			array( $this, 'page_output' )
@@ -94,7 +94,7 @@ class ClientDash_Page_Settings extends ClientDash {
 
 		// Make sure user has rights
 		if ( ! current_user_can( 'activate_plugins' ) ) {
-			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+			wp_die( __( 'You do not have sufficient permissions to access this page.', 'client-dash' ) );
 		}
 
 		// Get the current tab, if set
@@ -119,13 +119,13 @@ class ClientDash_Page_Settings extends ClientDash {
 
 				?>
 				<h2 class="cd-title"><span class="dashicons dashicons-admin-settings cd-icon"></span><span
-						class="cd-title-text">Client Dash Settings</span></h2>
+						class="cd-title-text"><?php _e( 'Client Dash Settings', 'client-dash' ); ?></span></h2>
 				<?php
 				$this->create_tab_page();
 
 				// Can modify submit button with this filter
 				// EG: add_filter( 'cd_submit', '__return_false' );
-				$submit = '<input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">';
+				$submit = '<input type="submit" name="submit" id="submit" class="button button-primary" value="' . __( 'Save Changes', 'client-dash' ) . '">';
 				echo apply_filters( 'cd_submit', $submit );
 				?>
 				<?php

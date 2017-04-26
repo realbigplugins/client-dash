@@ -22,16 +22,19 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 	function __construct() {
 
 		$this->add_content_section( array(
-			'name'     => 'Core Settings Display',
-			'page'     => 'Settings',
-			'tab'      => 'Display',
+			'name'     => __( 'Core Settings Display', 'client-dash' ),
+			'page'     => __( 'Settings', 'client-dash' ),
+			'tab'      => __( 'Display', 'client-dash' ),
 			'callback' => array( $this, 'block_output' )
 		) );
 	}
 
 	public function add_reset_button( $submit ) {
 
-		$reset = '<input type="button" class="button cd-reset-display" value="Reset Roles" onclick="if ( confirm(\'WARNING: This will reset all role settings back to default. \\n\\nAre you sure you want to do this?\') ) cdAJAX.reset_roles();" />';
+	    /* translators: \n is line break, leave as is */
+	    $confirm = __( "WARNING: This will reset all role settings back to default. \n\nAre you sure you want to do this?", 'client-dash' );
+
+		$reset = '<input type="button" class="button cd-reset-display" value="Reset Roles" onclick="if ( confirm(' . $confirm . ') ) cdAJAX.reset_roles();" />';
 
 		return $submit . $reset;
 	}
@@ -53,12 +56,12 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 		// Add our reset roles button next to submit
 		add_filter( 'cd_submit', array( $this, 'add_reset_button' ) );
 		?>
-		<p>Use this page to disable specific content for specific roles. Simply un-check the role inside of any content
-			block you want to disable for that role.</p>
+		<p><?php _e( 'Use this page to disable specific content for specific roles. Simply un-check the role inside of any content
+			block you want to disable for that role.', 'client-dash' ); ?></p>
 		<?php
 		// If no content sections, bail
 		if ( empty( $ClientDash->content_sections ) ) {
-			$this->error_nag( 'There seems to be no content... that\'s really weird... I\'d contact Joel or Kyle' );
+			$this->error_nag( __( 'There seems to be no content... that\'s really weird... I\'d contact Joel or Kyle', 'client-dash' ) );
 
 			return;
 		}
@@ -112,7 +115,7 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 			// All disabled tip
 			echo '<span style="position:relative;">';
 			if ( $all_disabled ) {
-				echo $this->pointer( 'All roles are disabled so this page won\'t show for anybody.', 'left', 'cd-tip-all-disabled' );
+				echo $this->pointer( __( 'All roles are disabled so this page won\'t show for anybody.', 'client-dash' ), 'left', 'cd-tip-all-disabled' );
 			}
 			echo '</span>';
 
@@ -133,7 +136,7 @@ class ClientDash_Core_Page_Settings_Tab_Display extends ClientDash {
 					// Content Box
 					echo '<div class="cd-display-grid-block">';
 					echo '<p class="cd-display-grid-title">' . $props_block['name'] . '</p>';
-					echo '<p class="description">All checked sections will be visible to the given role.</p>';
+					echo '<p class="description">' . __( 'All checked sections will be visible to the given role.', 'client-dash' ) . '</p>';
 					echo '<p class="cd-roles-grid-list">';
 
 					// Create checkboxes for all roles

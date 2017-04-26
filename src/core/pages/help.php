@@ -39,8 +39,8 @@ class ClientDash_Page_Help extends ClientDash {
 		if ( ! empty( $ClientDash->content_sections['help'] ) ) {
 			add_submenu_page(
 				'index.php',
-				'Help Information',
-				'Help',
+				__( 'Help Information', 'client-dash' ),
+				__( 'Help', 'client-dash' ),
 				'read',
 				'cd_help',
 				array( $this, 'page_output' )

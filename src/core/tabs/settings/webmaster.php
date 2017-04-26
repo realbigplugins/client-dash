@@ -22,9 +22,9 @@ class ClientDash_Core_Page_Settings_Tab_Webmaster extends ClientDash {
 	function __construct() {
 
 		$this->add_content_section( array(
-			'name'     => 'Core Settings Webmaster',
-			'page'     => 'Settings',
-			'tab'      => 'Webmaster',
+			'name'     => __( 'Core Settings Webmaster', 'client-dash' ),
+			'page'     => __( 'Settings', 'client-dash' ),
+			'tab'      => __( 'Webmaster', 'client-dash' ),
 			'callback' => array( $this, 'block_output' )
 		) );
 	}
@@ -54,7 +54,7 @@ class ClientDash_Core_Page_Settings_Tab_Webmaster extends ClientDash {
 		<table class="form-table">
 			<tr valign="top">
 				<th scope="row">
-					<label for="cd_webmaster_name">Webmaster Name</label>
+					<label for="cd_webmaster_name"><?php _e( 'Webmaster Name', 'client-dash' ); ?></label>
 				</th>
 				<td>
 					<input type="text" id="cd_webmaster_name" name="cd_webmaster_name" class="regular-text"
@@ -67,7 +67,7 @@ class ClientDash_Core_Page_Settings_Tab_Webmaster extends ClientDash {
 		<table class="form-table">
 			<tr valign="top">
 				<th scope="row">
-					<label for="cd_webmaster_main_tab_name">Tab Name</label>
+					<label for="cd_webmaster_main_tab_name"><?php _e( 'Tab Name', 'client-dash' ); ?></label>
 				</th>
 				<td>
 					<input type="text" id="cd_webmaster_main_tab_name" name="cd_webmaster_main_tab_name"
@@ -103,24 +103,25 @@ class ClientDash_Core_Page_Settings_Tab_Webmaster extends ClientDash {
 			</tr>
 			<tr valign="top">
 				<th scope="row">
-					<label for="cd_webmaster_feed_url">Feed URL</label>
+					<label for="cd_webmaster_feed_url"><?php _e( 'Feed URL', 'client-dash' ); ?></label>
 				</th>
 				<td>
 					<input type="text" id="cd_webmaster_feed_url" name="cd_webmaster_feed_url" class="regular-text"
 					       value="<?php echo $webmaster_feed_url; ?>"/>
 
-					<p class="description">This should be a link to the RSS feed you want to pull from.</p>
+					<p class="description"><?php _e( 'This should be a link to the RSS feed you want to pull from.',
+                            'client-dash' ); ?></p>
 				</td>
 			</tr>
 			<tr valign="top">
 				<th scope="row">
-					<label for="cd_webmaster_feed_count">Number of entries</label>
+					<label for="cd_webmaster_feed_count"><?php _e( 'Number of entries', 'client-dash' ); ?></label>
 				</th>
 				<td>
 					<input type="text" id="cd_webmaster_feed_count" name="cd_webmaster_feed_count"
 					       value="<?php echo $webmaster_feed_count; ?>"/>
 
-					<p class="description">How many entries to show.</p>
+					<p class="description"><?php _e( 'How many entries to show.', 'client-dash' ); ?></p>
 				</td>
 			</tr>
 		</table>

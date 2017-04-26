@@ -24,9 +24,9 @@ class ClientDash_Core_Page_Webmaster_Tab_Feed extends ClientDash {
 		// Only show if enabled
 		if ( get_option( 'cd_webmaster_feed', $this->option_defaults['webmaster_feed'] ) ) {
 			$this->add_content_section( array(
-				'name'     => 'Feed',
-				'page'     => 'Webmaster',
-				'tab'      => 'Feed',
+				'name'     => __( 'Feed', 'client-dash' ),
+				'page'     => __( 'Webmaster', 'client-dash' ),
+				'tab'      => __( 'Feed', 'client-dash' ),
 				'callback' => array( $this, 'block_output' )
 			) );
 		}
@@ -44,8 +44,15 @@ class ClientDash_Core_Page_Webmaster_Tab_Feed extends ClientDash {
 
 		// Check if url exists
 		if ( empty( $feed_url ) ) {
-			$this->error_nag( 'Please set feed url under Client Dash <a href="' . $this->get_settings_url( 'webmaster' ) . '">settings</a>.', 'manage_options' );
-			$this->error_nag( 'The feed tab has not yet been set up. If you believe this to be an error, please contact your system administrator' );
+
+			$this->error_nag( sprintf(
+				__( 'Please set feed url under Client Dash %ssettings.', 'client-dash' ),
+				'<a href="' . $this->get_settings_url( 'webmaster' ) . '">',
+				'</a>'
+			), 'manage_options' );
+
+			$this->error_nag( __( 'The feed tab has not yet been set up. If you believe this to be an error, please ' .
+			                      'contact your system administrator', 'client-dash' ) );
 
 			return;
 		}
@@ -57,7 +64,8 @@ class ClientDash_Core_Page_Webmaster_Tab_Feed extends ClientDash {
 
 		// Check for an error if there's no RSS feed
 		if ( is_wp_error( $feed ) ) {
-			$this->error_nag( 'ISSUE: Invalid URL' );
+
+			$this->error_nag( __( 'ISSUE: Invalid URL', 'client-dash' ) );
 
 			return;
 		}
@@ -65,30 +73,40 @@ class ClientDash_Core_Page_Webmaster_Tab_Feed extends ClientDash {
 		$feed_items = $feed->get_items( 0, $feed_count );
 		?>
 
-		<ul class="cd-feed-list">
+        <ul class="cd-feed-list">
 			<?php foreach ( $feed_items as $item ): ?>
-				<li>
-					<h3 class="cd-feed-title">
-						<a href="<?php echo $item->get_permalink(); ?>"><?php echo $item->get_title(); ?></a>
-					</h3>
+                <li>
+                    <h3 class="cd-feed-title">
+                        <a href="<?php echo $item->get_permalink(); ?>"><?php echo $item->get_title(); ?></a>
+                    </h3>
 
-					<p class="cd-feed-content"><?php echo $item->get_description(); ?></p>
+                    <p class="cd-feed-content"><?php echo $item->get_description(); ?></p>
 
-					<p class="cd-feed-meta">
-          <span class="cd-feed-author">
-            Posted by
-	          <?php
-	          $authors = $item->get_authors();
-	          echo $authors[0]->name;
-	          ?>
-          </span>
-          <span class="cd-feed-date">
-            On <?php echo $item->get_date(); ?>
-          </span>
-					</p>
-				</li>
+                    <p class="cd-feed-meta">
+
+                        <span class="cd-feed-author">
+                              <?php
+                              $authors = $item->get_authors();
+                              printf(
+                              /* translators: %s: the name of the author */
+	                              __( 'Posted by %s', 'client-dash' ),
+	                              $authors[0]->name
+                              );
+                              ?>
+                        </span>
+                        <span class="cd-feed-date">
+                            <?php
+                            printf(
+                            /* translators: %s: date of the blog post */
+	                            __( 'On %s', 'client-dash' ),
+	                            $item->get_date()
+                            );
+                            ?>
+                        </span>
+                    </p>
+                </li>
 			<?php endforeach; ?>
-		</ul>
-	<?php
+        </ul>
+		<?php
 	}
 }

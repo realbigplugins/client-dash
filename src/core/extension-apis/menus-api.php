@@ -104,12 +104,13 @@ abstract class ClientDash_Menus_API extends ClientDash_Functions {
 
 			<p class="button-controls">
 			<span class="list-controls">
-				<a href="/wp-admin/nav-menus.php?page-tab=all&amp;selectall=1#<?php echo $ID; ?>" class="select-all">Select
-					All</a>
+				<a href="/wp-admin/nav-menus.php?page-tab=all&amp;selectall=1#<?php echo $ID; ?>" class="select-all">
+                    <?php _e( 'Select All', 'client-dash' ); ?>
+                </a>
 			</span>
 
 			<span class="add-to-menu">
-				<input type="submit" class="button-secondary submit-add-to-menu right" value="Add to Menu"
+				<input type="submit" class="button-secondary submit-add-to-menu right" value="<?php _e( 'Add to Menu', 'client-dash' ); ?>"
 				       name="add-post-type-menu-item" id="submit-<?php echo $ID; ?>">
 				<span class="spinner"></span>
 			</span>
@@ -130,7 +131,7 @@ abstract class ClientDash_Menus_API extends ClientDash_Functions {
 
 		// If no items, bail
 		if ( empty( $items ) ) {
-			self::error_nag( 'ERROR: You did not enter any items.' );
+			self::error_nag( __( 'ERROR: You did not enter any items.', 'client-dash' ) );
 
 			return;
 		}

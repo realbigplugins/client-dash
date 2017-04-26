@@ -30,8 +30,8 @@ class ClientDash_Core_Page_Webmaster_Tab_Main extends ClientDash {
 		}
 
 		$this->add_content_section( array(
-			'name'     => 'Main',
-			'page'     => 'Webmaster',
+			'name'     => __( 'Main', 'client-dash' ),
+			'page'     => __( 'Webmaster', 'client-dash' ),
 			'tab'      => $tab_name,
 			'callback' => array( $this, 'block_output' )
 		) );
@@ -48,10 +48,21 @@ class ClientDash_Core_Page_Webmaster_Tab_Main extends ClientDash {
 		$content = wpautop( $content );
 
 		if ( ! empty( $content ) ) {
+
 			echo $content;
+
 		} else {
-			$this->error_nag( 'Please set content under Client Dash <a href="' . $this->get_settings_url( 'webmaster' ) . '">settings</a>.', 'manage_options' );
-			$this->error_nag( 'This tab has no content. If you believe this to be an error, please contact your system administrator.' );
+
+			$this->error_nag( sprintf(
+				__( 'Please set content under Client Dash %ssettings%s.', 'client-dash' ),
+				'<a href="' . $this->get_settings_url( 'webmaster' ) . '">',
+				'</a>'
+			), 'manage_options' );
+
+			$this->error_nag(
+				__( 'This tab has no content. If you believe this to be an error, please contact your system ' .
+				    'administrator.', 'client-dash' )
+			);
 		}
 	}
 }

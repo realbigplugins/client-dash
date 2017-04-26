@@ -61,8 +61,8 @@ class ClientDash_Core_Page_Account_Tab_Sites extends ClientDash {
 
 				echo '<td valign="top" style="border-right: 1px solid #ccc;">';
 				echo '<h3>' . $blog->blogname . '</h3>';
-				echo '<p><a href="' . $blog->siteurl . '">Visit</a> | ';
-				echo '<a href="' . $blog->siteurl . '/wp-admin/">Dashboard</a></p>';
+				echo '<p><a href="' . $blog->siteurl . '">' . __( 'Visit', 'client-dash' ) . '</a> | ';
+				echo '<a href="' . $blog->siteurl . '/wp-admin/">' . __( 'Dashboard', 'client-dash' ) . '</a></p>';
 				echo '</td>';
 
 				echo '</tr>';

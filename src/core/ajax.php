@@ -44,7 +44,7 @@ class ClientDash_AJAX {
 
 		update_option( 'cd_content_sections_roles', $ClientDash->option_defaults['content_sections_roles'] );
 
-		echo 'Roles successfully reset!';
+		echo __( 'Roles successfully reset!', 'client-dash' );
 
 		die();
 	}
@@ -100,7 +100,7 @@ class ClientDash_AJAX {
 			delete_option( "widget_$widget_ID" );
 		}
 
-		echo 'Settings successfully reset!';
+		echo __( 'Settings successfully reset!', 'client-dash' );
 
 		die();
 	}

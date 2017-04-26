@@ -22,9 +22,9 @@ class ClientDash_Core_Page_Help_Tab_Info extends ClientDash {
 	function __construct() {
 
 		$this->add_content_section( array(
-			'name'     => 'Basic Information',
-			'page'     => 'Help',
-			'tab'      => 'Info',
+			'name'     => __( 'Basic Information', 'client-dash' ),
+			'page'     => __( 'Help', 'client-dash' ),
+			'tab'      => __( 'Info', 'client-dash' ),
 			'callback' => array( $this, 'block_output' )
 		) );
 	}
@@ -47,11 +47,11 @@ class ClientDash_Core_Page_Help_Tab_Info extends ClientDash {
 		?>
 		<table class="form-table">
 			<tr valign="top">
-				<th scope="row">Current WordPress version</th>
+				<th scope="row"><?php _e( 'Current WordPress version', 'client-dash' ); ?></th>
 				<td><?php echo $wp_version; ?></td>
 			</tr>
 			<tr valign="top">
-				<th scope="row">Current theme</th>
+				<th scope="row"><?php _e( 'Current theme', 'client-dash' ); ?></th>
 				<td><?php if ( ! empty( $cd_theme_uri )) { ?>
 					<a href="<?php echo $cd_theme_uri; ?>">
 						<?php
@@ -65,13 +65,17 @@ class ClientDash_Core_Page_Help_Tab_Info extends ClientDash {
 								echo $cd_current_theme;
 							}
 							?>
-							<?php if ( is_child_theme() ) {
-								echo '(child of <span class="cd-capitalize">' . str_replace( '-', ' ', $cd_current_theme->get( 'Template' ) ) . '</span>)';
-							} ?>
+							(<?php if ( is_child_theme() ) {
+							    printf(
+							            /* translators: %s: Theme name */
+							            __( 'child of %s', 'client-dash' ),
+                                    '<span class="cd-capitalize">' . str_replace( '-', ' ', $cd_current_theme->get( 'Template' ) ) . '</span>'
+                                );
+							} ?>)
 				</td>
 			</tr>
 			<tr valign="top">
-				<th scope="row">Active plugins</th>
+				<th scope="row"><?php _e( 'Active plugins', 'client-dash' ); ?></th>
 				<td class="cd-capitalize"><?php foreach ( $cd_active_plugins as $key => $value ) {
 						$string = explode( '/', $value ); // Display folder name
 						echo $string[0];
@@ -79,7 +83,7 @@ class ClientDash_Core_Page_Help_Tab_Info extends ClientDash {
 					} ?></td>
 			</tr>
 			<tr valign="top">
-				<th scope="row">Installed plugins</th>
+				<th scope="row"><?php _e( 'Installed plugins', 'client-dash' ); ?></th>
 				<td><?php foreach ( $cd_plugins as $plugin ) {
 						echo $plugin['Name'];
 						echo "<br/>";

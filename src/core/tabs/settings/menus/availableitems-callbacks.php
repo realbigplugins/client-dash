@@ -81,7 +81,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 		if ( ! array_key_exists( 'edit_posts', $role->capabilities ) ) {
 
-			echo '<p class="description">No items present</p>';
+			echo '<p class="description">' . __( 'No items present', 'client-dash' ) . '</p>';
 
 			return;
 		}
@@ -142,7 +142,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 		// If no post types (uh never?)
 		if ( empty( $post_types ) ) {
-			echo '<p class="description">No items present</p>';
+			echo '<p class="description">' . __( 'No items present', 'client-dash' ) . '</p>';
 
 			return;
 		}
@@ -154,25 +154,25 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 				<li class="tabs">
 					<a class="nav-tab-link" data-type="tabs-panel-posttype-toplevel"
 					   href="/wp-admin/nav-menus.php?page-tab=most-recent#tabs-panel-posttype-toplevel">
-						Top-level
+						<?php _e( 'Top-level', 'client-dash' ); ?>
 					</a>
 				</li>
 				<li>
 					<a class="nav-tab-link" data-type="tabs-panel-posttype-addnew"
 					   href="/wp-admin/nav-menus.php?page-tab=all#tabs-panel-posttype-addnew">
-						Add New
+						<?php _e( 'Add New', 'client-dash' ); ?>
 					</a>
 				</li>
 				<li>
 					<a class="nav-tab-link" data-type="tabs-panel-posttype-listall"
 					   href="/wp-admin/nav-menus.php?page-tab=search#tabs-panel-posttype-listall">
-						List All
+						<?php _e( 'List All', 'client-dash' ); ?>
 					</a>
 				</li>
 				<li>
 					<a class="nav-tab-link" data-type="tabs-panel-posttype-taxonomies"
 					   href="/wp-admin/nav-menus.php?page-tab=search#tabs-panel-posttype-taxonomies">
-						Taxonomies
+						<?php _e( 'Taxonomies', 'client-dash' ); ?>
 					</a>
 				</li>
 			</ul>
@@ -210,7 +210,8 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 						$i --;
 
 						$options = array(
-							'title'   => 'Add New ' . $post_type['title'],
+						        /* translators: %s the post type (noun) */
+							'title'   => sprintf( __( 'Add New $s', 'client-dash' ), $post_type['title'] ),
 							'url'     => $post_type['addnew_link'],
 							'cd-icon' => isset( $icon[ $post_type['id'] ] ) ? $icon[ $post_type['id'] ] : 'dashicons-admin-post',
 							'cd-type' => 'post_type',
@@ -294,12 +295,13 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 			<p class="button-controls">
 			<span class="list-controls">
-				<a href="/wp-admin/nav-menus.php?page-tab=all&amp;selectall=1#posttype-page" class="select-all">Select
-					All</a>
+				<a href="/wp-admin/nav-menus.php?page-tab=all&amp;selectall=1#posttype-page" class="select-all">
+                    <?php _e( 'Select All', 'client-dash' ); ?>
+                </a>
 			</span>
 
 			<span class="add-to-menu">
-				<input type="submit" class="button-secondary submit-add-to-menu right" value="Add to Menu"
+				<input type="submit" class="button-secondary submit-add-to-menu right" value="<?php _e( 'Add to Menu', 'client-dash' ); ?>"
 				       name="add-post-type-menu-item" id="submit-posttype-page">
 				<span class="spinner"></span>
 			</span>
@@ -327,13 +329,13 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 				<li class="tabs">
 					<a class="nav-tab-link" data-type="tabs-panel-wordpress-core-toplevel"
 					   href="/wp-admin/nav-menus.php?page-tab=most-recent#tabs-panel-wordpress-core-toplevel">
-						Top-level
+						<?php _e( 'Top-level', 'client-dash' ); ?>
 					</a>
 				</li>
 				<li>
 					<a class="nav-tab-link" data-type="tabs-panel-wordpress-core-submenu"
 					   href="/wp-admin/nav-menus.php?page-tab=all#tabs-panel-wordpress-core-submenu">
-						Sub-menu
+						<?php _e( 'Sub-menu', 'client-dash' ); ?>
 					</a>
 				</li>
 			</ul>
@@ -426,12 +428,13 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 			<p class="button-controls">
 			<span class="list-controls">
-				<a href="/wp-admin/nav-menus.php?page-tab=all&amp;selectall=1#wordpress-core" class="select-all">Select
-					All</a>
+				<a href="/wp-admin/nav-menus.php?page-tab=all&amp;selectall=1#wordpress-core" class="select-all">
+                    <?php _e( 'Select All', 'client-dash' ); ?>
+                </a>
 			</span>
 
 			<span class="add-to-menu">
-				<input type="submit" class="button-secondary submit-add-to-menu right" value="Add to Menu"
+				<input type="submit" class="button-secondary submit-add-to-menu right" value="<?php _e( 'Add to Menu', 'client-dash' ); ?>"
 				       name="add-post-type-menu-item" id="submit-wordpress-core">
 				<span class="spinner"></span>
 			</span>
@@ -483,7 +486,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 			}
 
 			// Skip if a separator
-			if ( $menu_item['menu_title'] == 'Separator' || strpos( $menu_item['menu_slug'], 'separator' ) !== false ) {
+			if ( $menu_item['menu_title'] == __( 'Separator', 'client-dash' ) || strpos( $menu_item['menu_slug'], 'separator' ) !== false ) {
 				continue;
 			}
 
@@ -533,7 +536,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 		if ( empty( $menu_items ) ) {
 
-			echo '<p class="description">No items</p>';
+			echo '<p class="description">' . __( 'No items', 'client-dash' ) . '</p>';
 
 			return;
 		}
@@ -545,13 +548,13 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 				<li class="tabs">
 					<a class="nav-tab-link" data-type="tabs-panel-plugin-toplevel"
 					   href="/wp-admin/nav-menus.php?page-tab=most-recent#tabs-panel-plugin-toplevel">
-						Top-level
+						<?php _e( 'Top-level', 'client-dash' ); ?>
 					</a>
 				</li>
 				<li>
 					<a class="nav-tab-link" data-type="tabs-panel-plugin-submenu"
 					   href="/wp-admin/nav-menus.php?page-tab=all#tabs-panel-plugin-submenu">
-						Sub-menu
+						<?php _e( 'Sub-menu', 'client-dash' ); ?>
 					</a>
 				</li>
 			</ul>
@@ -621,12 +624,13 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 			<p class="button-controls">
 			<span class="list-controls">
-				<a href="/wp-admin/nav-menus.php?page-tab=all&amp;selectall=1#plugin" class="select-all">Select
-					All</a>
+				<a href="/wp-admin/nav-menus.php?page-tab=all&amp;selectall=1#plugin" class="select-all">
+                    <?php _e( 'Select All', 'client-dash' ); ?>
+                </a>
 			</span>
 
 			<span class="add-to-menu">
-				<input type="submit" class="button-secondary submit-add-to-menu right" value="Add to Menu"
+				<input type="submit" class="button-secondary submit-add-to-menu right" value="<?php _e( 'Add to Menu', 'client-dash' ); ?>"
 				       name="add-post-type-menu-item" id="submit-plugin">
 				<span class="spinner"></span>
 			</span>
@@ -681,12 +685,13 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 			<p class="button-controls">
 			<span class="list-controls">
-				<a href="/wp-admin/nav-menus.php?page-tab=all&amp;selectall=1#clientdash-core" class="select-all">Select
-					All</a>
+				<a href="/wp-admin/nav-menus.php?page-tab=all&amp;selectall=1#clientdash-core" class="select-all">
+                    <?php _e( 'Select All', 'client-dash' ); ?>
+                </a>
 			</span>
 
 			<span class="add-to-menu">
-				<input type="submit" class="button-secondary submit-add-to-menu right" value="Add to Menu"
+				<input type="submit" class="button-secondary submit-add-to-menu right" value="<?php _e( 'Add to Menu', 'client-dash' ); ?>"
 				       name="add-post-type-menu-item" id="submit-clientdash-core">
 				<span class="spinner"></span>
 			</span>
@@ -705,7 +710,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 		?>
 		<div id="separator" class="posttypediv">
 
-			<p class="description">Adds some vertical space between items.</p>
+			<p class="description"><?php _e( 'Adds some vertical space between items.', 'client-dash' ); ?></p>
 
 			<div id="tabs-panel-separator-submenu" class="tabs-panel tabs-panel-active" style="display: none;">
 				<ul id="posttypechecklist-separator" class="categorychecklist form-no-clear">
@@ -726,7 +731,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 			<p class="button-controls">
 
 			<span class="add-to-menu">
-				<input type="submit" class="button-secondary submit-add-to-menu right" value="Add to Menu"
+				<input type="submit" class="button-secondary submit-add-to-menu right" value="<?php _e( 'Add to Menu', 'client-dash' ); ?>"
 				       name="add-post-type-menu-item" id="submit-separator">
 				<span class="spinner"></span>
 			</span>
@@ -759,9 +764,9 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 							<p id="menu-item-name-wrap">
 								<label class="howto" for="custom-menu-item-name">
-									<span>Link Text</span>
+									<span><?php _e( 'Link Text', 'client-dash' ); ?></span>
 									<input type="text" class="menu-item-title" name="menu-item[-1][menu-item-title]"
-									       value="" placeholder="Menu Item">
+									       value="" placeholder="<?php _e( 'Menu Item', 'client-dash' ); ?>">
 									<input type="checkbox" id="custom-checkbox" style="display: none;"
 									       class="menu-item-checkbox" name="menu-item[-1][menu-item-object-id]"
 									       value="0" checked>
@@ -780,7 +785,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 			<p class="button-controls">
 				<span class="add-to-menu">
-					<input type="submit" class="button-secondary submit-add-to-menu right" value="Add to Menu"
+					<input type="submit" class="button-secondary submit-add-to-menu right" value="<?php _e( 'Add to Menu', 'client-dash' ); ?>"
 					       name="add-post-type-menu-item" id="submit-custom-link">
 					<span class="spinner"></span>
 				</span>

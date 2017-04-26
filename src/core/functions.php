@@ -158,7 +158,7 @@ abstract class ClientDash_Functions {
 
 		// If no content on this page, show error and bail
 		if ( empty( $ClientDash->content_sections[ $current_page ] ) ) {
-			self::error_nag( 'This page has no content' );
+			self::error_nag( __( 'This page has no content', 'client-dash' ) );
 
 			return;
 		}
@@ -234,7 +234,7 @@ abstract class ClientDash_Functions {
 		} else {
 
 			// Let the user know the tab doesn't exist
-			self::error_nag( 'This tab doesn\'t seem to exist! Sorry about that.' );
+			self::error_nag( __( 'This tab doesn\'t seem to exist! Sorry about that.', 'client-dash' ) );
 
 			// Also need to remove the submit button if on settings pages
 			if ( $_GET['page'] == 'cd_settings' ) {
@@ -356,7 +356,7 @@ abstract class ClientDash_Functions {
 	 *
 	 * @param $which_color
 	 *
-	 * @return array Current color scheme
+	 * @return array|bool Current color scheme
 	 */
 	public static function get_color_scheme( $which_color = null ) {
 
