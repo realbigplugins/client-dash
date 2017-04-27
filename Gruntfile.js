@@ -56,12 +56,12 @@ module.exports = function (grunt) {
             },
             src: {
                 files: {
-                    'src/assets/js/client-dash.min.js': ['src/assets/js/source/**/*.js', '!src/assets/js/source/admin/**/*.js']
+                    'src/assets/js/clientdash.min.js': ['src/assets/js/source/**/*.js', '!src/assets/js/source/admin/**/*.js']
                 }
             },
             admin: {
                 files: {
-                    'src/assets/js/client-dash-admin.min.js': ['src/assets/js/source/admin/*.js']
+                    'src/assets/js/clientdash-admin.min.js': ['src/assets/js/source/admin/*.js']
                 }
             }
         },
@@ -77,12 +77,12 @@ module.exports = function (grunt) {
             },
             src: {
                 files: {
-                    'src/assets/css/client-dash.min.css': 'src/assets/scss/main.scss'
+                    'src/assets/css/clientdash.min.css': 'src/assets/scss/clientdash.scss'
                 }
             },
             admin: {
                 files: {
-                    'src/assets/css/client-dash-admin.min.css': 'src/assets/scss/admin/admin.scss'
+                    'src/assets/css/clientdash-admin.min.css': 'src/assets/scss/admin/admin.scss'
                 }
             }
         },
@@ -148,8 +148,8 @@ module.exports = function (grunt) {
                         replacement: "Stable tag: " + pkg.version
                     }, {
                         // Plugin version
-                        pattern: /protected static $version = '\d+\.\d+\.\d+';/,
-                        replacement: "$1" + pkg.version
+                        pattern: /protected static \$version = '\d+\.\d+\.\d+;/,
+                        replacement: "protected static $version = '" + pkg.version
                     }]
                 }
             },
@@ -218,6 +218,22 @@ module.exports = function (grunt) {
             }
         },
 
+        makepot: {
+            target: {
+                options: {
+                    cwd: 'src/',                          // Directory of files to internationalize.
+                    domainPath: 'languages/',                   // Where to save the POT file.
+                    mainFile: 'client-dash.php',                     // Main project file.
+                    potFilename: 'client-dash.pot',                  // Name of the POT file.
+                    potHeaders: {
+                        poedit: true,                 // Includes common Poedit headers.
+                        'x-poedit-keywordslist': true // Include a list of all possible gettext functions.
+                    },                                // Headers to add to the generated POT file.
+                    type: 'wp-plugin',                // Type of project (wp-plugin or wp-theme).
+                }
+            }
+        },
+
         /**
          * Notifies me when tasks complete.
          *
@@ -259,5 +275,5 @@ module.exports = function (grunt) {
 
     // Register tasks
     grunt.registerTask('Watch', ['watch']);
-    grunt.registerTask('Build', ['string-replace:version', 'sync', 'string-replace:header', 'notify:build']);
+    grunt.registerTask('Build', ['makepot', 'string-replace:version', 'sync', 'string-replace:header', 'notify:build']);
 };

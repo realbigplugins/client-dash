@@ -39,8 +39,8 @@ class ClientDash_Page_Reports extends ClientDash {
 		if ( ! empty( $ClientDash->content_sections['reports'] ) ) {
 			add_submenu_page(
 				'index.php',
-				'Reports Information',
-				'Reports',
+				__( 'Reports Information', 'client-dash' ),
+				__( 'Reports', 'client-dash' ),
 				'read',
 				'cd_reports',
 				array( $this, 'page_output' )

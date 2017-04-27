@@ -1,6 +1,6 @@
 {
   "name": "ClientDash",
-  "version": "1.6.12",
+  "version": "1.6.14",
   "description": "Creating a more intuitive admin interface for clients.",
   "repository": {
     "type": "git",
@@ -11,14 +11,15 @@
   "plugin_uri": "http://clientdash.io",
   "devDependencies": {
     "grunt": "~1.0",
-    "grunt-string-replace": "~1.2",
     "grunt-autoprefixer": "~3.0",
-    "grunt-contrib-uglify": "~1.0",
     "grunt-contrib-imagemin": "~1.0",
-    "grunt-contrib-watch": "~1.0",
     "grunt-contrib-sass": "~1.0",
-    "grunt-sync": "~0.5",
+    "grunt-contrib-uglify": "~1.0",
+    "grunt-contrib-watch": "~1.0",
     "grunt-notify": "~0.4",
+    "grunt-string-replace": "~1.2",
+    "grunt-sync": "~0.5",
+    "grunt-wp-i18n": "^1.0.0",
     "matchdep": "~1.0"
   }
 }

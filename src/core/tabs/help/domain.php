@@ -22,9 +22,9 @@ class ClientDash_Core_Page_Help_Tab_Domain extends ClientDash {
 	function __construct() {
 
 		$this->add_content_section( array(
-			'name'     => 'Basic Information',
-			'page'     => 'Help',
-			'tab'      => 'Domain',
+			'name'     => __( 'Basic Information', 'client-dash' ),
+			'page'     => __( 'Help', 'client-dash' ),
+			'tab'      => __( 'Domain', 'client-dash' ),
 			'callback' => array( $this, 'block_output' )
 		) );
 	}
@@ -44,11 +44,11 @@ class ClientDash_Core_Page_Help_Tab_Domain extends ClientDash {
 		?>
 		<table class="form-table">
 			<tr valign="top">
-				<th scope="row">Current site domain</th>
+				<th scope="row"><?php _e( 'Current site domain', 'client-dash' ); ?></th>
 				<td><?php echo $cd_domain; ?></td>
 			</tr>
 			<tr valign="top">
-				<th scope="row">Domain IP address</th>
+				<th scope="row"><?php _e( 'Domain IP address', 'client-dash' ); ?></th>
 				<td><?php echo $cd_ip; ?></td>
 			</tr>
 		</table>

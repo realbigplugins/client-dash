@@ -22,9 +22,9 @@ class ClientDash_Core_Page_Account_Tab_About extends ClientDash {
 	function __construct() {
 
 		$this->add_content_section( array(
-			'name'     => 'Basic Information',
-			'page'     => 'Account',
-			'tab'      => 'About You',
+			'name'     => __( 'Basic Information', 'client-dash' ),
+			'page'     => __( 'Account', 'client-dash' ),
+			'tab'      => __( 'About You', 'client-dash' ),
 			'callback' => array( $this, 'block_output' )
 		) );
 	}
@@ -53,63 +53,66 @@ class ClientDash_Core_Page_Account_Tab_About extends ClientDash {
 		$cd_usercaps = $current_user->allcaps;
 		?>
 
-		<table class="form-table">
-			<tr valign="top">
-				<th scope="row">Your username</th>
-				<td><?php echo $cd_username; ?></td>
-			</tr>
+        <table class="form-table">
+            <tr valign="top">
+                <th scope="row"><?php _e( 'Your username', 'client-dash' ); ?></th>
+                <td><?php echo $cd_username; ?></td>
+            </tr>
 
 			<?php if ( $cd_firstname || $cd_lastname ): { ?>
-				<tr valign="top">
-					<th scope="row">Your name</th>
-					<td><?php echo $cd_firstname . ' ' . $cd_lastname; ?></td>
-				</tr>
+                <tr valign="top">
+                    <th scope="row"><?php _e( 'Your name', 'client-dash' ); ?></th>
+                    <td><?php echo $cd_firstname . ' ' . $cd_lastname; ?></td>
+                </tr>
 			<?php } endif; ?>
 
-			<tr valign="top">
-				<th scope="row">Your e-mail address</th>
-				<td><?php echo $cd_useremail; ?></td>
-			</tr>
+            <tr valign="top">
+                <th scope="row"><?php _e( 'Your e-mail address', 'client-dash' ); ?></th>
+                <td><?php echo $cd_useremail; ?></td>
+            </tr>
 
 			<?php if ( $cd_url ): { ?>
-				<tr valign="top">
-					<th scope="row">Your URL</th>
-					<td><a href="<?php echo $cd_url; ?>" target="_blank"><?php echo $cd_url; ?></a></td>
-				</tr>
+                <tr valign="top">
+                    <th scope="row"><?php _e( 'Your URL', 'client-dash' ); ?></th>
+                    <td><a href="<?php echo $cd_url; ?>" target="_blank"><?php echo $cd_url; ?></a></td>
+                </tr>
 			<?php } endif; ?>
 
-			<tr valign="top">
-				<th scope="row">When you first joined this site</th>
-				<td><?php echo $cd_userregistered; ?></td>
-			</tr>
+            <tr valign="top">
+                <th scope="row"><?php _e( 'When you first joined this site', 'client-dash' ); ?></th>
+                <td><?php echo $cd_userregistered; ?></td>
+            </tr>
 
-			<tr valign="top">
-				<th scope="row">Your role</th>
-				<td><?php echo $cd_userrole; ?>
-					<span class="cd-caps cd-click dashicons dashicons-info"
-					      onclick="cdMain.updown('cd-caps');"
-					      style="color:<?php echo $this->get_color_scheme( 'secondary' ); ?>"></span>
-		        <span id="cd-caps" style="display: none;">
+            <tr valign="top">
+                <th scope="row"><?php _e( 'Your role', 'client-dash' ); ?></th>
+                <td><?php echo $cd_userrole; ?>
+                    <span class="cd-caps cd-click dashicons dashicons-info"
+                          onclick="cdMain.updown('cd-caps');"
+                          style="color:<?php echo $this->get_color_scheme( 'secondary' ); ?>"></span>
+                    <span id="cd-caps" style="display: none;">
 		          <h4><?php echo $cd_userrole; ?>s are able to:</h4>
-			        <?php
-			        if ( ! empty( $cd_usercaps ) ) {
-				        unset( $cd_usercaps['level_0'], $cd_usercaps['level_1'], $cd_usercaps['level_2'], $cd_usercaps['level_3'], $cd_usercaps['level_4'], $cd_usercaps['level_5'], $cd_usercaps['level_6'], $cd_usercaps['level_7'], $cd_usercaps['level_8'], $cd_usercaps['level_9'], $cd_usercaps['level_10'] );
-				        echo '<ul>';
-				        foreach ( $cd_usercaps as $key => $value ) {
-					        echo '<li>' . $key . '</li>';
-				        }
-				        echo '</ul>';
-			        } ?>
+						<?php
+						if ( ! empty( $cd_usercaps ) ) {
+							unset( $cd_usercaps['level_0'], $cd_usercaps['level_1'], $cd_usercaps['level_2'], $cd_usercaps['level_3'], $cd_usercaps['level_4'], $cd_usercaps['level_5'], $cd_usercaps['level_6'], $cd_usercaps['level_7'], $cd_usercaps['level_8'], $cd_usercaps['level_9'], $cd_usercaps['level_10'] );
+							echo '<ul>';
+							foreach ( $cd_usercaps as $key => $value ) {
+								echo '<li>' . $key . '</li>';
+							}
+							echo '</ul>';
+						} ?>
 		        </span>
-				</td>
-			</tr>
+                </td>
+            </tr>
 
-			<tr valign="top">
-				<th scope="row"><a href="<?php site_url(); ?>/wp-admin/profile.php" class="button-primary">Edit your
-						profile</a></th>
-				<td></td>
-			</tr>
-		</table>
-	<?php
+            <tr valign="top">
+                <th scope="row">
+                    <a href="<?php site_url(); ?>/wp-admin/profile.php" class="button-primary">
+						<?php _e( 'Edit Your Profile', 'client-dash' ); ?>
+                    </a>
+                </th>
+                <td></td>
+            </tr>
+        </table>
+		<?php
 	}
 }

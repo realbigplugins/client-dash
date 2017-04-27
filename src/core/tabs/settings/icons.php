@@ -228,9 +228,9 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 	function __construct() {
 
 		$this->add_content_section( array(
-			'name'     => 'Core Settings Icons',
-			'page'     => 'Settings',
-			'tab'      => 'Icons',
+			'name'     => __( 'Core Settings Icons', 'client-dash' ),
+			'page'     => __( 'Settings', 'client-dash' ),
+			'tab'      => __( 'Icons', 'client-dash' ),
 			'callback' => array( $this, 'block_output' )
 		) );
 	}
@@ -249,9 +249,9 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 		$help_dashicon      = get_option( 'cd_dashicon_help', $this->option_defaults['dashicon_help'] );
 		$webmaster_dashicon = get_option( 'cd_dashicon_webmaster', $this->option_defaults['dashicon_webmaster'] );
 
-		// Show nag if not up to date, because not all icons exist in WP pre 1.9
+		// Show nag if not up to date, because not all icons exist in WP pre 3.9
 		if ( floatval( $wp_version ) < 3.9 ) {
-			self::error_nag( 'You are currently running a version of WordPress below 1.9. Not all icons exist before 1.9 and will not show here properly. Please update WordPress as soon as you can.' );
+			self::error_nag( __( 'You are currently running a version of WordPress below 3.9. Not all icons exist before 3.9 and will not show here properly. Please update WordPress as soon as you can.', 'client-dash' ) );
 		}
 		?>
 
@@ -269,7 +269,7 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 				   data-dashicon="<?php echo $account_dashicon; ?>"
 				   data-widget="account"></p>
 
-				<p class="cd-dashicons-title">Account</p>
+				<p class="cd-dashicons-title"><?php _e( 'Account', 'client-dash' ); ?></p>
 			</div>
 
 			<div class="cd-col-four cd-reports" onclick="cdMain.dashicons_selected('reports');">
@@ -277,7 +277,7 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 				   data-dashicon="<?php echo $reports_dashicon; ?>"
 				   data-widget="reports"></p>
 
-				<p class="cd-dashicons-title">Reports</p>
+				<p class="cd-dashicons-title"><?php _e( 'Reports', 'client-dash' ); ?></p>
 			</div>
 
 			<div class="cd-col-four cd-help" onclick="cdMain.dashicons_selected('help');">
@@ -285,7 +285,7 @@ class ClientDash_Core_Page_Settings_Tab_Icons extends ClientDash {
 				   data-dashicon="<?php echo $help_dashicon; ?>"
 				   data-widget="help"></p>
 
-				<p class="cd-dashicons-title">Help</p>
+				<p class="cd-dashicons-title"><?php _e( 'Help', 'client-dash' ); ?></p>
 			</div>
 
 			<div class="cd-col-four cd-webmaster" onclick="cdMain.dashicons_selected('webmaster');">

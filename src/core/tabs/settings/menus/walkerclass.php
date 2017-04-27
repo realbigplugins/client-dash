@@ -95,25 +95,25 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 		// Decide what the type label is (because all cd items are technically "custom")
 		switch ( $item->cd_type ) {
 			case 'post_type':
-				$type_label = 'Post Type';
+				$type_label = __( 'Post Type', 'client-dash' );
 				break;
 			case 'taxonomy':
-				$type_label = 'Post Type (Taxonomy)';
+				$type_label = __( 'Post Type (Taxonomy)', 'client-dash' );
 				break;
 			case 'separator':
-				$type_label = 'Separator';
+				$type_label = __( 'Separator', 'client-dash' );
 				break;
 			case 'wp_core':
-				$type_label = 'WordPress';
+				$type_label = __( 'WordPress', 'client-dash' );
 				break;
 			case 'cd_core':
-				$type_label = 'Client Dash';
+				$type_label = __( 'Client Dash', 'client-dash' );
 				break;
 			case 'plugin':
-				$type_label = 'Plugin / Theme';
+				$type_label = __( 'Plugin / Theme', 'client-dash' );
 				break;
 			default:
-				$type_label = 'Link';
+				$type_label = __( 'Link', 'client-dash' );
 		}
 
 		// Create the item classes
@@ -136,7 +136,12 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 		$item_errors = array();
 
 		if ( ! $visible ) {
-			$item_errors[] = $ClientDash->error_nag( 'This page has no content visible for the current menu\'s role. To correct this, please visit <a href="' . $ClientDash->get_settings_url( 'display' ) . '">Display Settings</a>', 'read', false );
+			$item_errors[] = $ClientDash->error_nag(
+				sprintf(
+					__( 'This page has no content visible for the current menu\'s role. To correct this, please visit %sDisplay Settings', 'client-dash' ),
+					'<a href="' . $ClientDash->get_settings_url( 'display' ) . '">',
+					'</a>' )
+				, 'read', false );
 		}
 
 		// Decide of the "submenu" text should show or not
@@ -154,40 +159,41 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 
 		// Deal with the icon being an icon, an image, or a data image (taken from WP core)
 		// wp-admin/menu-header.php:~89
-		$img = '<img src="' . $item->cd_icon . '" alt="" />';
+		$img       = '<img src="' . $item->cd_icon . '" alt="" />';
 		$img_style = '';
 		$img_class = '';
 		if ( 'none' === $item->cd_icon || 'div' === $item->cd_icon ) {
 			$img = '';
 		} elseif ( 0 === strpos( $item->cd_icon, 'data:image/svg+xml;base64,' ) ) {
-			$img = '';
+			$img       = '';
 			$img_style = ' style="background-image:url(\'' . esc_attr( $item->cd_icon ) . '\')"';
 			$img_class = ' svg';
 		} elseif ( ! empty( $item->cd_icon ) ) {
-			$img = '';
+			$img       = '';
 			$img_class = ' dashicons ' . sanitize_html_class( $item->cd_icon );
 		} elseif ( empty( $item->cd_icon ) ) {
-			$img = '';
+			$img       = '';
 			$img_class = ' dashicons dashicons-admin-generic';
 		}
 
 		ob_start();
 		?>
-	<li id="menu-item-<?php echo $item->ID; ?>" class="<?php echo implode( ' ', $classes ); ?>">
-	<dl class="menu-item-bar">
-		<dt class="menu-item-handle">
+    <li id="menu-item-<?php echo $item->ID; ?>" class="<?php echo implode( ' ', $classes ); ?>">
+        <dl class="menu-item-bar">
+            <dt class="menu-item-handle">
 				<span class="item-title">
 					<?php if ( $item->cd_type != 'separator' ) : ?>
-						<span class='menu-item-icon<?php echo $img_class; echo $depth != 0 ? ' hidden' : ''; ?>'<?php echo $img_style; ?>>
+                        <span class='menu-item-icon<?php echo $img_class;
+						echo $depth != 0 ? ' hidden' : ''; ?>'<?php echo $img_style; ?>>
 							<?php echo $img; ?>
 						</span>
 					<?php endif; ?>
-					<span class="menu-item-title">
+                    <span class="menu-item-title">
 						<?php echo ! empty( $item->title ) ? esc_html( strip_tags( $item->title ) ) : '(no title)'; ?>
 					</span>
 					<span class="is-submenu" <?php echo $submenu_text; ?>><?php _e( 'sub item' ); ?></span>
 				</span>
-					<span class="item-controls">
+                <span class="item-controls">
 						<span class="item-type"><?php echo $type_label; ?></span>
 						<span class="item-order hide-if-js">
 							<a href="<?php
@@ -218,168 +224,168 @@ class Walker_Nav_Menu_Edit_CD extends Walker_Nav_Menu {
 						</span>
 
 						<a class="item-edit" id="edit-<?php echo $item->ID; ?>"
-						   title="<?php esc_attr_e( 'Edit Menu Item' ); ?>" href="<?php
+                           title="<?php esc_attr_e( 'Edit Menu Item' ); ?>" href="<?php
 						echo ( isset( $_GET['edit-menu-item'] ) && $item->ID == $_GET['edit-menu-item'] ) ? admin_url( 'nav-menus.php' ) : add_query_arg( 'edit-menu-item', $item->ID, remove_query_arg( $removed_args, admin_url( 'nav-menus.php#menu-item-settings-' . $item->ID ) ) );
 						?>"><?php _e( 'Edit Menu Item' ); ?></a>
 					</span>
-		</dt>
-	</dl>
+            </dt>
+        </dl>
 
-	<div class="menu-item-settings" id="menu-item-settings-<?php echo $item->ID; ?>">
+        <div class="menu-item-settings" id="menu-item-settings-<?php echo $item->ID; ?>">
 
-		<?php
-		// Print out all set error messages
-		if ( ! empty( $item_errors ) ) {
-			foreach ( $item_errors as $error ) {
-				echo $error;
+			<?php
+			// Print out all set error messages
+			if ( ! empty( $item_errors ) ) {
+				foreach ( $item_errors as $error ) {
+					echo $error;
+				}
 			}
-		}
-		?>
+			?>
 
-		<div <?php echo $item->cd_type == 'separator' ? 'style="display: none;"' : ''; ?> >
+            <div <?php echo $item->cd_type == 'separator' ? 'style="display: none;"' : ''; ?> >
 
-			<?php if ( $item->cd_type == 'link' ) : ?>
-				<p class="field-url description description-wide">
-					<label for="edit-menu-item-url-<?php echo $item->ID; ?>">
-						<?php _e( 'URL' ); ?><br/>
-						<input type="text" id="edit-menu-item-url-<?php echo $item->ID; ?>"
-						       class="widefat code edit-menu-item-url"
-						       name="menu-item-url[<?php echo $item->ID; ?>]"
-						       value="<?php echo esc_attr( $item->url ); ?>"/>
-					</label>
-				</p>
-			<?php else: ?>
-				<input type="hidden" name="menu-item-url[<?php echo $item->ID; ?>]"
-				       value="<?php echo esc_attr( $item->url ); ?>"/>
-			<?php endif; ?>
+				<?php if ( $item->cd_type == 'link' ) : ?>
+                    <p class="field-url description description-wide">
+                        <label for="edit-menu-item-url-<?php echo $item->ID; ?>">
+							<?php _e( 'URL' ); ?><br/>
+                            <input type="text" id="edit-menu-item-url-<?php echo $item->ID; ?>"
+                                   class="widefat code edit-menu-item-url"
+                                   name="menu-item-url[<?php echo $item->ID; ?>]"
+                                   value="<?php echo esc_attr( $item->url ); ?>"/>
+                        </label>
+                    </p>
+				<?php else: ?>
+                    <input type="hidden" name="menu-item-url[<?php echo $item->ID; ?>]"
+                           value="<?php echo esc_attr( $item->url ); ?>"/>
+				<?php endif; ?>
 
-			<?php if ( $item->cd_type != 'separator' ) : ?>
-				<p class="description description-thin <?php echo $item->cd_type == 'separator' ? 'hidden' : ''; ?>">
-					<label for="edit-menu-item-title-<?php echo $item->ID; ?>">
-						<?php _e( 'Navigation Label' ); ?><br/>
+				<?php if ( $item->cd_type != 'separator' ) : ?>
+                    <p class="description description-thin <?php echo $item->cd_type == 'separator' ? 'hidden' : ''; ?>">
+                        <label for="edit-menu-item-title-<?php echo $item->ID; ?>">
+							<?php _e( 'Navigation Label' ); ?><br/>
 
-						<?php
-						// Don't allow title modification with Webmaster menu item
-						if ( $cd_webmaster == true ) :
-							?>
-							<input type="text" value="<?php echo esc_html( $item->title ); ?>"
-							       title="Change in Webmaster settings" disabled/>
-						<?php else: ?>
-							<input type="text" id="edit-menu-item-title-<?php echo $item->ID; ?>"
-							       class="widefat edit-menu-item-title"
-							       name="menu-item-title[<?php echo $item->ID; ?>]"
-							       value="<?php echo esc_html( $item->title ); ?>"/>
-						<?php endif; ?>
+							<?php
+							// Don't allow title modification with Webmaster menu item
+							if ( $cd_webmaster == true ) :
+								?>
+                                <input type="text" value="<?php echo esc_html( $item->title ); ?>"
+                                       title="Change in Webmaster settings" disabled/>
+							<?php else: ?>
+                                <input type="text" id="edit-menu-item-title-<?php echo $item->ID; ?>"
+                                       class="widefat edit-menu-item-title"
+                                       name="menu-item-title[<?php echo $item->ID; ?>]"
+                                       value="<?php echo esc_html( $item->title ); ?>"/>
+							<?php endif; ?>
 
-					</label>
-				</p>
+                        </label>
+                    </p>
 
-				<div class="cd-menu-icon-field">
-					<p class="description description-thin">
-						<label for="edit-menu-item-cd-icon-<?php echo $item->ID; ?>">
-							<?php _e( 'Menu Icon' ); ?><br/>
-							<input type="text" id="edit-menu-item-cd-icon-<?php echo $item->ID; ?>"
-							       class="widefat edit-menu-item-cd-icon"
-							       name="menu-item-cd-icon[<?php echo $item->ID; ?>]"
-							       value="<?php echo esc_html( ! empty( $item->cd_icon ) ? $item->cd_icon : '' ); ?>"
-							       placeholder="dashicons-admin-generic" />
-						</label>
-					</p>
-					<ul class="cd-menu-icon-selector">
-						<?php foreach ( ClientDash_Core_Page_Settings_Tab_Icons::$icons as $icon ) : ?>
-							<li data-icon="<?php echo $icon; ?>">
-								<span class="dashicons <?php echo $icon; ?>"></span>
-							</li>
-						<?php endforeach; ?>
-					</ul>
-				</div>
+                    <div class="cd-menu-icon-field">
+                        <p class="description description-thin">
+                            <label for="edit-menu-item-cd-icon-<?php echo $item->ID; ?>">
+								<?php _e( 'Menu Icon' ); ?><br/>
+                                <input type="text" id="edit-menu-item-cd-icon-<?php echo $item->ID; ?>"
+                                       class="widefat edit-menu-item-cd-icon"
+                                       name="menu-item-cd-icon[<?php echo $item->ID; ?>]"
+                                       value="<?php echo esc_html( ! empty( $item->cd_icon ) ? $item->cd_icon : '' ); ?>"
+                                       placeholder="dashicons-admin-generic"/>
+                            </label>
+                        </p>
+                        <ul class="cd-menu-icon-selector">
+							<?php foreach ( ClientDash_Core_Page_Settings_Tab_Icons::$icons as $icon ) : ?>
+                                <li data-icon="<?php echo $icon; ?>">
+                                    <span class="dashicons <?php echo $icon; ?>"></span>
+                                </li>
+							<?php endforeach; ?>
+                        </ul>
+                    </div>
 
-				<p class="field-css-classes description description-wide">
-					<label for="edit-menu-item-classes-<?php echo $item->ID; ?>">
+                    <p class="field-css-classes description description-wide">
+                        <label for="edit-menu-item-classes-<?php echo $item->ID; ?>">
 							<span class="cd-extra-params"
-							      onclick="cdMain.updown('edit-menu-item-classes-<?php echo $item->ID; ?>')">
+                                  onclick="cdMain.updown('edit-menu-item-classes-<?php echo $item->ID; ?>')">
 						<?php _e( 'CSS Classes (only applies to top-level menu items)' ); ?>
 								</span>
-						<input type="text" id="edit-menu-item-classes-<?php echo $item->ID; ?>"
-						       class="widefat code edit-menu-item-classes"
-						       name="menu-item-classes[<?php echo $item->ID; ?>]"
-						       value="<?php echo esc_attr( implode( ' ', $item->classes ) ); ?>"
-						       style="display: none;"/>
-					</label>
-				</p>
+                            <input type="text" id="edit-menu-item-classes-<?php echo $item->ID; ?>"
+                                   class="widefat code edit-menu-item-classes"
+                                   name="menu-item-classes[<?php echo $item->ID; ?>]"
+                                   value="<?php echo esc_attr( implode( ' ', $item->classes ) ); ?>"
+                                   style="display: none;"/>
+                        </label>
+                    </p>
 
-				<p class="description description-wide">
-					<label for="edit-menu-item-cd-params-<?php echo $item->ID; ?>">
+                    <p class="description description-wide">
+                        <label for="edit-menu-item-cd-params-<?php echo $item->ID; ?>">
 							<span class="cd-extra-params"
-							      onclick="cdMain.updown('edit-menu-item-cd-params-<?php echo $item->ID; ?>')">
+                                  onclick="cdMain.updown('edit-menu-item-cd-params-<?php echo $item->ID; ?>')">
 								<?php _e( 'Extra Parameters' ); ?>
 							</span>
-						<input type="text" id="edit-menu-item-cd-params-<?php echo $item->ID; ?>"
-						       class="widefat code edit-menu-item-cd-params"
-						       name="menu-item-cd-params[<?php echo $item->ID; ?>]"
-						       value="<?php echo $item->cd_params; ?>"
-						       style="display: none;"/>
-					</label>
-				</p>
-			<?php else: ?>
-				<input type="hidden"
-				       name="menu-item-title[<?php echo $item->ID; ?>]"
-				       value="Separator"/>
-			<?php endif; ?>
+                            <input type="text" id="edit-menu-item-cd-params-<?php echo $item->ID; ?>"
+                                   class="widefat code edit-menu-item-cd-params"
+                                   name="menu-item-cd-params[<?php echo $item->ID; ?>]"
+                                   value="<?php echo $item->cd_params; ?>"
+                                   style="display: none;"/>
+                        </label>
+                    </p>
+				<?php else: ?>
+                    <input type="hidden"
+                           name="menu-item-title[<?php echo $item->ID; ?>]"
+                           value="Separator"/>
+				<?php endif; ?>
 
-			<p class="field-move hide-if-no-js description description-wide">
-				<label>
-					<span><?php _e( 'Move' ); ?></span>
-					<a href="#" class="menus-move-up"><?php _e( 'Up one' ); ?></a>
-					<a href="#" class="menus-move-down"><?php _e( 'Down one' ); ?></a>
-					<a href="#" class="menus-move-left"></a>
-					<a href="#" class="menus-move-right"></a>
-					<a href="#" class="menus-move-top"><?php _e( 'To the top' ); ?></a>
-				</label>
-			</p>
-		</div>
+                <p class="field-move hide-if-no-js description description-wide">
+                    <label>
+                        <span><?php _e( 'Move' ); ?></span>
+                        <a href="#" class="menus-move-up"><?php _e( 'Up one' ); ?></a>
+                        <a href="#" class="menus-move-down"><?php _e( 'Down one' ); ?></a>
+                        <a href="#" class="menus-move-left"></a>
+                        <a href="#" class="menus-move-right"></a>
+                        <a href="#" class="menus-move-top"><?php _e( 'To the top' ); ?></a>
+                    </label>
+                </p>
+            </div>
 
-		<div class="menu-item-actions description-wide submitbox">
+            <div class="menu-item-actions description-wide submitbox">
 
-			<?php if ( $item->original_title != $item->title && $item->original_title != 'Client Dash ORIG' && $item->cd_type != 'separator' ) : ?>
-				<p class="link-to-original">
-					Original Title: <b style="font-style: normal;"><?php echo $item->original_title; ?></b>
-				</p>
-			<?php endif; ?>
+				<?php if ( $item->original_title != $item->title && $item->original_title != 'Client Dash ORIG' && $item->cd_type != 'separator' ) : ?>
+                    <p class="link-to-original">
+                        Original Title: <b style="font-style: normal;"><?php echo $item->original_title; ?></b>
+                    </p>
+				<?php endif; ?>
 
-			<?php if ( $item->original_title != 'Client Dash ORIG' ) : ?>
-				<a class="item-delete submitdelete deletion" id="delete-<?php echo $item->ID; ?>" href="<?php
-				echo wp_nonce_url(
-					add_query_arg(
-						array(
-							'action'    => 'delete-menu-item',
-							'menu-item' => $item->ID,
+				<?php if ( $item->original_title != 'Client Dash ORIG' ) : ?>
+                    <a class="item-delete submitdelete deletion" id="delete-<?php echo $item->ID; ?>" href="<?php
+					echo wp_nonce_url(
+						add_query_arg(
+							array(
+								'action'    => 'delete-menu-item',
+								'menu-item' => $item->ID,
+							),
+							admin_url( 'nav-menus.php' )
 						),
-						admin_url( 'nav-menus.php' )
-					),
-					'delete-menu_item_' . $item->ID
-				); ?>"><?php _e( 'Remove' ); ?></a>
-				<span class="meta-sep hide-if-no-js"> | </span>
-			<?php endif; ?>
+						'delete-menu_item_' . $item->ID
+					); ?>"><?php _e( 'Remove' ); ?></a>
+                    <span class="meta-sep hide-if-no-js"> | </span>
+				<?php endif; ?>
 
-			<a
-				class="item-cancel submitcancel hide-if-no-js" id="cancel-<?php echo $item->ID; ?>"
-				href="<?php echo esc_url( add_query_arg( array(
-					'edit-menu-item' => $item->ID,
-					'cancel'         => time()
-				), admin_url( 'nav-menus.php' ) ) );
-				?>#menu-item-settings-<?php echo $item->ID; ?>"><?php _e( 'Cancel' ); ?></a>
-		</div>
+                <a
+                        class="item-cancel submitcancel hide-if-no-js" id="cancel-<?php echo $item->ID; ?>"
+                        href="<?php echo esc_url( add_query_arg( array(
+							'edit-menu-item' => $item->ID,
+							'cancel'         => time()
+						), admin_url( 'nav-menus.php' ) ) );
+						?>#menu-item-settings-<?php echo $item->ID; ?>"><?php _e( 'Cancel' ); ?></a>
+            </div>
 
-		<input class="menu-item-data-db-id" type="hidden" name="menu-item-db-id[<?php echo $item->ID; ?>]"
-		       value="<?php echo $item->ID; ?>"/>
-		<input class="menu-item-data-parent-id" type="hidden" name="menu-item-parent-id[<?php echo $item->ID; ?>]"
-		       value="<?php echo esc_attr( $item->menu_item_parent ); ?>"/>
-		<input class="menu-item-data-position" type="hidden" name="menu-item-position[<?php echo $item->ID; ?>]"
-		       value="<?php echo esc_attr( $item->menu_order ); ?>"/>
-	</div>
-	<!-- .menu-item-settings-->
-	<ul class="menu-item-transport"></ul>
+            <input class="menu-item-data-db-id" type="hidden" name="menu-item-db-id[<?php echo $item->ID; ?>]"
+                   value="<?php echo $item->ID; ?>"/>
+            <input class="menu-item-data-parent-id" type="hidden" name="menu-item-parent-id[<?php echo $item->ID; ?>]"
+                   value="<?php echo esc_attr( $item->menu_item_parent ); ?>"/>
+            <input class="menu-item-data-position" type="hidden" name="menu-item-position[<?php echo $item->ID; ?>]"
+                   value="<?php echo esc_attr( $item->menu_order ); ?>"/>
+        </div>
+        <!-- .menu-item-settings-->
+        <ul class="menu-item-transport"></ul>
 		<?php
 		$output .= ob_get_clean();
 	}

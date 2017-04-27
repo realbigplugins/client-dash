@@ -39,8 +39,8 @@ class ClientDash_Page_Account extends ClientDash {
 		if ( ! empty( $ClientDash->content_sections['account'] ) ) {
 			add_submenu_page(
 				'index.php',
-				'Account Information',
-				'Account',
+				__( 'Account Information', 'client-dash' ),
+				__( 'Account', 'client-dash' ),
 				'read',
 				'cd_account',
 				array( $this, 'page_output' )

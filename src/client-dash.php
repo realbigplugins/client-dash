@@ -4,6 +4,9 @@
 // Require the functions class first so we can extend it
 include_once( plugin_dir_path( __FILE__ ) . 'core/functions.php' );
 
+define( 'CLIENTDASH_URI', plugin_dir_url( __FILE__ ) );
+define( 'CLIENTDASH_DIR', plugin_dir_path( __FILE__ ) );
+
 /**
  * Class ClientDash
  *
@@ -24,7 +27,7 @@ class ClientDash extends ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.5
 	 */
-	protected static $version = '1.6.11';
+	protected static $version = '1.6.13';
 
 	/**
 	 * The path to the plugin.
@@ -72,37 +75,38 @@ class ClientDash extends ClientDash_Functions {
 	/**
 	 * Client Dash Core available widgets.
 	 *
-	 * Private.
+	 * Title and Description set in the method translations_init().
 	 *
 	 * @since Client Dash 1.6
+	 * @access private
 	 */
 	public static $_cd_widgets = array(
 		'cd_account'   => array(
-			'title'       => 'Account',
+			'title'       => '',
 			'ID'          => 'cd_account',
-			'description' => 'The core Client Dash account page.',
-			'callback'   => array( 'ClientDash_Widget_Account', 'widget_content' ),
+			'description' => '',
+			'callback'    => array( 'ClientDash_Widget_Account', 'widget_content' ),
 			'_cd_core'    => '1',
 		),
 		'cd_help'      => array(
-			'title'       => 'Help',
+			'title'       => '',
 			'ID'          => 'cd_help',
-			'description' => 'The core Client Dash help page.',
-			'callback'   => array( 'ClientDash_Widget_Help', 'widget_content' ),
+			'description' => '',
+			'callback'    => array( 'ClientDash_Widget_Help', 'widget_content' ),
 			'_cd_core'    => '1',
 		),
 		'cd_reports'   => array(
-			'title'       => 'Reports',
+			'title'       => '',
 			'ID'          => 'cd_reports',
-			'description' => 'The core Client Dash reports page.',
-			'callback'   => array( 'ClientDash_Widget_Reports', 'widget_content' ),
+			'description' => '',
+			'callback'    => array( 'ClientDash_Widget_Reports', 'widget_content' ),
 			'_cd_core'    => '1',
 		),
 		'cd_webmaster' => array(
-			'title'       => 'Webmaster',
+			'title'       => '',
 			'ID'          => 'cd_webmaster',
-			'description' => 'The core Client Dash webmaster page.',
-			'callback'   => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
+			'description' => '',
+			'callback'    => array( 'ClientDash_Widget_Webmaster', 'widget_content' ),
 			'_cd_core'    => '1',
 		),
 	);
@@ -116,6 +120,8 @@ class ClientDash extends ClientDash_Functions {
 
 	/**
 	 * Default option settings for Client Dash options (settings).
+	 *
+	 * Some strings set in the method translations_init().
 	 *
 	 * @since Client Dash 1.0
 	 */
@@ -311,6 +317,9 @@ class ClientDash extends ClientDash_Functions {
 			require_once __DIR__ . '/update.php';
 		}
 
+		// Translate properties
+		$this->translate_init();
+
 		// Update all options if not set
 		$init_reset = get_option( 'cd_initial_reset' );
 		if ( empty( $init_reset ) ) {
@@ -320,6 +329,8 @@ class ClientDash extends ClientDash_Functions {
 
 		// Set the path
 		$this->path = plugin_dir_path( __FILE__ );
+
+		add_action( 'plugins_loaded', array( $this, 'load_textdomain') );
 
 		// Register and enqueue our scripts / styles
 		add_action( 'admin_init', array( $this, 'register_scripts' ) );
@@ -369,12 +380,38 @@ class ClientDash extends ClientDash_Functions {
 		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
 
 		// Adds a few more action links to plugins list
-		add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), array( $this, 'action_links' ) );
+		add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this, 'action_links' ) );
 	}
 
 	public static function get_version() {
+
 		return self::$version;
 	}
+
+	private function translate_init() {
+
+		self::$_cd_widgets['cd_account']['title']         = __( 'Account', 'client-dash' );
+		self::$_cd_widgets['cd_account']['description']   = __( 'The core Client Dash account page.', 'client-dash' );
+		self::$_cd_widgets['cd_help']['title']            = __( 'Help', 'client-dash' );
+		self::$_cd_widgets['cd_help']['description']      = __( 'The core Client Dash help page.', 'client-dash' );
+		self::$_cd_widgets['cd_reports']['title']         = __( 'Reports', 'client-dash' );
+		self::$_cd_widgets['cd_reports']['description']   = __( 'The core Client Dash reports page.', 'client-dash' );
+		self::$_cd_widgets['cd_webmaster']['title']       = __( 'Webmaster', 'client-dash' );
+		self::$_cd_widgets['cd_webmaster']['description'] = __( 'The core Client Dash webmaster page.', 'client-dash' );
+
+		$this->option_defaults['webmaster_name']          = __( 'Webmaster', 'client-dash' );
+		$this->option_defaults['webmaster_main_tab_name'] = __( 'Main', 'client-dash' );
+
+		$this->option_defaults['widgets'][0]['title'] = __( 'Account', 'client-dash' );
+		$this->option_defaults['widgets'][1]['title'] = __( 'Reports', 'client-dash' );
+		$this->option_defaults['widgets'][2]['title'] = __( 'Help', 'client-dash' );
+		$this->option_defaults['widgets'][3]['title'] = __( 'Webmaster', 'client-dash' );
+	}
+
+	function load_textdomain() {
+
+	    load_plugin_textdomain( 'client-dash', FALSE, basename( dirname( __FILE__ ) ) . '/languages/' );
+    }
 
 	/**
 	 * Registers all Client Dash scripts.
@@ -386,7 +423,7 @@ class ClientDash extends ClientDash_Functions {
 		// The main script for Client Dash
 		wp_register_script(
 			'cd-main',
-			plugin_dir_url( __FILE__ ) . 'assets/js/clientdash.min.js',
+			CLIENTDASH_URI . 'assets/js/clientdash.min.js',
 			array( 'jquery', 'jquery-ui-sortable', 'jquery-ui-draggable', 'jquery-effects-shake' ),
 			WP_DEBUG == false ? self::$version : time()
 		);
@@ -396,9 +433,9 @@ class ClientDash extends ClientDash_Functions {
 		// The main stylesheet for Client Dash
 		wp_register_style(
 			'cd-main',
-			plugins_url( 'assets/css/clientdash.min.css', __FILE__ ),
+			CLIENTDASH_URI . 'assets/css/clientdash.min.css',
 			array(),
-			WP_DEBUG == false? self::$version : time()
+			WP_DEBUG == false ? self::$version : time()
 		);
 	}
 
@@ -637,7 +674,7 @@ class ClientDash extends ClientDash_Functions {
 		global $wp_meta_boxes;
 
 		$sidebars = get_option( 'sidebars_widgets' );
-		
+
 		/**
 		 * This allows the currently visible dashboard "sidebar" to be changed from the default.
 		 *
@@ -837,13 +874,18 @@ class ClientDash extends ClientDash_Functions {
 		// ==============================================================================
 		if ( isset( $_GET['cd_update_dash'] ) ) {
 			?>
-			<div class="updated">
-				<p>
-					Great! Thanks! Now you can return to the settings <a
-						href="<?php echo $this->get_settings_url( 'widgets' ); ?>">here</a>.
-				</p>
-			</div>
-		<?php
+            <div class="updated">
+                <p>
+					<?php
+					printf(
+						__( 'Great! Thanks! Now you can return to the settings %shere%s.', 'client-dash' ),
+						'<a href="' . $this->get_settings_url( 'widgets' ) . '">',
+						'</a>'
+					)
+					?>
+                </p>
+            </div>
+			<?php
 		}
 
 		// ==============================================================================
@@ -860,16 +902,21 @@ class ClientDash extends ClientDash_Functions {
 
 		if ( $existing_roles != $cd_existing_roles && current_user_can( 'manage_options' ) ) {
 			?>
-			<div class="error">
-				<p>
-					It seems that there are either new roles, or some roles have been deleted, or the roles have been
-					modified in some other way. Please visit the <a
-						href="<?php echo $this->get_settings_url( 'display' ); ?>">Display Settings</a> and confirm that
-					the role display settings are still to your liking. (this message will go away once you hit "Save
-					Changes" on the display settings page).
-				</p>
-			</div>
-		<?php
+            <div class="error">
+                <p>
+					<?php
+					printf(
+						__( 'It seems that there are either new roles, or some roles have been deleted, or the roles ' .
+						    'have been modified in some other way. Please visit the %sDisplay Settings% and confirm ' .
+						    'that the role display settings are still to your liking. (this message will go away ' .
+						    'once you hit "Save Changes" on the display settings page).', 'client-dash' ),
+						'<a href="' . $this->get_settings_url( 'display' ) . '">',
+						'</a>'
+					)
+					?>
+                </p>
+            </div>
+			<?php
 		}
 
 		// Ensure option is always unset (except right before the initial checking)
@@ -886,9 +933,18 @@ class ClientDash extends ClientDash_Functions {
 	 * @return array
 	 */
 	public function action_links( $links ) {
-		$links[] = '<a href="'. get_admin_url(null, 'options-general.php?page=cd_settings') .'">Settings</a>';
-		$links[] = '<a href="http://realbigplugins.com/?utm_source=Client%20Dash&utm_medium=Plugins%20list%20link&utm_campaign=Client%20Dash%20Plugin" target="_blank">More Real Big Plugins</a>';
-		$links[] = '<a href="http://realbigplugins.com/subscribe/?utm_source=Client%20Dash&utm_medium=Plugins%20list%20link&utm_campaign=Client%20Dash%20Plugin" target="_blank">Subscribe</a>';
+
+		$links[] = '<a href="' . get_admin_url( null, 'options-general.php?page=cd_settings' ) . '">' .
+		           __( 'Settings', 'client-dash' ) . '</a>';
+
+		$links[] = '<a href="http://realbigplugins.com/?utm_source=Client%20Dash&utm_medium=Plugins%20list%20link&utm' .
+		           '_campaign=Client%20Dash%20Plugin" target="_blank">' . __( 'More Real Big Plugins', 'client-dash' ) .
+		           '</a>';
+
+		$links[] = '<a href="http://realbigplugins.com/subscribe/?utm_source=Client%20Dash&utm_medium=Plugins%20list%' .
+		           '20link&utm_campaign=Client%20Dash%20Plugin" target="_blank">' . __( 'Subscribe', 'client-dash' ) .
+		           '</a>';
+
 		return $links;
 	}
 }

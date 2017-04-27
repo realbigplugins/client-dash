@@ -160,11 +160,11 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			'icon'       => 'dashicons-admin-links',
 			'capability' => 'manage_links',
 			'submenus'   => array(
-				'All Links' => array(
+				'All Links'       => array(
 					'url'        => 'link-manager.php',
 					'capability' => 'manage_links',
 				),
-				'Add New' => array(
+				'Add New'         => array(
 					'url'        => 'link-add.php',
 					'capability' => 'manage_links',
 				),
@@ -370,6 +370,8 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 		global $ClientDash;
 
+		$this->translate_init();
+
 		// For when getting a specific role's admin menu
 		if ( isset( $_POST['cd_role_menu_items'] ) ) {
 
@@ -417,9 +419,9 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 
 		// Add the content
 		$this->add_content_section( array(
-			'name'     => 'Core Menu Settings',
-			'page'     => 'Settings',
-			'tab'      => 'Menus',
+			'name'     => __( 'Core Menu Settings', 'client-dash' ),
+			'page'     => __( 'Settings', 'client-dash' ),
+			'tab'      => __( 'Menus', 'client-dash' ),
 			'callback' => array( $this, 'block_output' )
 		) );
 
@@ -451,6 +453,16 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 			// Make sure we include the WP nav menu script for our custom CD page
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_nav_menu' ) );
 		}
+	}
+
+	private function translate_init() {
+
+		$side_sortables['add-post-type']['title']    = __( 'Post Types', 'client-dash' );
+		$side_sortables['add-wp-core']['title']      = __( 'WordPress', 'client-dash' );
+		$side_sortables['add-plugin']['title']       = __( 'Plugin / Theme', 'client-dash' );
+		$side_sortables['add-cd-core']['title']      = __( 'Client Dash', 'client-dash' );
+		$side_sortables['add-custom-links']['title'] = __( 'Custom Link', 'client-dash' );
+		$side_sortables['add-separator']['title']    = __( 'Separator', 'client-dash' );
 	}
 
 	/**
@@ -781,12 +793,12 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	public function add_client_dash_menu_item() {
 
 		self::update_menu_item( $this->menu_ID, 0, array(
-			'title'             => 'Client Dash',
+			'title'             => __( 'Client Dash', 'client-dash' ),
 			'url'               => 'cd_settings',
 			'cd-type'           => 'cd_core',
 			'cd-icon'           => $this->option_defaults['dashicon_settings'],
 			'cd-submenu-parent' => 'options-general.php',
-			'original-title'    => 'Client Dash ORIG',
+			'original-title'    => __( 'Client Dash ORIG', 'client-dash' )
 		) );
 	}
 
@@ -876,7 +888,8 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		// If creating, things are different
 		if ( isset( $_GET['cd_create_admin_menu'] ) ) {
 			$this->menu_ID = false;
-			$this->role = $_GET['cd_create_admin_menu'];
+			$this->role    = $_GET['cd_create_admin_menu'];
+
 			return;
 		}
 
@@ -1109,11 +1122,11 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	public static function sort_original_admin_menu( $menu, $is_submenu = false ) {
 
 		// Account for "Comments" having html in the title
-		if ( strpos( $is_submenu ? $is_submenu['menu_title'] : $menu['menu_title'], 'Comments' ) !== false ) {
+		if ( strpos( $is_submenu ? $is_submenu['menu_title'] : $menu['menu_title'], __( 'Comments' ) ) !== false ) {
 			if ( $is_submenu ) {
-				$is_submenu['menu_title'] = 'Comments';
+				$is_submenu['menu_title'] = __( 'Comments' );
 			} else {
-				$menu['menu_title'] = 'Comments';
+				$menu['menu_title'] = __( 'Comments' );
 			}
 		}
 
@@ -1132,7 +1145,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		if ( strpos( $menu['menu_slug'], 'separator' ) !== false ) {
 
 			// Separator
-			$args['title']   = 'Separator';
+			$args['title']   = __( 'Separator', 'client-dash' );
 			$args['cd-type'] = 'separator';
 
 		} elseif ( self::strposa( $menu['menu_slug'], array(
@@ -1299,7 +1312,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 				}
 
 				// If the comments page, get the html generated mimicked from WP core (/wp-admin/menus.php:~94)
-				if ( $menu_item->title == 'Comments' ) {
+				if ( $menu_item->title == __( 'Comments' ) ) {
 
 					$awaiting_mod     = wp_count_comments();
 					$awaiting_mod     = $awaiting_mod->moderated;
@@ -1366,10 +1379,10 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 					$hookname = get_plugin_page_hookname( $menu_item->url, '' );
 
 					if ( empty( $menu_item->cd_icon ) ) {
-						$icon_url = 'dashicons-admin-generic';
+						$icon_url   = 'dashicons-admin-generic';
 						$icon_class = 'menu-icon-generic ';
 					} else {
-						$icon_url = set_url_scheme( $menu_item->cd_icon );
+						$icon_url   = set_url_scheme( $menu_item->cd_icon );
 						$icon_class = '';
 					}
 
@@ -1524,8 +1537,8 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		global $self, $pagenow, $plugin_page, $cd_parent_file, $submenu_file, $cd_submenu_file;
 
 		// Set the self (or what WP thinks we're viewing) to the ENTIRE slug, not just the parent.
-		$self = $cd_parent_file;
-		$pagenow = $cd_parent_file;
+		$self        = $cd_parent_file;
+		$pagenow     = $cd_parent_file;
 		$plugin_page = $cd_parent_file;
 
 		// Tell WP what our new submenu file is (because it's custom), otherwise, default to
@@ -1893,308 +1906,308 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		// Only show select area if a menu has been created. Otherwise, this will be shown below
 		if ( $this->menu_ID && ! $creating ) :
 			?>
-			<div class="manage-menus<?php echo $creating ? ' disabled' : ''; ?>">
-				<form method="get">
-					<label for="menu" class="selected-menu"><?php _e( 'Select a menu to edit:' ); ?></label>
+            <div class="manage-menus<?php echo $creating ? ' disabled' : ''; ?>">
+                <form method="get">
+                    <label for="menu" class="selected-menu"><?php _e( 'Select a menu to edit:' ); ?></label>
 
-					<?php // Keep us on the same page! ?>
-					<input type="hidden" name="page" value="cd_settings"/>
-					<input type="hidden" name="tab" value="menus"/>
+					<?php // Keep us on the same page!
+					?>
+                    <input type="hidden" name="page" value="cd_settings"/>
+                    <input type="hidden" name="tab" value="menus"/>
 
-					<select id="menu" name="menu">
+                    <select id="menu" name="menu">
 						<?php
 						foreach ( get_editable_roles() as $role_ID => $role ) {
 							?>
-							<option
-								value="<?php echo $this->all_menu_IDs[ $role_ID ] ? $this->all_menu_IDs[ $role_ID ] : $role_ID; ?>"
+                            <option
+                                    value="<?php echo $this->all_menu_IDs[ $role_ID ] ? $this->all_menu_IDs[ $role_ID ] : $role_ID; ?>"
 								<?php selected( $this->role, $role_ID ); ?>>
 								<?php echo $role_ID == 'administrator' ? $role['name'] . ' (that\'s you!)' : $role['name']; ?>
-							</option>
-						<?php
+                            </option>
+							<?php
 						}
 						?>
-					</select>
+                    </select>
 
-					<span class="submit-btn">
+                    <span class="submit-btn">
 						<input type="submit" class="button-secondary" value="Select"/>
 					</span>
-				</form>
-			</div><!-- /manage-menus -->
+                </form>
+            </div><!-- /manage-menus -->
 		<?php endif; ?>
 
-		<div id="nav-menus-frame">
-		<div id="menu-settings-column"
-		     class="metabox-holder<?php echo $this->menu_ID && ! $creating ? '' : ' metabox-holder-disabled'; ?>">
+        <div id="nav-menus-frame">
+            <div id="menu-settings-column"
+                 class="metabox-holder<?php echo $this->menu_ID && ! $creating ? '' : ' metabox-holder-disabled'; ?>">
 
-			<div class="clear"></div>
+                <div class="clear"></div>
 
-			<form id="nav-menu-meta" action="" class="nav-menu-meta" method="post" enctype="multipart/form-data">
-				<input type="hidden" name="menu" id="nav-menu-meta-object-id"
-				       value="<?php echo esc_attr( $this->menu_ID ); ?>"/>
-				<input type="hidden" name="action" value="add-menu-item"/>
-				<?php wp_nonce_field( 'add-menu_item', 'menu-settings-column-nonce' ); ?>
-				<?php do_accordion_sections( 'nav-menus', 'side', null ); ?>
-			</form>
+                <form id="nav-menu-meta" action="" class="nav-menu-meta" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="menu" id="nav-menu-meta-object-id"
+                           value="<?php echo esc_attr( $this->menu_ID ); ?>"/>
+                    <input type="hidden" name="action" value="add-menu-item"/>
+					<?php wp_nonce_field( 'add-menu_item', 'menu-settings-column-nonce' ); ?>
+					<?php do_accordion_sections( 'nav-menus', 'side', null ); ?>
+                </form>
 
-			<div class="clear"></div>
+                <div class="clear"></div>
 
-			<?php
-			// Only show if menus exist
-			if ( $this->menu_ID ) :
-				?>
-				<div id="cd-nav-menu-statuses" class="accordion-container">
-					<div class="control-section accordion-section  open add-post-types" id="add-post-types">
-						<h3 class="accordion-section-title">
-							Menu Statuses
-						</h3>
-
-						<div class="accordion-section-content ">
-							<div class="inside">
-								<table class="cd-nav-menu-statuses-table">
-									<tr>
-										<th>Menu</th>
-										<th>Active</th>
-									</tr>
-									<?php
-									// Cycle through all role menus and show them
-									foreach ( $this->all_menu_IDs as $role => $menu_ID ) {
-
-										// Skip if no menu ID present
-										if ( ! $menu_ID ) {
-											continue;
-										}
-
-										$on_off = get_option( 'cd_adminmenu_disabled_' . $this->all_menu_IDs[ $role ], false ) ? 'off' : 'on';
-
-										?>
-										<tr>
-											<td>
-												<?php echo $this->translate_id_to_name( $role ); ?>
-											</td>
-											<td>
-												<span class="cd-nav-menu-status <?php echo $on_off; ?>"></span>
-											</td>
-										</tr>
-									<?php
-									}
-									?>
-								</table>
-							</div>
-						</div>
-					</div>
-				</div>
-			<?php endif; ?>
-
-		</div>
-
-		<!-- /#menu-settings-column -->
-		<div id="menu-management-liquid" <?php echo $creating ? 'class="disabled"' : ''; ?>>
-		<div id="menu-management">
-		<form id="update-nav-menu" action="" method="post" enctype="multipart/form-data">
-			<div class="menu-edit">
 				<?php
-				wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );
-				wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );
-				wp_nonce_field( 'update-nav_menu', 'update-nav-menu-nonce' );
-				?>
-				<?php if ( $this->menu_ID ) : ?>
-					<input type="hidden" name="action" value="update"/>
-				<?php else : ?>
-					<input type="hidden" name="action" value="create"/>
-				<?php endif; ?>
-				<input type="hidden" name="menu" id="menu"
-				       value="<?php echo esc_attr( $this->menu_ID ); ?>"/>
-				<input type="hidden" id="menu-name" value="cd_admin_menu"/>
+				// Only show if menus exist
+				if ( $this->menu_ID ) :
+					?>
+                    <div id="cd-nav-menu-statuses" class="accordion-container">
+                        <div class="control-section accordion-section  open add-post-types" id="add-post-types">
+                            <h3 class="accordion-section-title">
+                                <?php _e( 'Menu Statuses', 'client-dash' ); ?>
+                            </h3>
 
-				<div id="nav-menu-header">
-					<div class="major-publishing-actions">
-						<label class="menu-name-label howto open-label" for="menu-name">
-							<?php
-							// If the menu is set, show it, otherwise, allow user to select which
-							// menu to create
-							if ( $this->menu_ID || $creating ) :
-								?>
-								<span>Menu Name:</span>
+                            <div class="accordion-section-content ">
+                                <div class="inside">
+                                    <table class="cd-nav-menu-statuses-table">
+                                        <tr>
+                                            <th><?php _e( 'Menu', 'client-dash' ); ?></th>
+                                            <th><?php _e( 'Active', 'client-dash' ); ?></th>
+                                        </tr>
+										<?php
+										// Cycle through all role menus and show them
+										foreach ( $this->all_menu_IDs as $role => $menu_ID ) {
 
-								<span class="cd-nav-menu-title"><?php echo $role_name; ?></span>
+											// Skip if no menu ID present
+											if ( ! $menu_ID ) {
+												continue;
+											}
 
-								<?php
-								// Output a spinner if creating the initial menu
-								if ( $creating ) {
-									echo '<span class="spinner"></span>';
-								}
-								?>
-							<?php else : ?>
+											$on_off = get_option( 'cd_adminmenu_disabled_' . $this->all_menu_IDs[ $role ], false ) ? 'off' : 'on';
 
-								<input type="hidden" name="cd_role_menu_items" value="1"/>
-
-								<span>Choose which role to create a menu for:</span>
-								<select name="cd_create_admin_menu">
-									<?php
-									foreach ( get_editable_roles() as $role_ID => $role ) {
-
-										// Don't show if already created
-										if ( $this->all_menu_IDs[ $role_ID ] ) {
-											continue;
+											?>
+                                            <tr>
+                                                <td>
+													<?php echo $this->translate_id_to_name( $role ); ?>
+                                                </td>
+                                                <td>
+                                                    <span class="cd-nav-menu-status <?php echo $on_off; ?>"></span>
+                                                </td>
+                                            </tr>
+											<?php
 										}
 										?>
-										<option
-											value="<?php echo $role_ID; ?>"
-											<?php selected( $this->role, $role_ID ); ?>>
-											<?php echo $role_ID == 'administrator' ? $role['name'] . ' (that\'s you!)' : $role['name']; ?>
-										</option>
-									<?php
-									}
-									?>
-								</select>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+				<?php endif; ?>
 
-								<?php // Needed for added spacing ?>
-								&nbsp;
+            </div>
 
-								<?php // Tells us whether to import items (default) or just start blank ?>
-								<label for="import_items">
-									<input type="hidden" name="import_items" value="0"/>
-									<input type="checkbox" id="import_items" name="import_items" value="1"
-									       checked/>
-									Import role's existing menu items?
-								</label>
-							<?php endif; ?>
-						</label>
-
-						<div class="publishing-action">
-
+            <!-- /#menu-settings-column -->
+            <div id="menu-management-liquid" <?php echo $creating ? 'class="disabled"' : ''; ?>>
+                <div id="menu-management">
+                    <form id="update-nav-menu" action="" method="post" enctype="multipart/form-data">
+                        <div class="menu-edit">
 							<?php
-							// Outputs a toggle switch for quickly disabling / enabling the menu
-							if ( $this->menu_ID && ! $creating ) {
-								$this->toggle_switch(
-									"cd_adminmenu_disabled_$this->menu_ID",
-									'1',
-									get_option( "cd_adminmenu_disabled_$this->menu_ID", '0' ),
-									true,
-									true,
-									true,
-									array(
-										'title' => 'Temporarily disables this menu. The user with this role will get the default admin menu if this is set to off'
-									)
-								);
-							}
+							wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );
+							wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );
+							wp_nonce_field( 'update-nav_menu', 'update-nav-menu-nonce' );
 							?>
-
-							<?php
-							$args = array(
-								'id' => 'save_menu_header'
-							);
-
-							if ( $creating ) {
-								$args['disabled'] = true;
-							}
-							submit_button(
-								$this->menu_ID ? __( 'Save Menu' ) : __( 'Create Menu' ),
-								'button-primary menu-save',
-								'save_menu',
-								false,
-								$args
-							);
-							?>
-						</div>
-						<!-- END .publishing-action -->
-					</div>
-					<!-- END .major-publishing-actions -->
-				</div>
-				<!-- END .nav-menu-header -->
-				<div id="post-body">
-					<div id="post-body-content">
-
-						<?php
-						// Skip altogether and show a loading icon if loading the inital menu
-						if ( $creating ) :
-							?>
-
-							<div class="creating-nav-menu">
-								<p>The menu is being created. This may take some time.</p>
-
-								<p><strong>Please do NOT leave this page.</strong></p>
-
-								<div class="cd-progress-bar">
-									<div class="cd-progress-bar-inner"></div>
-									<span class="cd-progress-bar-percent">0%</span>
-								</div>
-							</div>
-
-						<?php else : ?>
-							<?php
-							// If no menu ID is set, instruct to create a new menu from above
-							if ( $this->menu_ID ) :
-								?>
-								<h3><?php _e( 'Menu Structure' ); ?></h3>
-
-								<div class="drag-instructions post-body-plain"
-									<?php echo isset( $menu_items ) && 0 == count( $menu_items ) ? 'style="display: none;"' : ''; ?>>
-									<p>Drag and drop them in the order you like. Click on
-										the arrows on each box to reveal more options.</p>
-								</div>
-								<?php
-								if ( isset( $edit_markup ) && ! is_wp_error( $edit_markup ) ) {
-									echo $edit_markup;
-								} else {
-									echo '<ul class="menu" id="menu-to-edit"></ul>';
-								}
-								?>
+							<?php if ( $this->menu_ID ) : ?>
+                                <input type="hidden" name="action" value="update"/>
 							<?php else : ?>
-								<p class="post-body-plain">Select a role to create a menu for.</p>
-								<p class="post-body-plain">The menu will be automatically populated with all
-									visible admin menu items for the specified roles.</p>
+                                <input type="hidden" name="action" value="create"/>
 							<?php endif; ?>
+                            <input type="hidden" name="menu" id="menu"
+                                   value="<?php echo esc_attr( $this->menu_ID ); ?>"/>
+                            <input type="hidden" id="menu-name" value="cd_admin_menu"/>
 
-						<?php endif; ?>
+                            <div id="nav-menu-header">
+                                <div class="major-publishing-actions">
+                                    <label class="menu-name-label howto open-label" for="menu-name">
+										<?php
+										// If the menu is set, show it, otherwise, allow user to select which
+										// menu to create
+										if ( $this->menu_ID || $creating ) :
+											?>
+                                            <span><?php _e( 'Menu Name:', 'client-dash' ); ?></span>
 
-					</div>
-					<!-- /#post-body-content -->
-				</div>
-				<!-- /#post-body -->
-				<div id="nav-menu-footer">
-					<div class="major-publishing-actions">
-						<?php if ( $this->menu_ID && ! $creating ) : ?>
-							<span class="delete-action">
+                                            <span class="cd-nav-menu-title"><?php echo $role_name; ?></span>
+
+											<?php
+											// Output a spinner if creating the initial menu
+											if ( $creating ) {
+												echo '<span class="spinner"></span>';
+											}
+											?>
+										<?php else : ?>
+
+                                            <input type="hidden" name="cd_role_menu_items" value="1"/>
+
+                                            <span><?php _e( 'Choose which role to create a menu for:', 'client-dash' ); ?></span>
+                                            <select name="cd_create_admin_menu">
+												<?php
+												foreach ( get_editable_roles() as $role_ID => $role ) {
+
+													// Don't show if already created
+													if ( $this->all_menu_IDs[ $role_ID ] ) {
+														continue;
+													}
+													?>
+                                                    <option
+                                                            value="<?php echo $role_ID; ?>"
+														<?php selected( $this->role, $role_ID ); ?>>
+														<?php echo $role_ID == 'administrator' ? $role['name'] . ' ' .
+                                                                                                 __( '(that\'s you!)', 'client-dash' ) : $role['name']; ?>
+                                                    </option>
+													<?php
+												}
+												?>
+                                            </select>
+
+											<?php // Needed for added spacing ?>
+                                            &nbsp;
+
+											<?php // Tells us whether to import items (default) or just start blank ?>
+                                            <label for="import_items">
+                                                <input type="hidden" name="import_items" value="0"/>
+                                                <input type="checkbox" id="import_items" name="import_items" value="1"
+                                                       checked/>
+                                                <?php _e( 'Import role\'s existing menu items?', 'client-dash' ); ?>
+                                            </label>
+										<?php endif; ?>
+                                    </label>
+
+                                    <div class="publishing-action">
+
+										<?php
+										// Outputs a toggle switch for quickly disabling / enabling the menu
+										if ( $this->menu_ID && ! $creating ) {
+											$this->toggle_switch(
+												"cd_adminmenu_disabled_$this->menu_ID",
+												'1',
+												get_option( "cd_adminmenu_disabled_$this->menu_ID", '0' ),
+												true,
+												true,
+												true,
+												array(
+													'title' => __( 'Temporarily disables this menu. The user with this role will get the default admin menu if this is set to off', 'client-dash' )
+												)
+											);
+										}
+										?>
+
+										<?php
+										$args = array(
+											'id' => 'save_menu_header'
+										);
+
+										if ( $creating ) {
+											$args['disabled'] = true;
+										}
+										submit_button(
+											$this->menu_ID ? __( 'Save Menu' ) : __( 'Create Menu' ),
+											'button-primary menu-save',
+											'save_menu',
+											false,
+											$args
+										);
+										?>
+                                    </div>
+                                    <!-- END .publishing-action -->
+                                </div>
+                                <!-- END .major-publishing-actions -->
+                            </div>
+                            <!-- END .nav-menu-header -->
+                            <div id="post-body">
+                                <div id="post-body-content">
+
+									<?php
+									// Skip altogether and show a loading icon if loading the inital menu
+									if ( $creating ) :
+										?>
+
+                                        <div class="creating-nav-menu">
+                                            <p><?php _e( 'The menu is being created. This may take some time.', 'client-dash' ); ?></p>
+
+                                            <p><strong><?php _e( 'Please do NOT leave this page.', 'client-dash' ); ?></strong></p>
+
+                                            <div class="cd-progress-bar">
+                                                <div class="cd-progress-bar-inner"></div>
+                                                <span class="cd-progress-bar-percent">0%</span>
+                                            </div>
+                                        </div>
+
+									<?php else : ?>
+										<?php
+										// If no menu ID is set, instruct to create a new menu from above
+										if ( $this->menu_ID ) :
+											?>
+                                            <h3><?php _e( 'Menu Structure' ); ?></h3>
+
+                                            <div class="drag-instructions post-body-plain"
+												<?php echo isset( $menu_items ) && 0 == count( $menu_items ) ? 'style="display: none;"' : ''; ?>>
+                                                <p><?php _e( 'Drag and drop them in the order you like. Click on the arrows on each box to reveal more options.', 'client-dash' ); ?></p>
+                                            </div>
+											<?php
+											if ( isset( $edit_markup ) && ! is_wp_error( $edit_markup ) ) {
+												echo $edit_markup;
+											} else {
+												echo '<ul class="menu" id="menu-to-edit"></ul>';
+											}
+											?>
+										<?php else : ?>
+                                            <p class="post-body-plain"><?php _e( 'Select a role to create a menu for.', 'client-dash' ); ?></p>
+                                            <p class="post-body-plain"><?php _e( 'The menu will be automatically populated with all visible admin menu items for the specified roles.', 'client-dash' ); ?></p>
+										<?php endif; ?>
+
+									<?php endif; ?>
+
+                                </div>
+                                <!-- /#post-body-content -->
+                            </div>
+                            <!-- /#post-body -->
+                            <div id="nav-menu-footer">
+                                <div class="major-publishing-actions">
+									<?php if ( $this->menu_ID && ! $creating ) : ?>
+                                        <span class="delete-action">
 											<a class="submitdelete deletion menu-delete"
-											   href="<?php echo esc_url( wp_nonce_url( add_query_arg( array(
+                                               href="<?php echo esc_url( wp_nonce_url( add_query_arg( array(
 												   'cd_delete_admin_menu' => $this->menu_ID,
 												   admin_url()
 											   ) ), 'delete-cd_nav_menu-' . $this->menu_ID ) ); ?>"><?php _e( 'Delete Menu' ); ?></a>
 										</span><!-- END .delete-action -->
-						<?php endif; ?>
-						<div class="publishing-action">
-							<?php
-							$args = array(
-								'id' => 'save_menu_footer'
-							);
+									<?php endif; ?>
+                                    <div class="publishing-action">
+										<?php
+										$args = array(
+											'id' => 'save_menu_footer'
+										);
 
-							if ( $creating ) {
-								$args['disabled'] = true;
-							}
-							submit_button(
-								$this->menu_ID ? __( 'Save Menu' ) : __( 'Create Menu' ),
-								'button-primary menu-save',
-								'save_menu',
-								false,
-								$args
-							);
-							?>
-						</div>
-						<!-- END .publishing-action -->
-					</div>
-					<!-- END .major-publishing-actions -->
-				</div>
-				<!-- /#nav-menu-footer -->
-			</div>
-			<!-- /.menu-edit -->
-		</form>
-		<!-- /#update-nav-menu -->
-		</div>
-		<!-- /#menu-management -->
-		</div>
-		<!-- /#menu-management-liquid -->
-		</div><!-- /#nav-menus-frame -->
-	<?php
+										if ( $creating ) {
+											$args['disabled'] = true;
+										}
+										submit_button(
+											$this->menu_ID ? __( 'Save Menu' ) : __( 'Create Menu' ),
+											'button-primary menu-save',
+											'save_menu',
+											false,
+											$args
+										);
+										?>
+                                    </div>
+                                    <!-- END .publishing-action -->
+                                </div>
+                                <!-- END .major-publishing-actions -->
+                            </div>
+                            <!-- /#nav-menu-footer -->
+                        </div>
+                        <!-- /.menu-edit -->
+                    </form>
+                    <!-- /#update-nav-menu -->
+                </div>
+                <!-- /#menu-management -->
+            </div>
+            <!-- /#menu-management-liquid -->
+        </div><!-- /#nav-menus-frame -->
+		<?php
 	}
 }

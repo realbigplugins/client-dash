@@ -98,9 +98,9 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 		}
 
 		$this->add_content_section( array(
-			'name'     => 'Core Settings Widgets',
-			'page'     => 'Settings',
-			'tab'      => 'Widgets',
+			'name'     => __( 'Core Settings Widgets', 'client-dash' ),
+			'page'     => __( 'Settings', 'client-dash' ),
+			'tab'      => __( 'Widgets', 'client-dash' ),
 			'callback' => array( $this, 'block_output' )
 		) );
 	}
@@ -265,8 +265,8 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 		foreach ( get_option( 'cd_active_widgets', array() ) as $widget_ID => $widget ) {
 
 			// Issue with html in quick press title
-			if ( strpos( $widget['title'], 'Quick Draft' ) !== false ) {
-				$widget['title'] = 'Quick Draft';
+			if ( strpos( $widget['title'], __( 'Quick Draft', 'client-dash' ) ) !== false ) {
+				$widget['title'] = __( 'Quick Draft', 'client-dash' );
 			}
 
 			/**
@@ -385,7 +385,8 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 
 		// If the # of sidebars don't match, OR the keys aren't identical, merge them
 		if ( count( $sidebars ) != count( $old_sidebars ) ||
-		     count( array_intersect_key( $sidebars, $old_sidebars ) ) != count( $sidebars ) ) {
+		     count( array_intersect_key( $sidebars, $old_sidebars ) ) != count( $sidebars )
+		) {
 
 			foreach ( $sidebars as $sidebar_ID => $sidebar ) {
 				unset( $old_sidebars[ $sidebar_ID ] );
@@ -415,9 +416,13 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 
 			$dashboard_link = get_admin_url();
 			$dashboard_link = add_query_arg( 'cd_update_dash', 'true', $dashboard_link );
-			$dashboard_link = "<a href='$dashboard_link'>Dashboard</a>";
 
-			$this->error_nag( "Hate to bother you, but one or more plugins has been activated / deactivated. Could you please visit the $dashboard_link to refresh the available widgets?" );
+			$this->error_nag(
+				__( 'Hate to bother you, but one or more plugins has been activated / deactivated. Could you ' .
+				    'please visit the %sDashboard%s to refresh the available widgets?', 'client-dash' ),
+				"<a href=\"$dashboard_link\">",
+				'</a>'
+			);
 
 			return;
 		}
@@ -428,33 +433,37 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 		// From wp-admin/widgets.php. Modified for CD use.
 		?>
 
-		<div id="cd-widgets">
-			<div class="widget-liquid-left">
-				<div id="widgets-left">
-					<div id="available-widgets" class="widgets-holder-wrap">
-						<div class="sidebar-name">
-							<div class="sidebar-name-arrow"><br/></div>
-							<h3><?php _e( 'Available Widgets' ); ?> <span
-									id="removing-widget"><?php _ex( 'Deactivate', 'removing-widget' ); ?>
-									<span></span></span></h3>
-						</div>
-						<div class="widget-holder">
-							<div class="sidebar-description">
-								<p class="description"><?php _e( 'To activate a widget drag it to a sidebar or click on it. To deactivate a widget and delete its settings, drag it back.' ); ?></p>
-							</div>
-							<div id="widget-list">
+        <div id="cd-widgets">
+            <div class="widget-liquid-left">
+                <div id="widgets-left">
+                    <div id="available-widgets" class="widgets-holder-wrap">
+                        <div class="sidebar-name">
+                            <div class="sidebar-name-arrow"><br/></div>
+                            <h3><?php _e( 'Available Widgets', 'client-dash' ); ?> <span
+                                        id="removing-widget"><?php _e( 'Deactivate', 'client-dash' ); ?>
+                                    <span></span></span></h3>
+                        </div>
+                        <div class="widget-holder">
+                            <div class="sidebar-description">
+                                <p class="description">
+									<?php _e( 'To activate a widget drag it to a sidebar or click ' .
+									          'on it. To deactivate a widget and delete its settings, drag it back.',
+										'client-dash' ); ?>
+                                </p>
+                            </div>
+                            <div id="widget-list">
 								<?php wp_list_widgets(); ?>
-							</div>
-							<br class='clear'/>
-						</div>
-						<br class="clear"/>
-					</div>
-				</div>
-			</div>
+                            </div>
+                            <br class='clear'/>
+                        </div>
+                        <br class="clear"/>
+                    </div>
+                </div>
+            </div>
 
-			<div class="widget-liquid-right">
-				<div id="widgets-right" class="single-sidebar">
-					<div class="sidebars-column-1">
+            <div class="widget-liquid-right">
+                <div id="widgets-right" class="single-sidebar">
+                    <div class="sidebars-column-1">
 						<?php
 
 						$i = 0;
@@ -470,30 +479,30 @@ class ClientDash_Core_Page_Settings_Tab_Widgets extends ClientDash {
 							}
 
 							?>
-							<div class="<?php echo esc_attr( $wrap_class ); ?>">
+                            <div class="<?php echo esc_attr( $wrap_class ); ?>">
 								<?php wp_list_widget_controls( $sidebar['id'], $sidebar['name'] ); ?>
-							</div>
+                            </div>
 							<?php
 
 							$i ++;
 						}
 						?>
-					</div>
-				</div>
-			</div>
-			<form action="" method="post">
+                    </div>
+                </div>
+            </div>
+            <form action="" method="post">
 				<?php wp_nonce_field( 'save-sidebar-widgets', '_wpnonce_widgets', false ); ?>
-			</form>
-			<br class="clear"/>
+            </form>
+            <br class="clear"/>
 
-			<div class="widgets-chooser">
-				<ul class="widgets-chooser-sidebars"></ul>
-				<div class="widgets-chooser-actions">
-					<button class="button-secondary"><?php _e( 'Cancel' ); ?></button>
-					<button class="button-primary"><?php _e( 'Add Widget' ); ?></button>
-				</div>
-			</div>
-		</div>
-	<?php
+            <div class="widgets-chooser">
+                <ul class="widgets-chooser-sidebars"></ul>
+                <div class="widgets-chooser-actions">
+                    <button class="button-secondary"><?php _e( 'Cancel', 'client-dash' ); ?></button>
+                    <button class="button-primary"><?php _e( 'Add Widget', 'client-dash' ); ?></button>
+                </div>
+            </div>
+        </div>
+		<?php
 	}
 }

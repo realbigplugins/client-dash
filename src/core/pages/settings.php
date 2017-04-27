@@ -26,6 +26,11 @@ class ClientDash_Page_Settings extends ClientDash {
 
 		// Add the menu item to the toolbar
 		add_action( 'admin_menu', array( $this, 'add_submenu_page' ) );
+
+		// Sidebar sections
+		add_action( 'cd_sidebar', array( __CLASS__, 'sidebar_pro_prompt' ) );
+		add_action( 'cd_sidebar', array( __CLASS__, 'sidebar_review_support' ), 15 );
+		add_action( 'cd_sidebar', array( __CLASS__, 'sidebar_rbp_signup' ), 20 );
 	}
 
 	/**
@@ -72,22 +77,14 @@ class ClientDash_Page_Settings extends ClientDash {
 
 		add_submenu_page(
 			'options-general.php',
-			'Client Dash Settings',
-			'Client Dash',
+			__( 'Client Dash Settings', 'client-dash' ),
+			__( 'Client Dash', 'client-dash' ),
 			'manage_options',
 			'cd_settings',
 			array( $this, 'page_output' )
 		);
 	}
 
-	/**
-	 * Outputs prompt for users to rate the plugin and subscribe
-	 *
-	 * @since Client Dash 1.7
-	 */
-	public function subscribe() {
-		echo '<div>Like this plugin? Consider <a href="https://wordpress.org/support/view/plugin-reviews/client-dash?rate=5#postform">leaving us a rating</a>. Also, we make other cool plugins and share updates and special offers to anyone who <a href="http://realbigplugins.com/subscribe/?utm_source=Client%20Dash&utm_medium=Plugin%20settings%20footer%20link&utm_campaign=Client%20Dash%20Plugin">subscribes here</a>.</div>';
-	}
 	/**
 	 * The page content.
 	 *
@@ -97,7 +94,7 @@ class ClientDash_Page_Settings extends ClientDash {
 
 		// Make sure user has rights
 		if ( ! current_user_can( 'activate_plugins' ) ) {
-			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+			wp_die( __( 'You do not have sufficient permissions to access this page.', 'client-dash' ) );
 		}
 
 		// Get the current tab, if set
@@ -109,34 +106,154 @@ class ClientDash_Page_Settings extends ClientDash {
 		?>
 		<div class="wrap cd-settings">
 
-			<?php
-			// Default to wrapping everything in the form, but allow to be disabled
-			if ( apply_filters( 'cd_settings_form_wrap', true ) ) {
+			<section class="cd-settings-wrap">
+				<?php
+				// Default to wrapping everything in the form, but allow to be disabled
+				if ( apply_filters( 'cd_settings_form_wrap', true ) ) {
 
-				echo '<form method="post" action="options.php">';
+					echo '<form method="post" action="options.php">';
 
-				// Prepare cd_settings
-				settings_fields( 'cd_options_' . $tab );
-			}
+					// Prepare cd_settings
+					settings_fields( 'cd_options_' . $tab );
+				}
 
-			?>
-			<h2 class="cd-title"><span class="dashicons dashicons-admin-settings cd-icon"></span><span class="cd-title-text">Client Dash Settings</span></h2>
-			<?php
+				?>
+				<h2 class="cd-title"><span class="dashicons dashicons-admin-settings cd-icon"></span><span
+						class="cd-title-text"><?php _e( 'Client Dash Settings', 'client-dash' ); ?></span></h2>
+				<?php
 				$this->create_tab_page();
 
 				// Can modify submit button with this filter
 				// EG: add_filter( 'cd_submit', '__return_false' );
-				$submit = '<input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">';
+				$submit = '<input type="submit" name="submit" id="submit" class="button button-primary" value="' . __( 'Save Changes', 'client-dash' ) . '">';
 				echo apply_filters( 'cd_submit', $submit );
 				?>
-			<?php
-			// Default to wrapping everything in the form, but allow to be disabled
-			if ( apply_filters( 'cd_settings_form_wrap', true ) ) {
-				echo '</form>';
-			}
-			$this->subscribe();
-			?>
+				<?php
+				// Default to wrapping everything in the form, but allow to be disabled
+				if ( apply_filters( 'cd_settings_form_wrap', true ) ) {
+					echo '</form>';
+				}
+				?>
+			</section>
+
+			<sidebar class="cd-settings-sidebar">
+
+				<?php
+				/**
+				 * Fires inside sidebar.
+				 *
+				 * @since 1.6.13
+				 *
+				 * @hooked ClientDash_Page_Settings::sidebar_rbp_pro-prompt() 10
+				 * @hooked ClientDash_Page_Settings::sidebar_rbp_signup() 15
+				 */
+				do_action( 'cd_sidebar' );
+				?>
+
+			</sidebar>
 		</div>
-	<?php
+		<?php
+	}
+
+	/**
+	 * Outputs the sidebar pro prompt section.
+	 *
+	 * @since 1.6.13
+	 * @access private
+	 */
+	static function sidebar_pro_prompt() {
+		?>
+		<section class="cd-settings-sidebar-section cd-settings-sidebar-pro-prompt">
+			<a href="https://realbigplugins.com/plugins/client-dash-pro/?utm_source=Client%20Dash&utm_medium=Plugin%20settings%20sidebar%20link&utm_campaign=Client%20Dash%20Plugin" target="_blank">
+				<img src="<?php echo CLIENTDASH_URI; ?>assets/images/cd-pro-logo.png"
+				     alt="<?php _e( 'Client Dash Pro', 'clientdash' ); ?>"/>
+			</a>
+
+			<h3><?php _e( 'Go Pro!', 'clientdash' ); ?></h3>
+
+			<p>
+				<?php _e( 'Extend Client Dash with numerous powerful WordPress dashboard customization ' .
+				          'features', 'clientdash' ) ?>
+			</p>
+
+			<p class="cd-settings-sidebar-centered">
+				<a href=https://realbigplugins.com/plugins/client-dash-pro/?utm_source=Client%20Dash&utm_medium=Plugin%20settings%20sidebar%20link&utm_campaign=Client%20Dash%20Plugin"
+				   class="button" target="_blank">
+					<?php _e( 'Check it out!', 'clientdash' ); ?>
+				</a>
+			</p>
+		</section>
+		<?php
+	}
+
+	/**
+	 * Outputs the sidebar wordpress.org review/support links.
+	 *
+	 * @since 1.6.13
+	 * @access private
+	 */
+	static function sidebar_review_support() {
+
+		$rating_confirm = 'onclick="return confirm(\'' .
+		                  __( "Is there something we can do better?\\n\\nIf you\\'re having an issue with the " .
+		                      "plugin, please consider asking us in the support forums instead.\\n\\nIf you " .
+		                      "still want to leave a low rating, please consider changing it in the future " .
+		                      "if we fix your issue. Thanks!" ) .
+		                  '\');"';
+		?>
+		<section class="cd-settings-sidebar-section cd-settings-sidebar-review-support">
+			<p>
+				<?php
+				printf(
+					__( 'Like this plugin? Consider leaving us a rating.' ),
+					'<a href="https://wordpress.org/support/view/plugin-reviews/client-dash?rate=5#postform">',
+					'</a>'
+				);
+				?>
+			</p>
+
+			<p class="cd-settings-sidebar-ratings">
+				<?php for ( $i = 5; $i >= 1; $i -- ) : ?><a
+					href="https://wordpress.org/support/plugin/client-dash/reviews/?rate=<?php echo $i; ?>#new-post"
+					class="dashicons dashicons-star-empty" target="_blank"
+					<?php echo $i < 4 ? $rating_confirm : ''; ?> >
+					</a><?php endfor; ?>
+			</p>
+
+			<p>
+				<?php
+				printf(
+					__( 'Need help? Visit our %ssupport forums%s.', 'clientdash' ),
+					'<a href="https://wordpress.org/support/plugin/client-dash" target="_blank">',
+					'</a>'
+				);
+				?>
+			</p>
+		</section>
+		<?php
+	}
+
+	/**
+	 * Outputs the sidebar Real Big Plugins signup section.
+	 *
+	 * @since 1.6.13
+	 * @access private
+	 */
+	static function sidebar_rbp_signup() {
+		?>
+		<section class="cd-settings-sidebar-section cd-settings-sidebar-rbp-signup">
+			<p>
+				<?php
+				printf(
+					__( 'We make other cool plugins and share updates and special offers to anyone who ' .
+					    '%ssubscribes here%s.' ),
+					'<a href="http://realbigplugins.com/subscribe/?utm_source=Client%20Dash&utm_medium=Plugin' .
+					'%20settings%20sidebar%20link&utm_campaign=Client%20Dash%20Plugin" target="_blank">',
+					'</a>'
+				);
+				?>
+			</p>
+		</section>
+		<?php
 	}
 }

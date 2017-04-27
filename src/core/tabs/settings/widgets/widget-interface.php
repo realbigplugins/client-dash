@@ -96,6 +96,9 @@ class CD_Widget extends WP_Widget {
 
 		global $ClientDash_Core_Page_Settings_Tab_Widgets;
 
+		/* translators: CD is short for Client Dash */
+		$this->title = __( 'CD Widget', 'client-dash' );
+
 		// Gather new properties
 		foreach ( $ClientDash_Core_Page_Settings_Tab_Widgets->widgets as $i => $widget ) {
 
@@ -134,22 +137,26 @@ class CD_Widget extends WP_Widget {
 	public function form( $instance ) {
 
 		// Don't show title if webmaster widget
-		if ( $this->title != 'Webmaster' . ' (' . get_option( 'cd_webmaster_name', '' ) . ')'
-		     && $this->title != 'Webmaster'
+		if ( $this->title != __( 'Webmaster', 'client-dash' ) . ' (' . get_option( 'cd_webmaster_name', '' ) . ')'
+		     && $this->title != __( 'Webmaster', 'client-dash' )
 		) {
 
 			// Title
 			$title = isset( $instance['title'] ) ? $instance['title'] : '';
 			?>
-			<p>
-				<label for="<?php echo $this->get_field_id( 'title' ); ?>">Title</label>
-				<input type="text" id="<?php echo $this->get_field_id( 'title' ); ?>" class="widefat"
-				       name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $title; ?>"/>
-			</p>
+            <p>
+                <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title', 'client-dash' ); ?></label>
+                <input type="text" id="<?php echo $this->get_field_id( 'title' ); ?>" class="widefat"
+                       name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $title; ?>"/>
+            </p>
 			<?php
 		} else {
 			ClientDash_Functions::error_nag(
-				'Title set in <a href="' . ClientDash_Functions::get_settings_url( 'webmaster' ) . '">Webmaster</a> page.'
+				sprintf(
+					__( 'Title set in %sWebmaster%s page.', 'client-dash' ),
+					'<a href="' . ClientDash_Functions::get_settings_url( 'webmaster' ) . '">',
+					'</a>'
+				)
 			);
 		}
 
