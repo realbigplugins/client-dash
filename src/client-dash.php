@@ -330,6 +330,8 @@ class ClientDash extends ClientDash_Functions {
 		// Set the path
 		$this->path = plugin_dir_path( __FILE__ );
 
+		add_action( 'plugins_loaded', array( $this, 'load_textdomain') );
+
 		// Register and enqueue our scripts / styles
 		add_action( 'admin_init', array( $this, 'register_scripts' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 100 );
@@ -405,6 +407,11 @@ class ClientDash extends ClientDash_Functions {
 		$this->option_defaults['widgets'][2]['title'] = __( 'Help', 'client-dash' );
 		$this->option_defaults['widgets'][3]['title'] = __( 'Webmaster', 'client-dash' );
 	}
+
+	function load_textdomain() {
+
+	    load_plugin_textdomain( 'client-dash', FALSE, basename( dirname( __FILE__ ) ) . '/languages/' );
+    }
 
 	/**
 	 * Registers all Client Dash scripts.

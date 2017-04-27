@@ -1,0 +1,811 @@
+# Copyright (C) 2017 
+# This file is distributed under the same license as the  package.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/client-dash\n"
+"POT-Creation-Date: 2017-04-26 17:04:10+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: United States\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: "
+"__;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_"
+"attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-Bookmarks: \n"
+"X-Textdomain-Support: yes\n"
+"X-Generator: grunt-wp-i18n1.0.0\n"
+
+#: client-dash.php:393 client-dash.php:405 core/pages/account.php:43
+#: core/tabs/account/about.php:26 core/tabs/settings/icons.php:272
+msgid "Account"
+msgstr ""
+
+#: client-dash.php:394
+msgid "The core Client Dash account page."
+msgstr ""
+
+#: client-dash.php:395 client-dash.php:407 core/pages/help.php:43
+#: core/tabs/help/domain.php:26 core/tabs/help/info.php:26
+#: core/tabs/settings/icons.php:288
+msgid "Help"
+msgstr ""
+
+#: client-dash.php:396
+msgid "The core Client Dash help page."
+msgstr ""
+
+#: client-dash.php:397 client-dash.php:406 core/pages/reports.php:43
+#: core/tabs/reports/site.php:26 core/tabs/settings/icons.php:280
+msgid "Reports"
+msgstr ""
+
+#: client-dash.php:398
+msgid "The core Client Dash reports page."
+msgstr ""
+
+#: client-dash.php:399 client-dash.php:402 client-dash.php:408
+#: core/tabs/settings/webmaster.php:27
+#: core/tabs/settings/widgets/widget-interface.php:140
+#: core/tabs/settings/widgets/widget-interface.php:141
+#: core/tabs/webmaster/feed.php:28 core/tabs/webmaster/main.php:34
+msgid "Webmaster"
+msgstr ""
+
+#: client-dash.php:400
+msgid "The core Client Dash webmaster page."
+msgstr ""
+
+#: client-dash.php:403 core/tabs/webmaster/main.php:33
+msgid "Main"
+msgstr ""
+
+#: client-dash.php:874
+msgid "Great! Thanks! Now you can return to the settings %shere%s."
+msgstr ""
+
+#: client-dash.php:931 core/tabs/settings/addons.php:26
+#: core/tabs/settings/display.php:26 core/tabs/settings/icons.php:232
+#: core/tabs/settings/menus.php:423 core/tabs/settings/tools.php:26
+#: core/tabs/settings/webmaster.php:26 core/tabs/settings/widgets.php:102
+msgid "Settings"
+msgstr ""
+
+#: client-dash.php:934
+msgid "More Real Big Plugins"
+msgstr ""
+
+#: client-dash.php:938
+msgid "Subscribe"
+msgstr ""
+
+#: core/ajax.php:47
+msgid "Roles successfully reset!"
+msgstr ""
+
+#: core/ajax.php:103
+msgid "Settings successfully reset!"
+msgstr ""
+
+#: core/extension-apis/menus-api.php:108
+#: core/tabs/settings/menus/availableitems-callbacks.php:299
+#: core/tabs/settings/menus/availableitems-callbacks.php:432
+#: core/tabs/settings/menus/availableitems-callbacks.php:628
+#: core/tabs/settings/menus/availableitems-callbacks.php:689
+msgid "Select All"
+msgstr ""
+
+#: core/extension-apis/menus-api.php:113
+#: core/tabs/settings/menus/availableitems-callbacks.php:304
+#: core/tabs/settings/menus/availableitems-callbacks.php:437
+#: core/tabs/settings/menus/availableitems-callbacks.php:633
+#: core/tabs/settings/menus/availableitems-callbacks.php:694
+#: core/tabs/settings/menus/availableitems-callbacks.php:734
+#: core/tabs/settings/menus/availableitems-callbacks.php:788
+msgid "Add to Menu"
+msgstr ""
+
+#: core/extension-apis/menus-api.php:134
+msgid "ERROR: You did not enter any items."
+msgstr ""
+
+#: core/functions.php:161
+msgid "This page has no content"
+msgstr ""
+
+#: core/functions.php:237
+msgid "This tab doesn't seem to exist! Sorry about that."
+msgstr ""
+
+#: core/pages/account.php:42
+msgid "Account Information"
+msgstr ""
+
+#: core/pages/help.php:42
+msgid "Help Information"
+msgstr ""
+
+#: core/pages/reports.php:42
+msgid "Reports Information"
+msgstr ""
+
+#: core/pages/settings.php:80 core/pages/settings.php:122
+msgid "Client Dash Settings"
+msgstr ""
+
+#: core/pages/settings.php:81 core/tabs/settings/menus/walkerclass.php:110
+#: core/tabs/settings/menus.php:463 core/tabs/settings/menus.php:796
+msgid "Client Dash"
+msgstr ""
+
+#: core/pages/settings.php:97
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: core/pages/settings.php:128
+msgid "Save Changes"
+msgstr ""
+
+#: core/pages/settings.php:169
+msgid "Client Dash Pro"
+msgstr ""
+
+#: core/pages/settings.php:172
+msgid "Go Pro!"
+msgstr ""
+
+#: core/pages/settings.php:182
+msgid "Check it out!"
+msgstr ""
+
+#: core/pages/settings.php:208
+msgid "Like this plugin? Consider leaving us a rating."
+msgstr ""
+
+#: core/pages/settings.php:226
+msgid "Need help? Visit our %ssupport forums%s."
+msgstr ""
+
+#: core/tabs/account/about.php:25 core/tabs/help/domain.php:25
+#: core/tabs/help/info.php:25 core/tabs/reports/site.php:25
+msgid "Basic Information"
+msgstr ""
+
+#: core/tabs/account/about.php:27
+msgid "About You"
+msgstr ""
+
+#: core/tabs/account/about.php:58
+msgid "Your username"
+msgstr ""
+
+#: core/tabs/account/about.php:64
+msgid "Your name"
+msgstr ""
+
+#: core/tabs/account/about.php:70
+msgid "Your e-mail address"
+msgstr ""
+
+#: core/tabs/account/about.php:76
+msgid "Your URL"
+msgstr ""
+
+#: core/tabs/account/about.php:82
+msgid "When you first joined this site"
+msgstr ""
+
+#: core/tabs/account/about.php:87
+msgid "Your role"
+msgstr ""
+
+#: core/tabs/account/about.php:110
+msgid "Edit Your Profile"
+msgstr ""
+
+#: core/tabs/account/sites.php:64
+msgid "Visit"
+msgstr ""
+
+#: core/tabs/account/sites.php:65
+msgid "Dashboard"
+msgstr ""
+
+#: core/tabs/help/domain.php:27
+msgid "Domain"
+msgstr ""
+
+#: core/tabs/help/domain.php:47
+msgid "Current site domain"
+msgstr ""
+
+#: core/tabs/help/domain.php:51
+msgid "Domain IP address"
+msgstr ""
+
+#: core/tabs/help/info.php:27
+msgid "Info"
+msgstr ""
+
+#: core/tabs/help/info.php:50
+msgid "Current WordPress version"
+msgstr ""
+
+#: core/tabs/help/info.php:54
+msgid "Current theme"
+msgstr ""
+
+#: core/tabs/help/info.php:71
+#. translators: %s: Theme name
+msgid "child of %s"
+msgstr ""
+
+#: core/tabs/help/info.php:78
+msgid "Active plugins"
+msgstr ""
+
+#: core/tabs/help/info.php:86
+msgid "Installed plugins"
+msgstr ""
+
+#: core/tabs/reports/site.php:27
+msgid "Site"
+msgstr ""
+
+#: core/tabs/reports/site.php:70 core/tabs/reports/site.php:79
+#. translators: %s number of posts publisehd
+msgid "%s published"
+msgstr ""
+
+#: core/tabs/reports/site.php:92 core/tabs/reports/site.php:101
+#: core/tabs/reports/site.php:183
+#. translators: %s number of posts pending
+#. translators: %s number of comments pending
+msgid "%s pending"
+msgstr ""
+
+#: core/tabs/reports/site.php:114 core/tabs/reports/site.php:123
+#. translators: %s number of posts draft
+msgid "%s drafts"
+msgstr ""
+
+#: core/tabs/reports/site.php:140 core/tabs/reports/site.php:143
+#: core/tabs/settings/menus.php:1125 core/tabs/settings/menus.php:1127
+#: core/tabs/settings/menus.php:1129 core/tabs/settings/menus.php:1315
+msgid "Comments"
+msgstr ""
+
+#: core/tabs/reports/site.php:154 core/tabs/reports/site.php:163
+#: core/tabs/reports/site.php:174 core/tabs/reports/site.php:194
+#. translators: %s number of comments approved
+msgid "%s approved"
+msgstr ""
+
+#: core/tabs/reports/site.php:203
+#. translators: %s number of comments spam
+msgid "%s spam"
+msgstr ""
+
+#: core/tabs/reports/site.php:215 core/tabs/reports/site.php:218
+msgid "Media"
+msgstr ""
+
+#: core/tabs/reports/site.php:230
+#. translators: %s number of media items
+msgid "%s total media items"
+msgstr ""
+
+#: core/tabs/reports/site.php:238
+#. translators: %s: size of media library
+msgid "%s total media library size"
+msgstr ""
+
+#: core/tabs/reports/site.php:245
+#. translators: %s: number of files
+msgid "%s files"
+msgstr ""
+
+#: core/tabs/reports/site.php:255 core/tabs/reports/site.php:258
+msgid "Users"
+msgstr ""
+
+#: core/tabs/reports/site.php:265
+#. translators: %s: registered users
+msgid "%s total registered users"
+msgstr ""
+
+#: core/tabs/settings/addons.php:25
+msgid "Core Settings Addons"
+msgstr ""
+
+#: core/tabs/settings/addons.php:27
+msgid "Addons"
+msgstr ""
+
+#: core/tabs/settings/addons.php:45
+msgid "Extension activated! Refresh for changes to take effect."
+msgstr ""
+
+#: core/tabs/settings/addons.php:50
+msgid "Extension deactivated! Refresh for changes to take effect."
+msgstr ""
+
+#: core/tabs/settings/addons.php:55
+msgid "Client Dash WP Help Addon"
+msgstr ""
+
+#: core/tabs/settings/addons.php:63
+msgid "Client Dash Extension Boilerplate"
+msgstr ""
+
+#: core/tabs/settings/addons.php:71
+msgid "Client Dash Status Cake Addon"
+msgstr ""
+
+#: core/tabs/settings/addons.php:79
+msgid "Client Dash BackupBuddy Addon"
+msgstr ""
+
+#: core/tabs/settings/addons.php:90
+msgid "Available Client Dash Addons"
+msgstr ""
+
+#: core/tabs/settings/addons.php:104 core/tabs/settings/widgets.php:443
+msgid "Deactivate"
+msgstr ""
+
+#: core/tabs/settings/addons.php:106
+msgid "Activate"
+msgstr ""
+
+#: core/tabs/settings/addons.php:108
+msgid "Install"
+msgstr ""
+
+#: core/tabs/settings/display.php:25
+msgid "Core Settings Display"
+msgstr ""
+
+#: core/tabs/settings/display.php:27
+msgid "Display"
+msgstr ""
+
+#: core/tabs/settings/display.php:35
+#. translators: \n is line break, leave as is
+msgid ""
+"WARNING: This will reset all role settings back to default. \n"
+"\n"
+"Are you sure you want to do this?"
+msgstr ""
+
+#: core/tabs/settings/display.php:59
+msgid ""
+"Use this page to disable specific content for specific roles. Simply "
+"un-check the role inside of any content\n"
+"\t\t\tblock you want to disable for that role."
+msgstr ""
+
+#: core/tabs/settings/display.php:64
+msgid ""
+"There seems to be no content... that's really weird... I'd contact Joel or "
+"Kyle"
+msgstr ""
+
+#: core/tabs/settings/display.php:118
+msgid "All roles are disabled so this page won't show for anybody."
+msgstr ""
+
+#: core/tabs/settings/display.php:139
+msgid "All checked sections will be visible to the given role."
+msgstr ""
+
+#: core/tabs/settings/icons.php:231
+msgid "Core Settings Icons"
+msgstr ""
+
+#: core/tabs/settings/icons.php:233
+msgid "Icons"
+msgstr ""
+
+#: core/tabs/settings/icons.php:254
+msgid ""
+"You are currently running a version of WordPress below 3.9. Not all icons "
+"exist before 3.9 and will not show here properly. Please update WordPress "
+"as soon as you can."
+msgstr ""
+
+#: core/tabs/settings/menus/availableitems-callbacks.php:84
+#: core/tabs/settings/menus/availableitems-callbacks.php:145
+msgid "No items present"
+msgstr ""
+
+#: core/tabs/settings/menus/availableitems-callbacks.php:157
+#: core/tabs/settings/menus/availableitems-callbacks.php:332
+#: core/tabs/settings/menus/availableitems-callbacks.php:551
+msgid "Top-level"
+msgstr ""
+
+#: core/tabs/settings/menus/availableitems-callbacks.php:163
+msgid "Add New"
+msgstr ""
+
+#: core/tabs/settings/menus/availableitems-callbacks.php:169
+msgid "List All"
+msgstr ""
+
+#: core/tabs/settings/menus/availableitems-callbacks.php:175
+msgid "Taxonomies"
+msgstr ""
+
+#: core/tabs/settings/menus/availableitems-callbacks.php:214
+#. translators: %s the post type (noun)
+msgid "Add New $s"
+msgstr ""
+
+#: core/tabs/settings/menus/availableitems-callbacks.php:338
+#: core/tabs/settings/menus/availableitems-callbacks.php:557
+msgid "Sub-menu"
+msgstr ""
+
+#: core/tabs/settings/menus/availableitems-callbacks.php:489
+#: core/tabs/settings/menus/walkerclass.php:104
+#: core/tabs/settings/menus.php:465 core/tabs/settings/menus.php:1148
+msgid "Separator"
+msgstr ""
+
+#: core/tabs/settings/menus/availableitems-callbacks.php:539
+msgid "No items"
+msgstr ""
+
+#: core/tabs/settings/menus/availableitems-callbacks.php:713
+msgid "Adds some vertical space between items."
+msgstr ""
+
+#: core/tabs/settings/menus/availableitems-callbacks.php:767
+msgid "Link Text"
+msgstr ""
+
+#: core/tabs/settings/menus/availableitems-callbacks.php:769
+msgid "Menu Item"
+msgstr ""
+
+#: core/tabs/settings/menus/walkerclass.php:98
+msgid "Post Type"
+msgstr ""
+
+#: core/tabs/settings/menus/walkerclass.php:101
+msgid "Post Type (Taxonomy)"
+msgstr ""
+
+#: core/tabs/settings/menus/walkerclass.php:107
+#: core/tabs/settings/menus.php:461
+msgid "WordPress"
+msgstr ""
+
+#: core/tabs/settings/menus/walkerclass.php:113
+#: core/tabs/settings/menus.php:462
+msgid "Plugin / Theme"
+msgstr ""
+
+#: core/tabs/settings/menus/walkerclass.php:116
+msgid "Link"
+msgstr ""
+
+#: core/tabs/settings/menus/walkerclass.php:141
+msgid ""
+"This page has no content visible for the current menu's role. To correct "
+"this, please visit %sDisplay Settings"
+msgstr ""
+
+#: core/tabs/settings/menus/walkerclass.php:194
+msgid "sub item"
+msgstr ""
+
+#: core/tabs/settings/menus/walkerclass.php:210
+msgid "Move up"
+msgstr ""
+
+#: core/tabs/settings/menus/walkerclass.php:223
+msgid "Move down"
+msgstr ""
+
+#: core/tabs/settings/menus/walkerclass.php:227
+#: core/tabs/settings/menus/walkerclass.php:229
+msgid "Edit Menu Item"
+msgstr ""
+
+#: core/tabs/settings/menus/walkerclass.php:250
+msgid "URL"
+msgstr ""
+
+#: core/tabs/settings/menus/walkerclass.php:265
+msgid "Navigation Label"
+msgstr ""
+
+#: core/tabs/settings/menus/walkerclass.php:286
+msgid "Menu Icon"
+msgstr ""
+
+#: core/tabs/settings/menus/walkerclass.php:307
+msgid "CSS Classes (only applies to top-level menu items)"
+msgstr ""
+
+#: core/tabs/settings/menus/walkerclass.php:321
+msgid "Extra Parameters"
+msgstr ""
+
+#: core/tabs/settings/menus/walkerclass.php:338
+msgid "Move"
+msgstr ""
+
+#: core/tabs/settings/menus/walkerclass.php:339
+msgid "Up one"
+msgstr ""
+
+#: core/tabs/settings/menus/walkerclass.php:340
+msgid "Down one"
+msgstr ""
+
+#: core/tabs/settings/menus/walkerclass.php:343
+msgid "To the top"
+msgstr ""
+
+#: core/tabs/settings/menus/walkerclass.php:367
+msgid "Remove"
+msgstr ""
+
+#: core/tabs/settings/menus/walkerclass.php:377
+#: core/tabs/settings/widgets.php:501
+msgid "Cancel"
+msgstr ""
+
+#: core/tabs/settings/menus.php:422
+msgid "Core Menu Settings"
+msgstr ""
+
+#: core/tabs/settings/menus.php:424
+msgid "Menus"
+msgstr ""
+
+#: core/tabs/settings/menus.php:460
+msgid "Post Types"
+msgstr ""
+
+#: core/tabs/settings/menus.php:464
+msgid "Custom Link"
+msgstr ""
+
+#: core/tabs/settings/menus.php:529
+msgid "Move up one"
+msgstr ""
+
+#: core/tabs/settings/menus.php:530
+msgid "Move down one"
+msgstr ""
+
+#: core/tabs/settings/menus.php:531
+msgid "Move to the top"
+msgstr ""
+
+#: core/tabs/settings/menus.php:533
+#. translators: %s: previous item name
+msgid "Move under %s"
+msgstr ""
+
+#: core/tabs/settings/menus.php:535
+#. translators: %s: previous item name
+msgid "Move out from under %s"
+msgstr ""
+
+#: core/tabs/settings/menus.php:537
+#. translators: %s: previous item name
+msgid "Under %s"
+msgstr ""
+
+#: core/tabs/settings/menus.php:539
+#. translators: %s: previous item name
+msgid "Out from under %s"
+msgstr ""
+
+#: core/tabs/settings/menus.php:541
+#. translators: 1: item name, 2: item position, 3: total number of items
+msgid "%1$s. Menu item %2$d of %3$d."
+msgstr ""
+
+#: core/tabs/settings/menus.php:543
+#. translators: 1: item name, 2: item position, 3: parent item name
+msgid "%1$s. Sub item number %2$d under %3$s."
+msgstr ""
+
+#: core/tabs/settings/menus.php:801
+msgid "Client Dash ORIG"
+msgstr ""
+
+#: core/tabs/settings/menus.php:1319
+msgid "Comments %s"
+msgstr ""
+
+#: core/tabs/settings/menus.php:1911
+msgid "Select a menu to edit:"
+msgstr ""
+
+#: core/tabs/settings/menus.php:1962
+msgid "Menu Statuses"
+msgstr ""
+
+#: core/tabs/settings/menus.php:1969
+msgid "Menu"
+msgstr ""
+
+#: core/tabs/settings/menus.php:1970
+msgid "Active"
+msgstr ""
+
+#: core/tabs/settings/menus.php:2031
+msgid "Menu Name:"
+msgstr ""
+
+#: core/tabs/settings/menus.php:2045
+msgid "Choose which role to create a menu for:"
+msgstr ""
+
+#: core/tabs/settings/menus.php:2059
+msgid "(that's you!)"
+msgstr ""
+
+#: core/tabs/settings/menus.php:2074
+msgid "Import role's existing menu items?"
+msgstr ""
+
+#: core/tabs/settings/menus.php:2092
+msgid ""
+"Temporarily disables this menu. The user with this role will get the "
+"default admin menu if this is set to off"
+msgstr ""
+
+#: core/tabs/settings/menus.php:2107 core/tabs/settings/menus.php:2189
+msgid "Save Menu"
+msgstr ""
+
+#: core/tabs/settings/menus.php:2107 core/tabs/settings/menus.php:2189
+msgid "Create Menu"
+msgstr ""
+
+#: core/tabs/settings/menus.php:2129
+msgid "The menu is being created. This may take some time."
+msgstr ""
+
+#: core/tabs/settings/menus.php:2131
+msgid "Please do NOT leave this page."
+msgstr ""
+
+#: core/tabs/settings/menus.php:2144
+msgid "Menu Structure"
+msgstr ""
+
+#: core/tabs/settings/menus.php:2148
+msgid ""
+"Drag and drop them in the order you like. Click on the arrows on each box "
+"to reveal more options."
+msgstr ""
+
+#: core/tabs/settings/menus.php:2158
+msgid "Select a role to create a menu for."
+msgstr ""
+
+#: core/tabs/settings/menus.php:2159
+msgid ""
+"The menu will be automatically populated with all visible admin menu items "
+"for the specified roles."
+msgstr ""
+
+#: core/tabs/settings/menus.php:2176
+msgid "Delete Menu"
+msgstr ""
+
+#: core/tabs/settings/tools.php:25
+msgid "Core Settings Tools"
+msgstr ""
+
+#: core/tabs/settings/tools.php:27
+msgid "Tools"
+msgstr ""
+
+#: core/tabs/settings/tools.php:52
+msgid "Reset all Client Dash settings"
+msgstr ""
+
+#: core/tabs/settings/webmaster.php:25
+msgid "Core Settings Webmaster"
+msgstr ""
+
+#: core/tabs/settings/webmaster.php:57
+msgid "Webmaster Name"
+msgstr ""
+
+#: core/tabs/settings/webmaster.php:70
+msgid "Tab Name"
+msgstr ""
+
+#: core/tabs/settings/webmaster.php:106
+msgid "Feed URL"
+msgstr ""
+
+#: core/tabs/settings/webmaster.php:112
+msgid "This should be a link to the RSS feed you want to pull from."
+msgstr ""
+
+#: core/tabs/settings/webmaster.php:118
+msgid "Number of entries"
+msgstr ""
+
+#: core/tabs/settings/webmaster.php:124
+msgid "How many entries to show."
+msgstr ""
+
+#: core/tabs/settings/widgets/widget-interface.php:100
+#. translators: CD is short for Client Dash
+msgid "CD Widget"
+msgstr ""
+
+#: core/tabs/settings/widgets/widget-interface.php:148
+msgid "Title"
+msgstr ""
+
+#: core/tabs/settings/widgets/widget-interface.php:156
+msgid "Title set in %sWebmaster%s page."
+msgstr ""
+
+#: core/tabs/settings/widgets.php:101
+msgid "Core Settings Widgets"
+msgstr ""
+
+#: core/tabs/settings/widgets.php:103
+msgid "Widgets"
+msgstr ""
+
+#: core/tabs/settings/widgets.php:268 core/tabs/settings/widgets.php:269
+msgid "Quick Draft"
+msgstr ""
+
+#: core/tabs/settings/widgets.php:442
+msgid "Available Widgets"
+msgstr ""
+
+#: core/tabs/settings/widgets.php:502
+msgid "Add Widget"
+msgstr ""
+
+#: core/tabs/webmaster/feed.php:27 core/tabs/webmaster/feed.php:29
+msgid "Feed"
+msgstr ""
+
+#: core/tabs/webmaster/feed.php:49
+msgid "Please set feed url under Client Dash %ssettings."
+msgstr ""
+
+#: core/tabs/webmaster/feed.php:68
+msgid "ISSUE: Invalid URL"
+msgstr ""
+
+#: core/tabs/webmaster/feed.php:92
+#. translators: %s: the name of the author
+msgid "Posted by %s"
+msgstr ""
+
+#: core/tabs/webmaster/feed.php:101
+#. translators: %s: date of the blog post
+msgid "On %s"
+msgstr ""
+
+#: core/tabs/webmaster/main.php:57
+msgid "Please set content under Client Dash %ssettings%s."
+msgstr ""
