@@ -41,7 +41,7 @@ class ClientDash_Core_Page_Settings_Tab_Tools extends ClientDash {
 			__( 'WARNING: This will reset ALL settings back to default.\nThis can NOT be undone.\n\nAre you sure you ' .
 			    'want to do this?', 'client-dash' ),
 			"\n"
-		); ?>
+		);
 
         add_filter( 'cd_submit', '__return_false' );
         ?>
