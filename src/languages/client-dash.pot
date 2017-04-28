@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/client-dash\n"
-"POT-Creation-Date: 2017-04-26 17:04:10+00:00\n"
+"POT-Creation-Date: 2017-04-28 17:14:55+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -68,22 +68,22 @@ msgstr ""
 msgid "Main"
 msgstr ""
 
-#: client-dash.php:874
+#: client-dash.php:881
 msgid "Great! Thanks! Now you can return to the settings %shere%s."
 msgstr ""
 
-#: client-dash.php:931 core/tabs/settings/addons.php:26
+#: client-dash.php:938 core/tabs/settings/addons.php:26
 #: core/tabs/settings/display.php:26 core/tabs/settings/icons.php:232
 #: core/tabs/settings/menus.php:423 core/tabs/settings/tools.php:26
 #: core/tabs/settings/webmaster.php:26 core/tabs/settings/widgets.php:102
 msgid "Settings"
 msgstr ""
 
-#: client-dash.php:934
+#: client-dash.php:941
 msgid "More Real Big Plugins"
 msgstr ""
 
-#: client-dash.php:938
+#: client-dash.php:945
 msgid "Subscribe"
 msgstr ""
 
