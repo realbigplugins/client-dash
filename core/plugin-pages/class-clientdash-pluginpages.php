@@ -49,6 +49,11 @@ class ClientDash_PluginPages {
 
 			add_action( 'admin_init', array( $this, 'reset_all_settings' ) );
 		}
+
+		if ( isset( $_REQUEST['cd_flush_addons'])) {
+
+			add_action( 'admin_init', array( $this, 'flush_addons_cache' ) );
+		}
 	}
 
 	/**
@@ -71,6 +76,20 @@ class ClientDash_PluginPages {
 		set_transient( 'settings_errors', get_settings_errors(), 30 );
 
 		wp_redirect( admin_url( 'admin.php?page=clientdash_settings&settings-updated=1' ) );
+		exit();
+	}
+
+	/**
+	 * Resets the addons cache.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 */
+	function flush_addons_cache() {
+
+		delete_transient( 'clientdash_addons' );
+
+		wp_redirect( admin_url( 'admin.php?page=clientdash_addons' ) );
 		exit();
 	}
 

@@ -39,7 +39,8 @@ defined( 'ABSPATH' ) || die;
                             </h3>
 
                             <p class="clietndash-addon-description">
-								<?php echo esc_html( $addon->info->content ); ?>
+								<?php echo $addon->info->excerpt ?
+									esc_html( $addon->info->excerpt ) : esc_html( $addon->info->content ); ?>
                             </p>
 
                             <a href="<?php echo esc_url_raw( $addon->info->link ); ?>"
@@ -52,12 +53,13 @@ defined( 'ABSPATH' ) || die;
 			<?php endforeach; ?>
         </ul>
 
+        <a href="<?php echo admin_url( 'admin.php?page=clientdash_addons&cd_flush_addons' ); ?>"
+           class="page-title-action">
+			<?php _e( 'Refresh Addons', 'client-dash' ); ?>
+        </a>
+
     </section>
 
 	<?php include_once CLIENTDASH_DIR . 'core/plugin-pages/views/sidebar/sidebar.php'; ?>
-
-    <!--    <a href="https://realbigplugins.com/plugins/" class="button button-primary">-->
-    <!--		--><?php //_e( 'View all Real Big Plugins', 'client-dash' ); ?>
-    <!--    </a>-->
 
 </div>
