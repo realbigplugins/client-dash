@@ -1,0 +1,12 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>Copyright (C) 2017 by original authors @ fontello.com</metadata>
+<defs>
+<font id="clientdash-icons" horiz-adv-x="1000" >
+<font-face font-family="clientdash-icons" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
+<missing-glyph horiz-adv-x="1000" />
+<glyph glyph-name="logo-menu" unicode="&#xe800;" d="M502 545c-23 0-42 19-42 42 0 23 19 41 42 41 22 0 41-18 41-41 0-23-19-42-41-42z m211-80c-23 0-42 19-42 42 0 23 19 41 42 41 23 0 41-18 41-41 0-23-18-42-41-42z m116-181c-23 0-42 19-42 42 0 23 19 41 42 41 23 0 41-18 41-41 0-23-18-42-41-42z m-542 180c-23 0-41 18-41 41 0 23 18 42 41 42 23 0 42-19 42-42 0-23-19-41-42-41z m-117-180c-23 0-42 19-42 42 0 23 19 41 42 41 23 0 41-18 41-41 0-23-18-42-41-42z m-170-32c0 276 224 500 500 500 276 0 500-224 500-500 0-46-6-91-18-133l-514 0 170 114 254 0c0 0 0 12 0 18 0 214-175 387-391 387-217 0-392-173-392-387 0-6 1-18 1-18l208 0 284 192-42 63 190-38-37-190-43 62-306-203-346 0c-12 42-18 87-18 133z" horiz-adv-x="1000" />
+</font>
+</defs>
+</svg>

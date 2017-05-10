@@ -1,0 +1,85 @@
+.cd-editor-action-button {
+  color: $dark-gray;
+  background: $light-gray;
+  font-weight: bold;
+  border: 1px solid $medium-gray;
+  font-size: $font-large;
+  outline: none;
+  height: 50px;
+  line-height: 50px;
+  cursor: pointer;
+  min-width: 3em;
+  padding: 0;
+
+  &:hover {
+    color: #222;
+    background: linear-gradient(to bottom, #f4f4f4 0%,#dbdbdb 100%);
+  }
+
+  &.right {
+    float: right;
+  }
+
+  &.left {
+    float: left;
+  }
+
+  &.cd-editor-action-button-disabled {
+    background: darken($light-gray, 8%) !important;
+    color: lighten($dark-gray, 8%) !important;
+    cursor: not-allowed;
+  }
+
+  .cd-editor-action-button-icon {
+    font-size: 1.2em;
+    height: auto;
+    width: auto;
+    vertical-align: middle;
+    margin-right: 0.2em;
+  }
+
+  &.cd-editor-action-button-delete {
+    background: $color-error;
+    color: mix($color-error, #fff, 50%);
+    border-color: darken($color-error, 10%);
+
+    &:hover {
+      background: linear-gradient(to bottom, $color-error 0%, darken($color-error, 10%) 100%);
+      color: #fff;
+    }
+  }
+
+  &.cd-editor-action-button-primary {
+    background: $primary-color;
+    color: mix($primary-color, #fff, 50%);
+    border-color: darken($primary-color, 10%);
+
+    &:hover {
+      background: linear-gradient(to bottom, $primary-color 0%, darken($primary-color, 10%) 100%);
+      color: #fff;
+    }
+  }
+}
+
+.cd-customize-show {
+  position: absolute;
+  bottom: 1em;
+  left: 1em;
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  cursor: pointer;
+  z-index: 100;
+  transition: transform 150ms;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  .cd-customize-show-icon {
+    font-size: 4em;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(#000, 0.5);
+  }
+}
