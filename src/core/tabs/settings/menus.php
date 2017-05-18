@@ -412,7 +412,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 		add_filter( 'wp_get_nav_menus', array( $this, 'hide_cd_nav_menu' ) );
 
 		// Use custom walker menu for displaying sortable menu items
-		add_filter( 'wp_edit_nav_menu_walker', array( $this, 'return_new_walker_menu' ), 10, 2 );
+		add_filter( 'wp_edit_nav_menu_walker', array( $this, 'return_new_walker_menu' ), 1000, 2 );
 
 		// Filters the modified menu item when returned
 		add_filter( 'wp_setup_nav_menu_item', array( $this, 'modify_menu_item' ) );

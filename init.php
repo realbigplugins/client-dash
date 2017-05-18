@@ -2,7 +2,7 @@
 /*
 Plugin Name: Client Dash DEVELOPMENT
 Description: The development build for Client Dash.
-Version: 1.6.15
+Version: 1.6.16
 Author: Joel Worsham & Kyle Maurer
 Author URI: http://realbigmarketing.com/about-us/#staff
 */

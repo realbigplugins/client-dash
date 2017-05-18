@@ -1,6 +1,6 @@
 ![banner](https://raw.githubusercontent.com/brashrebel/client-dash/master/assets/static/banner.png)
 
-# v1.6.15
+# v1.6.16
 
 [Releases](https://github.com/brashrebel/client-dash/releases)
 
