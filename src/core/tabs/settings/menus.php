@@ -949,7 +949,7 @@ class ClientDash_Core_Page_Settings_Tab_Menus extends ClientDash {
 	 *
 	 * @return string The new Walker class.
 	 */
-	public function return_new_walker_menu( $walker, $menu ) {
+	public function return_new_walker_menu( $walker, $menu = null ) {
 
 		if ( ! $menu ) {
 			return $walker;

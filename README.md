@@ -1,6 +1,6 @@
 ![banner](https://raw.githubusercontent.com/brashrebel/client-dash/master/assets/static/banner.png)
 
-# v1.6.16
+# v1.6.17
 
 [Releases](https://github.com/brashrebel/client-dash/releases)
 
@@ -36,6 +36,18 @@ Using this plugin is very simple. All you have to do is:
 3. Configure settings by going to Settings - >Client Dash
 
 ## Changelog
+
+### [1.6.17](https://github.com/brashrebel/client-dash/releases/tag/v1.6.17)
+* Bug fix for potential conflict with plugin "If Menu"
+
+### [1.6.16](https://github.com/brashrebel/client-dash/releases/tag/v1.6.16)
+* Bug fix with menus and some plugins/themes conflicting
+
+### [1.6.15](https://github.com/brashrebel/client-dash/releases/tag/v1.6.15)
+* Bug fix with Tools page
+
+### [1.6.14](https://github.com/brashrebel/client-dash/releases/tag/v1.6.14)
+* Make everything translatable
 
 ### [1.6.13](https://github.com/brashrebel/client-dash/releases/tag/v1.6.13)
 * Add settings sidebar.

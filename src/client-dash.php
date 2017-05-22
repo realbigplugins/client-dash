@@ -27,7 +27,7 @@ class ClientDash extends ClientDash_Functions {
 	 *
 	 * @since Client Dash 1.5
 	 */
-	protected static $version = '1.6.16';
+	protected static $version = '1.6.17';
 
 	/**
 	 * The path to the plugin.
