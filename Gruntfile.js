@@ -148,7 +148,7 @@ module.exports = function (grunt) {
                         replacement: "Stable tag: " + pkg.version
                     }, {
                         // Plugin version
-                        pattern: /protected static \$version = '\d+\.\d+\.\d+;/,
+                        pattern: /protected static \$version = '\d+\.\d+\.\d+/,
                         replacement: "protected static $version = '" + pkg.version
                     }]
                 }

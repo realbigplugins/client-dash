@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/client-dash\n"
-"POT-Creation-Date: 2017-05-22 21:30:19+00:00\n"
+"POT-Creation-Date: 2017-05-22 22:17:28+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -97,19 +97,19 @@ msgstr ""
 
 #: core/extension-apis/menus-api.php:108
 #: core/tabs/settings/menus/availableitems-callbacks.php:299
-#: core/tabs/settings/menus/availableitems-callbacks.php:432
-#: core/tabs/settings/menus/availableitems-callbacks.php:628
-#: core/tabs/settings/menus/availableitems-callbacks.php:689
+#: core/tabs/settings/menus/availableitems-callbacks.php:433
+#: core/tabs/settings/menus/availableitems-callbacks.php:658
+#: core/tabs/settings/menus/availableitems-callbacks.php:720
 msgid "Select All"
 msgstr ""
 
 #: core/extension-apis/menus-api.php:113
-#: core/tabs/settings/menus/availableitems-callbacks.php:304
-#: core/tabs/settings/menus/availableitems-callbacks.php:437
-#: core/tabs/settings/menus/availableitems-callbacks.php:633
-#: core/tabs/settings/menus/availableitems-callbacks.php:694
-#: core/tabs/settings/menus/availableitems-callbacks.php:734
-#: core/tabs/settings/menus/availableitems-callbacks.php:788
+#: core/tabs/settings/menus/availableitems-callbacks.php:305
+#: core/tabs/settings/menus/availableitems-callbacks.php:439
+#: core/tabs/settings/menus/availableitems-callbacks.php:664
+#: core/tabs/settings/menus/availableitems-callbacks.php:726
+#: core/tabs/settings/menus/availableitems-callbacks.php:767
+#: core/tabs/settings/menus/availableitems-callbacks.php:822
 msgid "Add to Menu"
 msgstr ""
 
@@ -428,8 +428,8 @@ msgid "No items present"
 msgstr ""
 
 #: core/tabs/settings/menus/availableitems-callbacks.php:157
-#: core/tabs/settings/menus/availableitems-callbacks.php:332
-#: core/tabs/settings/menus/availableitems-callbacks.php:551
+#: core/tabs/settings/menus/availableitems-callbacks.php:333
+#: core/tabs/settings/menus/availableitems-callbacks.php:581
 msgid "Top-level"
 msgstr ""
 
@@ -450,30 +450,30 @@ msgstr ""
 msgid "Add New $s"
 msgstr ""
 
-#: core/tabs/settings/menus/availableitems-callbacks.php:338
-#: core/tabs/settings/menus/availableitems-callbacks.php:557
+#: core/tabs/settings/menus/availableitems-callbacks.php:339
+#: core/tabs/settings/menus/availableitems-callbacks.php:587
 msgid "Sub-menu"
 msgstr ""
 
-#: core/tabs/settings/menus/availableitems-callbacks.php:489
+#: core/tabs/settings/menus/availableitems-callbacks.php:491
 #: core/tabs/settings/menus/walkerclass.php:104
 #: core/tabs/settings/menus.php:465 core/tabs/settings/menus.php:1148
 msgid "Separator"
 msgstr ""
 
-#: core/tabs/settings/menus/availableitems-callbacks.php:539
+#: core/tabs/settings/menus/availableitems-callbacks.php:569
 msgid "No items"
 msgstr ""
 
-#: core/tabs/settings/menus/availableitems-callbacks.php:713
+#: core/tabs/settings/menus/availableitems-callbacks.php:745
 msgid "Adds some vertical space between items."
 msgstr ""
 
-#: core/tabs/settings/menus/availableitems-callbacks.php:767
+#: core/tabs/settings/menus/availableitems-callbacks.php:800
 msgid "Link Text"
 msgstr ""
 
-#: core/tabs/settings/menus/availableitems-callbacks.php:769
+#: core/tabs/settings/menus/availableitems-callbacks.php:802
 msgid "Menu Item"
 msgstr ""
 

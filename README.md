@@ -1,6 +1,6 @@
 ![banner](https://raw.githubusercontent.com/brashrebel/client-dash/master/assets/static/banner.png)
 
-# v1.6.17
+# v1.6.18
 
 [Releases](https://github.com/brashrebel/client-dash/releases)
 
@@ -37,8 +37,8 @@ Using this plugin is very simple. All you have to do is:
 
 ## Changelog
 
-### [1.6.17](https://github.com/brashrebel/client-dash/releases/tag/v1.6.17)
-* Bug fix for potential conflict with plugin "If Menu"
+### [1.6.18](https://github.com/brashrebel/client-dash/releases/tag/v1.6.18)
+* Bug fix for not showing proper Plugin sub-menu items in the menu customizer.
 
 ### [1.6.16](https://github.com/brashrebel/client-dash/releases/tag/v1.6.16)
 * Bug fix with menus and some plugins/themes conflicting

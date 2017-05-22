@@ -32,12 +32,12 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 
 		// The checkbox and label
 		?>
-		<label class="menu-item-title">
-			<input type="checkbox" class="menu-item-checkbox"
-			       name="menu-item[<?php echo $i; ?>][menu-item-object-id]"
-			       value="0"/>
+        <label class="menu-item-title">
+            <input type="checkbox" class="menu-item-checkbox"
+                   name="menu-item[<?php echo $i; ?>][menu-item-object-id]"
+                   value="0"/>
 			<?php echo $label; ?>
-		</label>
+        </label>
 		<?php
 
 		// Iterations of options to skip over
@@ -58,11 +58,11 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 				continue;
 			}
 			?>
-			<input type="hidden"
-			       class="menu-item-<?php echo $option_name; ?>"
-			       name="menu-item[<?php echo $i; ?>][menu-item-<?php echo $option_name; ?>]"
-			       value="<?php echo $option_value; ?>"/>
-		<?php
+            <input type="hidden"
+                   class="menu-item-<?php echo $option_name; ?>"
+                   name="menu-item[<?php echo $i; ?>][menu-item-<?php echo $option_name; ?>]"
+                   value="<?php echo $option_value; ?>"/>
+			<?php
 		}
 
 		echo '</li>';
@@ -148,37 +148,37 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 		}
 		?>
 
-		<div id="posttype-page" class="posttypediv">
+        <div id="posttype-page" class="posttypediv">
 
-			<ul id="posttype-page-tabs" class="posttype-tabs add-menu-item-tabs">
-				<li class="tabs">
-					<a class="nav-tab-link" data-type="tabs-panel-posttype-toplevel"
-					   href="/wp-admin/nav-menus.php?page-tab=most-recent#tabs-panel-posttype-toplevel">
+            <ul id="posttype-page-tabs" class="posttype-tabs add-menu-item-tabs">
+                <li class="tabs">
+                    <a class="nav-tab-link" data-type="tabs-panel-posttype-toplevel"
+                       href="/wp-admin/nav-menus.php?page-tab=most-recent#tabs-panel-posttype-toplevel">
 						<?php _e( 'Top-level', 'client-dash' ); ?>
-					</a>
-				</li>
-				<li>
-					<a class="nav-tab-link" data-type="tabs-panel-posttype-addnew"
-					   href="/wp-admin/nav-menus.php?page-tab=all#tabs-panel-posttype-addnew">
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-tab-link" data-type="tabs-panel-posttype-addnew"
+                       href="/wp-admin/nav-menus.php?page-tab=all#tabs-panel-posttype-addnew">
 						<?php _e( 'Add New', 'client-dash' ); ?>
-					</a>
-				</li>
-				<li>
-					<a class="nav-tab-link" data-type="tabs-panel-posttype-listall"
-					   href="/wp-admin/nav-menus.php?page-tab=search#tabs-panel-posttype-listall">
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-tab-link" data-type="tabs-panel-posttype-listall"
+                       href="/wp-admin/nav-menus.php?page-tab=search#tabs-panel-posttype-listall">
 						<?php _e( 'List All', 'client-dash' ); ?>
-					</a>
-				</li>
-				<li>
-					<a class="nav-tab-link" data-type="tabs-panel-posttype-taxonomies"
-					   href="/wp-admin/nav-menus.php?page-tab=search#tabs-panel-posttype-taxonomies">
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-tab-link" data-type="tabs-panel-posttype-taxonomies"
+                       href="/wp-admin/nav-menus.php?page-tab=search#tabs-panel-posttype-taxonomies">
 						<?php _e( 'Taxonomies', 'client-dash' ); ?>
-					</a>
-				</li>
-			</ul>
+                    </a>
+                </li>
+            </ul>
 
-			<div id="tabs-panel-posttype-toplevel" class="tabs-panel tabs-panel-active">
-				<ul id="posttypechecklist-toplevel" class="categorychecklist form-no-clear">
+            <div id="tabs-panel-posttype-toplevel" class="tabs-panel tabs-panel-active">
+                <ul id="posttypechecklist-toplevel" class="categorychecklist form-no-clear">
 					<?php
 
 					$i = 0;
@@ -197,12 +197,12 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					}
 					?>
 
-				</ul>
-			</div>
-			<!-- /.tabs-panel -->
+                </ul>
+            </div>
+            <!-- /.tabs-panel -->
 
-			<div id="tabs-panel-posttype-addnew" class="tabs-panel tabs-panel-inactive">
-				<ul id="posttypechecklist-addnew" class="categorychecklist form-no-clear">
+            <div id="tabs-panel-posttype-addnew" class="tabs-panel tabs-panel-inactive">
+                <ul id="posttypechecklist-addnew" class="categorychecklist form-no-clear">
 					<?php
 
 					$i = 0;
@@ -210,7 +210,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 						$i --;
 
 						$options = array(
-						        /* translators: %s the post type (noun) */
+							/* translators: %s the post type (noun) */
 							'title'   => sprintf( __( 'Add New $s', 'client-dash' ), $post_type['title'] ),
 							'url'     => $post_type['addnew_link'],
 							'cd-icon' => isset( $icon[ $post_type['id'] ] ) ? $icon[ $post_type['id'] ] : 'dashicons-admin-post',
@@ -222,12 +222,12 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					}
 					?>
 
-				</ul>
-			</div>
-			<!-- /.tabs-panel -->
+                </ul>
+            </div>
+            <!-- /.tabs-panel -->
 
-			<div id="tabs-panel-posttype-listall" class="tabs-panel tabs-panel-inactive">
-				<ul id="posttypechecklist-listall" class="categorychecklist form-no-clear">
+            <div id="tabs-panel-posttype-listall" class="tabs-panel tabs-panel-inactive">
+                <ul id="posttypechecklist-listall" class="categorychecklist form-no-clear">
 					<?php
 
 					$i = 0;
@@ -251,13 +251,13 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					}
 					?>
 
-				</ul>
-			</div>
-			<!-- /.tabs-panel -->
+                </ul>
+            </div>
+            <!-- /.tabs-panel -->
 
 
-			<div id="tabs-panel-posttype-taxonomies" class="tabs-panel tabs-panel-inactive">
-				<ul id="posttypechecklist-taxonomies" class="categorychecklist form-no-clear">
+            <div id="tabs-panel-posttype-taxonomies" class="tabs-panel tabs-panel-inactive">
+                <ul id="posttypechecklist-taxonomies" class="categorychecklist form-no-clear">
 					<?php
 
 					// Cycle through post types
@@ -289,26 +289,27 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					}
 					?>
 
-				</ul>
-			</div>
-			<!-- /.tabs-panel -->
+                </ul>
+            </div>
+            <!-- /.tabs-panel -->
 
-			<p class="button-controls">
+            <p class="button-controls">
 			<span class="list-controls">
 				<a href="/wp-admin/nav-menus.php?page-tab=all&amp;selectall=1#posttype-page" class="select-all">
                     <?php _e( 'Select All', 'client-dash' ); ?>
                 </a>
 			</span>
 
-			<span class="add-to-menu">
-				<input type="submit" class="button-secondary submit-add-to-menu right" value="<?php _e( 'Add to Menu', 'client-dash' ); ?>"
-				       name="add-post-type-menu-item" id="submit-posttype-page">
+                <span class="add-to-menu">
+				<input type="submit" class="button-secondary submit-add-to-menu right"
+                       value="<?php _e( 'Add to Menu', 'client-dash' ); ?>"
+                       name="add-post-type-menu-item" id="submit-posttype-page">
 				<span class="spinner"></span>
 			</span>
-			</p>
+            </p>
 
-		</div>
-	<?php
+        </div>
+		<?php
 	}
 
 	/**
@@ -323,25 +324,25 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 		$role = get_role( $cd_current_menu_role ? $cd_current_menu_role : 'administrator' );
 		?>
 
-		<div id="wordpress-core" class="posttypediv">
+        <div id="wordpress-core" class="posttypediv">
 
-			<ul id="wordpress-core-tabs" class="wordpress-core-tabs add-menu-item-tabs">
-				<li class="tabs">
-					<a class="nav-tab-link" data-type="tabs-panel-wordpress-core-toplevel"
-					   href="/wp-admin/nav-menus.php?page-tab=most-recent#tabs-panel-wordpress-core-toplevel">
+            <ul id="wordpress-core-tabs" class="wordpress-core-tabs add-menu-item-tabs">
+                <li class="tabs">
+                    <a class="nav-tab-link" data-type="tabs-panel-wordpress-core-toplevel"
+                       href="/wp-admin/nav-menus.php?page-tab=most-recent#tabs-panel-wordpress-core-toplevel">
 						<?php _e( 'Top-level', 'client-dash' ); ?>
-					</a>
-				</li>
-				<li>
-					<a class="nav-tab-link" data-type="tabs-panel-wordpress-core-submenu"
-					   href="/wp-admin/nav-menus.php?page-tab=all#tabs-panel-wordpress-core-submenu">
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-tab-link" data-type="tabs-panel-wordpress-core-submenu"
+                       href="/wp-admin/nav-menus.php?page-tab=all#tabs-panel-wordpress-core-submenu">
 						<?php _e( 'Sub-menu', 'client-dash' ); ?>
-					</a>
-				</li>
-			</ul>
+                    </a>
+                </li>
+            </ul>
 
-			<div id="tabs-panel-wordpress-core-toplevel" class="tabs-panel tabs-panel-active">
-				<ul id="posttypechecklist-wordpress-core" class="categorychecklist form-no-clear">
+            <div id="tabs-panel-wordpress-core-toplevel" class="tabs-panel tabs-panel-active">
+                <ul id="posttypechecklist-wordpress-core" class="categorychecklist form-no-clear">
 					<?php
 
 					$i = 0;
@@ -366,12 +367,12 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					}
 					?>
 
-				</ul>
-			</div>
-			<!-- /.tabs-panel -->
+                </ul>
+            </div>
+            <!-- /.tabs-panel -->
 
-			<div id="tabs-panel-wordpress-core-submenu" class="tabs-panel tabs-panel-inactive">
-				<ul id="posttypechecklist-wordpress-core" class="categorychecklist form-no-clear">
+            <div id="tabs-panel-wordpress-core-submenu" class="tabs-panel tabs-panel-inactive">
+                <ul id="posttypechecklist-wordpress-core" class="categorychecklist form-no-clear">
 					<?php
 					$core_items = self::$wp_core;
 
@@ -422,26 +423,27 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					}
 					?>
 
-				</ul>
-			</div>
-			<!-- /.tabs-panel -->
+                </ul>
+            </div>
+            <!-- /.tabs-panel -->
 
-			<p class="button-controls">
+            <p class="button-controls">
 			<span class="list-controls">
 				<a href="/wp-admin/nav-menus.php?page-tab=all&amp;selectall=1#wordpress-core" class="select-all">
                     <?php _e( 'Select All', 'client-dash' ); ?>
                 </a>
 			</span>
 
-			<span class="add-to-menu">
-				<input type="submit" class="button-secondary submit-add-to-menu right" value="<?php _e( 'Add to Menu', 'client-dash' ); ?>"
-				       name="add-post-type-menu-item" id="submit-wordpress-core">
+                <span class="add-to-menu">
+				<input type="submit" class="button-secondary submit-add-to-menu right"
+                       value="<?php _e( 'Add to Menu', 'client-dash' ); ?>"
+                       name="add-post-type-menu-item" id="submit-wordpress-core">
 				<span class="spinner"></span>
 			</span>
-			</p>
+            </p>
 
-		</div>
-	<?php
+        </div>
+		<?php
 	}
 
 	/**
@@ -452,7 +454,7 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 	public static function plugin() {
 
 		// Globalize the "parent" class object for access of public properties
-		global $ClientDash_Core_Page_Settings_Tab_Menus, $cd_current_menu_role;
+		global $ClientDash_Core_Page_Settings_Tab_Menus, $cd_current_menu_role, $menu, $submenu;
 
 		$role = get_role( $cd_current_menu_role ? $cd_current_menu_role : 'administrator' );
 
@@ -520,12 +522,40 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					// Only add if not a WP Core or CD Core item
 					// Variable webmaster title
 					$title = $submenu_item['menu_slug'] == 'cd_webmaster' ? 'webmaster' : strtolower( $submenu_item['menu_title'] );
-					if ( isset( $wp_core[ $menu_item['menu_title'] ]['submenus'] )
-					     && ! array_key_exists( $submenu_item['menu_title'], $wp_core[ $menu_item['menu_title'] ]['submenus'] )
-					     && ! array_key_exists( $title, ClientDash::$core_files ) && $title != 'client dash'
-					) {
-						$menu_item['submenus'][] = $submenu_item;
+
+					// Check if in WP Core
+					$in_wp_core = false;
+					foreach ( $wp_core as $wp_core_menu_item ) {
+						if ( $menu_item['menu_slug'] !== $wp_core_menu_item['url'] ) {
+							continue;
+						}
+
+						foreach ( $wp_core_menu_item['submenus'] as $wp_core_submenu_item ) {
+							if ( $submenu_item['menu_slug'] === $wp_core_submenu_item['url'] ) {
+								$in_wp_core = true;
+								break;
+							}
+						}
 					}
+
+					if ( $in_wp_core ) {
+						continue;
+					}
+
+					// Check if in CD Core
+					$in_cd_core = false;
+					foreach ( ClientDash::$core_files as $core_file => $tabs ) {
+						if ( $submenu_item['menu_slug'] === "cd_$core_file" ) {
+							$in_cd_core = true;
+							break;
+						}
+					}
+
+					if ( $in_cd_core ) {
+						continue;
+					}
+
+					$menu_item['submenus'][] = $submenu_item;
 				}
 			}
 
@@ -542,25 +572,25 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 		}
 		?>
 
-		<div id="plugin" class="posttypediv">
+        <div id="plugin" class="posttypediv">
 
-			<ul id="plugin-tabs" class="plugin-tabs add-menu-item-tabs">
-				<li class="tabs">
-					<a class="nav-tab-link" data-type="tabs-panel-plugin-toplevel"
-					   href="/wp-admin/nav-menus.php?page-tab=most-recent#tabs-panel-plugin-toplevel">
+            <ul id="plugin-tabs" class="plugin-tabs add-menu-item-tabs">
+                <li class="tabs">
+                    <a class="nav-tab-link" data-type="tabs-panel-plugin-toplevel"
+                       href="/wp-admin/nav-menus.php?page-tab=most-recent#tabs-panel-plugin-toplevel">
 						<?php _e( 'Top-level', 'client-dash' ); ?>
-					</a>
-				</li>
-				<li>
-					<a class="nav-tab-link" data-type="tabs-panel-plugin-submenu"
-					   href="/wp-admin/nav-menus.php?page-tab=all#tabs-panel-plugin-submenu">
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-tab-link" data-type="tabs-panel-plugin-submenu"
+                       href="/wp-admin/nav-menus.php?page-tab=all#tabs-panel-plugin-submenu">
 						<?php _e( 'Sub-menu', 'client-dash' ); ?>
-					</a>
-				</li>
-			</ul>
+                    </a>
+                </li>
+            </ul>
 
-			<div id="tabs-panel-plugin-toplevel" class="tabs-panel tabs-panel-active">
-				<ul id="posttypechecklist-plugin" class="categorychecklist form-no-clear">
+            <div id="tabs-panel-plugin-toplevel" class="tabs-panel tabs-panel-active">
+                <ul id="posttypechecklist-plugin" class="categorychecklist form-no-clear">
 					<?php
 
 					$i = 0;
@@ -584,12 +614,12 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					}
 					?>
 
-				</ul>
-			</div>
-			<!-- /.tabs-panel -->
+                </ul>
+            </div>
+            <!-- /.tabs-panel -->
 
-			<div id="tabs-panel-plugin-submenu" class="tabs-panel tabs-panel-inactive">
-				<ul id="posttypechecklist-plugin" class="categorychecklist form-no-clear">
+            <div id="tabs-panel-plugin-submenu" class="tabs-panel tabs-panel-inactive">
+                <ul id="posttypechecklist-plugin" class="categorychecklist form-no-clear">
 					<?php
 
 					foreach ( $menu_items as $item ) {
@@ -618,26 +648,27 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					}
 					?>
 
-				</ul>
-			</div>
-			<!-- /.tabs-panel -->
+                </ul>
+            </div>
+            <!-- /.tabs-panel -->
 
-			<p class="button-controls">
+            <p class="button-controls">
 			<span class="list-controls">
 				<a href="/wp-admin/nav-menus.php?page-tab=all&amp;selectall=1#plugin" class="select-all">
                     <?php _e( 'Select All', 'client-dash' ); ?>
                 </a>
 			</span>
 
-			<span class="add-to-menu">
-				<input type="submit" class="button-secondary submit-add-to-menu right" value="<?php _e( 'Add to Menu', 'client-dash' ); ?>"
-				       name="add-post-type-menu-item" id="submit-plugin">
+                <span class="add-to-menu">
+				<input type="submit" class="button-secondary submit-add-to-menu right"
+                       value="<?php _e( 'Add to Menu', 'client-dash' ); ?>"
+                       name="add-post-type-menu-item" id="submit-plugin">
 				<span class="spinner"></span>
 			</span>
-			</p>
+            </p>
 
-		</div>
-	<?php
+        </div>
+		<?php
 	}
 
 	/**
@@ -651,10 +682,10 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 		$role = get_role( $cd_current_menu_role ? $cd_current_menu_role : 'administrator' );
 		?>
 
-		<div id="clientdash-core" class="posttypediv">
+        <div id="clientdash-core" class="posttypediv">
 
-			<div id="tabs-panel-clientdash-core-submenu" class="tabs-panel tabs-panel-active">
-				<ul id="posttypechecklist-clientdash-core" class="categorychecklist form-no-clear">
+            <div id="tabs-panel-clientdash-core-submenu" class="tabs-panel tabs-panel-active">
+                <ul id="posttypechecklist-clientdash-core" class="categorychecklist form-no-clear">
 					<?php
 					$i = 0;
 					foreach ( ClientDash::$core_files as $item_title => $submenus ) {
@@ -679,26 +710,27 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 					}
 					?>
 
-				</ul>
-			</div>
-			<!-- /.tabs-panel -->
+                </ul>
+            </div>
+            <!-- /.tabs-panel -->
 
-			<p class="button-controls">
+            <p class="button-controls">
 			<span class="list-controls">
 				<a href="/wp-admin/nav-menus.php?page-tab=all&amp;selectall=1#clientdash-core" class="select-all">
                     <?php _e( 'Select All', 'client-dash' ); ?>
                 </a>
 			</span>
 
-			<span class="add-to-menu">
-				<input type="submit" class="button-secondary submit-add-to-menu right" value="<?php _e( 'Add to Menu', 'client-dash' ); ?>"
-				       name="add-post-type-menu-item" id="submit-clientdash-core">
+                <span class="add-to-menu">
+				<input type="submit" class="button-secondary submit-add-to-menu right"
+                       value="<?php _e( 'Add to Menu', 'client-dash' ); ?>"
+                       name="add-post-type-menu-item" id="submit-clientdash-core">
 				<span class="spinner"></span>
 			</span>
-			</p>
+            </p>
 
-		</div>
-	<?php
+        </div>
+		<?php
 	}
 
 	/**
@@ -708,37 +740,38 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 	 */
 	public static function separator() {
 		?>
-		<div id="separator" class="posttypediv">
+        <div id="separator" class="posttypediv">
 
-			<p class="description"><?php _e( 'Adds some vertical space between items.', 'client-dash' ); ?></p>
+            <p class="description"><?php _e( 'Adds some vertical space between items.', 'client-dash' ); ?></p>
 
-			<div id="tabs-panel-separator-submenu" class="tabs-panel tabs-panel-active" style="display: none;">
-				<ul id="posttypechecklist-separator" class="categorychecklist form-no-clear">
-					<li>
-						<input type="checkbox" class="menu-item-checkbox" id="separator-checkbox"
-						       name="menu-item[-1][menu-item-object-id]"
-						       value="0" checked/>
+            <div id="tabs-panel-separator-submenu" class="tabs-panel tabs-panel-active" style="display: none;">
+                <ul id="posttypechecklist-separator" class="categorychecklist form-no-clear">
+                    <li>
+                        <input type="checkbox" class="menu-item-checkbox" id="separator-checkbox"
+                               name="menu-item[-1][menu-item-object-id]"
+                               value="0" checked/>
 
-						<input type="hidden" name="menu-item[-1][menu-item-title]" class="menu-item-title"
-						       value="Separator"/>
-						<input type="hidden" name="menu-item[-1][menu-item-cd-type]" class="cd-custom-menu-item"
-						       value="separator"/>
-					</li>
-				</ul>
-			</div>
-			<!-- /.tabs-panel -->
+                        <input type="hidden" name="menu-item[-1][menu-item-title]" class="menu-item-title"
+                               value="Separator"/>
+                        <input type="hidden" name="menu-item[-1][menu-item-cd-type]" class="cd-custom-menu-item"
+                               value="separator"/>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.tabs-panel -->
 
-			<p class="button-controls">
+            <p class="button-controls">
 
 			<span class="add-to-menu">
-				<input type="submit" class="button-secondary submit-add-to-menu right" value="<?php _e( 'Add to Menu', 'client-dash' ); ?>"
-				       name="add-post-type-menu-item" id="submit-separator">
+				<input type="submit" class="button-secondary submit-add-to-menu right"
+                       value="<?php _e( 'Add to Menu', 'client-dash' ); ?>"
+                       name="add-post-type-menu-item" id="submit-separator">
 				<span class="spinner"></span>
 			</span>
-			</p>
+            </p>
 
-		</div>
-	<?php
+        </div>
+		<?php
 	}
 
 	/**
@@ -746,52 +779,53 @@ class CD_AdminMenu_AvailableItems_Callbacks extends ClientDash_Core_Page_Setting
 	 *
 	 * @since Client Dash 1.6
 	 */
-	public static function custom_link() {		?>
-		<div id="custom-link" class="posttypediv">
+	public static function custom_link() { ?>
+        <div id="custom-link" class="posttypediv">
 
-			<div id="tabs-panel-custom-link" class="tabs-panel-active categorychecklist form-no-clear">
-				<ul id="posttypechecklist-custom-link" class="categorychecklist form-no-clear">
-					<li>
-						<label class="menu-item-title">
-							<p id="menu-item-url-wrap">
-								<label class="howto" for="menu-item-url">
-									<span>URL</span>
-									<input type="text" class="menu-item-url code"
-									       placeholder="Link"
-									       name="menu-item[-1][menu-item-url]" value="">
-								</label>
-							</p>
+            <div id="tabs-panel-custom-link" class="tabs-panel-active categorychecklist form-no-clear">
+                <ul id="posttypechecklist-custom-link" class="categorychecklist form-no-clear">
+                    <li>
+                        <label class="menu-item-title">
+                            <p id="menu-item-url-wrap">
+                                <label class="howto" for="menu-item-url">
+                                    <span>URL</span>
+                                    <input type="text" class="menu-item-url code"
+                                           placeholder="Link"
+                                           name="menu-item[-1][menu-item-url]" value="">
+                                </label>
+                            </p>
 
-							<p id="menu-item-name-wrap">
-								<label class="howto" for="custom-menu-item-name">
-									<span><?php _e( 'Link Text', 'client-dash' ); ?></span>
-									<input type="text" class="menu-item-title" name="menu-item[-1][menu-item-title]"
-									       value="" placeholder="<?php _e( 'Menu Item', 'client-dash' ); ?>">
-									<input type="checkbox" id="custom-checkbox" style="display: none;"
-									       class="menu-item-checkbox" name="menu-item[-1][menu-item-object-id]"
-									       value="0" checked>
-								</label>
-							</p>
-						</label>
+                            <p id="menu-item-name-wrap">
+                                <label class="howto" for="custom-menu-item-name">
+                                    <span><?php _e( 'Link Text', 'client-dash' ); ?></span>
+                                    <input type="text" class="menu-item-title" name="menu-item[-1][menu-item-title]"
+                                           value="" placeholder="<?php _e( 'Menu Item', 'client-dash' ); ?>">
+                                    <input type="checkbox" id="custom-checkbox" style="display: none;"
+                                           class="menu-item-checkbox" name="menu-item[-1][menu-item-object-id]"
+                                           value="0" checked>
+                                </label>
+                            </p>
+                        </label>
 
-						<input type="hidden" class="menu-item-type" name="menu-item[-1][menu-item-type]" value="custom">
-						<input type="hidden" class="menu-item-cd-type" name="menu-item[-1][menu-item-cd-type]"
-						       value="link">
-						<input type="hidden" class="menu-item-cd-icon" name="menu-item[-1][menu-item-cd-icon]"
-						       value="dashicons-admin-links">
-					</li>
-				</ul>
-			</div>
+                        <input type="hidden" class="menu-item-type" name="menu-item[-1][menu-item-type]" value="custom">
+                        <input type="hidden" class="menu-item-cd-type" name="menu-item[-1][menu-item-cd-type]"
+                               value="link">
+                        <input type="hidden" class="menu-item-cd-icon" name="menu-item[-1][menu-item-cd-icon]"
+                               value="dashicons-admin-links">
+                    </li>
+                </ul>
+            </div>
 
-			<p class="button-controls">
+            <p class="button-controls">
 				<span class="add-to-menu">
-					<input type="submit" class="button-secondary submit-add-to-menu right" value="<?php _e( 'Add to Menu', 'client-dash' ); ?>"
-					       name="add-post-type-menu-item" id="submit-custom-link">
+					<input type="submit" class="button-secondary submit-add-to-menu right"
+                           value="<?php _e( 'Add to Menu', 'client-dash' ); ?>"
+                           name="add-post-type-menu-item" id="submit-custom-link">
 					<span class="spinner"></span>
 				</span>
-			</p>
+            </p>
 
-		</div>
-	<?php
+        </div>
+		<?php
 	}
 }
