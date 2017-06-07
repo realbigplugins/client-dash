@@ -4,7 +4,7 @@ Contributors: BrashRebel, joelworsham
 Tags: client, portal, dashboard, admin, users, webmaster
 Requires at least: 3.8.0
 Tested up to: 4.7.0
-Stable tag: 1.6.19
+Stable tag: 1.6.20
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -94,6 +94,9 @@ Using this plugin is very simple. All you have to do is:
 7. Client Dash has a few addons available, and many more to come!
 
 == Changelog ==
+
+= 1.6.20 =
+* Bug fix for separators in admin menu not showing properly.
 
 = 1.6.19 =
 * Bug fix for an invalid admin notice.

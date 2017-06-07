@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/client-dash\n"
-"POT-Creation-Date: 2017-05-23 18:45:21+00:00\n"
+"POT-Creation-Date: 2017-06-07 17:52:48+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -671,11 +671,11 @@ msgid ""
 "default admin menu if this is set to off"
 msgstr ""
 
-#: core/tabs/settings/menus.php:2107 core/tabs/settings/menus.php:2189
+#: core/tabs/settings/menus.php:2107 core/tabs/settings/menus.php:2191
 msgid "Save Menu"
 msgstr ""
 
-#: core/tabs/settings/menus.php:2107 core/tabs/settings/menus.php:2189
+#: core/tabs/settings/menus.php:2107 core/tabs/settings/menus.php:2191
 msgid "Create Menu"
 msgstr ""
 
@@ -683,31 +683,31 @@ msgstr ""
 msgid "The menu is being created. This may take some time."
 msgstr ""
 
-#: core/tabs/settings/menus.php:2131
+#: core/tabs/settings/menus.php:2132
 msgid "Please do NOT leave this page."
 msgstr ""
 
-#: core/tabs/settings/menus.php:2144
+#: core/tabs/settings/menus.php:2146
 msgid "Menu Structure"
 msgstr ""
 
-#: core/tabs/settings/menus.php:2148
+#: core/tabs/settings/menus.php:2150
 msgid ""
 "Drag and drop them in the order you like. Click on the arrows on each box "
 "to reveal more options."
 msgstr ""
 
-#: core/tabs/settings/menus.php:2158
+#: core/tabs/settings/menus.php:2160
 msgid "Select a role to create a menu for."
 msgstr ""
 
-#: core/tabs/settings/menus.php:2159
+#: core/tabs/settings/menus.php:2161
 msgid ""
 "The menu will be automatically populated with all visible admin menu items "
 "for the specified roles."
 msgstr ""
 
-#: core/tabs/settings/menus.php:2176
+#: core/tabs/settings/menus.php:2178
 msgid "Delete Menu"
 msgstr ""
 

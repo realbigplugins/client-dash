@@ -1,6 +1,6 @@
 ![banner](https://raw.githubusercontent.com/brashrebel/client-dash/master/assets/static/banner.png)
 
-# v1.6.19
+# v1.6.20
 
 [Releases](https://github.com/brashrebel/client-dash/releases)
 
@@ -36,6 +36,9 @@ Using this plugin is very simple. All you have to do is:
 3. Configure settings by going to Settings - >Client Dash
 
 ## Changelog
+
+### [1.6.20](https://github.com/brashrebel/client-dash/releases/tag/v1.6.20)
+* Bug fix for separators in admin menu not showing properly.
 
 ### [1.6.19](https://github.com/brashrebel/client-dash/releases/tag/v1.6.19)
 * Bug fix for an invalid admin notice.
