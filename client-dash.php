@@ -45,6 +45,15 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		public $api;
 
 		/**
+		 * Handles the plugin upgrades.
+		 *
+		 * @since {{VERSION}}
+		 *
+		 * @var ClientDash_Upgrade
+		 */
+		public $upgrade;
+
+		/**
 		 * Handles the plugin pages.
 		 *
 		 * @since {{VERSION}}
@@ -127,6 +136,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		private function require_necessities() {
 
 			require_once CLIENTDASH_DIR . 'core/clientdash-functions.php';
+			require_once CLIENTDASH_DIR . 'core/class-clientdash-upgrade.php';
 			require_once CLIENTDASH_DIR . 'core/class-clientdash-db.php';
 			require_once CLIENTDASH_DIR . 'core/api/class-clientdash-api.php';
 			require_once CLIENTDASH_DIR . 'core/customize/class-clientdash-customize.php';
@@ -142,6 +152,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 				require_once CLIENTDASH_DIR . 'core/plugin-pages/class-clientdash-pluginpages.php';
 				require_once CLIENTDASH_DIR . 'core/class-clientdash-modify.php';
 
+				$this->upgrade     = new ClientDash_Upgrade();
 				$this->pluginpages = new ClientDash_PluginPages();
 				$this->modify      = new ClientDash_Modify();
 			}
@@ -209,7 +220,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 
 			wp_localize_script( 'clientdash', 'ClientDash_Data', array(
 				'nonce' => wp_create_nonce( 'clientdash_nonce' ),
-				'l10n' => array(
+				'l10n'  => array(
 					'reset_settings_confirm' => __(
 						'This will reset ALL Client Dash settings permanently. This can NOT be undone. Are you sure ' .
 						'you want to proceed?',
@@ -221,7 +232,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 			wp_localize_script( 'clientdash-customize-inpreview', 'ClientDashCustomizeInPreview_Data', array(
 				'domain' => get_bloginfo( 'url' ),
 				'l10n'   => array(
-					'preview_only'           => __( 'Preview Only', 'clientdash' ),
+					'preview_only' => __( 'Preview Only', 'clientdash' ),
 				),
 			) );
 		}

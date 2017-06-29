@@ -81,6 +81,7 @@ class ClientDash_REST_Customizations_Controller {
 	 */
 	public function get_item_permissions_check( $request ) {
 
+		return true;
 		global $current_user;
 
 		// TODO Get these permission checks working!
