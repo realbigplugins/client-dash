@@ -47,15 +47,6 @@ class ClientDash_Modify {
 	public $dashboard;
 
 	/**
-	 * The customized pages.
-	 *
-	 * @since {{VERSION}}
-	 *
-	 * @var array|null
-	 */
-	public $cdpages;
-
-	/**
 	 * ClientDash_Modify constructor.
 	 *
 	 * @since {{VERSION}}
@@ -64,7 +55,6 @@ class ClientDash_Modify {
 
 		add_filter( 'custom_menu_order', array( $this, 'modify_menu' ), 99999 );
 		add_action( 'wp_dashboard_setup', array( $this, 'modify_dashboard' ), 99999 );
-		add_filter( 'cd_core_pages', array( $this, 'modify_cd_pages' ), 99999 );
 	}
 
 	/**
@@ -110,7 +100,6 @@ class ClientDash_Modify {
 		$this->menu      = $customizations['menu'];
 		$this->submenu   = $customizations['submenu'];
 		$this->dashboard = $customizations['dashboard'];
-		$this->cdpages   = $customizations['cdpages'];
 	}
 
 	/**
@@ -268,48 +257,5 @@ class ClientDash_Modify {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Modifies core CD pages.
-	 *
-	 * @since {{VERSION}}
-	 * @access private
-	 *
-	 * @param array $pages
-	 *
-	 * @return array
-	 */
-	function modify_cd_pages( $pages ) {
-
-		$this->get_customizations();
-
-		if ( ! $this->cdpages ) {
-
-			return $pages;
-		}
-
-		foreach ( $pages as $i => $page ) {
-
-			$custom_page = cd_array_search_by_key( $this->cdpages, 'id', $page['id'] );
-
-			if ( ! $custom_page ) {
-
-				continue;
-			}
-
-			if ( $custom_page['deleted'] ) {
-
-				unset( $pages[ $i ] );
-				continue;
-			}
-
-			$pages[ $i ] = wp_parse_args( $custom_page, $page );
-		}
-
-		// Re-index
-		$pages = array_values( $pages );
-
-		return $pages;
 	}
 }

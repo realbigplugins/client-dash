@@ -34,7 +34,7 @@ class ClientDash_DB {
 
 		$results = $wpdb->get_row(
 			"
-			SELECT menu,submenu,dashboard,cdpages
+			SELECT menu,submenu,dashboard
 			FROM {$wpdb->prefix}cd_customizations
 			WHERE role = '$role'
 			",
@@ -158,37 +158,6 @@ class ClientDash_DB {
 		$dashboard = apply_filters( 'cd_role_dashboard', $results['dashboard'] );
 
 		return $dashboard;
-	}
-
-	/**
-	 * Gets the role's custom pages, if set.
-	 *
-	 * @since {{VERSION}}
-	 *
-	 * @param string $role Role to get pages for.
-	 *
-	 * @return array|bool|mixed|void
-	 */
-	public static function get_role_pages( $role ) {
-
-		if ( ! ( $results = self::get_customizations( $role ) ) ) {
-
-			return false;
-		}
-
-		if ( ! isset( $results['pages'] ) ) {
-
-			return array();
-		}
-
-		/**
-		 * Filters the role's custom pages, if set.
-		 *
-		 * @since {{VERSION}}
-		 */
-		$pages = apply_filters( 'cd_role_pages', $results['pages'] );
-
-		return $pages;
 	}
 
 	/**

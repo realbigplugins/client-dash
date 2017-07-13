@@ -7,12 +7,10 @@ import {
     MenuItemEdit,
     MenuItemSeparator,
     MenuItemCustomLink,
-    MenuItemCDPage,
     SubmenuItemEdit,
     SubmenuItemCustomLink,
     SortableLineItems,
     WidgetEdit,
-    CDPageEdit
 } from './line-items';
 import {arrayMove} from 'react-sortable-hoc';
 
@@ -68,11 +66,6 @@ class PanelPrimary extends React.Component {
                     target="dashboard"
                     onLoadPanel={this.loadPanel}
                 />
-                <PanelLoadButton
-                    text={l10n['panel_text_cd_pages']}
-                    target="cdPages"
-                    onLoadPanel={this.loadPanel}
-                />
             </Panel>
         )
     }
@@ -108,88 +101,6 @@ class PanelLoadButton extends React.Component {
                 {this.props.text}
                 <span className="cd-editor-panel-icon fa fa-chevron-right"></span>
             </div>
-        )
-    }
-}
-
-/**
- * Panel for setting visibility of core CD pages.
- *
- * @since {{VERSION}}
- */
-class PanelCDPages extends React.Component {
-
-    constructor(props) {
-
-        super(props);
-
-        this.pageDelete     = this.pageDelete.bind(this);
-        this.pageEdit       = this.pageEdit.bind(this);
-        this.pageTabsEdit   = this.pageTabsEdit.bind(this);
-        this.itemSubmitForm = this.itemSubmitForm.bind(this);
-    }
-
-    pageDelete(ID) {
-
-        this.props.onPageDelete(ID);
-    }
-
-    pageEdit(page) {
-
-        this.props.onPageEdit(page);
-    }
-
-    pageTabsEdit(ID) {
-
-        this.props.onPageTabsEdit(ID);
-    }
-
-    itemSubmitForm(event) {
-
-        this.props.onItemSubmitForm(event);
-    }
-
-    render() {
-
-        let pages = [];
-        let panel_contents;
-
-        if ( this.props.pages.length ) {
-
-            this.props.pages.map((item) => {
-
-                pages.push(
-                    <CDPageEdit
-                        key={item.id}
-                        id={item.id}
-                        title={item.title}
-                        original_title={item.original_title}
-                        icon={item.icon}
-                        original_icon={item.original_icon}
-                        parent={item.parent}
-                        parent_label={item.parent_label}
-                        onPageEdit={this.pageEdit}
-                        onPageDelete={this.pageDelete}
-                        onItemFormSubmit={this.itemSubmitForm}
-                    />
-                );
-            });
-
-            panel_contents =
-                <LineItems items={pages}/>
-            ;
-
-        } else {
-
-            panel_contents =
-                <div className="cd-editor-panel-helptext">
-                    {l10n['no_items_added']}
-                </div>
-        }
-        return (
-            <Panel id="cd-pages">
-                {panel_contents}
-            </Panel>
         )
     }
 }
@@ -284,20 +195,6 @@ class PanelMenu extends React.Component {
                                     onItemFormSubmit={this.itemSubmitForm}
                                 />
                             ;
-
-                        break;
-
-                    case 'cd_page':
-
-                        menu_item =
-                            <MenuItemCDPage
-                                key={item.id}
-                                id={item.id}
-                                title={item.title || item.original_title}
-                                icon={item.icon || item.original_icon}
-                                onDeleteItem={this.deleteItem}
-                            />
-                        ;
 
                         break;
 
@@ -422,17 +319,6 @@ class PanelSubmenu extends React.Component {
                                 onItemFormSubmit={this.itemSubmitForm}
                             />
                         ;
-                        break;
-
-                    case 'cd_page':
-
-                        menu_item =
-                            <MenuItemCDPage
-                                key={item.id}
-                                id={item.id}
-                                title={item.title || item.original_title}
-                                onDeleteItem={this.deleteItem}
-                            />
                         break;
 
                     default:
@@ -653,7 +539,6 @@ export {
     PanelPrimary,
     PanelAddItems,
     PanelBlank,
-    PanelCDPages,
     PanelDashboard,
     PanelLoadButton,
     PanelLoading,

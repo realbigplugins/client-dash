@@ -164,6 +164,15 @@ class ClientDash_PluginPages {
 
 		add_submenu_page(
 			'clientdash',
+			__( 'Helper Pages', 'clientdash' ),
+			__( 'Helper Pages', 'clientdash' ),
+			'manage_options',
+			'clientdash_helper_pages',
+			array( __CLASS__, 'load_helper_pages' )
+		);
+
+		add_submenu_page(
+			'clientdash',
 			__( 'Addons', 'clientdash' ),
 			__( 'Addons', 'clientdash' ),
 			'manage_options',
@@ -194,6 +203,22 @@ class ClientDash_PluginPages {
 	 * @access private
 	 */
 	static function load_admin_page() {
+
+		$admin_page_title   = get_option( 'cd_admin_page_title' );
+		$admin_page_content = get_option( 'cd_admin_page_content' );
+
+		add_action( 'clientdash_sidebar', array( __CLASS__, 'sidebar_admin_page_actions' ), 5 );
+
+		include_once CLIENTDASH_DIR . 'core/plugin-pages/views/admin-page.php';
+	}
+
+	/**
+	 * Loads the Helper Pages screen.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 */
+	static function load_helper_pages() {
 
 		$admin_page_title   = get_option( 'cd_admin_page_title' );
 		$admin_page_content = get_option( 'cd_admin_page_content' );
