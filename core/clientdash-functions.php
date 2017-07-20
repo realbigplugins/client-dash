@@ -317,3 +317,22 @@ function cd_reset_all_settings() {
 	 */
 	do_action( 'clientdash_reset_all_settings' );
 }
+
+/**
+ * Outputs the Dashicon selector.
+ *
+ * @since {{VERSION}}
+ *
+ * @param array $args
+ */
+function cd_dashicon_selector( $args = array() ) {
+
+	$args = wp_parse_args( $args, array(
+		'name'     => '',
+		'selected' => '',
+	) );
+
+	$icons = json_decode( file_get_contents( CLIENTDASH_DIR . 'core/includes/dashicons.json' ) );
+
+	include CLIENTDASH_DIR . 'core/includes/views/dashicon-selector.php';
+}

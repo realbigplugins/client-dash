@@ -209,19 +209,21 @@ if ( ! class_exists( 'ClientDash' ) ) {
 
 			wp_localize_script( 'clientdash', 'ClientDash_Data', array(
 				'nonce' => wp_create_nonce( 'clientdash_nonce' ),
-				'l10n' => array(
+				'l10n'  => array(
 					'reset_settings_confirm' => __(
 						'This will reset ALL Client Dash settings permanently. This can NOT be undone. Are you sure ' .
 						'you want to proceed?',
 						'client-dash'
 					),
+					'change' => __( 'Change', 'client-dash-pro' ),
+					'close'  => __( 'Close', 'client-dash-pro' ),
 				),
 			) );
 
 			wp_localize_script( 'clientdash-customize-inpreview', 'ClientDashCustomizeInPreview_Data', array(
 				'domain' => get_bloginfo( 'url' ),
 				'l10n'   => array(
-					'preview_only'           => __( 'Preview Only', 'clientdash' ),
+					'preview_only' => __( 'Preview Only', 'clientdash' ),
 				),
 			) );
 		}

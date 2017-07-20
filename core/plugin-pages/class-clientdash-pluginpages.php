@@ -220,12 +220,9 @@ class ClientDash_PluginPages {
 	 */
 	static function load_helper_pages() {
 
-		$admin_page_title   = get_option( 'cd_admin_page_title' );
-		$admin_page_content = get_option( 'cd_admin_page_content' );
+		$pages = ClientDash_Core_Pages::get_pages();
 
-		add_action( 'clientdash_sidebar', array( __CLASS__, 'sidebar_admin_page_actions' ), 5 );
-
-		include_once CLIENTDASH_DIR . 'core/plugin-pages/views/admin-page.php';
+		include_once CLIENTDASH_DIR . 'core/plugin-pages/views/helper-pages.php';
 	}
 
 	/**

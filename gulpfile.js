@@ -17,7 +17,7 @@ const gutil      = require('gulp-util');
 const reactify   = require('reactify');
 
 gulp.task('sass', function () {
-    return gulp.src('./assets/src/scss/*.scss')
+    return gulp.src('./assets/src/scss/main/**/*.scss')
         .pipe(sourcemaps.init())
         .pipe(sass({
             outputStyle: 'compressed'
