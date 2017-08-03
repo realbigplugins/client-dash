@@ -7,6 +7,8 @@
  * @package ClientDash
  * @subpackage ClientDash/core/pluginpages/views
  *
+ * @var string $feed_url
+ * @var string $feed_count
  * @var string $reset_settings_link
  */
 
@@ -15,31 +17,87 @@ defined( 'ABSPATH' ) || die;
 
 <div class="wrap clientdash">
 
-    <h1 class="clientdash-page-title">
-		<?php echo get_admin_page_title(); ?>
-    </h1>
+    <form action="options.php" method="post" id="clientdash-settings-page-form">
 
-    <?php settings_errors(); ?>
+        <?php settings_fields( 'clientdash_settings' ); ?>
 
-    <form action="options.php" method="post">
+        <h1 class="clientdash-page-title">
+			<?php echo get_admin_page_title(); ?>
+        </h1>
 
-        <table class="form-table">
-            <tbody>
-            <tr valign="top">
-                <th scope="row">
-                    <label for="cd_reset_all_settings">
-						<?php _e( 'Reset All Settings', 'client-dash' ); ?>
-                    </label>
-                </th>
+		<?php settings_errors(); ?>
 
-                <td>
-                    <a href="<?php echo esc_attr( $reset_settings_link ); ?>" id="cd_reset_all_settings" class="button">
-						<?php _e( 'Reset', 'client-dash' ); ?>
-                    </a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <section class="clientdash-page-wrap">
+
+            <div class="clientdash-page-description">
+				<?php
+				_e( 'Modify Client Dash settings on this page.', 'client-dash' );
+				?>
+            </div>
+
+            <h2><?php _e( 'Admin Page Feed', 'client-dash' ); ?></h2>
+
+            <table class="form-table">
+                <tbody>
+                <tr valign="top">
+                    <th scope="row">
+                        <label for="cd_adminpage_feed_url">
+							<?php _e( 'Feed URL', 'client-dash' ); ?>
+                        </label>
+                    </th>
+
+                    <td>
+                        <input type="text" name="cd_adminpage_feed_url" id="cd_adminpage_feed_url" class="regular-text"
+                               value="<?php echo esc_attr( $feed_url ); ?>"/>
+
+                        <p class="description">
+							<?php _e( 'RSS feed url that will be used on the custom Admin Page.', 'client-dash' ); ?>
+                        </p>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row">
+                        <label for="cd_adminpage_feed_count">
+							<?php _e( 'Feed Count', 'client-dash' ); ?>
+                        </label>
+                    </th>
+
+                    <td>
+                        <input type="text" name="cd_adminpage_feed_count" id="cd_adminpage_feed_count" class="regular-text"
+                               value="<?php echo esc_attr( $feed_count ); ?>"/>
+
+                        <p class="description">
+							<?php _e( 'Number of items to display in the feed.', 'client-dash' ); ?>
+                        </p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h2><?php _e( 'Other', 'client-dash' ); ?></h2>
+
+            <table class="form-table">
+                <tbody>
+                <tr valign="top">
+                    <th scope="row">
+                        <label for="cd_reset_all_settings">
+							<?php _e( 'Reset All Settings', 'client-dash' ); ?>
+                        </label>
+                    </th>
+
+                    <td>
+                        <a href="<?php echo esc_attr( $reset_settings_link ); ?>" id="cd_reset_all_settings"
+                           class="button">
+							<?php _e( 'Reset', 'client-dash' ); ?>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </section>
+
+	    <?php include_once CLIENTDASH_DIR . 'core/plugin-pages/views/sidebar/sidebar.php'; ?>
 
     </form>
 

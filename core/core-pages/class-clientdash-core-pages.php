@@ -74,15 +74,16 @@ class ClientDash_Core_Pages {
 				'parent'      => 'index.php',
 				'deleted'     => false,
 				'position'    => 100,
-				'roles'       => array( 'editor', 'author', 'contributor', 'subscriber' ),
 				'tabs'        => array(
 					'about' => array(
 						'title'    => __( 'About', 'client-dash' ),
 						'callback' => array( __CLASS__, 'load_cd_page_account_tab_about' ),
+						'roles'    => array( 'editor', 'author', 'contributor', 'subscriber' ),
 					),
 					'sites' => array(
 						'title'    => __( 'Sites', 'client-dash' ),
 						'callback' => array( __CLASS__, 'load_cd_page_account_tab_sites' ),
+						'roles'    => array( 'editor', 'author' ),
 					),
 				),
 			),
@@ -94,15 +95,16 @@ class ClientDash_Core_Pages {
 				'parent'      => 'index.php',
 				'deleted'     => false,
 				'position'    => 100,
-				'roles'       => array( 'editor' ),
 				'tabs'        => array(
-					'about' => array(
-						'title'    => __( 'Domain', 'client-dash' ),
-						'callback' => array( __CLASS__, 'load_cd_page_help_tab_domain' ),
-					),
-					'sites' => array(
+					'info'   => array(
 						'title'    => __( 'Info', 'client-dash' ),
 						'callback' => array( __CLASS__, 'load_cd_page_help_tab_info' ),
+						'roles'    => array( 'editor' ),
+					),
+					'domain' => array(
+						'title'    => __( 'Domain', 'client-dash' ),
+						'callback' => array( __CLASS__, 'load_cd_page_help_tab_domain' ),
+						'roles'    => array( 'editor' ),
 					),
 				),
 			),
@@ -114,11 +116,11 @@ class ClientDash_Core_Pages {
 				'parent'      => 'index.php',
 				'deleted'     => false,
 				'position'    => 100,
-				'roles'       => array( 'editor', 'author' ),
 				'tabs'        => array(
-					'about' => array(
+					'site' => array(
 						'title'    => __( 'Site', 'client-dash' ),
 						'callback' => array( __CLASS__, 'load_cd_page_reports_tab_site' ),
+						'roles'    => array( 'editor', 'author' ),
 					),
 				),
 			),
@@ -134,11 +136,16 @@ class ClientDash_Core_Pages {
 				'parent'      => 'index.php',
 				'deleted'     => false,
 				'position'    => 100,
-				'roles'       => array(),
 				'tabs'        => array(
-					'about' => array(
+					'main' => array(
 						'title'    => __( 'Main', 'client-dash' ),
 						'callback' => array( __CLASS__, 'load_cd_page_admin_page_tab_main' ),
+						'roles'    => array(),
+					),
+					'feed' => array(
+						'title'    => __( 'Feed', 'client-dash' ),
+						'callback' => array( __CLASS__, 'load_cd_page_admin_page_tab_feed' ),
+						'roles'    => array(),
 					),
 				),
 			),
@@ -459,6 +466,41 @@ class ClientDash_Core_Pages {
 
 		$content = apply_filters( 'the_content', $content );
 
-		include_once CLIENTDASH_DIR . 'core/core-pages/views/admin-page.php';
+		include_once CLIENTDASH_DIR . 'core/core-pages/views/admin-page/main.php';
+	}
+
+	/**
+	 * Loads the Admin Page tab Feed.
+	 *
+	 * @since {{VERSION}}
+	 */
+	static public function load_cd_page_admin_page_tab_feed() {
+
+		// Get the feed options
+		$feed_url = get_option( 'cd_adminpage_feed_url', null );
+
+		if ( ! $feed_url ) {
+
+			include_once CLIENTDASH_DIR . 'core/core-pages/views/admin-page/feed-error.php';
+
+			return;
+		}
+
+		$feed_count = get_option( 'cd_adminpage_feed_count', 5 );
+
+		// Get the feed items
+		$feed = fetch_feed( $feed_url );
+
+		// Check for an error if there's no RSS feed
+		if ( is_wp_error( $feed ) ) {
+
+			include_once CLIENTDASH_DIR . 'core/core-pages/views/admin-page/feed-error.php';
+
+			return;
+		}
+
+		$feed_items = $feed->get_items( 0, $feed_count );
+
+		include_once CLIENTDASH_DIR . 'core/core-pages/views/admin-page/feed.php';
 	}
 }

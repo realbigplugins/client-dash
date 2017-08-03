@@ -112,6 +112,9 @@ class ClientDash_PluginPages {
 	 */
 	function register_settings() {
 
+		register_setting( 'clientdash_settings', 'cd_adminpage_feed_url' );
+		register_setting( 'clientdash_settings', 'cd_adminpage_feed_count' );
+
 		register_setting( 'clientdash_admin_page', 'cd_admin_page_title' );
 		register_setting( 'clientdash_admin_page', 'cd_admin_page_content' );
 
@@ -270,7 +273,12 @@ class ClientDash_PluginPages {
 	 */
 	static function load_settings() {
 
+		$feed_url = get_option( 'cd_adminpage_feed_url', '' );
+		$feed_count = get_option( 'cd_adminpage_feed_count', 5 );
+
 		$reset_settings_link = admin_url( 'admin.php?page=clientdash_settings&cd_reset_settings' );
+
+		add_action( 'clientdash_sidebar', array( __CLASS__, 'sidebar_settings_page_actions' ), 5 );
 
 		include_once CLIENTDASH_DIR . 'core/plugin-pages/views/settings.php';
 	}
@@ -324,6 +332,17 @@ class ClientDash_PluginPages {
 	static function sidebar_admin_page_actions() {
 
 		include_once CLIENTDASH_DIR . 'core/plugin-pages/views/sidebar/admin-page-actions.php';
+	}
+
+	/**
+	 * Outputs the sidebar settings page actions section.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 */
+	static function sidebar_settings_page_actions() {
+
+		include_once CLIENTDASH_DIR . 'core/plugin-pages/views/sidebar/settings-page-actions.php';
 	}
 
 	/**
