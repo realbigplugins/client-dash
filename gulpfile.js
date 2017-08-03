@@ -16,17 +16,14 @@ const buffer     = require('vinyl-buffer');
 const gutil      = require('gulp-util');
 const reactify   = require('reactify');
 
-gulp.task('sass', function () {
-    return gulp.src('./assets/src/scss/main/**/*.scss')
+gulp.task('admin_sass', function () {
+    return gulp.src('./assets/src/scss/admin/**/*.scss')
         .pipe(sourcemaps.init())
         .pipe(sass({
             outputStyle: 'compressed'
         }).on('error', sass.logError))
         .pipe(sourcemaps.write())
-        .pipe(rename({
-            dirname: '',
-            suffix: '.min'
-        }))
+        .pipe(rename('clientdash-admin.min.css'))
         .pipe(gulp.dest('./assets/dist/css'))
         .pipe(notify({message: 'SASS complete'}));
 });
@@ -61,15 +58,15 @@ gulp.task('customize_inpreview_sass', function () {
         .pipe(notify({message: 'SASS Customize Inpreview complete'}));
 });
 
-gulp.task('scripts', function () {
-    return gulp.src('./assets/src/js/*.js')
-        .pipe(concat('clientdash.min.js'))
+gulp.task('admin_js', function () {
+    return gulp.src('./assets/src/js/admin/**/*.js')
+        .pipe(concat('clientdash-admin.min.js'))
         .pipe(gulp.dest('./assets/dist/js/'))
         .pipe(sourcemaps.init())
         .pipe(uglify())
         .pipe(sourcemaps.write('/'))
         .pipe(gulp.dest('./assets/dist/js/'))
-        .pipe(notify({message: 'JS complete'}));
+        .pipe(notify({message: 'JS Admin complete'}));
 });
 
 gulp.task('customize_inpreview_js', function () {
@@ -114,13 +111,13 @@ gulp.task('apply-prod-environment', function () {
     }
 });
 
-gulp.task('default', ['sass', 'scripts', 'customize_sass', 'customize_inpreview_sass', 'customize_inpreview_js', 'customize_js'], function () {
-    gulp.watch(['./assets/src/scss/*.scss'], ['sass']);
+gulp.task('default', ['admin_sass', 'admin_js', 'customize_sass', 'customize_inpreview_sass', 'customize_inpreview_js', 'customize_js'], function () {
+    gulp.watch(['./assets/src/scss/admin/**/*.scss'], ['admin_sass']);
     gulp.watch(['./assets/src/scss/customize/*.scss'], ['customize_sass']);
     gulp.watch(['./assets/src/scss/customize-inpreview/*.scss'], ['customize_inpreview_sass']);
-    gulp.watch(['./assets/src/js/*.js'], ['scripts']);
+    gulp.watch(['./assets/src/js/admin/**/*.js'], ['admin_js']);
     gulp.watch(['./assets/src/js/customize/*.js'], ['customize_js']);
     gulp.watch(['./assets/src/js/customize/customize-inpreview.js'], ['customize_inpreview_js']);
 });
 
-gulp.task('build', ['version', 'apply-prod-environment', 'sass', 'scripts', 'customize_sass', 'customize_inpreview_sass', 'customize_inpreview_js', 'customize_js', 'generate_pot']);
+gulp.task('build', ['version', 'apply-prod-environment', 'admin_sass', 'admin_js', 'customize_sass', 'customize_inpreview_sass', 'customize_inpreview_js', 'customize_js', 'generate_pot']);

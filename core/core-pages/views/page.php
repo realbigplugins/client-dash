@@ -25,7 +25,7 @@ defined( 'ABSPATH' ) || die();
 			<?php foreach ( $cd_page['tabs'] as $tab_ID => $tab ) : ?>
                 <a href="?page=<?php echo esc_attr( $_GET['page'] ); ?>&amp;tab=<?php echo esc_attr( $tab_ID ); ?>"
                    class="nav-tab <?php echo $tab_ID == $active_tab ? 'nav-tab-active' : ''; ?>">
-					<?php echo esc_html( $tab['label'] ); ?>
+					<?php echo esc_html( $tab['title'] ); ?>
                 </a>
 			<?php endforeach; ?>
         </p>

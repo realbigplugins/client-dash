@@ -155,16 +155,18 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		 */
 		function register_assets() {
 
+			// --- INTERNAL ---
+
 			wp_register_style(
-				'clientdash',
-				CLIENTDASH_URI . '/assets/dist/css/clientdash.min.css',
+				'clientdash-admin',
+				CLIENTDASH_URI . '/assets/dist/css/clientdash-admin.min.css',
 				array(),
 				defined( 'WP_DEBUG' ) && WP_DEBUG ? time() : CLIENTDASH_VERSION
 			);
 
 			wp_register_script(
-				'clientdash',
-				CLIENTDASH_URI . '/assets/dist/js/clientdash.min.js',
+				'clientdash-admin',
+				CLIENTDASH_URI . '/assets/dist/js/clientdash-admin.min.js',
 				array( 'jquery' ),
 				defined( 'WP_DEBUG' ) && WP_DEBUG ? time() : CLIENTDASH_VERSION,
 				true
@@ -207,7 +209,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 				defined( 'WP_DEBUG' ) && WP_DEBUG ? time() : CLIENTDASH_VERSION
 			);
 
-			wp_localize_script( 'clientdash', 'ClientDash_Data', array(
+			wp_localize_script( 'clientdash-admin', 'ClientDash_Data', array(
 				'nonce' => wp_create_nonce( 'clientdash_nonce' ),
 				'l10n'  => array(
 					'reset_settings_confirm' => __(
@@ -215,8 +217,8 @@ if ( ! class_exists( 'ClientDash' ) ) {
 						'you want to proceed?',
 						'client-dash'
 					),
-					'change' => __( 'Change', 'client-dash-pro' ),
-					'close'  => __( 'Close', 'client-dash-pro' ),
+					'change'                 => __( 'Change', 'client-dash-pro' ),
+					'close'                  => __( 'Close', 'client-dash-pro' ),
 				),
 			) );
 
@@ -226,6 +228,23 @@ if ( ! class_exists( 'ClientDash' ) ) {
 					'preview_only' => __( 'Preview Only', 'clientdash' ),
 				),
 			) );
+
+			// --- VENDOR ---
+
+			// Select 2
+			wp_register_style(
+				'clientdash-select2',
+				CLIENTDASH_URI . '/assets/vendor/select2/select2.min.css',
+				array(),
+				'4.0.3'
+			);
+
+			wp_register_script(
+				'clientdash-select2',
+				CLIENTDASH_URI . '/assets/vendor/select2/select2.full.min.js',
+				array( 'jquery' ),
+				'4.0.3'
+			);
 		}
 
 		/**
@@ -238,8 +257,11 @@ if ( ! class_exists( 'ClientDash' ) ) {
 
 			global $wp_styles;
 
-			wp_enqueue_script( 'clientdash' );
-			wp_enqueue_style( 'clientdash' );
+			wp_enqueue_style( 'clientdash-select2' );
+			wp_enqueue_script( 'clientdash-select2' );
+
+			wp_enqueue_style( 'clientdash-admin' );
+			wp_enqueue_script( 'clientdash-admin' );
 		}
 	}
 

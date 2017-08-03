@@ -63,85 +63,133 @@ class ClientDash_Core_Pages {
 	 */
 	static public function get_pages() {
 
-		/**
-		 * Client Dash core pages.
-		 *
-		 * @since {{VERSION}}
-		 */
-		$pages = apply_filters( 'cd_core_pages', array(
+		$page_modifications = get_option( 'cd_helper_pages', array() );
+
+		$pages = array(
 			array(
-				'id'             => 'cd_account',
-				'title'          => '',
-				'original_title' => __( 'Account', 'clientdash' ),
-				'icon'           => '',
-				'original_icon'  => 'dashicons-id-alt',
-				'parent'         => 'index.php',
-				'deleted'        => false,
-				'position'       => 100,
-				'tabs'           => array(
+				'id'          => 'account',
+				'title'       => __( 'Account', 'clientdash' ),
+				'icon'        => 'dashicons-id-alt',
+				'description' => __( 'Provides some quick, helpful information on the user\'s account.', 'client-dash' ),
+				'parent'      => 'index.php',
+				'deleted'     => false,
+				'position'    => 100,
+				'roles'       => array( 'editor', 'author', 'contributor', 'subscriber' ),
+				'tabs'        => array(
 					'about' => array(
-						'label'    => __( 'About', 'client-dash' ),
+						'title'    => __( 'About', 'client-dash' ),
 						'callback' => array( __CLASS__, 'load_cd_page_account_tab_about' ),
 					),
 					'sites' => array(
-						'label'    => __( 'Sites', 'client-dash' ),
+						'title'    => __( 'Sites', 'client-dash' ),
 						'callback' => array( __CLASS__, 'load_cd_page_account_tab_sites' ),
 					),
 				),
 			),
 			array(
-				'id'             => 'cd_help',
-				'title'          => '',
-				'original_title' => __( 'Help', 'clientdash' ),
-				'icon'           => '',
-				'original_icon'  => 'dashicons-editor-help',
-				'parent'         => 'index.php',
-				'deleted'        => false,
-				'position'       => 100,
-				'tabs'           => array(
+				'id'          => 'help',
+				'title'       => __( 'Help', 'clientdash' ),
+				'icon'        => 'dashicons-editor-help',
+				'description' => __( 'Provides information about the current website and setup.', 'client-dash' ),
+				'parent'      => 'index.php',
+				'deleted'     => false,
+				'position'    => 100,
+				'roles'       => array( 'editor' ),
+				'tabs'        => array(
 					'about' => array(
-						'label'    => __( 'Domain', 'client-dash' ),
+						'title'    => __( 'Domain', 'client-dash' ),
 						'callback' => array( __CLASS__, 'load_cd_page_help_tab_domain' ),
 					),
 					'sites' => array(
-						'label'    => __( 'Info', 'client-dash' ),
+						'title'    => __( 'Info', 'client-dash' ),
 						'callback' => array( __CLASS__, 'load_cd_page_help_tab_info' ),
 					),
 				),
 			),
 			array(
-				'id'             => 'cd_reports',
-				'title'          => '',
-				'original_title' => __( 'Reports', 'clientdash' ),
-				'icon'           => '',
-				'original_icon'  => 'dashicons-chart-area',
-				'parent'         => 'index.php',
-				'deleted'        => false,
-				'position'       => 100,
-				'tabs'           => array(
+				'id'          => 'reports',
+				'title'       => __( 'Reports', 'clientdash' ),
+				'icon'        => 'dashicons-chart-area',
+				'description' => __( 'Provides quick reports on the website\'s content.', 'client-dash' ),
+				'parent'      => 'index.php',
+				'deleted'     => false,
+				'position'    => 100,
+				'roles'       => array( 'editor', 'author' ),
+				'tabs'        => array(
 					'about' => array(
-						'label'    => __( 'Site', 'client-dash' ),
+						'title'    => __( 'Site', 'client-dash' ),
 						'callback' => array( __CLASS__, 'load_cd_page_reports_tab_site' ),
 					),
 				),
 			),
 			array(
-				'id'             => 'cd_admin_page',
-				'title'          => '',
-				'original_title' => __( 'Admin Page', 'clientdash' ),
-				'icon'           => '',
-				'original_icon'  => 'dashicons-admin-generic',
-				'parent'         => 'index.php',
-				'deleted'        => false,
-				'position'       => 100,
-				'tabs'           => array(
+				'id'          => 'admin_page',
+				'title'       => __( 'Admin Page', 'clientdash' ),
+				'icon'        => 'dashicons-admin-generic',
+				'description' => sprintf(
+					__( 'Customizable admin page to benefit your users. It can be edited further %shere%s.', 'client-dash' ),
+					'<a href="' . admin_url( 'admin.php?page=clientdash_admin_page' ) . '">',
+					'</a>'
+				),
+				'parent'      => 'index.php',
+				'deleted'     => false,
+				'position'    => 100,
+				'roles'       => array(),
+				'tabs'        => array(
 					'about' => array(
-						'label'    => __( 'Main', 'client-dash' ),
+						'title'    => __( 'Main', 'client-dash' ),
 						'callback' => array( __CLASS__, 'load_cd_page_admin_page_tab_main' ),
 					),
 				),
 			),
-		) );
+		);
+
+		// Override via saved options.
+		foreach ( $pages as &$page ) {
+
+			if ( isset( $page_modifications[ $page['id'] ] ) ) {
+
+				$modified_page = $page_modifications[ $page['id'] ];
+
+				if ( $modified_page['title'] ) {
+
+					$page['title'] = $modified_page['title'];
+				}
+
+				if ( $modified_page['icon'] ) {
+
+					$page['icon'] = $modified_page['icon'];
+				}
+
+				if ( $modified_page['tabs'] && $page['tabs'] ) {
+
+					foreach ( $page['tabs'] as $tab_ID => &$tab ) {
+
+						if ( isset( $modified_page['tabs'][ $tab_ID ] ) ) {
+
+							$modified_tab = $modified_page['tabs'][ $tab_ID ];
+
+							if ( $modified_tab['title'] ) {
+
+								$tab['title'] = $modified_tab['title'];
+							}
+
+							if ( $modified_tab['roles'] ) {
+
+								$tab['roles'] = $modified_tab['roles'];
+							}
+						}
+					}
+				}
+			}
+		}
+
+		/**
+		 * Client Dash core pages.
+		 *
+		 * @since {{VERSION}}
+		 */
+		$pages = apply_filters( 'cd_core_pages', $pages );
 
 		return $pages;
 	}
@@ -172,12 +220,12 @@ class ClientDash_Core_Pages {
 			}
 
 			add_menu_page(
-				$page['title'] ? $page['title'] : $page['original_title'],
-				$page['title'] ? $page['title'] : $page['original_title'],
+				$page['title'],
+				$page['title'],
 				'read', // TODO Capability for core pages
 				$page['id'],
 				array( $this, 'load_page' ),
-				$page['icon'] ? $page['icon'] : $page['original_icon'],
+				$page['icon'] ? $page['icon'] : $page['icon'],
 				$page['position'] ? $page['position'] : 100
 			);
 		}
@@ -192,8 +240,8 @@ class ClientDash_Core_Pages {
 
 			add_submenu_page(
 				$page['parent'],
-				$page['title'] ? $page['title'] : $page['original_title'],
-				$page['title'] ? $page['title'] : $page['original_title'],
+				$page['title'],
+				$page['title'],
 				'read', // TODO Capability for core pages
 				$page['id'],
 				array( $this, 'load_page' )
@@ -218,11 +266,11 @@ class ClientDash_Core_Pages {
 
 			wp_add_dashboard_widget(
 				$page['id'],
-				$page['title'] ? $page['title'] : $page['original_title'],
+				$page['title'],
 				array( $this, 'load_widget' ),
 				null,
 				array(
-					'icon' => $page['icon'] ? $page['icon'] : $page['original_icon'],
+					'icon' => $page['icon'],
 					'link' => admin_url( ( $page['parent'] == 'toplevel' ? 'admin.php' : $page['parent'] ) .
 					                     "?page=$page[id]" ),
 				)
@@ -241,8 +289,8 @@ class ClientDash_Core_Pages {
 	 */
 	static public function setup_cd_page_args( $cd_page ) {
 
-		$cd_page['title'] = $cd_page['title'] ? $cd_page['title'] : $cd_page['original_title'];
-		$cd_page['icon']  = $cd_page['icon'] ? $cd_page['icon'] : $cd_page['original_icon'];
+		$cd_page['title'] = $cd_page['title'];
+		$cd_page['icon']  = $cd_page['icon'];
 
 		return $cd_page;
 	}

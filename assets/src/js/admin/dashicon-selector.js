@@ -43,7 +43,6 @@
 
         toggle: function (e) {
 
-            console.log('toggle');
             e.stopPropagation();
 
             $(this).closest('.cd-dashicon-selector').toggleClass('cd-dashicon-selector-open');
