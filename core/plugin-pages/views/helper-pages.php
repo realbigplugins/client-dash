@@ -107,9 +107,11 @@ defined( 'ABSPATH' ) || die;
 
                                     <div class="clientdash-helper-page-disabled-notice">
                                         <span class="clientdash-helper-page-visible-icon dashicons dashicons-visibility"
-                                              aria-label="<?php _e( 'Visible', 'client-dash' ); ?>"></span>
+                                              aria-label="<?php _e( 'Visible', 'client-dash' ); ?>"
+                                              title="<?php _e( 'Visible', 'client-dash' ); ?>"></span>
                                         <span class="clientdash-helper-page-hidden-icon dashicons dashicons-hidden"
-                                              aria-label="<?php _e( 'Hidden', 'client-dash' ); ?>"></span>
+                                              aria-label="<?php _e( 'Hidden', 'client-dash' ); ?>"
+                                              title="<?php _e( 'Hidden', 'client-dash' ); ?>"></span>
                                     </div>
                                 </div>
 
