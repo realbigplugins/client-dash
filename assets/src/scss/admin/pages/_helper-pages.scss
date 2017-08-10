@@ -4,6 +4,12 @@
   font-style: italic;
   margin-bottom: 1em;
 
+  &:last-of-type {
+    .clientdash-helper-page-tab-wrap {
+      border-bottom: none;
+    }
+  }
+
   &.clientdash-helper-page-disabled {
     .clientdash-helper-page-title {
       .clientdash-helper-page-visible-icon {
