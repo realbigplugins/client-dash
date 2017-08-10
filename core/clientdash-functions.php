@@ -224,14 +224,8 @@ function cd_template( $template, $args = array() ) {
  */
 function cd_is_core_page( $ID ) {
 
-	return in_array( $ID, array(
-		'cd_account',
-		'cd_reports',
-		'cd_help',
-		'cd_admin_page',
-	) );
+	return in_array( $ID, wp_list_pluck( ClientDash_Core_Pages::get_pages(), 'id' ) );
 }
-
 
 /**
  * Gets the size of a directory on the server.
@@ -253,10 +247,10 @@ function cd_get_dir_size( $path ) {
 			if ( $file != '.' && $file != '..' && ! is_link( $nextpath ) ) {
 				if ( is_dir( $nextpath ) ) {
 					$dircount ++;
-					$result = cd_get_dir_size( $nextpath );
-					$totalsize += $result['size'];
+					$result     = cd_get_dir_size( $nextpath );
+					$totalsize  += $result['size'];
 					$totalcount += $result['count'];
-					$dircount += $result['dircount'];
+					$dircount   += $result['dircount'];
 				} elseif ( is_file( $nextpath ) ) {
 					$totalsize += filesize( $nextpath );
 					$totalcount ++;
@@ -312,7 +306,7 @@ function cd_reset_all_settings() {
 	global $wpdb;
 
 	// Totally empty customizations table
-	$wpdb->query("TRUNCATE TABLE `{$wpdb->prefix}cd_customizations`");
+	$wpdb->query( "TRUNCATE TABLE `{$wpdb->prefix}cd_customizations`" );
 
 	/**
 	 * Fires during Client Dash settings reset.
@@ -322,4 +316,23 @@ function cd_reset_all_settings() {
 	 * @hooked ClientDash_PluginPages::reset_admin_page 10
 	 */
 	do_action( 'clientdash_reset_all_settings' );
+}
+
+/**
+ * Outputs the Dashicon selector.
+ *
+ * @since {{VERSION}}
+ *
+ * @param array $args
+ */
+function cd_dashicon_selector( $args = array() ) {
+
+	$args = wp_parse_args( $args, array(
+		'name'     => '',
+		'selected' => '',
+	) );
+
+	$icons = json_decode( file_get_contents( CLIENTDASH_DIR . 'core/includes/dashicons.json' ) );
+
+	include CLIENTDASH_DIR . 'core/includes/views/dashicon-selector.php';
 }

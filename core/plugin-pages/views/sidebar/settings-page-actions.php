@@ -1,6 +1,6 @@
 <?php
 /**
- * Sidebar section: Admin Page Actions
+ * Sidebar section: Settings Page Actions
  *
  * @since {{VERSION}}
  *
@@ -11,8 +11,8 @@
 defined( 'ABSPATH' ) || die;
 ?>
 
-<section class="clientdash-page-sidebar-section clientdash-page-sidebar-admin-pages-actions">
+<section class="clientdash-page-sidebar-section clientdash-page-sidebar-settings-pages-actions">
     <button type="submit" name="submit" id="submit" class="button button-primary button-hero widefat">
-        <?php _e( 'Save Admin Page', 'client-dash' ); ?>
+        <?php _e( 'Save Settings', 'client-dash' ); ?>
     </button>
 </section>

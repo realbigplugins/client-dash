@@ -1,11 +1,11 @@
 <?php
 /**
- * The Core CD, custom Admin Page
+ * The Core CD, custom Admin Page Main tab.
  *
  * @since {{VERSION}}
  *
  * @package ClientDash
- * @subpackage ClientDash/core/core-pages/views
+ * @subpackage ClientDash/core/core-pages/views/admin_page
  *
  * @var string $title
  * @var string $content
@@ -14,9 +14,9 @@
 defined( 'ABSPATH' ) || die();
 ?>
 
-<div class="wrap clientdash cd-adminpage">
+<div class="wrap clientdash clientdash-adminpage">
 
-    <div class="cd-adminpage-content">
+    <div class="clientdash-adminpage-content">
         <?php echo $content; ?>
     </div>
 

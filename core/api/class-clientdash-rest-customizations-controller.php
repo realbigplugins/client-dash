@@ -177,7 +177,6 @@ class ClientDash_REST_Customizations_Controller {
 			'menu'      => $request['menu'],
 			'submenu'   => $request['submenu'],
 			'dashboard' => $request['dashboard'],
-			'cdpages'   => $request['cdpages'],
 		) );
 
 		if ( $results === false ) {
@@ -224,7 +223,6 @@ class ClientDash_REST_Customizations_Controller {
 			'menu'      => $request['menu'],
 			'submenu'   => $request['submenu'],
 			'dashboard' => $request['dashboard'],
-			'cdpages'   => $request['cdpages'],
 		) );
 
 		if ( $results === false ) {
@@ -323,11 +321,6 @@ class ClientDash_REST_Customizations_Controller {
 			$response['dashboard'] = $data['dashboard'];
 		}
 
-		if ( isset( $schema['properties']['cdpages'] ) ) {
-
-			$response['cdpages'] = $data['cdpages'];
-		}
-
 		return rest_ensure_response( $response );
 	}
 
@@ -360,11 +353,6 @@ class ClientDash_REST_Customizations_Controller {
 		if ( isset( $schema['properties']['dashboard'] ) ) {
 
 			$customizations['dashboard'] = $request->get_param( 'dashboard' );
-		}
-
-		if ( isset( $schema['properties']['cdpages'] ) ) {
-
-			$customizations['cdpages'] = $request->get_param( 'cdpages' );
 		}
 
 		/**
@@ -464,10 +452,6 @@ class ClientDash_REST_Customizations_Controller {
 				),
 				'dashboard' => array(
 					'description' => esc_html__( 'The customizations dashboard.', 'clientdash' ),
-					'type'        => 'array',
-				),
-				'cdpages'   => array(
-					'description' => esc_html__( 'The customizations Client Dash Pages.', 'clientdash' ),
 					'type'        => 'array',
 				),
 			),

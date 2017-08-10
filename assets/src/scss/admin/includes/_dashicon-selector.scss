@@ -1,0 +1,60 @@
+.cd-dashicon-selector {
+  position: relative;
+  font-size: 2em;
+
+  &:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+
+  &.cd-dashicon-selector-open {
+    ul {
+      display: block;
+    }
+  }
+
+  .cd-dashicon-selector-preview {
+    cursor: pointer;
+  }
+
+  ul {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    margin: 0;
+    box-shadow: 0 0 20px rgba(#000, 0.2);
+    list-style: none;
+    overflow-y: scroll;
+    width: 300px;
+    height: 300px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    display: none;
+    z-index: 10000;
+  }
+
+  li {
+    width: 20%;
+    float: left;
+    padding: 0.2em 0;
+    cursor: pointer;
+    opacity: 0.6;
+    text-align: center;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    &.cd-dashicon-selector-selected {
+      opacity: 1;
+    }
+
+    .dashicons {
+      font-size: inherit;
+      width: auto;
+      height: auto;
+      padding: 0;
+    }
+  }
+}

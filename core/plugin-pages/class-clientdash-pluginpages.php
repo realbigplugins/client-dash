@@ -50,7 +50,7 @@ class ClientDash_PluginPages {
 			add_action( 'admin_init', array( $this, 'reset_all_settings' ) );
 		}
 
-		if ( isset( $_REQUEST['cd_flush_addons'])) {
+		if ( isset( $_REQUEST['cd_flush_addons'] ) ) {
 
 			add_action( 'admin_init', array( $this, 'flush_addons_cache' ) );
 		}
@@ -112,8 +112,13 @@ class ClientDash_PluginPages {
 	 */
 	function register_settings() {
 
+		register_setting( 'clientdash_settings', 'cd_adminpage_feed_url' );
+		register_setting( 'clientdash_settings', 'cd_adminpage_feed_count' );
+
 		register_setting( 'clientdash_admin_page', 'cd_admin_page_title' );
 		register_setting( 'clientdash_admin_page', 'cd_admin_page_content' );
+
+		register_setting( 'clientdash_helper_pages', 'cd_helper_pages' );
 	}
 
 	/**
@@ -164,6 +169,15 @@ class ClientDash_PluginPages {
 
 		add_submenu_page(
 			'clientdash',
+			__( 'Helper Pages', 'clientdash' ),
+			__( 'Helper Pages', 'clientdash' ),
+			'manage_options',
+			'clientdash_helper_pages',
+			array( __CLASS__, 'load_helper_pages' )
+		);
+
+		add_submenu_page(
+			'clientdash',
 			__( 'Addons', 'clientdash' ),
 			__( 'Addons', 'clientdash' ),
 			'manage_options',
@@ -195,12 +209,27 @@ class ClientDash_PluginPages {
 	 */
 	static function load_admin_page() {
 
+		add_action( 'clientdash_sidebar', array( __CLASS__, 'sidebar_admin_page_actions' ), 5 );
+
 		$admin_page_title   = get_option( 'cd_admin_page_title' );
 		$admin_page_content = get_option( 'cd_admin_page_content' );
 
-		add_action( 'clientdash_sidebar', array( __CLASS__, 'sidebar_admin_page_actions' ), 5 );
-
 		include_once CLIENTDASH_DIR . 'core/plugin-pages/views/admin-page.php';
+	}
+
+	/**
+	 * Loads the Helper Pages screen.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 */
+	static function load_helper_pages() {
+
+		add_action( 'clientdash_sidebar', array( __CLASS__, 'sidebar_helper_pages_actions' ), 5 );
+
+		$pages = ClientDash_Core_Pages::get_pages();
+
+		include_once CLIENTDASH_DIR . 'core/plugin-pages/views/helper-pages.php';
 	}
 
 	/**
@@ -244,7 +273,12 @@ class ClientDash_PluginPages {
 	 */
 	static function load_settings() {
 
+		$feed_url = get_option( 'cd_adminpage_feed_url', '' );
+		$feed_count = get_option( 'cd_adminpage_feed_count', 5 );
+
 		$reset_settings_link = admin_url( 'admin.php?page=clientdash_settings&cd_reset_settings' );
+
+		add_action( 'clientdash_sidebar', array( __CLASS__, 'sidebar_settings_page_actions' ), 5 );
 
 		include_once CLIENTDASH_DIR . 'core/plugin-pages/views/settings.php';
 	}
@@ -298,6 +332,28 @@ class ClientDash_PluginPages {
 	static function sidebar_admin_page_actions() {
 
 		include_once CLIENTDASH_DIR . 'core/plugin-pages/views/sidebar/admin-page-actions.php';
+	}
+
+	/**
+	 * Outputs the sidebar settings page actions section.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 */
+	static function sidebar_settings_page_actions() {
+
+		include_once CLIENTDASH_DIR . 'core/plugin-pages/views/sidebar/settings-page-actions.php';
+	}
+
+	/**
+	 * Outputs the sidebar helper pages actions section.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 */
+	static function sidebar_helper_pages_actions() {
+
+		include_once CLIENTDASH_DIR . 'core/plugin-pages/views/sidebar/helper-pages-actions.php';
 	}
 
 	/**

@@ -56,11 +56,6 @@ class ClientDash_Customize {
 				$this,
 				'save_dashboard_preview'
 			), 99998 ); // Priority just before modifying
-
-			add_filter( 'cd_core_pages', array(
-				$this,
-				'save_cd_pages'
-			), 99998 ); // Priority just before modifying
 		}
 	}
 
@@ -202,7 +197,6 @@ class ClientDash_Customize {
 			'adminurl'  => admin_url(),
 			'domain'    => get_bloginfo( 'url' ),
 			'dashicons' => json_decode( file_get_contents( CLIENTDASH_DIR . 'core/dashicons.json' ) ),
-			'cd_pages'  => ClientDash_Core_Pages::get_pages(),
 			'api_nonce' => wp_create_nonce( 'wp_rest' ),
 			'l10n'      => array(
 				'role_switcher_label'               => __( 'Modifying for:', 'clientdash' ),
@@ -554,41 +548,5 @@ class ClientDash_Customize {
 		) );
 
 		return $dashboard_widgets;
-	}
-
-	/**
-	 * Initially save's the cd core pages.
-	 *
-	 * @since {{VERSION}}
-	 * @access private
-	 *
-	 * @param array $pages
-	 *
-	 * @return array
-	 */
-	function save_cd_pages( $pages ) {
-
-		$role = $_GET['role'];
-
-		$customizations = cd_get_customizations( $role );
-
-		$save_pages = $pages;
-
-		if ( $customizations['cdpages'] ) {
-
-			foreach ( $save_pages as $i => $page ) {
-
-				$custom_page = cd_array_search_by_key( $customizations['cdpages'], 'id', $page['id'] );
-
-				$save_pages[ $i ] = wp_parse_args( $custom_page, $page );
-			}
-		}
-
-		// Set current role cd core pages
-		cd_update_role_customizations( "preview_$role", array(
-			'cdpages' => $save_pages,
-		) );
-
-		return $pages;
 	}
 }
