@@ -81,13 +81,13 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		public $modify;
 
 		/**
-		 * Handles core CD pages.
+		 * Handles Helper Pages.
 		 *
 		 * @since {{VERSION}}
 		 *
-		 * @var ClientDash_Core_Pages
+		 * @var ClientDash_Helper_Pages
 		 */
-		public $core_pages;
+		public $helper_pages;
 
 		protected function __wakeup() {
 		}
@@ -140,12 +140,12 @@ if ( ! class_exists( 'ClientDash' ) ) {
 			require_once CLIENTDASH_DIR . 'core/class-clientdash-db.php';
 			require_once CLIENTDASH_DIR . 'core/api/class-clientdash-api.php';
 			require_once CLIENTDASH_DIR . 'core/customize/class-clientdash-customize.php';
-			require_once CLIENTDASH_DIR . 'core/core-pages/class-clientdash-core-pages.php';
+			require_once CLIENTDASH_DIR . 'core/helper-pages/class-clientdash-helper-pages.php';
 
-			$this->db         = new ClientDash_DB();
-			$this->api        = new ClientDash_API();
-			$this->customize  = new ClientDash_Customize();
-			$this->core_pages = new ClientDash_Core_Pages();
+			$this->db           = new ClientDash_DB();
+			$this->api          = new ClientDash_API();
+			$this->customize    = new ClientDash_Customize();
+			$this->helper_pages = new ClientDash_Helper_Pages();
 
 			if ( is_admin() ) {
 

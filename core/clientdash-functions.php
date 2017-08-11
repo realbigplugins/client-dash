@@ -156,7 +156,7 @@ function cd_add_core_page( $page ) {
  */
 function cd_get_core_pages() {
 
-	$pages = ClientDash_Core_Pages::get_pages();
+	$pages = ClientDash_Helper_Pages::get_pages();
 
 	return $pages;
 }
@@ -224,7 +224,7 @@ function cd_template( $template, $args = array() ) {
  */
 function cd_is_core_page( $ID ) {
 
-	return in_array( $ID, wp_list_pluck( ClientDash_Core_Pages::get_pages(), 'id' ) );
+	return in_array( $ID, wp_list_pluck( ClientDash_Helper_Pages::get_pages(), 'id' ) );
 }
 
 /**

@@ -1,23 +1,23 @@
 <?php
 /**
- * Adds core CD pages.
+ * Adds Helper Pages.
  *
  * @since {{VERSION}}
  *
  * @package ClientDash
- * @subpackage ClientDash/core/core-pages
+ * @subpackage ClientDash/core/helper-pages
  */
 
 defined( 'ABSPATH' ) || die;
 
 /**
- * Class ClientDash_Core_Pages
+ * Class ClientDash_Helper_Pages
  *
- * Adds core CD pages.
+ * Adds Helper Pages.
  *
  * @since {{VERSION}}
  */
-class ClientDash_Core_Pages {
+class ClientDash_Helper_Pages {
 
 	/**
 	 * The custom pages.
@@ -29,7 +29,7 @@ class ClientDash_Core_Pages {
 	public $pages;
 
 	/**
-	 * ClientDash_Core_Pages constructor.
+	 * ClientDash_Helper_Pages constructor.
 	 *
 	 * @since {{VERSION}}
 	 */
@@ -66,8 +66,7 @@ class ClientDash_Core_Pages {
 		$page_modifications = get_option( 'cd_helper_pages', array() );
 
 		$pages = array(
-			array(
-				'id'          => 'account',
+			'account' => array(
 				'title'       => __( 'Account', 'clientdash' ),
 				'icon'        => 'dashicons-id-alt',
 				'description' => __( 'Provides some quick, helpful information on the user\'s account.', 'client-dash' ),
@@ -87,8 +86,7 @@ class ClientDash_Core_Pages {
 					),
 				),
 			),
-			array(
-				'id'          => 'help',
+			'help' => array(
 				'title'       => __( 'Help', 'clientdash' ),
 				'icon'        => 'dashicons-editor-help',
 				'description' => __( 'Provides information about the current website and setup.', 'client-dash' ),
@@ -108,8 +106,7 @@ class ClientDash_Core_Pages {
 					),
 				),
 			),
-			array(
-				'id'          => 'reports',
+			'reports' => array(
 				'title'       => __( 'Reports', 'clientdash' ),
 				'icon'        => 'dashicons-chart-area',
 				'description' => __( 'Provides quick reports on the website\'s content.', 'client-dash' ),
@@ -124,8 +121,7 @@ class ClientDash_Core_Pages {
 					),
 				),
 			),
-			array(
-				'id'          => 'admin_page',
+			'admin_page' => array(
 				'title'       => __( 'Admin Page', 'clientdash' ),
 				'icon'        => 'dashicons-admin-generic',
 				'description' => sprintf(
@@ -152,11 +148,11 @@ class ClientDash_Core_Pages {
 		);
 
 		// Override via saved options.
-		foreach ( $pages as &$page ) {
+		foreach ( $pages as $page_ID => &$page ) {
 
-			if ( isset( $page_modifications[ $page['id'] ] ) ) {
+			if ( isset( $page_modifications[ $page_ID ] ) ) {
 
-				$modified_page = $page_modifications[ $page['id'] ];
+				$modified_page = $page_modifications[ $page_ID ];
 
 				if ( $modified_page['title'] ) {
 
@@ -192,11 +188,11 @@ class ClientDash_Core_Pages {
 		}
 
 		/**
-		 * Client Dash core pages.
+		 * Client Dash helper pages.
 		 *
 		 * @since {{VERSION}}
 		 */
-		$pages = apply_filters( 'cd_core_pages', $pages );
+		$pages = apply_filters( 'cd_helper_pages', $pages );
 
 		return $pages;
 	}
@@ -219,7 +215,7 @@ class ClientDash_Core_Pages {
 		// TODO Figure out how to handle cap
 
 		// Add toplevel
-		foreach ( $this->pages as $page ) {
+		foreach ( $this->pages as $page_ID => $page ) {
 
 			if ( $page['parent'] != 'toplevel' ) {
 
@@ -229,8 +225,8 @@ class ClientDash_Core_Pages {
 			add_menu_page(
 				$page['title'],
 				$page['title'],
-				'read', // TODO Capability for core pages
-				$page['id'],
+				'read', // TODO Capability for helper pages
+				$page_ID,
 				array( $this, 'load_page' ),
 				$page['icon'] ? $page['icon'] : $page['icon'],
 				$page['position'] ? $page['position'] : 100
@@ -249,8 +245,8 @@ class ClientDash_Core_Pages {
 				$page['parent'],
 				$page['title'],
 				$page['title'],
-				'read', // TODO Capability for core pages
-				$page['id'],
+				'read', // TODO Capability for helper pages
+				$page_ID,
 				array( $this, 'load_page' )
 			);
 		}
@@ -264,7 +260,7 @@ class ClientDash_Core_Pages {
 	 */
 	function add_widgets() {
 
-		foreach ( $this->pages as $page ) {
+		foreach ( $this->pages as $page_ID => $page ) {
 
 			if ( $page['deleted'] || ! $page['parent'] ) {
 
@@ -272,7 +268,7 @@ class ClientDash_Core_Pages {
 			}
 
 			wp_add_dashboard_widget(
-				$page['id'],
+				$page_ID,
 				$page['title'],
 				array( $this, 'load_widget' ),
 				null,
@@ -315,13 +311,13 @@ class ClientDash_Core_Pages {
 		$cd_page = cd_array_search_by_key( $this->pages, 'id', $plugin_page );
 
 		/**
-		 * The template to use for core CD pages.
+		 * The template to use for helper CD pages.
 		 *
 		 * @since {{VERSION}}
 		 */
 		$page_template = apply_filters(
-			'cd_core_page_template',
-			CLIENTDASH_DIR . 'core/core-pages/views/page.php'
+			'cd_helper_page_template',
+			CLIENTDASH_DIR . 'core/helper-pages/views/page.php'
 		);
 
 		$cd_page = self::setup_cd_page_args( $cd_page );
@@ -359,7 +355,7 @@ class ClientDash_Core_Pages {
 		$icon = $widget['args']['icon'];
 		$link = $widget['args']['link'];
 
-		include CLIENTDASH_DIR . 'core/core-pages/views/widget.php';
+		include CLIENTDASH_DIR . 'core/helper-pages/views/widget.php';
 	}
 
 	/**
@@ -374,7 +370,7 @@ class ClientDash_Core_Pages {
 		$current_user = wp_get_current_user();
 		$user_role    = $wp_roles->role_names[ $current_user->roles[0] ];
 
-		include_once CLIENTDASH_DIR . 'core/core-pages/views/account/about.php';
+		include_once CLIENTDASH_DIR . 'core/helper-pages/views/account/about.php';
 	}
 
 	/**
@@ -388,7 +384,7 @@ class ClientDash_Core_Pages {
 
 		$blogs = get_blogs_of_user( $current_user->ID );
 
-		include_once CLIENTDASH_DIR . 'core/core-pages/views/account/sites.php';
+		include_once CLIENTDASH_DIR . 'core/helper-pages/views/account/sites.php';
 	}
 
 	/**
@@ -402,7 +398,7 @@ class ClientDash_Core_Pages {
 		$ip     = gethostbyname( $domain );
 		$dns    = dns_get_record( $domain );
 
-		include_once CLIENTDASH_DIR . 'core/core-pages/views/help/domain.php';
+		include_once CLIENTDASH_DIR . 'core/helper-pages/views/help/domain.php';
 	}
 
 	/**
@@ -432,7 +428,7 @@ class ClientDash_Core_Pages {
 			$child_theme = wp_get_theme( $current_theme->get_template() );
 		}
 
-		include_once CLIENTDASH_DIR . 'core/core-pages/views/help/info.php';
+		include_once CLIENTDASH_DIR . 'core/helper-pages/views/help/info.php';
 	}
 
 	/**
@@ -451,7 +447,7 @@ class ClientDash_Core_Pages {
 		$dir_info       = cd_get_dir_size( $upload_dir['basedir'] );
 		$attachments    = wp_count_posts( 'attachment' );
 
-		include_once CLIENTDASH_DIR . 'core/core-pages/views/reports/site.php';
+		include_once CLIENTDASH_DIR . 'core/helper-pages/views/reports/site.php';
 	}
 
 	/**
@@ -466,7 +462,7 @@ class ClientDash_Core_Pages {
 
 		$content = apply_filters( 'the_content', $content );
 
-		include_once CLIENTDASH_DIR . 'core/core-pages/views/admin-page/main.php';
+		include_once CLIENTDASH_DIR . 'core/helper-pages/views/admin-page/main.php';
 	}
 
 	/**
@@ -481,7 +477,7 @@ class ClientDash_Core_Pages {
 
 		if ( ! $feed_url ) {
 
-			include_once CLIENTDASH_DIR . 'core/core-pages/views/admin-page/feed-error.php';
+			include_once CLIENTDASH_DIR . 'core/helper-pages/views/admin-page/feed-error.php';
 
 			return;
 		}
@@ -494,13 +490,13 @@ class ClientDash_Core_Pages {
 		// Check for an error if there's no RSS feed
 		if ( is_wp_error( $feed ) ) {
 
-			include_once CLIENTDASH_DIR . 'core/core-pages/views/admin-page/feed-error.php';
+			include_once CLIENTDASH_DIR . 'core/helper-pages/views/admin-page/feed-error.php';
 
 			return;
 		}
 
 		$feed_items = $feed->get_items( 0, $feed_count );
 
-		include_once CLIENTDASH_DIR . 'core/core-pages/views/admin-page/feed.php';
+		include_once CLIENTDASH_DIR . 'core/helper-pages/views/admin-page/feed.php';
 	}
 }

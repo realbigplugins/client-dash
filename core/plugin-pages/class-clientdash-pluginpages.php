@@ -227,7 +227,7 @@ class ClientDash_PluginPages {
 
 		add_action( 'clientdash_sidebar', array( __CLASS__, 'sidebar_helper_pages_actions' ), 5 );
 
-		$pages = ClientDash_Core_Pages::get_pages();
+		$pages = ClientDash_Helper_Pages::get_pages();
 
 		include_once CLIENTDASH_DIR . 'core/plugin-pages/views/helper-pages.php';
 	}
