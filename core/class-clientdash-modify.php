@@ -97,6 +97,13 @@ class ClientDash_Modify {
 			return;
 		}
 
+		/**
+		 * The current user's customizations.
+		 *
+		 * @since {{VERSION}}
+		 */
+		$customizations = apply_filters( 'cd_customizations', $customizations );
+
 		$this->menu      = $customizations['menu'];
 		$this->submenu   = $customizations['submenu'];
 		$this->dashboard = $customizations['dashboard'];
@@ -119,16 +126,14 @@ class ClientDash_Modify {
 			return;
 		}
 
-		$uncustomized_menu = array();
-		$new_menu          = array();
+		$new_menu = array();
 
 		foreach ( $menu as $i => $menu_item ) {
 
 			$customized_menu_item_key = cd_array_get_index_by_key( $this->menu, 'id', $menu_item[2] );
 
-			if ( $customized_menu_item_key === false) {
+			if ( $customized_menu_item_key === false ) {
 
-				$uncustomized_menu[] = $menu_item;
 				continue;
 			}
 
@@ -152,8 +157,25 @@ class ClientDash_Modify {
 			);
 		}
 
+		// Re-index
+		$new_menu = array_values( $new_menu );
+
 		ksort( $new_menu );
-		$new_menu = array_merge( $new_menu, $uncustomized_menu );
+
+		/**
+		 * The new, customized admin menu for the current role.
+		 *
+		 * @since {{VERSION}}
+		 */
+		$new_menu = apply_filters( 'cd_customized_menu', $new_menu, $menu );
+
+		// Enforce that Client Dash menu always exist for admins
+		if ( current_user_can( 'manage_options' ) &&
+		     cd_array_get_index_by_key( $new_menu, 2, 'clientdash' ) === false
+		) {
+
+			$new_menu[] = $menu[ cd_array_get_index_by_key( $menu, 2, 'clientdash' ) ];
+		}
 
 		$new_submenu = array();
 
@@ -167,7 +189,6 @@ class ClientDash_Modify {
 				continue;
 			}
 
-			$uncustomized_submenu        = array();
 			$new_submenu[ $menu_parent ] = array();
 
 			foreach ( $submenu_items as $i => $submenu_item ) {
@@ -180,7 +201,6 @@ class ClientDash_Modify {
 
 				if ( $customized_submenu_item_key === false ) {
 
-					$uncustomized_submenu[] = $submenu_item;
 					continue;
 				}
 
@@ -202,7 +222,21 @@ class ClientDash_Modify {
 			}
 
 			ksort( $new_submenu[ $menu_parent ] );
-			$new_submenu[ $menu_parent ] = array_merge( $new_submenu[ $menu_parent ], $uncustomized_submenu );
+		}
+
+		/**
+		 * The new, customized admin submenu for the current role.
+		 *
+		 * @since {{VERSION}}
+		 */
+		$new_submenu = apply_filters( 'cd_customized_submenu', $new_submenu, $submenu );
+
+		// Enforce that Client Dash submenu always exist for admins
+		if ( current_user_can( 'manage_options' ) &&
+		     ( ! isset( $new_submenu['clientdash'] ) || empty( $new_submenu['clientdash'] ) )
+		) {
+
+			$new_submenu['clientdash'] = $submenu['clientdash'];
 		}
 
 		$menu    = $new_menu;

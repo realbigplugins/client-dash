@@ -59,6 +59,12 @@ class SecondaryActions extends React.Component {
                         disabled={this.props.disabled}
                     />
                     }
+
+                    {this.props.nextPanelNotification &&
+                    <div className="cd-editor-panel-actions-notification cd-editor-tip cd-editor-tip-above next">
+                        {this.props.nextPanelNotification}
+                    </div>
+                    }
                 </div>
                 }
             </div>

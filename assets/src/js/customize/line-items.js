@@ -44,6 +44,10 @@ class LineItemContent extends React.Component {
                     </div>
 
                     <div className="cd-editor-lineitem-actions">
+                        {this.props.new &&
+                        <span className="cd-editor-tip cd-editor-tip-right">{l10n['new']}</span>
+                        }
+
                         {this.props.actions}
                     </div>
                 </div>
@@ -233,7 +237,7 @@ class MenuItemEdit extends React.Component {
 
         let actions = [];
 
-        if ( this.props.type != 'clientdash' ) {
+        if ( this.props.type !== 'clientdash' ) {
             actions = [
                 <LineItemAction
                     key="menu-action-submenu"
@@ -279,11 +283,11 @@ class MenuItemEdit extends React.Component {
                       />
 
                       <p className="cd-editor-lineitem-form-subfield cd-editor-lineitem-form-subtext">
-                          {l10n['original_icon'] + " "}<span className={"dashicons " + this.props.original_icon} />
+                          {l10n['original_icon'] + " "}<span className={"dashicons " + this.props.original_icon}/>
                       </p>
 
                   </LineItemForm>
-            ;
+        ;
 
         return (
             <LineItemContent
@@ -414,7 +418,7 @@ class MenuItemCustomLink extends React.Component {
 
         let actions = [];
 
-        if ( this.props.type != 'clientdash' ) {
+        if ( this.props.type !== 'clientdash' ) {
             actions = [
                 <LineItemAction
                     key="menu-action-submenu"
@@ -467,11 +471,11 @@ class MenuItemCustomLink extends React.Component {
                       />
 
                       <p className="cd-editor-lineitem-form-subfield cd-editor-lineitem-form-subtext">
-                          {l10n['original_icon'] + " "}<span className={"dashicons " + this.props.original_icon} />
+                          {l10n['original_icon'] + " "}<span className={"dashicons " + this.props.original_icon}/>
                       </p>
 
                   </LineItemForm>
-            ;
+        ;
 
         return (
             <LineItemContent
@@ -555,7 +559,7 @@ class SubmenuItemEdit extends React.Component {
                   <span className="cd-editor-lineitem-form-subtext">
                     {l10n['original_title'] + " "}<strong>{this.props.original_title}</strong>
                 </span>
-            ;
+        ;
 
         const form =
                   <LineItemForm
@@ -572,7 +576,7 @@ class SubmenuItemEdit extends React.Component {
                           {l10n['original_title'] + " "}<strong>{this.props.original_title}</strong>
                       </p>
                   </LineItemForm>
-            ;
+        ;
 
 
         return (
@@ -688,7 +692,7 @@ class SubmenuItemCustomLink extends React.Component {
                           onHandleChange={this.linkChange}
                       />
                   </LineItemForm>
-            ;
+        ;
 
         return (
             <LineItemContent
@@ -740,6 +744,18 @@ class ItemAdd extends React.Component {
             />
         ];
 
+        let classes = '';
+
+        if ( this.props.id === 'separator' ) {
+
+            classes += ' separator';
+        }
+
+        if ( this.props.new ) {
+
+            classes += ' new';
+        }
+
         return (
             <LineItemContent
                 key={this.props.id}
@@ -747,7 +763,8 @@ class ItemAdd extends React.Component {
                 title={this.props.title}
                 icon={this.props.icon}
                 actions={actions}
-                classes={this.props.id == 'separator' && 'cd-editor-menuitem-separator'}
+                classes={classes}
+                new={this.props.new || false}
             />
         )
     }
@@ -831,7 +848,7 @@ class WidgetEdit extends React.Component {
                           {l10n['original_title'] + " "}<strong>{this.props.original_title}</strong>
                       </p>
                   </LineItemForm>
-            ;
+        ;
 
         return (
             <LineItemContent

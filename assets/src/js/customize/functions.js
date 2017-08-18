@@ -250,6 +250,29 @@ function sortableCancelStart(e) {
     return cancel;
 }
 
+/**
+ * Makes sure the supplied parameter comes out an array.
+ *
+ * @since {{VERSION}}
+ *
+ * @param maybeObject
+ * @returns {*}
+ */
+function ensureArray (maybeObject) {
+
+    if (typeof maybeObject === 'array' ) {
+
+        return maybeObject;
+    }
+
+    let array = []
+
+    // Walk through object and push values to array
+    Object.keys(maybeObject).map((index) => array.push(maybeObject[index]));
+
+    return array;
+}
+
 export {
     getFirstAvailableIndex,
     getNewItemID,
@@ -260,5 +283,6 @@ export {
     getDeletedItems,
     getAvailableItems,
     setToOriginalTitles,
-    sortableCancelStart
+    sortableCancelStart,
+    ensureArray
 }

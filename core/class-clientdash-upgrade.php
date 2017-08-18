@@ -32,25 +32,36 @@ class ClientDash_Upgrade {
 
 		if ( isset( $_GET['clientdash_upgrade'] ) ) {
 
-			$this->upgrade();
-
-			if ( $_GET['clientdash_upgrade'] === '1' ) {
-
-				$this->migrate();
-			}
-
-			wp_redirect( add_query_arg(
-				'clientdash_upgraded',
-				$_GET['clientdash_upgrade'],
-				remove_query_arg( 'clientdash_upgrade' )
-			) );
-			exit();
+			add_action( 'admin_menu', array( $this, 'init_upgrade' ), 999999 );
 		}
 
 		if ( isset( $_GET['clientdash_upgraded'] ) ) {
 
 			add_action( 'admin_notices', array( $this, 'show_upgraded_nag' ) );
 		}
+	}
+
+	/**
+	 * Initializes the upgrade so we can hook it after admin menu has loaded.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 */
+	function init_upgrade() {
+
+		$this->upgrade();
+
+		if ( $_GET['clientdash_upgrade'] === '1' ) {
+
+			$this->migrate();
+		}
+
+		wp_redirect( add_query_arg(
+			'clientdash_upgraded',
+			$_GET['clientdash_upgrade'],
+			remove_query_arg( 'clientdash_upgrade' )
+		) );
+		exit();
 	}
 
 	/**
@@ -154,7 +165,7 @@ class ClientDash_Upgrade {
 		// Run initial install to mamke sure this runs from upgrade
 		ClientDash_Install::install();
 
-		update_option( 'cd_version', CLIENTDASH_VERSION );
+//		update_option( 'cd_version', CLIENTDASH_VERSION );
 	}
 
 	/**
@@ -179,18 +190,20 @@ class ClientDash_Upgrade {
 	 */
 	private function migrate_admin_menus() {
 
-		$menus = wp_get_nav_menus();
+		global $menu, $submenu;
 
-		foreach ( $menus as $menu ) {
+		$nav_menus = wp_get_nav_menus();
 
-			if ( substr( $menu->name, 0, 14 ) === 'cd_admin_menu_' ) {
+		foreach ( $nav_menus as $nav_menu ) {
 
-				$role = substr( $menu->name, 14 );
+			if ( substr( $nav_menu->name, 0, 14 ) === 'cd_admin_menu_' ) {
+
+				$role = substr( $nav_menu->name, 14 );
 
 				$new_menu    = array();
 				$new_submenu = array();
 
-				$items = wp_get_nav_menu_items( $menu->term_id );
+				$items = wp_get_nav_menu_items( $nav_menu->term_id );
 
 				foreach ( $items as $item ) {
 
@@ -199,6 +212,7 @@ class ClientDash_Upgrade {
 						'title'          => $item->title,
 						'original_title' => get_post_meta( $item->db_id, '_menu_item_original_title', true ),
 						'deleted'        => false,
+						'new'            => false,
 					);
 
 					if ( (int) $item->menu_item_parent > 0 ) {
@@ -215,9 +229,83 @@ class ClientDash_Upgrade {
 
 					$menu_item['icon']          = get_post_meta( $item->db_id, '_menu_item_cd_icon', true );
 					$menu_item['original_icon'] = '';
-					$menu_item['type']          = 'menu_item';
+
+					$item_type = get_post_meta( $item->db_id, '_menu_item_cd_type', true );
+
+					switch ( $item_type ) {
+
+						case 'separator':
+
+							$menu_item['type'] = 'separator';
+							break;
+
+						default:
+
+							$menu_item['type'] = 'menu_item';
+							break;
+					}
 
 					$new_menu[ $item->ID ] = $menu_item;
+				}
+
+				$new_menu = array_values( $new_menu );
+
+				// Add existing menu items as deleted
+				foreach ( $menu as $i => $menu_item ) {
+
+					if ( cd_array_get_index_by_key( $new_menu, 'id', $menu_item[2] ) === false ) {
+
+						$type = 'menu_item';
+
+						if ( strpos( $menu_item[4], 'wp-menu-separator' ) !== false ) {
+
+							$type = 'separator';
+						}
+
+						if ( $menu_item[2] == 'clientdash' ) {
+
+							$type = 'clientdash';
+						}
+
+						$new_menu[] = array(
+							'id'             => $menu_item[2],
+							'title'          => '',
+							'original_title' => $menu_item[0],
+							'icon'           => '',
+							'original_icon'  => isset( $menu_item[6] ) ? $menu_item[6] : '',
+							'deleted'        => $type !== 'clientdash' || false,
+							'type'           => $type,
+							'new'            => false,
+						);
+					}
+				}
+
+				// Add existing submenu items as deleted
+				foreach ( $submenu as $menu_ID => $submenu_items ) {
+
+					foreach ( $submenu_items as $i => $submenu_item ) {
+
+						if ( ! isset( $new_submenu[ $menu_ID ] ) ||
+						     cd_array_get_index_by_key( $new_submenu[ $menu_ID ], 'id', $submenu_item[2] ) === false
+						) {
+
+							$type = 'submenu_item';
+
+							if ( cd_is_core_page( $submenu_item[2] ) ) {
+
+								$type = 'cd_page';
+							}
+
+							$save_submenu[ $menu_ID ][] = array(
+								'id'             => $submenu_item[2],
+								'title'          => '',
+								'original_title' => $submenu_item[0],
+								'deleted'        => true,
+								'type'           => $type,
+								'new'            => false,
+							);
+						}
+					}
 				}
 
 				cd_update_role_customizations( $role, array(
@@ -225,7 +313,7 @@ class ClientDash_Upgrade {
 					'submenu' => $new_submenu,
 				) );
 
-				wp_delete_nav_menu( $menu->term_id );
+//				wp_delete_nav_menu( $menu->term_id );
 			}
 		}
 	}
@@ -276,8 +364,8 @@ class ClientDash_Upgrade {
 			}
 		}
 
-		unset( $sidebars['cd-dashboard'] );
-		update_option( 'sidebars_widgets', $sidebars );
+//		unset( $sidebars['cd-dashboard'] );
+//		update_option( 'sidebars_widgets', $sidebars );
 	}
 
 	/**
@@ -343,6 +431,7 @@ class ClientDash_Upgrade {
 				if ( $admin_page_title ) {
 
 					$page['title'] = $admin_page_title;
+//					delete_option( 'cd_webmaster_name' );
 				}
 
 				$admin_page_main_tab_title = get_option( 'cd_webmaster_main_tab_name' );
@@ -350,6 +439,7 @@ class ClientDash_Upgrade {
 				if ( $admin_page_main_tab_title ) {
 
 					$page['tabs']['main']['title'] = $admin_page_main_tab_title;
+//					delete_option( 'cd_webmaster_main_tab_name' );
 				}
 
 				$disable_feed_tab = get_option( 'cd_webmaster_feed' );
@@ -357,17 +447,18 @@ class ClientDash_Upgrade {
 				if ( $disable_feed_tab ) {
 
 					$page['tabs']['feed']['roles'] = array();
+//					delete_option( 'cd_webmaster_feed' );
 				}
 			}
 		}
 
 		update_option( 'cd_helper_pages', $pages );
 
-		delete_option( 'cd_dashicon_account' );
-		delete_option( 'cd_dashicon_reports' );
-		delete_option( 'cd_dashicon_help' );
-		delete_option( 'cd_dashicon_webmaster' );
-		delete_option( 'cd_content_sections_roles' );
+//		delete_option( 'cd_dashicon_account' );
+//		delete_option( 'cd_dashicon_reports' );
+//		delete_option( 'cd_dashicon_help' );
+//		delete_option( 'cd_dashicon_webmaster' );
+//		delete_option( 'cd_content_sections_roles' );
 	}
 
 	/**
@@ -383,7 +474,7 @@ class ClientDash_Upgrade {
 		if ( $page_content ) {
 
 			update_option( 'cd_admin_page_content', $page_content );
-			delete_option( 'cd_webmaster_main_tab_content' );
+//			delete_option( 'cd_webmaster_main_tab_content' );
 		}
 
 		$feed_url = get_option( 'cd_webmaster_feed_url' );
@@ -391,7 +482,7 @@ class ClientDash_Upgrade {
 		if ( $feed_url ) {
 
 			update_option( 'cd_adminpage_feed_url', $feed_url );
-			delete_option( 'cd_webmaster_feed_url' );
+//			delete_option( 'cd_webmaster_feed_url' );
 		}
 
 		$feed_count = get_option( 'cd_webmaster_feed_count' );
@@ -399,7 +490,7 @@ class ClientDash_Upgrade {
 		if ( $feed_count ) {
 
 			update_option( 'cd_adminpage_feed_count', $feed_count );
-			delete_option( 'cd_webmaster_feed_count' );
+//			delete_option( 'cd_webmaster_feed_count' );
 		}
 	}
 }

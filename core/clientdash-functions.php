@@ -90,7 +90,7 @@ function cd_delete_customizations( $role ) {
 /**
  * Searches an array by a nested key and returns the match.
  *
- * @param array $array
+ * @param array|object $array
  * @param string $key
  * @param string $value
  *

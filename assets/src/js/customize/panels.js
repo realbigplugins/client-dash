@@ -404,6 +404,7 @@ class PanelAddItems extends React.Component {
                         title={item.title || item.original_title}
                         icon={item.icon || item.original_icon}
                         type={item.type || null}
+                        new={item.new || false}
                         onAddItem={this.addItem}
                     />
                 );

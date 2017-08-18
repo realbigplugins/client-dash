@@ -194,11 +194,14 @@ class ClientDash_PluginPages {
 			array( __CLASS__, 'load_settings' )
 		);
 
-		$submenu['clientdash'][0] = array(
-			__( 'Customize Admin', 'clientdash' ),
-			'customize_admin',
-			'/?clientdash_customize=1'
-		);
+		if ( current_user_can( 'manage_options' ) ) {
+
+			$submenu['clientdash'][0] = array(
+				__( 'Customize Admin', 'clientdash' ),
+				'customize_admin',
+				'/?clientdash_customize=1'
+			);
+		}
 	}
 
 	/**
@@ -273,7 +276,7 @@ class ClientDash_PluginPages {
 	 */
 	static function load_settings() {
 
-		$feed_url = get_option( 'cd_adminpage_feed_url', '' );
+		$feed_url   = get_option( 'cd_adminpage_feed_url', '' );
 		$feed_count = get_option( 'cd_adminpage_feed_count', 5 );
 
 		$reset_settings_link = admin_url( 'admin.php?page=clientdash_settings&cd_reset_settings' );

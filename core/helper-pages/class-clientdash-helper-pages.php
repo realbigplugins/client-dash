@@ -66,7 +66,7 @@ class ClientDash_Helper_Pages {
 		$page_modifications = get_option( 'cd_helper_pages', array() );
 
 		$pages = array(
-			'account' => array(
+			'account'    => array(
 				'title'       => __( 'Account', 'clientdash' ),
 				'icon'        => 'dashicons-id-alt',
 				'description' => __( 'Provides some quick, helpful information on the user\'s account.', 'client-dash' ),
@@ -86,7 +86,7 @@ class ClientDash_Helper_Pages {
 					),
 				),
 			),
-			'help' => array(
+			'help'       => array(
 				'title'       => __( 'Help', 'clientdash' ),
 				'icon'        => 'dashicons-editor-help',
 				'description' => __( 'Provides information about the current website and setup.', 'client-dash' ),
@@ -106,7 +106,7 @@ class ClientDash_Helper_Pages {
 					),
 				),
 			),
-			'reports' => array(
+			'reports'    => array(
 				'title'       => __( 'Reports', 'clientdash' ),
 				'icon'        => 'dashicons-chart-area',
 				'description' => __( 'Provides quick reports on the website\'s content.', 'client-dash' ),
@@ -172,12 +172,12 @@ class ClientDash_Helper_Pages {
 
 							$modified_tab = $modified_page['tabs'][ $tab_ID ];
 
-							if ( $modified_tab['title'] ) {
+							if ( isset( $modified_tab['title'] ) ) {
 
 								$tab['title'] = $modified_tab['title'];
 							}
 
-							if ( $modified_tab['roles'] ) {
+							if ( isset( $modified_tab['roles'] ) ) {
 
 								$tab['roles'] = $modified_tab['roles'];
 							}

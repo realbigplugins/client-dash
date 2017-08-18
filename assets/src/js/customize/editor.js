@@ -9,7 +9,8 @@ import {
     getDeletedItems,
     getAvailableItems,
     getNewItemID,
-    getItemIndex
+    getItemIndex,
+    ensureArray
 } from './functions';
 import {
     PanelPrimary,
@@ -25,8 +26,8 @@ import PrimaryActions from './primary-actions';
 import RoleSwitcher from './role-switcher';
 import Message from './message';
 
-const l10n     = ClientdashCustomize_Data.l10n || false;
-const adminurl = ClientdashCustomize_Data.adminurl || false;
+const l10n      = ClientdashCustomize_Data.l10n || false;
+const adminurl  = ClientdashCustomize_Data.adminurl || false;
 const api_nonce = ClientdashCustomize_Data.api_nonce || false;
 
 /**
@@ -317,6 +318,10 @@ class Editor extends React.Component {
                     prevState.activePanel = 'primary';
                     prevState.loading     = false;
 
+                    // Force some customizations to array
+                    customizations.menu      = ensureArray(customizations.menu);
+                    customizations.dashboard = ensureArray(customizations.dashboard);
+
                     prevState.customizations[role] = customizations;
                     prevState.history[role]        = {};
 
@@ -328,7 +333,7 @@ class Editor extends React.Component {
                 console.log('error: ', error);
             });
 
-        } else if ( this.state.activePanel == 'loading' ) {
+        } else if ( this.state.activePanel === 'loading' ) {
 
             this.setState((prevState) => {
 
@@ -387,7 +392,7 @@ class Editor extends React.Component {
 
                 default:
 
-                    prevState.customizations[role].menu = modifyItem(menu, item.id, {deleted: false});
+                    prevState.customizations[role].menu = modifyItem(menu, item.id, {deleted: false, new: false});
 
                     // Move to beginning
                     prevState.customizations[role].menu = arrayMove(
@@ -436,7 +441,7 @@ class Editor extends React.Component {
                     prevState.customizations[role].submenu[submenu_edit] = modifyItem(
                         prevState.customizations[role].submenu[submenu_edit],
                         item.id,
-                        {deleted: false}
+                        {deleted: false, new: false}
                     );
 
                     // Move to beginning
@@ -703,6 +708,16 @@ class Editor extends React.Component {
 
                 let current_items   = customizations.menu;
                 let available_items = getAvailableItems(current_items);
+                let new_items       = false;
+
+                // Check if any new items
+                current_items.map(item => {
+
+                    if ( item.new ) {
+
+                        new_items = true;
+                    }
+                });
 
                 panel =
                     <PanelMenu
@@ -726,6 +741,7 @@ class Editor extends React.Component {
                         loadNextText={l10n['action_button_add_items']}
                         onLoadPanel={this.loadPanel}
                         disabled={this.state.saving || this.state.deleting}
+                        nextPanelNotification={new_items ? l10n['new_items'] : false}
                     />
                 ;
                 break;
@@ -743,7 +759,7 @@ class Editor extends React.Component {
                                     {menu_item.title || menu_item.original_title}
                                 </span>
                         </div>
-                    ;
+                ;
 
                 panel =
                     <PanelSubmenu
@@ -779,7 +795,7 @@ class Editor extends React.Component {
                 // Skip separators
                 available_items = available_items.filter((item) => {
 
-                    return item.type != 'separator';
+                    return item.type !== 'separator';
                 });
 
                 // Add custom link
@@ -825,7 +841,7 @@ class Editor extends React.Component {
                                 {menu_item.title || menu_item.original_title}
                             </span>
                         </div>
-                    ;
+                ;
                 let current_items   = customizations.submenu[this.state.submenuEdit] || [];
                 let available_items = getDeletedItems(current_items);
 
@@ -943,7 +959,7 @@ class Editor extends React.Component {
             }
         }
 
-        if ( this.state.activePanel == 'confirmReset' || this.state.activePanel == 'deleting' ) {
+        if ( this.state.activePanel === 'confirmReset' || this.state.activePanel === 'deleting' ) {
 
             panel =
                 <PanelBlank

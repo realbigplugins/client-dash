@@ -1,3 +1,9 @@
+@mixin separator {
+  background-color: #ececec;
+  font-style: italic;
+  color: #777;
+}
+
 #cd-editor {
   position: absolute;
   top: 0;
@@ -189,6 +195,7 @@
   }
 
   .cd-editor-panel-actions-buttons {
+    position: relative;
     height: 50px;
     border-top: 1px solid $medium-gray;
   }
@@ -196,6 +203,25 @@
   .cd-editor-action-button {
     border-top: 0;
     border-bottom: 0;
+  }
+
+  .cd-editor-panel-actions-notification {
+    &.next {
+      right: 5px;
+
+      &:after {
+        right: 10%;
+        left: auto;
+      }
+    }
+
+    &.previous {
+      left: 5px;
+
+      &:after {
+        left: 10%;
+      }
+    }
   }
 }
 
@@ -277,6 +303,24 @@ body > .cd-editor-lineitem-li {
       color: $dark-gray;
     }
   }
+
+  &.separator {
+    @include separator;
+  }
+
+  &.new {
+    .cd-editor-tip {
+      right: 35px; // Button width (30px) + 5px
+      left: auto;
+      margin-top: -1px; // Cover top border (1px)
+      height: 32px; // Tall enough to cover height (30px) + top/bottom borders (2px total)
+      line-height: normal;
+    }
+  }
+}
+
+.cd-editor-menuitem-separator {
+  @include separator;
 }
 
 .cd-editor-lineitem-block {
@@ -288,6 +332,7 @@ body > .cd-editor-lineitem-li {
 }
 
 .cd-editor-lineitem-title {
+  position: relative;
   float: left;
   width: 60%;
   padding-left: 0.5em;
@@ -305,6 +350,7 @@ body > .cd-editor-lineitem-li {
 }
 
 .cd-editor-lineitem-actions {
+  position: relative;
   float: right;
   width: 40%;
   text-align: right;
@@ -340,12 +386,6 @@ body > .cd-editor-lineitem-li {
     font-size: 2em;
     vertical-align: middle;
   }
-}
-
-.cd-editor-menuitem-separator {
-  background-color: #ececec;
-  font-style: italic;
-  color: #777;
 }
 
 .cd-editor-lineitem-form {

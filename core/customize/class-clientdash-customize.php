@@ -242,6 +242,8 @@ class ClientDash_Customize {
 				'cannot_view_link'                  => __( 'Only administrative links can be viewed.', 'clientdash' ),
 				'current_location'                  => __( 'Current location', 'clientdash' ),
 				'toplevel'                          => __( 'Top Level', 'clientdash' ),
+				'new_items'                         => __( 'New Items', 'clientdash' ),
+				'new'                               => __( 'New', 'clientdash' ),
 			),
 		) );
 	}
@@ -413,7 +415,7 @@ class ClientDash_Customize {
 
 			if ( $customized_menu_item ) {
 
-				$save_menu[ $customized_menu_item_key ] = array(
+				$save_menu[] = array(
 					'id'             => $menu_item[2],
 					'title'          => $customized_menu_item['title'],
 					'original_title' => $menu_item[0],
@@ -425,20 +427,20 @@ class ClientDash_Customize {
 
 			} else {
 
-				$save_menu_new[] = array(
+				$save_menu[] = array(
 					'id'             => $menu_item[2],
 					'title'          => '',
 					'original_title' => $menu_item[0],
 					'icon'           => '',
 					'original_icon'  => isset( $menu_item[6] ) ? $menu_item[6] : '',
-					'deleted'        => false,
+					'deleted'        => ! $customized_menu_item && $type !== 'clientdash' || false,
 					'type'           => $type,
+					'new'            => ! $customized_menu_item && $type !== 'clientdash' || false,
 				);
 			}
 		}
 
 		ksort( $save_menu );
-		$save_menu = array_merge( $save_menu, $save_menu_new );
 
 		// Get original submenu merged with customizations
 		$save_submenu       = array();
@@ -473,8 +475,9 @@ class ClientDash_Customize {
 					'id'             => $submenu_item[2],
 					'title'          => '',
 					'original_title' => $submenu_item[0],
-					'deleted'        => false,
+					'deleted'        => ! $customized_submenu_item || false,
 					'type'           => $type,
+					'new'            => ! $customized_submenu_item || false,
 				) );
 			}
 		}
