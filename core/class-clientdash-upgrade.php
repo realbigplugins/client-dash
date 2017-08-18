@@ -91,9 +91,14 @@ class ClientDash_Upgrade {
         <div class="notice notice-warning">
             <p>
 				<?php
-				_e(
-					'Client Dash needs to upgrade your database and migrate your previous Client Dash customizations.',
-					'client-dash'
+				printf(
+					__(
+					/* translators: Both %s are HTML for <strong> */
+						'%sClient Dash%s needs to upgrade your database and migrate your previous Client Dash customizations.',
+						'client-dash'
+					),
+					'<strong>',
+					'</strong>'
 				);
 				?>
             </p>
@@ -207,15 +212,34 @@ class ClientDash_Upgrade {
 
 				foreach ( $items as $item ) {
 
+					$original_title = get_post_meta( $item->db_id, '_menu_item_original_title', true );
+
 					$menu_item = array(
 						'id'             => $item->url,
-						'title'          => $item->title,
-						'original_title' => get_post_meta( $item->db_id, '_menu_item_original_title', true ),
+						'title'          => $item->title !== $original_title ? $item->title : '',
+						'original_title' => $original_title,
 						'deleted'        => false,
 						'new'            => false,
 					);
 
 					if ( (int) $item->menu_item_parent > 0 ) {
+
+						// Edge case: Webmaster is now Admin Page. Change ID
+						if ( $menu_item['id'] === 'cd_webmaster' ) {
+
+							$menu_item['id'] = 'cd_admin_page';
+						}
+
+						// Check for presence of submenu item in original submenu. If it doesn't exist, it was moved to
+						// a different parent, which is no longer allowed.
+						if ( cd_array_get_index_by_key(
+							     $submenu[ $new_menu[ $item->menu_item_parent ]['id'] ],
+							     2,
+							     $menu_item['id'] ) === false
+						) {
+
+							continue;
+						}
 
 						if ( ! isset( $new_submenu[ $new_menu[ $item->menu_item_parent ]['id'] ] ) ) {
 

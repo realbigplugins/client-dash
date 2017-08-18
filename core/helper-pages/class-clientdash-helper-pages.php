@@ -226,7 +226,7 @@ class ClientDash_Helper_Pages {
 				$page['title'],
 				$page['title'],
 				'read', // TODO Capability for helper pages
-				$page_ID,
+				"cd_$page_ID",
 				array( $this, 'load_page' ),
 				$page['icon'] ? $page['icon'] : $page['icon'],
 				$page['position'] ? $page['position'] : 100
@@ -234,7 +234,7 @@ class ClientDash_Helper_Pages {
 		}
 
 		// Add submenu
-		foreach ( $this->pages as $page ) {
+		foreach ( $this->pages as $page_ID => $page ) {
 
 			if ( $page['parent'] == 'toplevel' ) {
 
@@ -246,7 +246,7 @@ class ClientDash_Helper_Pages {
 				$page['title'],
 				$page['title'],
 				'read', // TODO Capability for helper pages
-				$page_ID,
+				"cd_$page_ID",
 				array( $this, 'load_page' )
 			);
 		}
@@ -308,7 +308,9 @@ class ClientDash_Helper_Pages {
 
 		global $plugin_page;
 
-		$cd_page = cd_array_search_by_key( $this->pages, 'id', $plugin_page );
+		$cd_page_ID = substr( $plugin_page, 3 );
+
+		$cd_page = $this->pages[$cd_page_ID];
 
 		/**
 		 * The template to use for helper CD pages.
