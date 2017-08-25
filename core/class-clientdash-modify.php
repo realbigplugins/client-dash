@@ -86,8 +86,8 @@ class ClientDash_Modify {
 
 		$role = $user->roles[0];
 
-		// If loading in the previewer, use temp data
-		if ( isset( $_GET['cd_customizing'] ) ) {
+		// If loading in the previewer, use temp data EXCEPT on initial role loading
+		if ( ClientDash_Customize::in_customizer() && ! ClientDash_Customize::is_saving_role() ) {
 
 			$role = "preview_$role";
 		}
@@ -157,10 +157,9 @@ class ClientDash_Modify {
 			);
 		}
 
-		// Re-index
-		$new_menu = array_values( $new_menu );
-
+		// Sort and re-index
 		ksort( $new_menu );
+		$new_menu = array_values( $new_menu );
 
 		/**
 		 * The new, customized admin menu for the current role.

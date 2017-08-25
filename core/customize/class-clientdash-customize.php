@@ -38,24 +38,24 @@ class ClientDash_Customize {
 		}
 
 		// If in the customizer, modify the role
-		if ( isset( $_GET['cd_customizing'] ) ) {
+		if ( self::in_customizer() ) {
 
 			add_action( 'set_current_user', array( $this, 'modify_current_user' ), 99999 );
 			add_action( 'admin_enqueue_scripts', array( $this, 'preview_scripts' ), 1 );
 		}
 
 		// Save role settings on first role load
-		if ( isset( $_GET['cd_save_role'] ) ) {
+		if ( self::is_saving_role() ) {
 
 			add_filter( 'custom_menu_order', array(
 				$this,
 				'save_menu_preview'
-			), 99998 ); // Priority just before modifying
+			), 100000 ); // Priority just after modifying
 
 			add_filter( 'wp_dashboard_widgets', array(
 				$this,
 				'save_dashboard_preview'
-			), 99998 ); // Priority just before modifying
+			), 100000 ); // Priority just after modifying
 		}
 	}
 
@@ -69,6 +69,30 @@ class ClientDash_Customize {
 	public static function is_customizing() {
 
 		return isset( $_REQUEST['clientdash_customize'] ) && $_REQUEST['clientdash_customize'] == '1';
+	}
+
+	/**
+	 * Tells if the current page IS the customizer preview.
+	 *
+	 * @since {{VERSION}}
+	 *
+	 * @return bool True if in customizer, false otherwise.
+	 */
+	public static function in_customizer() {
+
+		return isset( $_REQUEST['cd_customizing'] ) && $_REQUEST['cd_customizing'] == '1';
+	}
+
+	/**
+	 * Tells if current in customizer window should save current role settings.
+	 *
+	 * @since {{VERSION}}
+	 *
+	 * @return bool True if should save role, false otherwise.
+	 */
+	public static function is_saving_role() {
+
+		return self::in_customizer() && isset( $_REQUEST['cd_save_role'] ) && $_REQUEST['cd_save_role'] == '1';
 	}
 
 	/**
@@ -388,7 +412,7 @@ class ClientDash_Customize {
 
 		$customizations = cd_get_customizations( $role );
 
-		// Get original menu merged with customizations
+		// Double check we iterate in proper order
 		ksort( $menu );
 
 		$save_menu       = array();
@@ -413,31 +437,20 @@ class ClientDash_Customize {
 				$type = 'clientdash';
 			}
 
-			if ( $customized_menu_item ) {
+			// If menu was previously customized, and this item does not exist in that customized menu, and it isn't
+			// the client dash item, we can assume it is new.
+			$new = ( $customized_menu && ! $customized_menu_item && $type !== 'clientdash' ) || false;
 
-				$save_menu[] = array(
-					'id'             => $menu_item[2],
-					'title'          => $customized_menu_item['title'],
-					'original_title' => $menu_item[0],
-					'icon'           => $customized_menu_item['icon'],
-					'original_icon'  => isset( $menu_item[6] ) ? $menu_item[6] : '',
-					'deleted'        => $customized_menu_item['deleted'],
-					'type'           => $customized_menu_item['type'],
-				);
-
-			} else {
-
-				$save_menu[] = array(
-					'id'             => $menu_item[2],
-					'title'          => '',
-					'original_title' => $menu_item[0],
-					'icon'           => '',
-					'original_icon'  => isset( $menu_item[6] ) ? $menu_item[6] : '',
-					'deleted'        => ! $customized_menu_item && $type !== 'clientdash' || false,
-					'type'           => $type,
-					'new'            => ! $customized_menu_item && $type !== 'clientdash' || false,
-				);
-			}
+			$save_menu[] = array(
+				'id'             => $menu_item[2],
+				'title'          => $customized_menu_item ? $customized_menu_item['title'] : '',
+				'original_title' => $menu_item[0],
+				'icon'           => $customized_menu_item ? $customized_menu_item['icon'] : '',
+				'original_icon'  => isset( $menu_item[6] ) ? $menu_item[6] : '',
+				'type'           => $customized_menu_item ? $customized_menu_item['type'] : $type,
+				'deleted'        => $new,
+				'new'            => $new,
+			);
 		}
 
 		ksort( $save_menu );
@@ -471,13 +484,23 @@ class ClientDash_Customize {
 					$type = 'cd_page';
 				}
 
+				// Get save menu item that is parent of this submenu item
+				$submenu_item_parent_key = cd_array_get_index_by_key( $save_menu, 'id', $menu_slug );
+				$submenu_item_parent     = $submenu_item_parent_key !== false ?
+					$save_menu[ $submenu_item_parent_key ] : false;
+
+				// If menu was previously customized, and this item does not exist in that customized menu, we can
+				// assume it is new. BUT, if parent is new, don't set as new (this way, once they add the new menu item
+				// parent, all of its submenu items are added too).
+				$new = ( $customized_submenu && ! $customized_submenu_item && ! $submenu_item_parent['new'] ) || false;
+
 				$save_submenu[ $menu_slug ][] = wp_parse_args( $customized_submenu_item, array(
 					'id'             => $submenu_item[2],
 					'title'          => '',
 					'original_title' => $submenu_item[0],
-					'deleted'        => ! $customized_submenu_item || false,
 					'type'           => $type,
-					'new'            => ! $customized_submenu_item || false,
+					'deleted'        => $new,
+					'new'            => $new,
 				) );
 			}
 		}
