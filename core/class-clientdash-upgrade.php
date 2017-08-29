@@ -167,9 +167,10 @@ class ClientDash_Upgrade {
 	 */
 	private function upgrade() {
 
-		// Run initial install to mamke sure this runs from upgrade
+		// Run initial install to make sure this runs from upgrade
 		ClientDash_Install::install();
 
+		// TODO Enable this
 //		update_option( 'cd_version', CLIENTDASH_VERSION );
 	}
 
