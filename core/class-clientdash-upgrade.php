@@ -338,6 +338,7 @@ class ClientDash_Upgrade {
 					'submenu' => $new_submenu,
 				) );
 
+				// TODO Enable
 //				wp_delete_nav_menu( $menu->term_id );
 			}
 		}
@@ -389,6 +390,7 @@ class ClientDash_Upgrade {
 			}
 		}
 
+		// TODO Enable
 //		unset( $sidebars['cd-dashboard'] );
 //		update_option( 'sidebars_widgets', $sidebars );
 	}
@@ -456,6 +458,7 @@ class ClientDash_Upgrade {
 				if ( $admin_page_title ) {
 
 					$page['title'] = $admin_page_title;
+					// TODO Enable
 //					delete_option( 'cd_webmaster_name' );
 				}
 
@@ -464,6 +467,7 @@ class ClientDash_Upgrade {
 				if ( $admin_page_main_tab_title ) {
 
 					$page['tabs']['main']['title'] = $admin_page_main_tab_title;
+					// TODO Enable
 //					delete_option( 'cd_webmaster_main_tab_name' );
 				}
 
@@ -472,6 +476,7 @@ class ClientDash_Upgrade {
 				if ( $disable_feed_tab ) {
 
 					$page['tabs']['feed']['roles'] = array();
+					// TODO Enable
 //					delete_option( 'cd_webmaster_feed' );
 				}
 			}
@@ -479,6 +484,7 @@ class ClientDash_Upgrade {
 
 		update_option( 'cd_helper_pages', $pages );
 
+		// TODO Enable
 //		delete_option( 'cd_dashicon_account' );
 //		delete_option( 'cd_dashicon_reports' );
 //		delete_option( 'cd_dashicon_help' );
@@ -499,6 +505,7 @@ class ClientDash_Upgrade {
 		if ( $page_content ) {
 
 			update_option( 'cd_admin_page_content', $page_content );
+			// TODO Enable
 //			delete_option( 'cd_webmaster_main_tab_content' );
 		}
 
@@ -507,6 +514,7 @@ class ClientDash_Upgrade {
 		if ( $feed_url ) {
 
 			update_option( 'cd_adminpage_feed_url', $feed_url );
+			// TODO Enable
 //			delete_option( 'cd_webmaster_feed_url' );
 		}
 
@@ -515,6 +523,7 @@ class ClientDash_Upgrade {
 		if ( $feed_count ) {
 
 			update_option( 'cd_adminpage_feed_count', $feed_count );
+			// TODO Enable
 //			delete_option( 'cd_webmaster_feed_count' );
 		}
 	}
