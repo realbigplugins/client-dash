@@ -71,7 +71,7 @@ gulp.task('admin_js', function () {
 
 gulp.task('customize_inpreview_js', function () {
     return gulp.src('./assets/src/js/customize-inpreview/*.js')
-        .pipe(concat('clientdash-inpreview.min.js'))
+        .pipe(concat('clientdash-customize-inpreview.min.js'))
         .pipe(gulp.dest('./assets/dist/js/'))
         .pipe(sourcemaps.init())
         .pipe(uglify())

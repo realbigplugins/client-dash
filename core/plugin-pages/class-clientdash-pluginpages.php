@@ -50,6 +50,11 @@ class ClientDash_PluginPages {
 			add_action( 'admin_init', array( $this, 'reset_all_settings' ) );
 		}
 
+		if ( isset( $_REQUEST['cd_enable_customize_tutorial'] ) ) {
+
+			add_action( 'admin_init', array( $this, 'enable_customize_tutorial' ) );
+		}
+
 		if ( isset( $_REQUEST['cd_flush_addons'] ) ) {
 
 			add_action( 'admin_init', array( $this, 'flush_addons_cache' ) );
@@ -70,6 +75,29 @@ class ClientDash_PluginPages {
 			'cd_reset_settings',
 			'',
 			__( 'All settings successfully reset.', 'client-dash' ),
+			'updated clientdash-notice'
+		);
+
+		set_transient( 'settings_errors', get_settings_errors(), 30 );
+
+		wp_redirect( admin_url( 'admin.php?page=clientdash_settings&settings-updated=1' ) );
+		exit();
+	}
+
+	/**
+	 * Enables the customize tutorial.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 */
+	function enable_customize_tutorial() {
+
+		delete_user_meta( get_current_user_id(), 'clientdash_hide_customize_tutorial' );
+
+		add_settings_error(
+			'cd_reset_settings',
+			'',
+			__( 'Customize Admin tutorial enabled.', 'client-dash' ),
 			'updated clientdash-notice'
 		);
 
@@ -280,6 +308,7 @@ class ClientDash_PluginPages {
 		$feed_count = get_option( 'cd_adminpage_feed_count', 5 );
 
 		$reset_settings_link = admin_url( 'admin.php?page=clientdash_settings&cd_reset_settings' );
+		$enable_customize_tutorial_link = admin_url( 'admin.php?page=clientdash_settings&cd_enable_customize_tutorial' );
 
 		add_action( 'clientdash_sidebar', array( __CLASS__, 'sidebar_settings_page_actions' ), 5 );
 

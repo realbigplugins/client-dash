@@ -6,12 +6,14 @@ import 'whatwg-fetch';
 import './functions';
 import Editor from './editor';
 import Preview from './preview';
+import Tutorial from './tutorial';
 
-const l10n      = ClientdashCustomize_Data.l10n || false;
-const roles     = ClientdashCustomize_Data.roles || false;
-const adminurl  = ClientdashCustomize_Data.adminurl || false;
-const domain    = ClientdashCustomize_Data.domain || false;
-const dashicons = ClientdashCustomize_Data.dashicons || false;
+const l10n         = ClientdashCustomize_Data.l10n || false;
+const roles        = ClientdashCustomize_Data.roles || false;
+const adminurl     = ClientdashCustomize_Data.adminurl || false;
+const domain       = ClientdashCustomize_Data.domain || false;
+const dashicons    = ClientdashCustomize_Data.dashicons || false;
+const loadTutorial = ClientdashCustomize_Data.load_tutorial || false;
 
 /**
  * The main Customize component.
@@ -30,15 +32,18 @@ class Customize extends React.Component {
             loadedRoles: ['administrator'],
             saveRole: true,
             previewLoading: true,
+            loadTutorial: loadTutorial,
         }
 
-        this.hideCustomizer = this.hideCustomizer.bind(this);
-        this.showCustomizer = this.showCustomizer.bind(this);
-        this.switchRole     = this.switchRole.bind(this);
-        this.resetRole      = this.resetRole.bind(this);
-        this.loadData       = this.loadData.bind(this);
-        this.refreshPreview = this.refreshPreview.bind(this);
-        this.showMessage    = this.showMessage.bind(this);
+        this.hideCustomizer      = this.hideCustomizer.bind(this);
+        this.showCustomizer      = this.showCustomizer.bind(this);
+        this.switchRole          = this.switchRole.bind(this);
+        this.resetRole           = this.resetRole.bind(this);
+        this.loadData            = this.loadData.bind(this);
+        this.refreshPreview      = this.refreshPreview.bind(this);
+        this.showMessage         = this.showMessage.bind(this);
+        this.closeTutorial       = this.closeTutorial.bind(this);
+        this.tutorialChangePanel = this.tutorialChangePanel.bind(this);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -126,6 +131,18 @@ class Customize extends React.Component {
         this.refs.editor.showMessage(message);
     }
 
+    closeTutorial() {
+
+        this.setState({
+            loadTutorial: false,
+        });
+    }
+
+    tutorialChangePanel(panel) {
+
+        this.refs.editor.loadPanel(panel);
+    }
+
     render() {
 
         return (
@@ -158,6 +175,13 @@ class Customize extends React.Component {
                 <div id="cd-editor-preview-cover">
                     <span className="cd-editor-preview-cover-icon fa fa-circle-o-notch fa-spin"/>
                 </div>}
+
+                {(this.state.loadTutorial && !this.state.previewLoading) &&
+                <Tutorial
+                    onClose={this.closeTutorial}
+                    onChangeEditorPanel={this.tutorialChangePanel}
+                />
+                }
             </div>
         )
     }

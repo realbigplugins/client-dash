@@ -1,9 +1,15 @@
 @import "settings";
 
+// Vendor
+@import "../../../vendor/motion-ui/motion-ui";
+
+// Global
 @import "../global/icons";
 @import "../global/animations";
+
 @import "base";
 @import "common";
 @import "dashicons-selector";
 @import "editor";
 @import "preview";
+@import "tutorial";

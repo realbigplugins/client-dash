@@ -10,6 +10,7 @@
  * @var string $feed_url
  * @var string $feed_count
  * @var string $reset_settings_link
+ * @var string $enable_customize_tutorial_link
  */
 
 defined( 'ABSPATH' ) || die;
@@ -19,7 +20,7 @@ defined( 'ABSPATH' ) || die;
 
     <form action="options.php" method="post" id="clientdash-settings-page-form">
 
-        <?php settings_fields( 'clientdash_settings' ); ?>
+		<?php settings_fields( 'clientdash_settings' ); ?>
 
         <h1 class="clientdash-page-title">
 			<?php echo get_admin_page_title(); ?>
@@ -63,7 +64,8 @@ defined( 'ABSPATH' ) || die;
                     </th>
 
                     <td>
-                        <input type="text" name="cd_adminpage_feed_count" id="cd_adminpage_feed_count" class="regular-text"
+                        <input type="text" name="cd_adminpage_feed_count" id="cd_adminpage_feed_count"
+                               class="regular-text"
                                value="<?php echo esc_attr( $feed_count ); ?>"/>
 
                         <p class="description">
@@ -78,6 +80,25 @@ defined( 'ABSPATH' ) || die;
 
             <table class="form-table">
                 <tbody>
+                <tr valign="top">
+                    <th scope="row">
+                        <label for="clientdash_hide_customize_tutorial">
+							<?php _e( 'Enable Customize Admin Tutorial', 'client-dash' ); ?>
+                        </label>
+                    </th>
+
+                    <td>
+                        <a href="<?php echo esc_attr( $enable_customize_tutorial_link ); ?>"
+                           id="clientdash_hide_customize_tutorial"
+                           class="button">
+							<?php _e( 'Enable', 'client-dash' ); ?>
+                        </a>
+
+                        <p class="description">
+							<?php _e( 'Once you hide or complete the tutorial for the "Customize Admin" tool, it will disappear. Click this button to enable it again.', 'client-dahs' ); ?>
+                        </p>
+                    </td>
+                </tr>
                 <tr valign="top">
                     <th scope="row">
                         <label for="cd_reset_all_settings">
@@ -97,7 +118,7 @@ defined( 'ABSPATH' ) || die;
 
         </section>
 
-	    <?php include_once CLIENTDASH_DIR . 'core/plugin-pages/views/sidebar/sidebar.php'; ?>
+		<?php include_once CLIENTDASH_DIR . 'core/plugin-pages/views/sidebar/sidebar.php'; ?>
 
     </form>
 

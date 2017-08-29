@@ -183,13 +183,6 @@ if ( ! class_exists( 'ClientDash' ) ) {
 				true
 			);
 
-			wp_register_style(
-				'clientdash-fontawesome',
-				'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css',
-				array(),
-				'4.7.0'
-			);
-
 			// Customize assets
 			wp_register_style(
 				'clientdash-customize',
@@ -215,7 +208,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 
 			wp_register_script(
 				'clientdash-customize-inpreview',
-				CLIENTDASH_URI . '/assets/dist/js/clientdash-inpreview.min.js',
+				CLIENTDASH_URI . '/assets/dist/js/clientdash-customize-inpreview.min.js',
 				array(),
 				defined( 'WP_DEBUG' ) && WP_DEBUG ? time() : CLIENTDASH_VERSION
 			);
@@ -245,16 +238,24 @@ if ( ! class_exists( 'ClientDash' ) ) {
 			// Select 2
 			wp_register_style(
 				'clientdash-select2',
-				CLIENTDASH_URI . '/assets/vendor/select2/select2.min.css',
+				CLIENTDASH_URI . '/assets/vendor/select2/dist/css/select2.min.css',
 				array(),
 				'4.0.3'
 			);
 
 			wp_register_script(
 				'clientdash-select2',
-				CLIENTDASH_URI . '/assets/vendor/select2/select2.full.min.js',
+				CLIENTDASH_URI . '/assets/vendor/select2/dist/js/select2.full.min.js',
 				array( 'jquery' ),
 				'4.0.3'
+			);
+
+			// Font awesome
+			wp_register_style(
+				'clientdash-fontawesome',
+				CLIENTDASH_URI . '/assets/vendor/fontawesome/css/font-awesome.min.css',
+				array(),
+				'4.7.0'
 			);
 		}
 

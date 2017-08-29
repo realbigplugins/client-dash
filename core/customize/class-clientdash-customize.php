@@ -26,11 +26,13 @@ class ClientDash_Customize {
 	 */
 	function __construct() {
 
+		add_action( 'rest_api_init', array( $this, 'rest_add_fields' ) );
+
 		if ( self::is_customizing() ) {
 
 			add_action( 'template_redirect', array( $this, 'load' ), 0 );
 
-			add_filter( 'show_admin_bar', '__return_false' );
+			add_filter( 'show_admin_bar', '__return_false', 999 );
 
 			add_action( 'cd_customize_header', array( $this, 'template_header' ) );
 			add_action( 'cd_customize_body', array( $this, 'template_body' ) );
@@ -217,59 +219,305 @@ class ClientDash_Customize {
 		}
 
 		wp_localize_script( 'clientdash-customize', 'ClientdashCustomize_Data', array(
-			'roles'     => $roles,
-			'adminurl'  => admin_url(),
-			'domain'    => get_bloginfo( 'url' ),
-			'dashicons' => json_decode( file_get_contents( CLIENTDASH_DIR . 'core/dashicons.json' ) ),
-			'api_nonce' => wp_create_nonce( 'wp_rest' ),
-			'l10n'      => array(
-				'role_switcher_label'               => __( 'Modifying for:', 'clientdash' ),
-				'panel_text_menu'                   => __( 'Menu', 'clientdash' ),
-				'panel_text_dashboard'              => __( 'Dashboard', 'clientdash' ),
-				'panel_text_cd_pages'               => __( 'Pages', 'clientdash' ),
-				'panel_actions_title_menu'          => __( 'Editing: Menu', 'clientdash' ),
-				'panel_actions_title_submenu'       => __( 'Editing: Sub-Menu', 'clientdash' ),
-				'panel_actions_title_menu_add'      => __( 'Adding: Menu Items', 'clientdash' ),
-				'panel_actions_title_submenu_add'   => __( 'Adding: Sub-Menu Items', 'clientdash' ),
-				'panel_actions_title_dashboard'     => __( 'Editing: Dashboard', 'clientdash' ),
-				'panel_actions_title_dashboard_add' => __( 'Adding: Widgets', 'clientdash' ),
-				'panel_actions_title_cdpages'       => __( 'Editing: Pages', 'clientdash' ),
-				'panel_actions_title_cdpages_add'   => __( 'Adding: Pages', 'clientdash' ),
-				'action_button_back'                => __( 'Back', 'clientdash' ),
-				'action_button_add_items'           => __( 'Add Items', 'clientdash' ),
-				'show_controls'                     => __( 'Show Controls', 'clientdash' ),
-				'title'                             => __( 'Title', 'clientdash' ),
-				'original_title'                    => __( 'Original title:', 'clientdash' ),
-				'original_icon'                     => __( 'Original icon:', 'clientdash' ),
-				'icon'                              => __( 'Icon', 'clientdash' ),
-				'link'                              => __( 'Link', 'clientdash' ),
-				'no_items_added'                    => __( 'No items added yet. Click the add items "+" button to add your first item.', 'clientdash' ),
-				'no_items_available'                => __( 'No items available.', 'clientdash' ),
-				'separator'                         => __( 'Separator', 'clientdash' ),
-				'custom_link'                       => __( 'Custom Link', 'clientdash' ),
-				'click_to_move'                     => __( 'Click to move', 'clientdash' ),
-				'edit'                              => __( 'Edit', 'clientdash' ),
-				'edit_submenu'                      => __( 'Edit submenu', 'clientdash' ),
-				'delete'                            => __( 'Delete', 'clientdash' ),
-				'leave_confirmation'                => __( 'Are you sure you want to leave? Any unsaved changes will be lost.', 'clientdash' ),
-				'save'                              => __( 'Save', 'clientdash' ),
-				'saved'                             => __( 'Changes saved and live!', 'clientdash' ),
-				'role_reset'                        => __( 'Role successfully reset!', 'clientdash' ),
-				'close'                             => __( 'Close', 'clientdash' ),
-				'cancel'                            => __( 'Cancel', 'clientdash' ),
-				'confirm'                           => __( 'Confirm', 'clientdash' ),
-				'none'                              => __( 'None', 'clientdash' ),
-				'reset_role'                        => __( 'Reset Role', 'clientdash' ),
-				'up_do_date'                        => __( 'Up to date', 'clientdash' ),
-				'confirm_role_reset'                => __( 'Are you sure you want to reset all customizations for this role? This can not be undone.', 'clientdash' ),
-				'cannot_submit_form'                => __( 'Preview only. Cannot do that. Sorry!', 'clientdash' ),
-				'cannot_view_link'                  => __( 'Only administrative links can be viewed.', 'clientdash' ),
-				'current_location'                  => __( 'Current location', 'clientdash' ),
-				'toplevel'                          => __( 'Top Level', 'clientdash' ),
-				'new_items'                         => __( 'New Items', 'clientdash' ),
-				'new'                               => __( 'New', 'clientdash' ),
+			'roles'           => $roles,
+			'adminurl'        => admin_url(),
+			'domain'          => get_bloginfo( 'url' ),
+			'dashicons'       => json_decode( file_get_contents( CLIENTDASH_DIR . 'core/dashicons.json' ) ),
+			'api_nonce'       => wp_create_nonce( 'wp_rest' ),
+			'current_user_id' => get_current_user_id(),
+			'load_tutorial'   => get_user_meta( get_current_user_id(), 'clientdash_hide_customize_tutorial', true ) !== 'yes',
+			'tutorial_panels' => $this->get_tutorial_panels(),
+			'l10n'            => array(
+				'role_switcher_label'               => __( 'Modifying for:', 'client-dash' ),
+				'panel_text_menu'                   => __( 'Menu', 'client-dash' ),
+				'panel_text_dashboard'              => __( 'Dashboard', 'client-dash' ),
+				'panel_text_cd_pages'               => __( 'Pages', 'client-dash' ),
+				'panel_actions_title_menu'          => __( 'Editing: Menu', 'client-dash' ),
+				'panel_actions_title_submenu'       => __( 'Editing: Sub-Menu', 'client-dash' ),
+				'panel_actions_title_menu_add'      => __( 'Adding: Menu Items', 'client-dash' ),
+				'panel_actions_title_submenu_add'   => __( 'Adding: Sub-Menu Items', 'client-dash' ),
+				'panel_actions_title_dashboard'     => __( 'Editing: Dashboard', 'client-dash' ),
+				'panel_actions_title_dashboard_add' => __( 'Adding: Widgets', 'client-dash' ),
+				'panel_actions_title_cdpages'       => __( 'Editing: Pages', 'client-dash' ),
+				'panel_actions_title_cdpages_add'   => __( 'Adding: Pages', 'client-dash' ),
+				'action_button_back'                => __( 'Back', 'client-dash' ),
+				'action_button_add_items'           => __( 'Add Items', 'client-dash' ),
+				'show_controls'                     => __( 'Show Controls', 'client-dash' ),
+				'title'                             => __( 'Title', 'client-dash' ),
+				'original_title'                    => __( 'Original title:', 'client-dash' ),
+				'original_icon'                     => __( 'Original icon:', 'client-dash' ),
+				'icon'                              => __( 'Icon', 'client-dash' ),
+				'link'                              => __( 'Link', 'client-dash' ),
+				'no_items_added'                    => __( 'No items added yet. Click the add items "+" button to add your first item.', 'client-dash' ),
+				'no_items_available'                => __( 'No items available.', 'client-dash' ),
+				'separator'                         => __( 'Separator', 'client-dash' ),
+				'custom_link'                       => __( 'Custom Link', 'client-dash' ),
+				'click_to_move'                     => __( 'Click to move', 'client-dash' ),
+				'edit'                              => __( 'Edit', 'client-dash' ),
+				'edit_submenu'                      => __( 'Edit submenu', 'client-dash' ),
+				'delete'                            => __( 'Delete', 'client-dash' ),
+				'leave_confirmation'                => __( 'Are you sure you want to leave? Any unsaved changes will be lost.', 'client-dash' ),
+				'save'                              => __( 'Save', 'client-dash' ),
+				'saved'                             => __( 'Changes saved and live!', 'client-dash' ),
+				'role_reset'                        => __( 'Role successfully reset!', 'client-dash' ),
+				'close'                             => __( 'Close', 'client-dash' ),
+				'cancel'                            => __( 'Cancel', 'client-dash' ),
+				'confirm'                           => __( 'Confirm', 'client-dash' ),
+				'none'                              => __( 'None', 'client-dash' ),
+				'reset_role'                        => __( 'Reset Role', 'client-dash' ),
+				'up_do_date'                        => __( 'Up to date', 'client-dash' ),
+				'confirm_role_reset'                => __( 'Are you sure you want to reset all customizations for this role? This can not be undone.', 'client-dash' ),
+				'cannot_submit_form'                => __( 'Preview only. Cannot do that. Sorry!', 'client-dash' ),
+				'cannot_view_link'                  => __( 'Only administrative links can be viewed.', 'client-dash' ),
+				'current_location'                  => __( 'Current location', 'client-dash' ),
+				'toplevel'                          => __( 'Top Level', 'client-dash' ),
+				'new_items'                         => __( 'New Items', 'client-dash' ),
+				'new'                               => __( 'New', 'client-dash' ),
+				'next'                              => __( 'Next', 'client-dash' ),
+				'previous'                          => __( 'Previous', 'client-dash' ),
+				'finish'                            => __( 'Finish', 'client-dash' ),
 			),
 		) );
+	}
+
+	/**
+	 * Adds custom REST API fields.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 */
+	function rest_add_fields() {
+
+		register_rest_field( 'user', 'clientdash_hide_customize_tutorial', array(
+			'update_callback' => array( $this, 'rest_update_user_field' ),
+			'schema'       => array(
+				'context' => array(
+					'edit',
+				),
+			),
+		));
+	}
+
+	/**
+	 * Updates a user meta field.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 *
+	 * @param mixed $value The value of the field
+	 * @param object $object The object from the response
+	 * @param string $field_name Name of field
+	 *
+	 * @return mixed
+	 */
+	function rest_update_user_field( $value, $object, $field_name ) {
+
+		return update_user_meta( $object->ID, $field_name, strip_tags( $value ) );
+	}
+
+	/**
+	 * Gets the tutorial panels.
+	 *
+	 * Each panel should have a unique key as the ID, a title, and an array of content where each item is a new line.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 */
+	function get_tutorial_panels() {
+
+		$panels = array(
+			'intro'             => array(
+				'title'        => __( 'Welcome.', 'client-dash' ),
+				'content'      => array(
+					array(
+						'text' => __( 'This tutorial will quickly walk you through how to use the Client Dash Customize Admin tool.', 'client-dash' ),
+					),
+					array(
+						'text' => __( 'The Customize Admin tool is designed to help you customize the "Admin Experience" for each role on this website. You can change how each role views their "Admin Menu" and "Dashboard" in order to give them the best possible experience.', 'client-dash' ),
+					),
+					array(
+						'text'    => __( 'You can click the "X" to the right of this pop-up at any point to close this tutorial. Once you finish or close this tutorial, it will not show again. If you would like to view it again, please visit the Client Dash Settings page to turn it back on.', 'client-dash' ),
+						'classes' => 'footnote',
+					),
+				),
+				'editor_panel' => 'primary',
+			),
+			'editor'            => array(
+				'title'        => __( 'The Editor.', 'client-dash' ),
+				'content'      => array(
+					array(
+						'text' => __( 'The Editor is the pane on the left side of the screen where all of the Customize controls are. This is where you can make all customizations.', 'client-dash' ),
+					),
+					array(
+						'text' => __( 'Any edits you make will appear live in the Preview Screen, which appears to the right of the Editor (behind this tutorial).', 'client-dash' ),
+					),
+					array(
+						'text' => __( 'To get started editing, you can select any of the items in the list.', 'client-dash' ),
+					),
+				),
+				'highlights'   => array(
+					array(
+						'selector' => 'cd-editor-panels',
+						'position' => 'right',
+						'size'     => 'large',
+					),
+				),
+				'editor_panel' => 'primary',
+			),
+			'action_buttons'    => array(
+				'title'        => __( 'Action Buttons.', 'client-dash' ),
+				'content'      => array(
+					array(
+						'text' => __( 'The buttons at the top help you use the editor. Hover over each for more information. They include collapsing the editor, exiting the Customize Admin tool, refreshing the preview, and saving changes.', 'client-dash' ),
+					),
+				),
+				'highlights'   => array(
+					array(
+						'selector' => 'cd-editor-primary-actions',
+						'position' => 'bottom',
+					),
+				),
+				'editor_panel' => 'primary',
+			),
+			'role_switcher'     => array(
+				'title'        => __( 'Role Switcher.', 'client-dash' ),
+				'content'      => array(
+					array(
+						'text' => __( 'By default you will be editing the Admin Screen for the "Administrator" role. You can change which role you are editing the experience for by using the "Role Switcher" drop-down.', 'client-dash' ),
+					),
+					array(
+						'text' => __( 'All changes you make will only apply to the role you are editing.', 'client-dash' ),
+					),
+				),
+				'highlights'   => array(
+					array(
+						'selector' => 'cd-editor-role-switcher',
+						'position' => 'bottom',
+					),
+				),
+				'editor_panel' => 'primary',
+			),
+			'menu'              => array(
+				'title'        => __( 'The Menu.', 'client-dash' ),
+				'content'      => array(
+					array(
+						'text' => __( 'The Menu editor is what you use to edit the Admin Menu (in other words, the tall menu on the left side of the screen).', 'client-dash' ),
+					),
+					array(
+						'text' => __( 'You can drag and drop items, delete them, add any new items, rename them, and more!', 'client-dash' ),
+					),
+					array(
+						'text' => __( 'To edit each sub-menu, click on the sub-menu edit button (the list icon) on the menu item you would like to edit the sub-menu for. Once there, you can edit the sub-menu in the same way you edit the menu.', 'client-dash' ),
+					),
+					array(
+						'text'    => __( 'IMPORTANT: Once you save customizations for a role\'s menu, no menu items will be added automatically in the future. You will need to come back here and add any new items (which will be highlighted as "New"). Normally activating new plugins or themes might add menu items, but now you will need to add them manually for any roles with customizations.', 'client-dash' ),
+						'classes' => 'footnote',
+					),
+				),
+				'highlights'   => array(
+					array(
+						'selector' => 'cd-editor-panels',
+						'position' => 'right',
+						'size'     => 'large',
+					),
+				),
+				'editor_panel' => 'menu',
+			),
+			'secondary_actions' => array(
+				'title'        => __( 'More Action Buttons.', 'client-dash' ),
+				'content'      => array(
+					array(
+						'text' => __( 'Depending on what you are editing, the Action Buttons at the bottom may do different things.', 'client-dash' ),
+					),
+					array(
+						'text' => __( 'Typically, the left botton will take you back a step, and the right button will take you where you can add more items.', 'client-dash' ),
+					),
+					array(
+						'text' => __( 'You can also find more information on what you are editing here.', 'client-dash' ),
+					),
+				),
+				'highlights'   => array(
+					array(
+						'selector' => 'cd-editor-footer',
+						'position' => 'top',
+					),
+				),
+				'editor_panel' => 'menu',
+			),
+			'dashboard'         => array(
+				'title'        => __( 'The Dashboard.', 'client-dash' ),
+				'content'      => array(
+					array(
+						'text' => __( 'The Dashboard editor is what you use to edit the Dashboard (the primary screen users see when logging into the website).', 'client-dash' ),
+					),
+					array(
+						'text' => __( 'Each "box" on the Dashboard is called a "Dashboard Widget", and each item in this list represents a widget. You can delete them, add new ones, or edit the title of them.', 'client-dash' ),
+					),
+					array(
+						'text'    => __( 'IMPORTANT: Once you save customizations for a role\'s dashboard, no widgets will be added automatically in the future. You will need to come back here and add any new items (which will be highlighted as "New"). Normally activating new plugins or themes might add widgets, but now you will need to add them manually for any roles with customizations.', 'client-dash' ),
+						'classes' => 'footnote',
+					),
+				),
+				'highlights'   => array(
+					array(
+						'selector' => 'cd-editor-panels',
+						'position' => 'right',
+						'size'     => 'large',
+					),
+				),
+				'editor_panel' => 'dashboard',
+			),
+			'reset_role'        => array(
+				'title'        => __( 'Reset a Role.', 'client-dash' ),
+				'content'      => array(
+					array(
+						'text' => __( 'If you want to completely erase all customizations for the selected role, click the "Reset Role" button (trash can icon). This will reset the role customizations back to the original, un-modified state.', 'client-dash' ),
+					),
+					array(
+						'text'    => __( 'WARNING: Deleting a role\'s customizations cannot be undone.', 'client-dash' ),
+						'classes' => 'footnote',
+					),
+				),
+				'highlights'   => array(
+					array(
+						'selector' => 'cd-editor-footer',
+						'position' => 'top',
+						'size'     => 'medium',
+						'classes'  => 'reset-role',
+					),
+				),
+				'editor_panel' => 'primary',
+			),
+			'finish'            => array(
+				'title'        => __( 'That\'s All.', 'client-dash' ),
+				'content'      => array(
+					array(
+						'text' => __( 'Hopefully you found this useful!', 'client-dash' ),
+					),
+					array(
+						'text' => __( 'If you need any more help or information for Client Dash, be sure to check out our documentation.', 'client-dash' ),
+					),
+					array(
+						'type' => 'link',
+						'text' => __( 'View Documentation', 'client-dash' ),
+						'link' => 'https://realbigplugins.com/docs/client-dash/',
+					),
+					array(
+						'text' => __( 'Click the "Finish" button to end this tutorial.', 'client-dash' ),
+					),
+				),
+				'editor_panel' => 'primary',
+			),
+		);
+
+		/**
+		 * The Customize tutorial panels.
+		 *
+		 * @since {{VERSION}}
+		 */
+		$panels = apply_filters( 'cd_customize_tutorial_panels', $panels );
+
+		return $panels;
 	}
 
 	/**
