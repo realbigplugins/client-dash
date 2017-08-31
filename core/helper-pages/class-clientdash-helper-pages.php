@@ -20,13 +20,13 @@ defined( 'ABSPATH' ) || die;
 class ClientDash_Helper_Pages {
 
 	/**
-	 * The custom pages.
+	 * Pages only viewable by the current user.
 	 *
 	 * @since {{VERSION}}
 	 *
-	 * @var array|null
+	 * @var array
 	 */
-	public $pages;
+	private $user_pages;
 
 	/**
 	 * ClientDash_Helper_Pages constructor.
@@ -45,6 +45,18 @@ class ClientDash_Helper_Pages {
 	}
 
 	/**
+	 * Returns the pages the current user can view.
+	 *
+	 * @since {{VERSION}}
+	 *
+	 * @return array
+	 */
+	public function get_user_pages() {
+
+		return $this->user_pages;
+	}
+
+	/**
 	 * Loads the custom pages.
 	 *
 	 * @since {{VERSION}}
@@ -52,7 +64,45 @@ class ClientDash_Helper_Pages {
 	 */
 	function load_pages() {
 
-		$this->pages = self::get_pages();
+		$this->user_pages = self::load_user_pages( self::get_pages() );
+	}
+
+	/**
+	 * Loads current user viewable pages only.
+	 *
+	 * @since {{VERSION}}
+	 *
+	 * @param array $pages All pages.
+	 *
+	 * @return array $pages
+	 */
+	public static function load_user_pages( $pages ) {
+
+		$user = wp_get_current_user();
+
+		// Admins can always view them all
+		if ( is_super_admin() || in_array( 'administrator', $user->roles ) ) {
+
+			return $pages;
+		}
+
+		foreach ( $pages as $page_ID => $page ) {
+
+			foreach ( $page['tabs'] as $tab_ID => $tab ) {
+
+				if ( ! array_intersect( $tab['roles'], $user->roles ) ) {
+
+					unset( $pages[ $page_ID ]['tabs'][ $tab_ID ] );
+				}
+			}
+
+			if ( empty( $pages[ $page_ID ]['tabs'] ) ) {
+
+				unset( $pages[ $page_ID ] );
+			}
+		}
+
+		return $pages;
 	}
 
 	/**
@@ -207,15 +257,13 @@ class ClientDash_Helper_Pages {
 
 		global $submenu;
 
-		if ( ! $this->pages || ! is_array( $this->pages ) ) {
+		if ( ! $this->user_pages ) {
 
 			return;
 		}
 
-		// TODO Figure out how to handle cap
-
 		// Add toplevel
-		foreach ( $this->pages as $page_ID => $page ) {
+		foreach ( $this->user_pages as $page_ID => $page ) {
 
 			if ( $page['parent'] != 'toplevel' ) {
 
@@ -225,7 +273,7 @@ class ClientDash_Helper_Pages {
 			add_menu_page(
 				$page['title'],
 				$page['title'],
-				'read', // TODO Capability for helper pages
+				'read',
 				"cd_$page_ID",
 				array( $this, 'load_page' ),
 				$page['icon'] ? $page['icon'] : $page['icon'],
@@ -234,7 +282,7 @@ class ClientDash_Helper_Pages {
 		}
 
 		// Add submenu
-		foreach ( $this->pages as $page_ID => $page ) {
+		foreach ( $this->user_pages as $page_ID => $page ) {
 
 			if ( $page['parent'] == 'toplevel' ) {
 
@@ -245,7 +293,7 @@ class ClientDash_Helper_Pages {
 				$page['parent'],
 				$page['title'],
 				$page['title'],
-				'read', // TODO Capability for helper pages
+				'read',
 				"cd_$page_ID",
 				array( $this, 'load_page' )
 			);
@@ -260,7 +308,7 @@ class ClientDash_Helper_Pages {
 	 */
 	function add_widgets() {
 
-		foreach ( $this->pages as $page_ID => $page ) {
+		foreach ( $this->user_pages as $page_ID => $page ) {
 
 			if ( $page['deleted'] || ! $page['parent'] ) {
 
@@ -282,23 +330,6 @@ class ClientDash_Helper_Pages {
 	}
 
 	/**
-	 * Sets up the page with defaults and such.
-	 *
-	 * @since {{VERSION}}
-	 *
-	 * @param array $cd_page
-	 *
-	 * @return array
-	 */
-	static public function setup_cd_page_args( $cd_page ) {
-
-		$cd_page['title'] = $cd_page['title'];
-		$cd_page['icon']  = $cd_page['icon'];
-
-		return $cd_page;
-	}
-
-	/**
 	 * Loads a custom page.
 	 *
 	 * @since {{VERSION}}
@@ -310,7 +341,7 @@ class ClientDash_Helper_Pages {
 
 		$cd_page_ID = substr( $plugin_page, 3 );
 
-		$cd_page = $this->pages[$cd_page_ID];
+		$cd_page = $this->user_pages[ $cd_page_ID ];
 
 		/**
 		 * The template to use for helper CD pages.
@@ -321,8 +352,6 @@ class ClientDash_Helper_Pages {
 			'cd_helper_page_template',
 			CLIENTDASH_DIR . 'core/helper-pages/views/page.php'
 		);
-
-		$cd_page = self::setup_cd_page_args( $cd_page );
 
 		if ( ! file_exists( $page_template ) ) {
 

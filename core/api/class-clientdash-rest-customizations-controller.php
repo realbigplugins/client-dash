@@ -81,10 +81,6 @@ class ClientDash_REST_Customizations_Controller {
 	 */
 	public function get_item_permissions_check( $request ) {
 
-		return true;
-		global $current_user;
-
-		// TODO Get these permission checks working!
 		if ( ! current_user_can( 'customize_admin' ) ) {
 
 			return new WP_Error( 'rest_forbidden', esc_html__( 'You cannot view the customizations resource.' ), array( 'status' => $this->authorization_status_code() ) );
@@ -105,7 +101,6 @@ class ClientDash_REST_Customizations_Controller {
 	 */
 	public function create_item_permissions_check( $request ) {
 
-		// TODO Get these permission checks working!
 		if ( ! current_user_can( 'customize_admin' ) ) {
 
 			return new WP_Error( 'rest_forbidden', esc_html__( 'You cannot edit the customizations resource.' ), array( 'status' => $this->authorization_status_code() ) );
@@ -123,7 +118,6 @@ class ClientDash_REST_Customizations_Controller {
 	 */
 	public function update_item_permissions_check( $request ) {
 
-		// TODO Get these permission checks working!
 		if ( ! current_user_can( 'customize_admin' ) ) {
 
 			return new WP_Error( 'rest_forbidden', esc_html__( 'You cannot view the customizations resource.' ), array( 'status' => $this->authorization_status_code() ) );
@@ -141,7 +135,6 @@ class ClientDash_REST_Customizations_Controller {
 	 */
 	public function delete_item_permissions_check( $request ) {
 
-		// TODO Get these permission checks working!
 		if ( ! current_user_can( 'customize_admin' ) ) {
 
 			return new WP_Error( 'rest_forbidden', esc_html__( 'You cannot view the customizations resource.' ), array( 'status' => $this->authorization_status_code() ) );
