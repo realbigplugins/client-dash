@@ -782,7 +782,7 @@ class WidgetEdit extends React.Component {
         super(props);
 
         this.state = {
-            editing: false,
+            editing: this.props.editing || false,
         }
 
         this.toggleEdit   = this.toggleEdit.bind(this);

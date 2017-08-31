@@ -268,7 +268,7 @@ class ClientDash_Helper_Pages {
 			}
 
 			wp_add_dashboard_widget(
-				$page_ID,
+				"cd_$page_ID",
 				$page['title'],
 				array( $this, 'load_widget' ),
 				null,

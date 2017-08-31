@@ -432,7 +432,7 @@ class Editor extends React.Component {
                     });
 
                     this.state.customizations[role].submenu[submenu_edit] = submenu;
-                    prevState.history[role].SubmenuItemLastAdded          = new_item_id;
+                    prevState.history[role].submenuItemLastAdded          = new_item_id;
 
                     break;
 
@@ -451,7 +451,7 @@ class Editor extends React.Component {
                         0
                     );
 
-                    prevState.history[role].SubmenuItemLastAdded = item.id;
+                    prevState.history[role].submenuItemLastAdded = item.id;
             }
 
             return prevState;
@@ -611,8 +611,10 @@ class Editor extends React.Component {
             prevState.customizations[role].dashboard = modifyItem(
                 prevState.customizations[role].dashboard,
                 widget.id,
-                {deleted: false}
+                {deleted: false, new: false}
             );
+
+            prevState.history[role].widgetItemLastAdded = widget.id;
 
             return prevState;
         });
@@ -751,6 +753,7 @@ class Editor extends React.Component {
                 let current_items   = customizations.submenu[this.state.submenuEdit] || [];
                 let available_items = getAvailableItems(current_items);
                 let menu_item       = getItem(customizations.menu, this.state.submenuEdit);
+                let new_items       = false;
                 let item_info       =
                         <div className="cd-editor-panel-menuinfo">
                             <span className={"cd-editor-panel-menuinfo-icon dashicons " +
@@ -761,11 +764,20 @@ class Editor extends React.Component {
                         </div>
                 ;
 
+                // Check if any new items
+                current_items.map(item => {
+
+                    if ( item.new ) {
+
+                        new_items = true;
+                    }
+                });
+
                 panel =
                     <PanelSubmenu
                         key="submenu"
                         itemInfo={item_info}
-                        editing={history.SubmenuItemLastAdded || false}
+                        editing={history.submenuItemLastAdded || false}
                         onSubmenuItemEdit={this.submenuItemEdit}
                         submenuItems={available_items}
                         onDeleteItem={this.submenuItemDelete}
@@ -783,6 +795,7 @@ class Editor extends React.Component {
                         loadNextText={l10n['action_button_add_items']}
                         onLoadPanel={this.loadPanel}
                         disabled={this.state.saving || this.state.deleting}
+                        nextPanelNotification={new_items ? l10n['new_items'] : false}
                     />
                 ;
                 break;
@@ -876,11 +889,22 @@ class Editor extends React.Component {
 
                 let current_items   = customizations.dashboard;
                 let available_items = getAvailableItems(current_items);
+                let new_items       = false;
+
+                // Check if any new items
+                current_items.map(item => {
+
+                    if ( item.new ) {
+
+                        new_items = true;
+                    }
+                });
 
                 panel =
                     <PanelDashboard
                         key="dashboard"
                         widgets={available_items}
+                        editing={history.widgetItemLastAdded || false}
                         onWidgetEdit={this.widgetEdit}
                         onDeleteWidget={this.widgetDelete}
                         onLoadPanel={this.loadPanel}
@@ -897,6 +921,7 @@ class Editor extends React.Component {
                         loadNextText={l10n['action_button_add_items']}
                         onLoadPanel={this.loadPanel}
                         disabled={this.state.saving || this.state.deleting}
+                        nextPanelNotification={new_items ? l10n['new_items'] : false}
                     />
                 ;
                 break;

@@ -52,7 +52,7 @@ class ClientDash_Customize {
 			add_filter( 'custom_menu_order', array(
 				$this,
 				'save_menu_preview'
-			), 100000 ); // Priority just after modifying
+			), 99998 ); // Priority just after modifying
 
 			add_filter( 'wp_dashboard_widgets', array(
 				$this,
@@ -290,12 +290,12 @@ class ClientDash_Customize {
 
 		register_rest_field( 'user', 'clientdash_hide_customize_tutorial', array(
 			'update_callback' => array( $this, 'rest_update_user_field' ),
-			'schema'       => array(
+			'schema'          => array(
 				'context' => array(
 					'edit',
 				),
 			),
-		));
+		) );
 	}
 
 	/**
@@ -791,6 +791,18 @@ class ClientDash_Customize {
 
 					foreach ( $widgets as $widget ) {
 
+						$widget_title = isset( $widget['title'] ) ? $widget['title'] : '';
+
+						// Sometimes title can be in args
+						if ( is_array( $widget['args'] ) && isset( $widget['args']['__widget_basename'] ) ) {
+
+							$widget_title = $widget['args']['__widget_basename'];
+						}
+
+						// Determine if CD Helper page widget
+						$helper_pages          = array_keys( ClientDash_Helper_Pages::get_pages() );
+						$is_helper_page_widget = in_array( substr( $widget['id'], 3 ), $helper_pages );
+
 						$customized_widget = cd_array_search_by_key( $customized_dashboard, 'id', $widget['id'] );
 
 						if ( $customized_widget ) {
@@ -798,7 +810,8 @@ class ClientDash_Customize {
 							$save_dashboard[] = wp_parse_args( $customized_widget, array(
 								'id'             => $widget['id'],
 								'title'          => '',
-								'original_title' => $widget['title'],
+								'original_title' => $widget_title,
+								'new'            => false,
 								'deleted'        => false,
 							) );
 
@@ -807,8 +820,9 @@ class ClientDash_Customize {
 							$save_dashboard[] = array(
 								'id'             => $widget['id'],
 								'title'          => '',
-								'original_title' => $widget['title'],
-								'deleted'        => false,
+								'original_title' => $widget_title,
+								'new'            => ! empty( $customized_dashboard ) && ! $is_helper_page_widget,
+								'deleted'        => ! empty( $customized_dashboard ),
 							);
 						}
 					}

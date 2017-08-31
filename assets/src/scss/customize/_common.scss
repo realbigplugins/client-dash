@@ -81,6 +81,9 @@
     font-size: 4em;
     color: #fff;
     text-shadow: 0 0 10px rgba(#000, 0.5);
+    animation-name: highlight-opacity;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
   }
 }
 

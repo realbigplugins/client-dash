@@ -477,6 +477,7 @@ class PanelDashboard extends React.Component {
                         id={item.id}
                         title={item.title}
                         original_title={item.original_title}
+                        editing={this.props.editing === item.id}
                         onWidgetEdit={this.widgetEdit}
                         onWidgetDelete={this.widgetDelete}
                         onItemFormSubmit={this.itemSubmitForm}

@@ -170,8 +170,7 @@ class ClientDash_Upgrade {
 		// Run initial install to make sure this runs from upgrade
 		ClientDash_Install::install();
 
-		// TODO Enable this
-//		update_option( 'cd_version', CLIENTDASH_VERSION );
+		update_option( 'cd_version', CLIENTDASH_VERSION );
 	}
 
 	/**
@@ -338,8 +337,7 @@ class ClientDash_Upgrade {
 					'submenu' => $new_submenu,
 				) );
 
-				// TODO Enable
-//				wp_delete_nav_menu( $menu->term_id );
+				wp_delete_nav_menu( $menu->term_id );
 			}
 		}
 	}
@@ -364,11 +362,24 @@ class ClientDash_Upgrade {
 				$ID_base   = $matches[1][0];
 				$ID_number = str_replace( '-', '', $matches[2][0] );
 
+				// Previous versions of Client Dash allowed multiple widgets of the same type. This is nonsense. If a
+				// widget of this type has been added, skip it.
+				if ( in_array( $ID_base, wp_list_pluck( $new_widgets, 'id' ) ) ) {
+
+					continue;
+				}
+
 				// Get all widgets of this type
 				$widgets = get_option( "widget_{$ID_base}" );
 
 				// Get the current widget
 				$widget = $widgets[ $ID_number ];
+
+				// Edge-case
+				if ( ! $widget ) {
+
+					continue;
+				}
 
 				// Set the ID
 				$widget['ID'] = isset( $widget['_cd_extension'] ) && $widget['_cd_extension'] == '1' ? $ID : $ID_base;
@@ -390,9 +401,8 @@ class ClientDash_Upgrade {
 			}
 		}
 
-		// TODO Enable
-//		unset( $sidebars['cd-dashboard'] );
-//		update_option( 'sidebars_widgets', $sidebars );
+		unset( $sidebars['cd-dashboard'] );
+		update_option( 'sidebars_widgets', $sidebars );
 	}
 
 	/**
@@ -458,8 +468,7 @@ class ClientDash_Upgrade {
 				if ( $admin_page_title ) {
 
 					$page['title'] = $admin_page_title;
-					// TODO Enable
-//					delete_option( 'cd_webmaster_name' );
+					delete_option( 'cd_webmaster_name' );
 				}
 
 				$admin_page_main_tab_title = get_option( 'cd_webmaster_main_tab_name' );
@@ -467,8 +476,7 @@ class ClientDash_Upgrade {
 				if ( $admin_page_main_tab_title ) {
 
 					$page['tabs']['main']['title'] = $admin_page_main_tab_title;
-					// TODO Enable
-//					delete_option( 'cd_webmaster_main_tab_name' );
+					delete_option( 'cd_webmaster_main_tab_name' );
 				}
 
 				$disable_feed_tab = get_option( 'cd_webmaster_feed' );
@@ -476,20 +484,18 @@ class ClientDash_Upgrade {
 				if ( $disable_feed_tab ) {
 
 					$page['tabs']['feed']['roles'] = array();
-					// TODO Enable
-//					delete_option( 'cd_webmaster_feed' );
+					delete_option( 'cd_webmaster_feed' );
 				}
 			}
 		}
 
 		update_option( 'cd_helper_pages', $pages );
 
-		// TODO Enable
-//		delete_option( 'cd_dashicon_account' );
-//		delete_option( 'cd_dashicon_reports' );
-//		delete_option( 'cd_dashicon_help' );
-//		delete_option( 'cd_dashicon_webmaster' );
-//		delete_option( 'cd_content_sections_roles' );
+		delete_option( 'cd_dashicon_account' );
+		delete_option( 'cd_dashicon_reports' );
+		delete_option( 'cd_dashicon_help' );
+		delete_option( 'cd_dashicon_webmaster' );
+		delete_option( 'cd_content_sections_roles' );
 	}
 
 	/**
@@ -505,8 +511,7 @@ class ClientDash_Upgrade {
 		if ( $page_content ) {
 
 			update_option( 'cd_admin_page_content', $page_content );
-			// TODO Enable
-//			delete_option( 'cd_webmaster_main_tab_content' );
+			delete_option( 'cd_webmaster_main_tab_content' );
 		}
 
 		$feed_url = get_option( 'cd_webmaster_feed_url' );
@@ -514,8 +519,7 @@ class ClientDash_Upgrade {
 		if ( $feed_url ) {
 
 			update_option( 'cd_adminpage_feed_url', $feed_url );
-			// TODO Enable
-//			delete_option( 'cd_webmaster_feed_url' );
+			delete_option( 'cd_webmaster_feed_url' );
 		}
 
 		$feed_count = get_option( 'cd_webmaster_feed_count' );
@@ -523,8 +527,7 @@ class ClientDash_Upgrade {
 		if ( $feed_count ) {
 
 			update_option( 'cd_adminpage_feed_count', $feed_count );
-			// TODO Enable
-//			delete_option( 'cd_webmaster_feed_count' );
+			delete_option( 'cd_webmaster_feed_count' );
 		}
 	}
 }

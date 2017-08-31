@@ -269,19 +269,18 @@ class ClientDash_Modify {
 
 					foreach ( $widgets as $i => $widget ) {
 
-						// No modification
-						if ( ( $custom_widget = cd_array_search_by_key( $this->dashboard, 'id', $widget['id'] ) ) === false ) {
+						$custom_widget = cd_array_search_by_key( $this->dashboard, 'id', $widget['id'] );
 
-							continue;
-						}
-
-						// Modify
-						if ( isset( $custom_widget['deleted'] ) && $custom_widget['deleted'] ) {
+						// No custom widget? remove it.
+						if ( $custom_widget === false ||
+						     ( isset( $custom_widget['deleted'] ) && $custom_widget['deleted'] )
+						) {
 
 							unset( $wp_meta_boxes['dashboard'][ $position ][ $priority ][ $i ]['title'] );
 							continue;
 						}
 
+						// Customized title
 						if ( isset( $custom_widget['title'] ) && $custom_widget['title'] ) {
 
 							$wp_meta_boxes['dashboard'][ $position ][ $priority ][ $i ]['title'] = $custom_widget['title'];
