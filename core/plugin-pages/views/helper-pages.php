@@ -32,21 +32,21 @@ defined( 'ABSPATH' ) || die;
 				?>
             </div>
 
-			<?php foreach ( $pages as $page ) : ?>
+			<?php foreach ( $pages as $page_ID => $page ) : ?>
                 <div class="clientdash-helper-page-wrap">
                     <div class="clientdash-helper-page-title">
                         <div class="clientdash-helper-page-icon-input">
 							<?php
 							cd_dashicon_selector( array(
-								'name'     => "cd_helper_pages[$page[id]][icon]",
+								'name'     => "cd_helper_pages[$page_ID][icon]",
 								'selected' => $page['icon'] ? $page['icon'] : $page['original_icon'],
 							) );
 							?>
                         </div>
 
                         <div class="clientdash-helper-page-title-input">
-                            <input type="text" name="<?php echo "cd_helper_pages[$page[id]][title]"; ?>"
-                                   id="<?php echo "cd_helper_pages[$page[id]][title]"; ?>"
+                            <input type="text" name="<?php echo "cd_helper_pages[$page_ID][title]"; ?>"
+                                   id="<?php echo "cd_helper_pages[$page_ID][title]"; ?>"
                                    class="cd-title-input widefat"
                                    placeholder="<?php _e( 'Helper Page Title', 'client-dash' ); ?>"
                                    value="<?php echo esc_attr( $page['title'] ? $page['title'] : $page['original_title'] ); ?>"/>
@@ -71,16 +71,16 @@ defined( 'ABSPATH' ) || die;
                             <div class="clientdash-helper-page-tab-wrap">
                                 <div class="clientdash-helper-page-tab-title">
                                     <div class="clientdash-helper-page-tab-title-input">
-                                        <input type="text" name="<?php echo "cd_helper_pages[$page[id]][tabs][$tab_ID][title]"; ?>"
-                                               id="<?php echo "cd_helper_pages[$page[id]][tabs][$tab_ID][title]"; ?>"
+                                        <input type="text" name="<?php echo "cd_helper_pages[$page_ID][tabs][$tab_ID][title]"; ?>"
+                                               id="<?php echo "cd_helper_pages[$page_ID][tabs][$tab_ID][title]"; ?>"
                                                class="cd-title-input widefat"
                                                placeholder="<?php _e( 'Helper Page Tab Title', 'client-dash' ); ?>"
                                                value="<?php echo esc_attr( $tab['title'] ? $tab['title'] : $tab['original_title'] ); ?>"/>
                                     </div>
 
                                     <div class="clientdash-helper-page-tab-roles-input">
-                                        <select name="<?php echo "cd_helper_pages[$page[id]][tabs][$tab_ID][roles][]"; ?>"
-                                                id="<?php echo "cd_helper_pages[$page[id]][tabs][$tab_ID][roles][]"; ?>"
+                                        <select name="<?php echo "cd_helper_pages[$page_ID][tabs][$tab_ID][roles][]"; ?>"
+                                                id="<?php echo "cd_helper_pages[$page_ID][tabs][$tab_ID][roles][]"; ?>"
                                                 class="clientdash-select2" multiple
                                                 data-minimum-results-for-search="Infinity"
                                                 data-dropdown-css-class="clientdash-helper-pages"
