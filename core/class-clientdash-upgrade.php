@@ -20,12 +20,15 @@ class ClientDash_Upgrade {
 	 * ClientDash_Upgrade constructor.
 	 *
 	 * @since {{VERSION}}
+     *
+     * @return bool True if needs to upgrade, false if does not.
 	 */
 	function __construct() {
 
+//		delete_option( 'cd_version' );
 		$version = get_option( 'cd_version', 0 );
 
-		if ( version_compare( $version, '2.0', '<' ) ) {
+		if ( version_compare( $version, '2.0', '<=' ) ) {
 
 			add_action( 'admin_notices', array( $this, 'show_upgrade_nag' ) );
 		}
@@ -40,6 +43,18 @@ class ClientDash_Upgrade {
 			add_action( 'admin_notices', array( $this, 'show_upgraded_nag' ) );
 		}
 	}
+
+	/**
+     * Returns if Client Dash needs to update.
+     *
+     * @since {{VERSION}}
+     *
+	 * @return bool
+	 */
+	function needs_update() {
+
+	    return version_compare( get_option( 'cd_version', 0 ), '2.0', '<=' );
+    }
 
 	/**
 	 * Initializes the upgrade so we can hook it after admin menu has loaded.
@@ -65,12 +80,39 @@ class ClientDash_Upgrade {
 	}
 
 	/**
+	 * Determines if the plugin has "migrate-able" settings or not.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 *
+	 * @return bool
+	 */
+	private function has_old_settings() {
+
+		$settings = array_filter( array(
+			$this->get_old_nav_menus(),
+			$this->get_old_widgets(),
+			$this->get_old_helper_pages(),
+			$this->get_old_admin_page(),
+		) );
+
+		return ! empty( $settings );
+	}
+
+	/**
 	 * Displays the database upgrade nag.
 	 *
 	 * @since {{VERSION}}
 	 * @access private
 	 */
 	function show_upgrade_nag() {
+
+		if ( ! $this->has_old_settings() ) {
+
+			$this->show_upgrade_nag_no_migration();
+
+			return;
+		}
 
 		$confirm_text_1 = sprintf(
 		/* translators: %s is current Client Dash version */
@@ -94,7 +136,7 @@ class ClientDash_Upgrade {
 				printf(
 					__(
 					/* translators: Both %s are HTML for <strong> */
-						'%sClient Dash%s needs to upgrade your database and migrate your previous Client Dash customizations.',
+						'In order to use %sClient Dash%s, your database needs to be upgraded and your previous customizations need to be migrated.',
 						'client-dash'
 					),
 					'<strong>',
@@ -123,6 +165,36 @@ class ClientDash_Upgrade {
 					);
 					?>
                 </strong>
+            </p>
+        </div>
+		<?php
+	}
+
+	/**
+	 * Displays update nag for no migration.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 */
+	private function show_upgrade_nag_no_migration() {
+
+		?>
+        <div class="notice notice-warning">
+            <p>
+				<?php
+				printf(
+					__(
+					/* translators: Both %s are HTML for <strong> */
+						'In order to use %sClient Dash%s, your database needs to be upgraded.',
+						'client-dash'
+					),
+					'<strong>',
+					'</strong>'
+				);
+				?>
+                <a href="<?php echo add_query_arg( 'clientdash_upgrade', '2' ); ?>" class="button button-primary">
+		            <?php _e( 'Upgrade', 'client-dash' ); ?>
+                </a>
             </p>
         </div>
 		<?php
@@ -188,6 +260,103 @@ class ClientDash_Upgrade {
 	}
 
 	/**
+	 * Returns any old CD Nav menus.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 *
+	 * @return array
+	 */
+	private function get_old_nav_menus() {
+
+		$cd_menus  = array();
+		$nav_menus = wp_get_nav_menus();
+
+		foreach ( $nav_menus as $nav_menu ) {
+
+			if ( substr( $nav_menu->name, 0, 14 ) === 'cd_admin_menu_' ) {
+
+				$cd_menus[] = $nav_menu;
+			}
+		}
+
+		return $cd_menus;
+	}
+
+	/**
+	 * Returns any old CD widgets.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 *
+	 * @return array
+	 */
+	private function get_old_widgets() {
+
+		$cd_widgets = array();
+
+		$sidebars = get_option( 'sidebars_widgets' );
+
+		if ( isset( $sidebars['cd-dashboard'] ) ) {
+
+			$cd_widgets = $sidebars['cd-dashboard'];
+		}
+
+		return $cd_widgets;
+	}
+
+	/**
+	 * Returns old helper pages settings.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 *
+	 * @return array
+	 */
+	private function get_old_helper_pages() {
+
+	    $cd_helper_pages = array();
+
+		$icons = array_filter( array(
+			'account'   => get_option( 'cd_dashicon_account' ),
+			'reports'   => get_option( 'cd_dashicon_reports' ),
+			'help'      => get_option( 'cd_dashicon_help' ),
+			'webmaster' => get_option( 'cd_dashicon_webmaster' ),
+		) );
+
+		$roles = get_option( 'cd_content_sections_roles' );
+
+		if ( $icons || $roles ) {
+
+			$cd_helper_pages = array(
+				'icons' => $icons,
+				'roles' => $roles,
+			);
+		}
+
+		return $cd_helper_pages;
+	}
+
+	/**
+	 * Returns old admin page settings.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 *
+	 * @return array
+	 */
+	private function get_old_admin_page() {
+
+		$cd_admin_page = array_filter( array(
+			'content'    => get_option( 'cd_webmaster_main_tab_content' ),
+			'feed_url'   => get_option( 'cd_webmaster_feed_url' ),
+			'feed_count' => get_option( 'cd_webmaster_feed_count' ),
+		) );
+
+		return $cd_admin_page;
+	}
+
+	/**
 	 * Migrate admin menus.
 	 *
 	 * @since {{VERSION}}
@@ -197,148 +366,145 @@ class ClientDash_Upgrade {
 
 		global $menu, $submenu;
 
-		$nav_menus = wp_get_nav_menus();
+		$nav_menus = $this->get_old_nav_menus();
 
 		foreach ( $nav_menus as $nav_menu ) {
 
-			if ( substr( $nav_menu->name, 0, 14 ) === 'cd_admin_menu_' ) {
+			$role = substr( $nav_menu->name, 14 );
 
-				$role = substr( $nav_menu->name, 14 );
+			$new_menu    = array();
+			$new_submenu = array();
 
-				$new_menu    = array();
-				$new_submenu = array();
+			$items = wp_get_nav_menu_items( $nav_menu->term_id );
 
-				$items = wp_get_nav_menu_items( $nav_menu->term_id );
+			foreach ( $items as $item ) {
 
-				foreach ( $items as $item ) {
+				$original_title = get_post_meta( $item->db_id, '_menu_item_original_title', true );
 
-					$original_title = get_post_meta( $item->db_id, '_menu_item_original_title', true );
+				$menu_item = array(
+					'id'             => $item->url,
+					'title'          => $item->title !== $original_title ? $item->title : '',
+					'original_title' => $original_title,
+					'deleted'        => false,
+					'new'            => false,
+				);
 
-					$menu_item = array(
-						'id'             => $item->url,
-						'title'          => $item->title !== $original_title ? $item->title : '',
-						'original_title' => $original_title,
-						'deleted'        => false,
-						'new'            => false,
-					);
+				if ( (int) $item->menu_item_parent > 0 ) {
 
-					if ( (int) $item->menu_item_parent > 0 ) {
+					// Edge case: Webmaster is now Admin Page. Change ID
+					if ( $menu_item['id'] === 'cd_webmaster' ) {
 
-						// Edge case: Webmaster is now Admin Page. Change ID
-						if ( $menu_item['id'] === 'cd_webmaster' ) {
+						$menu_item['id'] = 'cd_admin_page';
+					}
 
-							$menu_item['id'] = 'cd_admin_page';
-						}
-
-						// Check for presence of submenu item in original submenu. If it doesn't exist, it was moved to
-						// a different parent, which is no longer allowed.
-						if ( cd_array_get_index_by_key(
-							     $submenu[ $new_menu[ $item->menu_item_parent ]['id'] ],
-							     2,
-							     $menu_item['id'] ) === false
-						) {
-
-							continue;
-						}
-
-						if ( ! isset( $new_submenu[ $new_menu[ $item->menu_item_parent ]['id'] ] ) ) {
-
-							$new_submenu[ $new_menu[ $item->menu_item_parent ]['id'] ] = array();
-						}
-
-						$new_submenu[ $new_menu[ $item->menu_item_parent ]['id'] ][] = $menu_item;
+					// Check for presence of submenu item in original submenu. If it doesn't exist, it was moved to
+					// a different parent, which is no longer allowed.
+					if ( cd_array_get_index_by_key(
+						     $submenu[ $new_menu[ $item->menu_item_parent ]['id'] ],
+						     2,
+						     $menu_item['id'] ) === false
+					) {
 
 						continue;
 					}
 
-					$menu_item['icon']          = get_post_meta( $item->db_id, '_menu_item_cd_icon', true );
-					$menu_item['original_icon'] = '';
+					if ( ! isset( $new_submenu[ $new_menu[ $item->menu_item_parent ]['id'] ] ) ) {
 
-					$item_type = get_post_meta( $item->db_id, '_menu_item_cd_type', true );
-
-					switch ( $item_type ) {
-
-						case 'separator':
-
-							$menu_item['type'] = 'separator';
-							break;
-
-						default:
-
-							$menu_item['type'] = 'menu_item';
-							break;
+						$new_submenu[ $new_menu[ $item->menu_item_parent ]['id'] ] = array();
 					}
 
-					$new_menu[ $item->ID ] = $menu_item;
+					$new_submenu[ $new_menu[ $item->menu_item_parent ]['id'] ][] = $menu_item;
+
+					continue;
 				}
 
-				$new_menu = array_values( $new_menu );
+				$menu_item['icon']          = get_post_meta( $item->db_id, '_menu_item_cd_icon', true );
+				$menu_item['original_icon'] = '';
 
-				// Add existing menu items as deleted
-				foreach ( $menu as $i => $menu_item ) {
+				$item_type = get_post_meta( $item->db_id, '_menu_item_cd_type', true );
 
-					if ( cd_array_get_index_by_key( $new_menu, 'id', $menu_item[2] ) === false ) {
+				switch ( $item_type ) {
 
-						$type = 'menu_item';
+					case 'separator':
 
-						if ( strpos( $menu_item[4], 'wp-menu-separator' ) !== false ) {
+						$menu_item['type'] = 'separator';
+						break;
 
-							$type = 'separator';
+					default:
+
+						$menu_item['type'] = 'menu_item';
+						break;
+				}
+
+				$new_menu[ $item->ID ] = $menu_item;
+			}
+
+			$new_menu = array_values( $new_menu );
+
+			// Add existing menu items as deleted
+			foreach ( $menu as $i => $menu_item ) {
+
+				if ( cd_array_get_index_by_key( $new_menu, 'id', $menu_item[2] ) === false ) {
+
+					$type = 'menu_item';
+
+					if ( strpos( $menu_item[4], 'wp-menu-separator' ) !== false ) {
+
+						$type = 'separator';
+					}
+
+					if ( $menu_item[2] == 'clientdash' ) {
+
+						$type = 'clientdash';
+					}
+
+					$new_menu[] = array(
+						'id'             => $menu_item[2],
+						'title'          => '',
+						'original_title' => $menu_item[0],
+						'icon'           => '',
+						'original_icon'  => isset( $menu_item[6] ) ? $menu_item[6] : '',
+						'deleted'        => $type !== 'clientdash' || false,
+						'type'           => $type,
+						'new'            => false,
+					);
+				}
+			}
+
+			// Add existing submenu items as deleted
+			foreach ( $submenu as $menu_ID => $submenu_items ) {
+
+				foreach ( $submenu_items as $i => $submenu_item ) {
+
+					if ( ! isset( $new_submenu[ $menu_ID ] ) ||
+					     cd_array_get_index_by_key( $new_submenu[ $menu_ID ], 'id', $submenu_item[2] ) === false
+					) {
+
+						$type = 'submenu_item';
+
+						if ( cd_is_core_page( $submenu_item[2] ) ) {
+
+							$type = 'cd_page';
 						}
 
-						if ( $menu_item[2] == 'clientdash' ) {
-
-							$type = 'clientdash';
-						}
-
-						$new_menu[] = array(
-							'id'             => $menu_item[2],
+						$save_submenu[ $menu_ID ][] = array(
+							'id'             => $submenu_item[2],
 							'title'          => '',
-							'original_title' => $menu_item[0],
-							'icon'           => '',
-							'original_icon'  => isset( $menu_item[6] ) ? $menu_item[6] : '',
-							'deleted'        => $type !== 'clientdash' || false,
+							'original_title' => $submenu_item[0],
+							'deleted'        => true,
 							'type'           => $type,
 							'new'            => false,
 						);
 					}
 				}
-
-				// Add existing submenu items as deleted
-				foreach ( $submenu as $menu_ID => $submenu_items ) {
-
-					foreach ( $submenu_items as $i => $submenu_item ) {
-
-						if ( ! isset( $new_submenu[ $menu_ID ] ) ||
-						     cd_array_get_index_by_key( $new_submenu[ $menu_ID ], 'id', $submenu_item[2] ) === false
-						) {
-
-							$type = 'submenu_item';
-
-							if ( cd_is_core_page( $submenu_item[2] ) ) {
-
-								$type = 'cd_page';
-							}
-
-							$save_submenu[ $menu_ID ][] = array(
-								'id'             => $submenu_item[2],
-								'title'          => '',
-								'original_title' => $submenu_item[0],
-								'deleted'        => true,
-								'type'           => $type,
-								'new'            => false,
-							);
-						}
-					}
-				}
-
-				cd_update_role_customizations( $role, array(
-					'menu'    => $new_menu,
-					'submenu' => $new_submenu,
-				) );
-
-				wp_delete_nav_menu( $menu->term_id );
 			}
+
+			cd_update_role_customizations( $role, array(
+				'menu'    => $new_menu,
+				'submenu' => $new_submenu,
+			) );
+
+			wp_delete_nav_menu( $nav_menu->term_id );
 		}
 	}
 
@@ -350,57 +516,61 @@ class ClientDash_Upgrade {
 	 */
 	private function migrate_dashboard_widgets() {
 
-		$sidebars    = get_option( 'sidebars_widgets' );
-		$new_widgets = array();
+		$sidebars = $this->get_old_widgets();
 
-		if ( isset( $sidebars['cd-dashboard'] ) ) {
+		if ( ! $sidebars ) {
 
-			foreach ( $sidebars['cd-dashboard'] as $ID ) {
-
-				// Break apart the ID
-				preg_match_all( "/(.*)(-\d+)/", $ID, $matches );
-				$ID_base   = $matches[1][0];
-				$ID_number = str_replace( '-', '', $matches[2][0] );
-
-				// Previous versions of Client Dash allowed multiple widgets of the same type. This is nonsense. If a
-				// widget of this type has been added, skip it.
-				if ( in_array( $ID_base, wp_list_pluck( $new_widgets, 'id' ) ) ) {
-
-					continue;
-				}
-
-				// Get all widgets of this type
-				$widgets = get_option( "widget_{$ID_base}" );
-
-				// Get the current widget
-				$widget = $widgets[ $ID_number ];
-
-				// Edge-case
-				if ( ! $widget ) {
-
-					continue;
-				}
-
-				// Set the ID
-				$widget['ID'] = isset( $widget['_cd_extension'] ) && $widget['_cd_extension'] == '1' ? $ID : $ID_base;
-
-				// Add it on
-				$new_widgets[] = array(
-					'id'             => $widget['ID'],
-					'title'          => $widget['title'],
-					'original_title' => $widget['_original_title'],
-					'deleted'        => false,
-				);
-			}
-
-			foreach ( get_editable_roles() as $role_ID => $role ) {
-
-				cd_update_role_customizations( $role_ID, array(
-					'dashboard' => $new_widgets,
-				) );
-			}
+			return;
 		}
 
+		$new_widgets = array();
+
+		foreach ( $sidebars as $ID ) {
+
+			// Break apart the ID
+			preg_match_all( "/(.*)(-\d+)/", $ID, $matches );
+			$ID_base   = $matches[1][0];
+			$ID_number = str_replace( '-', '', $matches[2][0] );
+
+			// Previous versions of Client Dash allowed multiple widgets of the same type. This is nonsense. If a
+			// widget of this type has been added, skip it.
+			if ( in_array( $ID_base, wp_list_pluck( $new_widgets, 'id' ) ) ) {
+
+				continue;
+			}
+
+			// Get all widgets of this type
+			$widgets = get_option( "widget_{$ID_base}" );
+
+			// Get the current widget
+			$widget = $widgets[ $ID_number ];
+
+			// Edge-case
+			if ( ! $widget ) {
+
+				continue;
+			}
+
+			// Set the ID
+			$widget['ID'] = isset( $widget['_cd_extension'] ) && $widget['_cd_extension'] == '1' ? $ID : $ID_base;
+
+			// Add it on
+			$new_widgets[] = array(
+				'id'             => $widget['ID'],
+				'title'          => $widget['title'],
+				'original_title' => $widget['_original_title'],
+				'deleted'        => false,
+			);
+		}
+
+		foreach ( get_editable_roles() as $role_ID => $role ) {
+
+			cd_update_role_customizations( $role_ID, array(
+				'dashboard' => $new_widgets,
+			) );
+		}
+
+		$sidebars = get_option( 'sidebars_widgets' );
 		unset( $sidebars['cd-dashboard'] );
 		update_option( 'sidebars_widgets', $sidebars );
 	}
@@ -413,19 +583,10 @@ class ClientDash_Upgrade {
 	 */
 	private function migrate_helper_pages() {
 
-		$icons = array_filter( array(
-			'account'   => get_option( 'cd_dashicon_account' ),
-			'reports'   => get_option( 'cd_dashicon_reports' ),
-			'help'      => get_option( 'cd_dashicon_help' ),
-			'webmaster' => get_option( 'cd_dashicon_webmaster' ),
-		) );
-
-		$content_sections_roles = get_option( 'cd_content_sections_roles' );
+		$helper_pages = $this->get_old_helper_pages();
 
 		// No customizations saved yet, don't bother.
-		if ( ! $icons &&
-		     ! $content_sections_roles
-		) {
+		if ( ! $helper_pages ) {
 
 			return;
 		}
@@ -433,14 +594,14 @@ class ClientDash_Upgrade {
 		$pages = ClientDash_Helper_Pages::get_pages();
 		foreach ( $pages as $page_ID => &$page ) {
 
-			if ( $icons && isset( $icons[ $page_ID ] ) ) {
+			if ( $helper_pages['icons'] && isset( $helper_pages['icons'][ $page_ID ] ) ) {
 
-				$page['icon'] = $icons[ $page_ID ];
+				$page['icon'] = $helper_pages['icons'][ $page_ID ];
 			}
 
-			if ( $content_sections_roles && isset( $content_sections_roles[ $page_ID ] ) ) {
+			if ( $helper_pages['roles'] && isset( $helper_pages['roles'][ $page_ID ] ) ) {
 
-				foreach ( $content_sections_roles[ $page_ID ] as $tab => $content_blocks ) {
+				foreach ( $helper_pages['roles'][ $page_ID ] as $tab => $content_blocks ) {
 
 					// One renamed tab
 					if ( $tab === 'about_you' ) {
@@ -506,27 +667,23 @@ class ClientDash_Upgrade {
 	 */
 	private function migrate_admin_page() {
 
-		$page_content = get_option( 'cd_webmaster_main_tab_content' );
+		$admin_page = $this->get_old_admin_page();
 
-		if ( $page_content ) {
+		if ( $admin_page['content'] ) {
 
-			update_option( 'cd_admin_page_content', $page_content );
+			update_option( 'cd_admin_page_content', $admin_page['content'] );
 			delete_option( 'cd_webmaster_main_tab_content' );
 		}
 
-		$feed_url = get_option( 'cd_webmaster_feed_url' );
+		if ( $admin_page['feed_url'] ) {
 
-		if ( $feed_url ) {
-
-			update_option( 'cd_adminpage_feed_url', $feed_url );
+			update_option( 'cd_adminpage_feed_url', $admin_page['feed_url'] );
 			delete_option( 'cd_webmaster_feed_url' );
 		}
 
-		$feed_count = get_option( 'cd_webmaster_feed_count' );
+		if ( $admin_page['feed_count'] ) {
 
-		if ( $feed_count ) {
-
-			update_option( 'cd_adminpage_feed_count', $feed_count );
+			update_option( 'cd_adminpage_feed_count', $admin_page['feed_count'] );
 			delete_option( 'cd_webmaster_feed_count' );
 		}
 	}

@@ -135,6 +135,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 
 			add_action( 'init', array( $this, 'register_assets' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
+			add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this, 'action_links' ) );
 		}
 
 		/**
@@ -152,6 +153,14 @@ if ( ! class_exists( 'ClientDash' ) ) {
 			require_once CLIENTDASH_DIR . 'core/customize/class-clientdash-customize.php';
 			require_once CLIENTDASH_DIR . 'core/helper-pages/class-clientdash-helper-pages.php';
 
+			$this->upgrade     = new ClientDash_Upgrade();
+
+			// Don't load Client Dash unless fully upgraded
+			if ( $this->upgrade->needs_update() ) {
+
+				return;
+			}
+
 			$this->db           = new ClientDash_DB();
 			$this->api          = new ClientDash_API();
 			$this->customize    = new ClientDash_Customize();
@@ -162,7 +171,6 @@ if ( ! class_exists( 'ClientDash' ) ) {
 				require_once CLIENTDASH_DIR . 'core/plugin-pages/class-clientdash-pluginpages.php';
 				require_once CLIENTDASH_DIR . 'core/class-clientdash-modify.php';
 
-				$this->upgrade     = new ClientDash_Upgrade();
 				$this->pluginpages = new ClientDash_PluginPages();
 				$this->modify      = new ClientDash_Modify();
 			}
@@ -257,6 +265,32 @@ if ( ! class_exists( 'ClientDash' ) ) {
 
 			wp_enqueue_style( 'clientdash-admin' );
 			wp_enqueue_script( 'clientdash-admin' );
+		}
+
+		/**
+		 * Adds more action links to the plugin row.
+		 *
+		 * @since {{VERSION}}
+		 * @access private
+		 *
+		 * @param array $links
+		 *
+		 * @return array
+		 */
+		function action_links( $links ) {
+
+			$links[] = '<a href="' . admin_url( 'admin.php?page=clientdash_settings' ) . '">' .
+			           __( 'Settings', 'client-dash' ) . '</a>';
+
+			$links[] = '<a href="http://realbigplugins.com/?utm_source=Client%20Dash&utm_medium=Plugins%20list%20link&utm' .
+			           '_campaign=Client%20Dash%20Plugin" target="_blank">' . __( 'More Real Big Plugins', 'client-dash' ) .
+			           '</a>';
+
+			$links[] = '<a href="http://realbigplugins.com/subscribe/?utm_source=Client%20Dash&utm_medium=Plugins%20list%' .
+			           '20link&utm_campaign=Client%20Dash%20Plugin" target="_blank">' . __( 'Subscribe', 'client-dash' ) .
+			           '</a>';
+
+			return $links;
 		}
 	}
 

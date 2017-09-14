@@ -576,7 +576,7 @@ class ClientDash_Customize {
 	function title_tag() {
 
 		/* translators: Customize page title */
-		$title = __( 'Client Dash Customize', 'client-dash' );
+		$title = __( 'Customize Admin', 'client-dash' );
 
 		/**
 		 * The main page title tag for the Customize tool.
@@ -585,7 +585,7 @@ class ClientDash_Customize {
 		 */
 		$title = apply_filters( 'cd_customize_page_title', $title );
 
-		echo '<title>' . esc_attr( $title ) . '</title>';
+		echo '<title>' . esc_attr( $title ) . ': ' . get_bloginfo( 'title' ) . '</title>';
 	}
 
 	/**
@@ -728,7 +728,7 @@ class ClientDash_Customize {
 				'icon'           => $customized_menu_item ? $customized_menu_item['icon'] : '',
 				'original_icon'  => isset( $menu_item[6] ) ? $menu_item[6] : '',
 				'type'           => $customized_menu_item ? $customized_menu_item['type'] : $type,
-				'deleted'        => $new,
+				'deleted'        => $customized_menu_item ? $customized_menu_item['deleted'] : $new,
 				'new'            => $new,
 			);
 		}
@@ -779,7 +779,7 @@ class ClientDash_Customize {
 					'title'          => '',
 					'original_title' => $submenu_item[0],
 					'type'           => $type,
-					'deleted'        => $new,
+					'deleted'        => $customized_submenu_item ? $customized_submenu_item['deleted'] : $new,
 					'new'            => $new,
 				) );
 			}
@@ -844,7 +844,7 @@ class ClientDash_Customize {
 								'title'          => '',
 								'original_title' => $widget_title,
 								'new'            => false,
-								'deleted'        => false,
+								'deleted'        => $customized_widget['deleted'] ? $customized_widget['deleted'] : false,
 							) );
 
 						} else {
