@@ -1,10 +1,20 @@
 <?php
 /**
+ * Client Dash
+ *
+ * @package     LearnDash_Gradebook
+ * @author      Real Big Plugins
+ * @license     GPL2
+ *
  * Plugin Name: Client Dash
  * Description: Creating a more intuitive admin interface for clients.
- * Version: 2.0.0-beta.1
+ * Version: 2.0.0
  * Author: Real Big Plugins
  * Author URI: https://realbigplugins.com
+ * Text Domain: client-dash
+ * Domain Path: /languages
+ * License:     GPL2
+ * License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * @package ClientDash
  */
@@ -13,7 +23,7 @@ defined( 'ABSPATH' ) || die;
 
 if ( ! class_exists( 'ClientDash' ) ) {
 
-	define( 'CLIENTDASH_VERSION', '2.0.0-beta.1' );
+	define( 'CLIENTDASH_VERSION', '2.0.0' );
 	define( 'CLIENTDASH_DIR', plugin_dir_path( __FILE__ ) );
 	define( 'CLIENTDASH_URI', plugins_url( '', __FILE__ ) );
 
@@ -22,14 +32,14 @@ if ( ! class_exists( 'ClientDash' ) ) {
 	 *
 	 * The main plugin class.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 */
 	final class ClientDash {
 
 		/**
 		 * Database functions.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 *
 		 * @var ClientDash_DB
 		 */
@@ -38,7 +48,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		/**
 		 * api functions.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 *
 		 * @var ClientDash_API
 		 */
@@ -47,7 +57,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		/**
 		 * Handles the plugin upgrades.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 *
 		 * @var ClientDash_Upgrade
 		 */
@@ -56,7 +66,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		/**
 		 * Handles the plugin pages.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 *
 		 * @var ClientDash_PluginPages
 		 */
@@ -65,7 +75,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		/**
 		 * Loads the Client Dash Customizer.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 *
 		 * @var ClientDash_Customize
 		 */
@@ -74,7 +84,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		/**
 		 * Modifies the admin from customizations.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 *
 		 * @var ClientDash_Modify
 		 */
@@ -83,7 +93,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		/**
 		 * Handles Helper Pages.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 *
 		 * @var ClientDash_Helper_Pages
 		 */
@@ -98,7 +108,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		/**
 		 * Call this method to get singleton
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 *
 		 * @return ClientDash()
 		 */
@@ -117,7 +127,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		/**
 		 * ClientDash constructor.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 */
 		function __construct() {
 
@@ -130,7 +140,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		/**
 		 * Requires and loads required files.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 * @access private
 		 */
 		private function require_necessities() {
@@ -161,7 +171,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		/**
 		 * Registers plugin assets.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 * @access private
 		 */
 		function register_assets() {
@@ -235,7 +245,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		/**
 		 * Enqueues plugin assets.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 * @access private
 		 */
 		function enqueue_assets() {
@@ -261,7 +271,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 	/**
 	 * Gets/loads the main plugin class.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @return ClientDash
 	 */

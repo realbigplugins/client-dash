@@ -15,8 +15,6 @@ const domain       = ClientdashCustomize_Data.domain || false;
 const dashicons    = ClientdashCustomize_Data.dashicons || false;
 const loadTutorial = ClientdashCustomize_Data.load_tutorial || false;
 
-// TODO React deployment version
-
 /**
  * The main Customize component.
  *

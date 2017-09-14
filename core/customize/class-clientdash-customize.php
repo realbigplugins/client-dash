@@ -198,6 +198,7 @@ class ClientDash_Customize {
 	 */
 	function enqueue_assets() {
 
+		wp_enqueue_style( 'dashicons' );
 		wp_enqueue_style( 'clientdash-customize' );
 		wp_enqueue_script( 'clientdash-customize' );
 	}

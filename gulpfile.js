@@ -1,20 +1,25 @@
 'use strict';
 
-const gulp       = require('gulp');
-const fs         = require('fs');
-const sass       = require('gulp-sass');
-const sourcemaps = require('gulp-sourcemaps');
-const rename     = require('gulp-rename');
-const notify     = require('gulp-notify');
-const concat     = require('gulp-concat');
-const uglify     = require('gulp-uglify');
-const browserify = require('browserify');
-const babelify   = require('babelify');
-const fetchify   = require('fetchify');
-const source     = require('vinyl-source-stream');
-const buffer     = require('vinyl-buffer');
-const gutil      = require('gulp-util');
-const reactify   = require('reactify');
+const packageInfo = require('./package.json');
+
+const gulp        = require('gulp');
+const fs          = require('fs');
+const sass        = require('gulp-sass');
+const sourcemaps  = require('gulp-sourcemaps');
+const rename      = require('gulp-rename');
+const notify      = require('gulp-notify');
+const concat      = require('gulp-concat');
+const uglify      = require('gulp-uglify');
+const browserify  = require('browserify');
+const babelify    = require('babelify');
+const fetchify    = require('fetchify');
+const source      = require('vinyl-source-stream');
+const buffer      = require('vinyl-buffer');
+const gutil       = require('gulp-util');
+const reactify    = require('reactify');
+const wpPot       = require('gulp-wp-pot');
+const sort        = require('gulp-sort');
+const justReplace = require('gulp-just-replace');
 
 gulp.task('admin_sass', function () {
     return gulp.src(['./assets/src/scss/admin/**/*.scss'])
@@ -113,6 +118,38 @@ gulp.task('apply-prod-environment', function () {
         process.stdout.write("Successfully set NODE_ENV to production" + "\n");
     }
 });
+
+gulp.task('version', function () {
+    return gulp.src(['./**/*.{php,js,scss,txt}', '!node_modules/', '!src/vendor'], {base: './'})
+        .pipe(justReplace([
+            {
+                search: /\{\{VERSION}}/g,
+                replacement: packageInfo.version
+            },
+            {
+                search: /(\* Version: )\d\.\d\.\d/,
+                replacement: "$1" + packageInfo.version
+            }, {
+                search: /(define\( 'CLIENTDASH_VERSION', ')\d\.\d\.\d/,
+                replacement: "$1" + packageInfo.version
+            }, {
+                search: /(Stable tag: )\d\.\d\.\d/,
+                replacement: "$1" + packageInfo.version
+            }
+        ]))
+        .pipe(gulp.dest('./'));
+});
+
+gulp.task('generate_pot', function () {
+    return gulp.src('./**/*.php')
+        .pipe(sort())
+        .pipe(wpPot({
+            domain: 'client-dash',
+            package: 'ClientDash',
+        }))
+        .pipe(gulp.dest('./languages/client-dash.pot'));
+});
+
 
 gulp.task('default', ['admin_sass', 'admin_js', 'customize_sass', 'customize_inpreview_sass', 'customize_inpreview_js', 'customize_js'], function () {
     gulp.watch(['./assets/src/scss/admin/**/*.scss'], ['admin_sass']);
