@@ -265,6 +265,18 @@ class ClientDash_DB {
 			return $result;
 		}
 	}
+
+	/**
+	 * Totally empty customizations table
+	 *
+	 * @since {{VERSION}}
+	 */
+	public static function delete_everything() {
+
+		global $wpdb;
+
+		$wpdb->query( "TRUNCATE TABLE `{$wpdb->prefix}cd_customizations`" );
+	}
 }
 
 /**

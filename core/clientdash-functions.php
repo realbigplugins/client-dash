@@ -305,8 +305,7 @@ function cd_reset_all_settings() {
 
 	global $wpdb;
 
-	// Totally empty customizations table
-	$wpdb->query( "TRUNCATE TABLE `{$wpdb->prefix}cd_customizations`" );
+	ClientDashDB()::delete_everything();
 
 	/**
 	 * Fires during Client Dash settings reset.
