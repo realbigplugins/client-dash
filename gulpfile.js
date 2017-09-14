@@ -17,7 +17,7 @@ const gutil      = require('gulp-util');
 const reactify   = require('reactify');
 
 gulp.task('admin_sass', function () {
-    return gulp.src('./assets/src/scss/admin/**/*.scss')
+    return gulp.src(['./assets/src/scss/admin/**/*.scss'])
         .pipe(sourcemaps.init())
         .pipe(sass({
             outputStyle: 'compressed'
@@ -59,7 +59,10 @@ gulp.task('customize_inpreview_sass', function () {
 });
 
 gulp.task('admin_js', function () {
-    return gulp.src('./assets/src/js/admin/**/*.js')
+    return gulp.src([
+        './assets/vendor/select2/dist/js/select2.full.js',
+        './assets/src/js/admin/**/*.js'
+    ])
         .pipe(concat('clientdash-admin.min.js'))
         .pipe(gulp.dest('./assets/dist/js/'))
         .pipe(sourcemaps.init())

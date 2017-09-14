@@ -166,8 +166,6 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		 */
 		function register_assets() {
 
-			// --- INTERNAL ---
-
 			wp_register_style(
 				'clientdash-admin',
 				CLIENTDASH_URI . '/assets/dist/css/clientdash-admin.min.css',
@@ -232,31 +230,6 @@ if ( ! class_exists( 'ClientDash' ) ) {
 					'preview_only' => __( 'Preview Only', 'clientdash' ),
 				),
 			) );
-
-			// --- VENDOR ---
-
-			// Select 2
-			wp_register_style(
-				'clientdash-select2',
-				CLIENTDASH_URI . '/assets/vendor/select2/dist/css/select2.min.css',
-				array(),
-				'4.0.3'
-			);
-
-			wp_register_script(
-				'clientdash-select2',
-				CLIENTDASH_URI . '/assets/vendor/select2/dist/js/select2.full.min.js',
-				array( 'jquery' ),
-				'4.0.3'
-			);
-
-			// Font awesome
-			wp_register_style(
-				'clientdash-fontawesome',
-				CLIENTDASH_URI . '/assets/vendor/fontawesome/css/font-awesome.min.css',
-				array(),
-				'4.7.0'
-			);
 		}
 
 		/**
