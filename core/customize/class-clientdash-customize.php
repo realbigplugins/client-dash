@@ -105,7 +105,8 @@ class ClientDash_Customize {
 	 */
 	function load() {
 
-		add_action( 'template_redirect', array( $this, 'unload_wordpress' ), 9999 );
+		add_action( 'template_redirect', array( $this, 'unload_wordpress' ), 9998 );
+		add_action( 'template_redirect', array( $this, 'load_actions' ), 9999 );
 		add_action( 'cd_customize_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 
 		nocache_headers();
@@ -179,6 +180,17 @@ class ClientDash_Customize {
 	}
 
 	/**
+	 * Loads actions after WordPress has been unloaded.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 */
+	function load_actions() {
+
+		add_action( 'wp_head', array( $this, 'title_tag' ) );
+	}
+
+	/**
 	 * Enqueues the Customizer assets.
 	 *
 	 * @since {{VERSION}}
@@ -186,8 +198,6 @@ class ClientDash_Customize {
 	 */
 	function enqueue_assets() {
 
-		wp_enqueue_style( 'dashicons' );
-		wp_enqueue_style( 'clientdash-fontawesome' );
 		wp_enqueue_style( 'clientdash-customize' );
 		wp_enqueue_script( 'clientdash-customize' );
 	}
@@ -554,6 +564,27 @@ class ClientDash_Customize {
 		 * @hooked ClientDash_Customize->template_footer() 10
 		 */
 		do_action( 'cd_customize_footer' );
+	}
+
+	/**
+	 * Outputs the Customize title tag.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 */
+	function title_tag() {
+
+		/* translators: Customize page title */
+		$title = __( 'Client Dash Customize', 'client-dash' );
+
+		/**
+		 * The main page title tag for the Customize tool.
+		 *
+		 * @since {{VERSION}}
+		 */
+		$title = apply_filters( 'cd_customize_page_title', $title );
+
+		echo '<title>' . esc_attr( $title ) . '</title>';
 	}
 
 	/**
