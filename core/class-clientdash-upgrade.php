@@ -20,12 +20,11 @@ class ClientDash_Upgrade {
 	 * ClientDash_Upgrade constructor.
 	 *
 	 * @since {{VERSION}}
-     *
-     * @return bool True if needs to upgrade, false if does not.
+	 *
+	 * @return bool True if needs to upgrade, false if does not.
 	 */
 	function __construct() {
 
-//		delete_option( 'cd_version' );
 		$version = get_option( 'cd_version', 0 );
 
 		if ( version_compare( $version, '2.0', '<=' ) ) {
@@ -45,16 +44,16 @@ class ClientDash_Upgrade {
 	}
 
 	/**
-     * Returns if Client Dash needs to update.
-     *
-     * @since {{VERSION}}
-     *
+	 * Returns if Client Dash needs to update.
+	 *
+	 * @since {{VERSION}}
+	 *
 	 * @return bool
 	 */
 	function needs_update() {
 
-	    return version_compare( get_option( 'cd_version', 0 ), '2.0', '<=' );
-    }
+		return version_compare( get_option( 'cd_version', 0 ), '2.0', '<=' );
+	}
 
 	/**
 	 * Initializes the upgrade so we can hook it after admin menu has loaded.
@@ -118,7 +117,8 @@ class ClientDash_Upgrade {
 		/* translators: %s is current Client Dash version */
 			__(
 				'Important: If you have made any customizations since udpating Client Dash to %s, all customizations ' .
-				'will be overwritten by previous Client Dash customizations.',
+				'will be overwritten by previous Client Dash customizations. It is recommended to backup your website ' .
+				'first.',
 				'client-dash'
 			),
 			CLIENTDASH_VERSION
@@ -136,7 +136,8 @@ class ClientDash_Upgrade {
 				printf(
 					__(
 					/* translators: Both %s are HTML for <strong> */
-						'In order to use %sClient Dash%s, your database needs to be upgraded and your previous customizations need to be migrated.',
+						'In order to use %sClient Dash%s, your database needs to be upgraded and your previous ' .
+						'customizations need to be migrated.',
 						'client-dash'
 					),
 					'<strong>',
@@ -193,7 +194,7 @@ class ClientDash_Upgrade {
 				);
 				?>
                 <a href="<?php echo add_query_arg( 'clientdash_upgrade', '2' ); ?>" class="button button-primary">
-		            <?php _e( 'Upgrade', 'client-dash' ); ?>
+					<?php _e( 'Upgrade', 'client-dash' ); ?>
                 </a>
             </p>
         </div>
@@ -315,7 +316,7 @@ class ClientDash_Upgrade {
 	 */
 	private function get_old_helper_pages() {
 
-	    $cd_helper_pages = array();
+		$cd_helper_pages = array();
 
 		$icons = array_filter( array(
 			'account'   => get_option( 'cd_dashicon_account' ),
