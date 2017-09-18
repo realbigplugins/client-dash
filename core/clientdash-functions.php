@@ -305,7 +305,7 @@ function cd_reset_all_settings() {
 
 	global $wpdb;
 
-	ClientDashDB()::delete_everything();
+	ClientDash_DB::delete_everything();
 
 	/**
 	 * Fires during Client Dash settings reset.
