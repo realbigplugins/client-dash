@@ -258,8 +258,6 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		 */
 		function enqueue_assets() {
 
-			global $wp_styles;
-
 			wp_enqueue_style( 'clientdash-select2' );
 			wp_enqueue_script( 'clientdash-select2' );
 
