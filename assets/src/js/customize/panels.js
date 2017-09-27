@@ -230,6 +230,7 @@ class PanelMenu extends React.Component {
                     axis="y"
                     lockAxis="y"
                     lockToContainerEdges={true}
+                    pressDelay={50}
                     shouldCancelStart={sortableCancelStart}
                 />
             ;
@@ -347,6 +348,7 @@ class PanelSubmenu extends React.Component {
                     onSortEnd={this.onSortEnd}
                     axis="y"
                     lockAxis="y"
+                    pressDelay={50}
                     lockToContainerEdges={true}
                     shouldCancelStart={sortableCancelStart}
                 />
