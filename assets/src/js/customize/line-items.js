@@ -31,6 +31,31 @@ class LineItem extends React.Component {
  * @prop (array) formInputs Inputs to send to the form, if any.
  */
 class LineItemContent extends React.Component {
+
+    constructor(props) {
+
+        super(props);
+
+        this.handleToggleEdit = this.handleToggleEdit.bind(this);
+        this.handleAddItem     = this.handleAddItem.bind(this);
+        this.handleDelete     = this.handleDelete.bind(this);
+    }
+
+    handleToggleEdit() {
+
+        this.props.toggleEdit();
+    }
+
+    handleAddItem() {
+
+        this.props.addItem();
+    }
+
+    handleDelete() {
+
+        this.props.deleteItem();
+    }
+
     render() {
         return (
             <div id={"cd-editor-lineitem-" + this.props.id}
@@ -43,13 +68,40 @@ class LineItemContent extends React.Component {
                         {this.props.title}
                     </div>
 
-                    <div className="cd-editor-lineitem-actions">
-                        {this.props.new &&
-                        <span className="cd-editor-tip cd-editor-tip-right">{l10n['new']}</span>
-                        }
+                    {this.props.new &&
+                    <span className="cd-editor-tip cd-editor-tip-right">{l10n['new']}</span>
+                    }
 
-                        {this.props.actions}
-                    </div>
+                    {this.props.deleteItem &&
+                    <button
+                        type="button" title={l10n['delete']}
+                        className={"cd-editor-lineitem-action"}
+                        onClick={this.handleDelete}
+                    >
+                        <span className="cd-editor-lineitem-action-icon fa fa-trash"/>
+                    </button>
+                    }
+
+                    {this.props.addItem &&
+                    <button
+                        type="button" title={l10n['add']}
+                        className={"cd-editor-lineitem-action"}
+                        onClick={this.handleAddItem}
+                    >
+                        <span className="cd-editor-lineitem-action-icon fa fa-plus"/>
+                    </button>
+                    }
+
+                    {this.props.toggleEdit &&
+                    <button
+                        type="button" title={l10n['edit']}
+                        className={"cd-editor-lineitem-action"}
+                        onClick={this.handleToggleEdit}
+                    >
+                            <span className={"cd-editor-lineitem-action-icon fa fa-" +
+                            (this.props.editing ? "chevron-up" : "chevron-down")}/>
+                    </button>
+                    }
                 </div>
 
                 {this.props.form && this.props.form}
@@ -101,7 +153,9 @@ class LineItemForm extends React.Component {
 
         super(props);
 
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSubmit      = this.handleSubmit.bind(this);
+        this.handleDelete      = this.handleDelete.bind(this);
+        this.handleSubmenuEdit = this.handleSubmenuEdit.bind(this);
     }
 
     handleSubmit(event) {
@@ -111,10 +165,39 @@ class LineItemForm extends React.Component {
         this.props.onSubmit(event);
     }
 
+    handleDelete(event) {
+
+        event.preventDefault();
+
+        this.props.onDelete();
+    }
+
+    handleSubmenuEdit(event) {
+
+        event.preventDefault();
+
+        this.props.onSubmenuEdit();
+    }
+
     render() {
         return (
             <form className="cd-editor-lineitem-form" onSubmit={this.handleSubmit}>
                 {this.props.children}
+
+                <div className="cd-editor-lineitem-form-actions">
+                    {this.props.onDelete &&
+                    <button onClick={this.handleDelete} type="button"
+                            className="cd-editor-lineitem-form-action cd-editor-lineitem-form-action-delete">
+                        {l10n['delete']}
+                    </button>
+                    }
+                    {this.props.onSubmenuEdit &&
+                    <button onClick={this.handleSubmenuEdit} type="button"
+                            className="cd-editor-lineitem-form-action cd-editor-lineitem-form-submenu">
+                        {l10n['submenu']}
+                    </button>
+                    }
+                </div>
             </form>
         )
     }
@@ -237,33 +320,12 @@ class MenuItemEdit extends React.Component {
 
         let actions = [];
 
-        if ( this.props.type !== 'clientdash' ) {
-            actions = [
-                <LineItemAction
-                    key="menu-action-submenu"
-                    icon="th-list"
-                    text={l10n['edit_submenu']}
-                    onHandleClick={this.submenuEdit}
-                />,
-                <LineItemAction
-                    key="menu-action-edit"
-                    icon={this.state.editing ? "chevron-up" : "chevron-down"}
-                    text={l10n['edit']}
-                    onHandleClick={this.toggleEdit}
-                />,
-                <LineItemAction
-                    key="menu-action-delete"
-                    icon="times"
-                    text={l10n['delete']}
-                    classes="cd-editor-lineitem-action-close"
-                    onHandleClick={this.deleteItem}
-                />
-            ];
-        }
 
         const form =
                   <LineItemForm
                       onSubmit={this.submitForm}
+                      onDelete={this.deleteItem}
+                      onSubmenuEdit={this.submenuEdit}
                   >
                       <InputText
                           label={l10n['title']}
@@ -295,8 +357,9 @@ class MenuItemEdit extends React.Component {
                 id={this.props.id}
                 title={this.props.title || this.props.original_title}
                 icon={this.props.icon || this.props.original_icon}
-                actions={actions}
                 form={this.state.editing ? form : false}
+                editing={this.state.editing}
+                toggleEdit={this.props.type !== 'clientdash' ? this.toggleEdit : false}
             />
         )
     }
@@ -323,22 +386,13 @@ class MenuItemSeparator extends React.Component {
 
     render() {
 
-        const actions = [
-            <LineItemAction
-                key="menu-action-delete"
-                icon="times"
-                classes="cd-editor-lineitem-action-close"
-                onHandleClick={this.deleteItem}
-            />
-        ];
-
         return (
             <LineItemContent
                 key={this.props.id}
                 id={this.props.id}
                 title={l10n['separator']}
                 classes="cd-editor-menuitem-separator"
-                actions={actions}
+                deleteItem={this.deleteItem}
             />
         )
     }
@@ -418,33 +472,10 @@ class MenuItemCustomLink extends React.Component {
 
         let actions = [];
 
-        if ( this.props.type !== 'clientdash' ) {
-            actions = [
-                <LineItemAction
-                    key="menu-action-submenu"
-                    icon="th-list"
-                    text={l10n['edit_submenu']}
-                    onHandleClick={this.submenuEdit}
-                />,
-                <LineItemAction
-                    key="menu-action-edit"
-                    icon={this.state.editing ? "chevron-up" : "chevron-down"}
-                    text={l10n['edit']}
-                    onHandleClick={this.toggleEdit}
-                />,
-                <LineItemAction
-                    key="menu-action-delete"
-                    icon="times"
-                    text={l10n['delete']}
-                    classes="cd-editor-lineitem-action-close"
-                    onHandleClick={this.deleteItem}
-                />
-            ];
-        }
-
         const form =
                   <LineItemForm
                       onSubmit={this.submitForm}
+                      onDelete={this.deleteItem}
                   >
                       <InputText
                           label={l10n['title']}
@@ -483,8 +514,9 @@ class MenuItemCustomLink extends React.Component {
                 id={this.props.id}
                 title={this.props.title || this.props.original_title}
                 icon={this.props.icon || this.props.original_icon}
-                actions={actions}
                 form={this.state.editing ? form : false}
+                editing={this.state.editing}
+                toggleEdit={this.toggleEdit}
             />
         )
     }
@@ -541,20 +573,6 @@ class SubmenuItemEdit extends React.Component {
 
     render() {
 
-        const actions = [
-            <LineItemAction
-                key="menu-action-edit"
-                icon={this.state.editing ? "chevron-up" : "chevron-down"}
-                onHandleClick={this.toggleEdit}
-            />,
-            <LineItemAction
-                key="menu-action-delete"
-                icon="times"
-                classes="cd-editor-lineitem-action-close"
-                onHandleClick={this.deleteItem}
-            />
-        ];
-
         const after_title =
                   <span className="cd-editor-lineitem-form-subtext">
                     {l10n['original_title'] + " "}<strong>{this.props.original_title}</strong>
@@ -564,6 +582,7 @@ class SubmenuItemEdit extends React.Component {
         const form =
                   <LineItemForm
                       onSubmit={this.submitForm}
+                      onDelete={this.deleteItem}
                   >
                       <InputText
                           label={l10n['title']}
@@ -584,8 +603,9 @@ class SubmenuItemEdit extends React.Component {
                 key={this.props.id}
                 id={this.props.id}
                 title={this.props.title || this.props.original_title}
-                actions={actions}
                 form={this.state.editing ? form : false}
+                editing={this.state.editing}
+                toggleEdit={this.toggleEdit}
             />
         )
     }
@@ -654,25 +674,10 @@ class SubmenuItemCustomLink extends React.Component {
 
     render() {
 
-        let actions = [
-            <LineItemAction
-                key="menu-action-edit"
-                icon={this.state.editing ? "chevron-up" : "chevron-down"}
-                text={l10n['edit']}
-                onHandleClick={this.toggleEdit}
-            />,
-            <LineItemAction
-                key="menu-action-delete"
-                icon="times"
-                text={l10n['delete']}
-                classes="cd-editor-lineitem-action-close"
-                onHandleClick={this.deleteItem}
-            />
-        ];
-
         const form =
                   <LineItemForm
                       onSubmit={this.submitForm}
+                      onDelete={this.deleteItem}
                   >
                       <InputText
                           label={l10n['title']}
@@ -699,8 +704,9 @@ class SubmenuItemCustomLink extends React.Component {
                 key={this.props.id}
                 id={this.props.id}
                 title={this.props.title || this.props.original_title}
-                actions={actions}
                 form={this.state.editing ? form : false}
+                editing={this.state.editing}
+                toggleEdit={this.toggleEdit}
             />
         )
     }
@@ -735,15 +741,6 @@ class ItemAdd extends React.Component {
 
     render() {
 
-        const actions = [
-            <LineItemAction
-                key="menu-item-action-add"
-                icon="plus"
-                classes="cd-editor-lineitem-action-add"
-                onHandleClick={this.addItem}
-            />
-        ];
-
         let classes = '';
 
         if ( this.props.id === 'separator' ) {
@@ -762,9 +759,9 @@ class ItemAdd extends React.Component {
                 id={this.props.id}
                 title={this.props.title}
                 icon={this.props.icon}
-                actions={actions}
                 classes={classes}
                 new={this.props.new || false}
+                addItem={this.addItem}
             />
         )
     }
@@ -819,23 +816,10 @@ class WidgetEdit extends React.Component {
 
     render() {
 
-        const actions = [
-            <LineItemAction
-                key="widget-action-edit"
-                icon={this.state.editing ? "chevron-up" : "chevron-down"}
-                onHandleClick={this.toggleEdit}
-            />,
-            <LineItemAction
-                key="widget-action-delete"
-                icon="times"
-                classes="cd-editor-lineitem-action-close"
-                onHandleClick={this.widgetDelete}
-            />
-        ];
-
         const form =
                   <LineItemForm
                       onSubmit={this.submitForm}
+                      onDelete={this.widgetDelete}
                   >
                       <InputText
                           label={l10n['title']}
@@ -855,8 +839,8 @@ class WidgetEdit extends React.Component {
                 key={this.props.id}
                 id={this.props.id}
                 title={this.props.title || this.props.original_title}
-                actions={actions}
                 form={this.state.editing ? form : false}
+                toggleEdit={this.toggleEdit}
             />
         )
     }

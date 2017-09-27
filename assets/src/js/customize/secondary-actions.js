@@ -42,8 +42,8 @@ class SecondaryActions extends React.Component {
                 <div className="cd-editor-panel-actions-buttons">
                     {this.props.previousPanel &&
                     <ActionButton
-                        text={l10n['action_button_back']}
-                        icon="chevron-left"
+                        title={l10n['action_button_back']}
+                        text={<span className="fa fa-chevron-left"/>}
                         align="left"
                         onHandleClick={this.loadPreviousPanel}
                         disabled={this.props.disabled}
@@ -52,8 +52,8 @@ class SecondaryActions extends React.Component {
 
                     {this.props.nextPanel &&
                     <ActionButton
-                        text={this.props.loadNextText}
-                        icon="plus"
+                        title={this.props.loadNextText}
+                        text={<span className="fa fa-plus"/>}
                         align="right"
                         onHandleClick={this.loadNextPanel}
                         disabled={this.props.disabled}
@@ -133,8 +133,8 @@ class SecondaryActionsPrimary extends React.Component {
 
                     {(!this.state.confirming && !this.props.deleting) &&
                     <ActionButton
-                        text={l10n['reset_role']}
-                        icon="trash"
+                        title={l10n['reset_role']}
+                        text={<span className="fa fa-trash"/>}
                         align="left"
                         type="delete"
                         disabled={this.props.resettable}
@@ -143,16 +143,17 @@ class SecondaryActionsPrimary extends React.Component {
 
                     {(this.state.confirming && !this.props.deleting) &&
                     <ActionButton
-                        text={l10n['cancel']}
-                        icon="ban"
+                        title={l10n['cancel']}
+                        text={<span className="fa fa-ban" />}
                         align="left"
                         onHandleClick={this.cancelReset}
                     />}
 
                     {(this.state.confirming || this.props.deleting) &&
                     <ActionButton
-                        text={l10n['confirm']}
-                        icon={this.props.deleting ? 'circle-o-notch fa-spin' : 'check'}
+                        title={l10n['confirm']}
+                        text={this.props.deleting ? <span className="fa fa-circle-o-notch fa-spin"/> :
+                            <span className="fa fa-check"/>}
                         align="right"
                         type="delete"
                         onHandleClick={this.resetRole}

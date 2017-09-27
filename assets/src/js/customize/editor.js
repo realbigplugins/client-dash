@@ -108,7 +108,7 @@ class Editor extends React.Component {
             activePanel: panel_ID,
             panelDirection: direction,
             message: {
-                type: 'default',
+                type: this.state.message.type || 'default',
                 text: ''
             }
         });
@@ -151,7 +151,7 @@ class Editor extends React.Component {
                 changes: false,
                 message: {
                     type: 'success',
-                    text: l10n['saved']
+                    text: l10n['saved_and_live']
                 }
             });
 
@@ -204,7 +204,7 @@ class Editor extends React.Component {
             activePanel: 'confirmReset',
             panelDirection: 'forward',
             message: {
-                type: 'default',
+                type: 'warning',
                 text: l10n['confirm_role_reset'],
                 noHide: true
             }
@@ -217,7 +217,7 @@ class Editor extends React.Component {
             activePanel: 'primary',
             panelDirection: 'backward',
             message: {
-                type: 'default',
+                type: 'warning',
                 text: ''
             }
         });
@@ -233,7 +233,7 @@ class Editor extends React.Component {
             activePanel: 'deleting',
             panelDirection: 'forward',
             message: {
-                type: 'default',
+                type: this.state.message.type || 'default',
                 text: ''
             }
         });
@@ -347,7 +347,7 @@ class Editor extends React.Component {
 
         clearTimeout(this.refreshingTimeout);
 
-        refreshDelay = refreshDelay === false ? 10 : 2000;
+        refreshDelay = refreshDelay === false ? 10 : 1200;
 
         this.refreshingTimeout = setTimeout(() => this.previewChanges(), refreshDelay);
 
@@ -360,6 +360,7 @@ class Editor extends React.Component {
 
         this.setState({
             message: {
+                type: this.state.message.type || 'default',
                 text: null
             }
         });
@@ -999,7 +1000,6 @@ class Editor extends React.Component {
                 <div className="cd-editor-header">
                     <PrimaryActions
                         onSaveChanges={this.saveChanges}
-                        onPreviewChanges={this.previewChanges}
                         onHideCustomizer={this.hideCustomizer}
                         onCloseCustomizer={this.closeCustomizer}
                         loadingPreview={this.state.loadingPreview}

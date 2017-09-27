@@ -50,7 +50,7 @@ class Message extends React.Component {
             this.hiding = setTimeout(() => this.hide(), 4000);
         }
 
-        var classes = [
+        let classes = [
             'cd-editor-message',
             'cd-editor-message-' + this.props.type
         ]

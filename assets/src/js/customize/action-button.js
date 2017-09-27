@@ -58,12 +58,9 @@ class ActionButton extends React.Component {
         }
 
         return (
-            <button type="button" title={this.props.text} aria-label={this.props.text} className={classes.join(' ')}
+            <button type="button" title={this.props.title || this.props.text} aria-label={this.props.text} className={classes.join(' ')}
                     onClick={this.handleClick}>
-
-                {this.props.icon &&
-                <span className={"cd-editor-action-button-icon fa fa-" + this.props.icon}></span>
-                }
+                {this.props.text}
             </button>
         )
     }

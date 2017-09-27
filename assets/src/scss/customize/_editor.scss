@@ -36,7 +36,7 @@
   }
 
   .cd-editor-action-button {
-    width: 25%;
+    width: 33.3333%;
     float: left;
     text-align: center;
     border-width: 0;
@@ -44,6 +44,12 @@
     &:not(:last-of-type) {
       border-right-width: 1px;
     }
+  }
+}
+
+.cd-editor-secondary-actions {
+  .cd-editor-action-button {
+    font-size: $font-large;
   }
 }
 
@@ -86,6 +92,10 @@
 
   &.cd-editor-message-success {
     border-bottom: 5px solid $color-success;
+  }
+
+  &.cd-editor-message-warning {
+    border-bottom: 5px solid $color-warning;
   }
 
   &.cd-editor-message-error {
@@ -335,7 +345,7 @@ body > .cd-editor-lineitem-li {
 .cd-editor-lineitem-title {
   position: relative;
   float: left;
-  width: 60%;
+  width: calc(100% - 30px);
   padding-left: 0.5em;
   height: 30px;
   line-height: 30px;
@@ -350,16 +360,8 @@ body > .cd-editor-lineitem-li {
   }
 }
 
-.cd-editor-lineitem-actions {
-  position: relative;
-  float: right;
-  width: 40%;
-  text-align: right;
-  height: 30px;
-  line-height: 30px;
-}
-
 .cd-editor-lineitem-action {
+  float: right;
   height: 30px;
   line-height: 30px;
   width: 30px;
@@ -367,13 +369,16 @@ body > .cd-editor-lineitem-li {
   padding: 0;
   margin: 0;
   border-left: 1px solid $medium-gray;
-  background-color: transparent;
   background-color: #fff;
   outline: none;
   box-shadow: none;
   vertical-align: top;
   color: $dark-gray;
   cursor: pointer;
+
+  &:hover {
+    background-color: darken(#fff, 5%);
+  }
 
   &.cd-editor-lineitem-action-close {
     color: $color-error;
@@ -408,6 +413,49 @@ body > .cd-editor-lineitem-li {
 
     & + .cd-editor-lineitem-form-subfield {
       margin-top: -0.8em;
+    }
+  }
+
+  .cd-editor-lineitem-form-actions {
+    margin: 0.5em -0.5em -0.5em -0.5em;
+    border-top: 1px solid $medium-gray;
+    font-size: 1em;
+
+    &:after {
+      content: '';
+      clear: both;
+      display: table;
+    }
+  }
+
+  .cd-editor-lineitem-form-action {
+    float: left;
+    height: 30px;
+    line-height: 30px;
+    width: 50%;
+    border: none;
+    padding: 0;
+    margin: 0;
+    background-color: #fff;
+    outline: none;
+    box-shadow: none;
+    vertical-align: top;
+    color: $dark-gray;
+    cursor: pointer;
+    font-size: inherit;
+
+    &:hover {
+      background-color: darken(#fff, 5%);
+      color: #000;
+    }
+
+    &:first-of-type {
+      border-right: 1px solid $medium-gray;
+    }
+
+    &.cd-editor-lineitem-form-action-delete {
+      //background-color: $color-error;
+      color: $color-error;
     }
   }
 }
