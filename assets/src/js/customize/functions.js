@@ -258,9 +258,9 @@ function sortableCancelStart(e) {
  * @param maybeObject
  * @returns {*}
  */
-function ensureArray (maybeObject) {
+function ensureArray(maybeObject) {
 
-    if (typeof maybeObject === 'array' ) {
+    if ( typeof maybeObject === 'array' ) {
 
         return maybeObject;
     }

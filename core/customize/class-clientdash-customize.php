@@ -697,22 +697,32 @@ class ClientDash_Customize {
 
 		$customizations = cd_get_customizations( $role );
 
-		// Double check we iterate in proper order
-		ksort( $menu );
+		if ( $customizations && ! empty( $customizations['menu'] ) ) {
 
-		$save_menu       = array();
-		$save_menu_new   = array();
-		$customized_menu = isset( $customizations['menu'] ) ? $customizations['menu'] : array();
+			$customized_menu = $customizations['menu'];
+			$save_menu       = $customized_menu;
+
+		} else {
+
+			$save_menu = array();
+		}
 
 		foreach ( $menu as $menu_item ) {
 
-			$customized_menu_item_key = cd_array_get_index_by_key( $customized_menu, 'id', $menu_item[2] );
-			$customized_menu_item     = $customized_menu_item_key !== false ?
-				$customized_menu[ $customized_menu_item_key ] : false;
+			$customized_menu_item_key = cd_array_get_index_by_key( $save_menu, 'id', $menu_item[2] );
+
+			if ( $customized_menu_item_key !== false ) {
+				continue;
+			}
 
 			$type = 'menu_item';
 
 			if ( strpos( $menu_item[4], 'wp-menu-separator' ) !== false ) {
+
+				// If we already have a customized menu, don't add new separators.
+				if ( isset( $customized_menu ) ) {
+					continue;
+				}
 
 				$type = 'separator';
 			}
@@ -724,70 +734,77 @@ class ClientDash_Customize {
 
 			// If menu was previously customized, and this item does not exist in that customized menu, and it isn't
 			// the client dash item, we can assume it is new.
-			$new = ( $customized_menu && ! $customized_menu_item && $type !== 'clientdash' ) || false;
+			$new = ( isset( $customized_menu ) && $type !== 'clientdash' ) || false;
 
 			$save_menu[] = array(
 				'id'             => $menu_item[2],
-				'title'          => $customized_menu_item ? $customized_menu_item['title'] : '',
+				'title'          => '',
 				'original_title' => $menu_item[0],
-				'icon'           => $customized_menu_item ? $customized_menu_item['icon'] : '',
+				'icon'           => '',
 				'original_icon'  => isset( $menu_item[6] ) ? $menu_item[6] : '',
-				'type'           => $customized_menu_item ? $customized_menu_item['type'] : $type,
-				'deleted'        => $customized_menu_item ? $customized_menu_item['deleted'] : $new,
+				'type'           => $type,
+				'deleted'        => $new,
 				'new'            => $new,
 			);
 		}
 
+		foreach ( $save_menu as $i => $save_menu_item ) {
+			$save_menu[ $i ] = $this->process_menu_item( $save_menu_item );
+		}
+
 		ksort( $save_menu );
 
-		// Get original submenu merged with customizations
-		$save_submenu       = array();
-		$customized_submenu = isset( $customizations['submenu'] ) ? $customizations['submenu'] : array();
+		if ( $customizations && ! empty( $customizations['submenu'] ) ) {
 
-		foreach ( $submenu as $menu_slug => $submenu_items ) {
+			$customized_submenu = $customizations['submenu'];
+			$save_submenu       = $customized_submenu;
 
-			ksort( $submenu_items );
+		} else {
 
-			$save_submenu[ $menu_slug ] = array();
+			$save_submenu = array();
+		}
 
-			foreach ( $submenu_items as $submenu_item ) {
+		foreach ( $submenu as $menu_ID => $submenu_items ) {
 
-				if ( isset( $customized_submenu[ $menu_slug ] ) ) {
+			foreach ( $submenu_items as $i => $submenu_item ) {
 
-					$customized_submenu_item = cd_array_search_by_key( $customized_submenu[ $menu_slug ], 'id', $submenu_item[2] );
-					$customized_submenu_item = $customized_submenu_item ? $customized_submenu_item : array();
+				$customized_submenu_item_key = cd_array_get_index_by_key( $save_submenu[ $menu_ID ], 'id', $submenu_item[2] );
 
-				} else {
-
-					$customized_submenu_item = array();
+				if ( $customized_submenu_item_key !== false ) {
+					continue;
 				}
 
-				$type = 'submenu_item';
+				$type = 'menu_item';
 
-				if ( cd_is_core_page( $submenu_item[2] ) ) {
+				// If menu was previously customized, and this item does not exist in that customized menu, and it isn't
+				// the client dash item, we can assume it is new.
+				$new = isset( $customized_submenu );
 
-					$type = 'cd_page';
-				}
-
-				// Get save menu item that is parent of this submenu item
-				$submenu_item_parent_key = cd_array_get_index_by_key( $save_menu, 'id', $menu_slug );
-				$submenu_item_parent     = $submenu_item_parent_key !== false ?
-					$save_menu[ $submenu_item_parent_key ] : false;
-
-				// If menu was previously customized, and this item does not exist in that customized menu, we can
-				// assume it is new. BUT, if parent is new, don't set as new (this way, once they add the new menu item
-				// parent, all of its submenu items are added too).
-				$new = ( $customized_submenu && ! $customized_submenu_item && ! $submenu_item_parent['new'] ) || false;
-
-				$save_submenu[ $menu_slug ][] = wp_parse_args( $customized_submenu_item, array(
+				$save_submenu[ $menu_ID ][] = array(
 					'id'             => $submenu_item[2],
 					'title'          => '',
 					'original_title' => $submenu_item[0],
 					'type'           => $type,
-					'deleted'        => $customized_submenu_item ? $customized_submenu_item['deleted'] : $new,
+					'deleted'        => $new,
 					'new'            => $new,
-				) );
+				);
 			}
+
+			// Process submenu
+			foreach ( $save_submenu[ $menu_ID ] as $i => $save_submenu_item ) {
+
+				$save_submenu[ $menu_ID ][ $i ] = $this->process_submenu_item( $save_submenu_item, $menu_ID );
+
+				// Edge-case: Header is in there twice under "Appearance" and then one is hidden via CSS. So, I remove
+				// one here, and then add it back on submenu modify. This way, they stay together and the user doesn't
+				// see 2 of them when customizing.
+				if ( $save_submenu_item['id'] === 'custom-header' ) {
+					unset( $save_submenu[ $menu_ID ][ $i ] );
+				}
+			}
+
+			ksort( $save_submenu[ $menu_ID ] );
+			$save_submenu[ $menu_ID ] = array_values( $save_submenu[ $menu_ID ] );
 		}
 
 		// Set current role menu
@@ -873,5 +890,110 @@ class ClientDash_Customize {
 		) );
 
 		return $dashboard_widgets;
+	}
+
+	/**
+	 * Processes a menu item before inserting into the Customize tool.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 *
+	 * @param array $item Menu item array.
+	 *
+	 * @return array Processed menu item array.
+	 */
+	private function process_menu_item( $item ) {
+
+		switch ( $item['id'] ) {
+
+			case 'plugins.php';
+				$item['original_title'] = __( 'Plugins', 'client-dash' );
+				break;
+
+			case 'edit-comments.php';
+				$item['original_title'] = __( 'Comments', 'client-dash' );
+				break;
+		}
+
+		/**
+		 * Processed menu item for insertion into the Customize tool.
+		 *
+		 * @since {{VERSION}}
+		 */
+		$item = apply_filters( 'cd_customize_process_menu_item', $item );
+
+		return $item;
+	}
+
+	/**
+	 * Processes a submenu item before inserting into the Customize tool.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 *
+	 * @param array $item Submenu item array.
+	 * @param string $menu_ID Parent menu item ID.
+	 *
+	 * @return array Processed submenu item array.
+	 */
+	private function process_submenu_item( $item, $menu_ID ) {
+
+		// Links generated for customizer. Taken from /wp-admin/menu.php:160-173 as of WP version 4.8.0
+		$customize_url            = esc_url( add_query_arg( 'return', urlencode( remove_query_arg( wp_removable_query_args(), wp_unslash( $_SERVER['REQUEST_URI'] ) ) ), 'customize.php' ) );
+		$customize_header_url     = esc_url( add_query_arg( array( 'autofocus' => array( 'control' => 'header_image' ) ), $customize_url ) );
+		$customize_background_url = esc_url( add_query_arg( array( 'autofocus' => array( 'control' => 'background_image' ) ), $customize_url ) );
+
+		switch ( $item['id'] ) {
+
+			case 'update-core.php';
+				$item['original_title'] = __( 'Updates', 'client-dash' );
+				break;
+
+			case $customize_url:
+
+				$item['id'] = 'wp_customize';
+				break;
+
+			case $customize_header_url:
+
+				$item['id'] = 'wp_customize_header';
+				break;
+
+			case $customize_background_url:
+
+				$item['id'] = 'wp_customize_background';
+				break;
+		}
+
+		/**
+		 * Processed submenu item for insertion into the Customize tool.
+		 *
+		 * @since {{VERSION}}
+		 */
+		$item = apply_filters( 'cd_customize_process_submenu_item', $item, $menu_ID );
+
+		return $item;
+	}
+
+	/**
+	 * Processes a dashboard item before inserting into the Customize tool.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 *
+	 * @param array $item Dashboard item array.
+	 *
+	 * @return array Processed dashboard item array.
+	 */
+	private function process_dashboard_item( $item ) {
+
+		/**
+		 * Processed dashboard item for insertion into the Customize tool.
+		 *
+		 * @since {{VERSION}}
+		 */
+		$item = apply_filters( 'cd_customize_process_dashboard_item', $item );
+
+		return $item;
 	}
 }

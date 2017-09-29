@@ -149,18 +149,10 @@ class PanelMenu extends React.Component {
 
         super(props);
 
-        this.onSortEnd      = this.onSortEnd.bind(this);
         this.deleteItem     = this.deleteItem.bind(this);
         this.menuItemEdit   = this.menuItemEdit.bind(this);
         this.submenuEdit    = this.submenuEdit.bind(this);
         this.itemSubmitForm = this.itemSubmitForm.bind(this);
-    }
-
-    onSortEnd(args) {
-
-        const new_order = arrayMove(this.props.menuItems, args.oldIndex, args.newIndex);
-
-        this.props.onReOrderMenu(new_order);
     }
 
     deleteItem(ID) {
@@ -257,7 +249,7 @@ class PanelMenu extends React.Component {
             panel_contents =
                 <SortableLineItems
                     items={menu_items}
-                    onSortEnd={this.onSortEnd}
+                    onSortEnd={this.props.reOrderMenu}
                     axis="y"
                     lockAxis="y"
                     lockToContainerEdges={true}
@@ -295,17 +287,9 @@ class PanelSubmenu extends React.Component {
 
         super(props);
 
-        this.onSortEnd       = this.onSortEnd.bind(this);
         this.deleteItem      = this.deleteItem.bind(this);
         this.submenuItemEdit = this.submenuItemEdit.bind(this);
         this.itemSubmitForm  = this.itemSubmitForm.bind(this);
-    }
-
-    onSortEnd(args) {
-
-        let new_order = arrayMove(this.props.submenuItems, args.oldIndex, args.newIndex);
-
-        this.props.onReOrderSubmenu(new_order);
     }
 
     deleteItem(item_id) {
@@ -376,7 +360,7 @@ class PanelSubmenu extends React.Component {
             panel_contents =
                 <SortableLineItems
                     items={menu_items}
-                    onSortEnd={this.onSortEnd}
+                    onSortEnd={this.props.reOrderSubmenu}
                     axis="y"
                     lockAxis="y"
                     pressDelay={50}

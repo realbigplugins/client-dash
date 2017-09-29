@@ -576,13 +576,14 @@ class Editor extends React.Component {
         this.dataChange();
     }
 
-    reOrderMenu(new_order) {
+    reOrderMenu(args) {
 
         let role = this.props.role;
 
         this.setState((prevState) => {
 
-            prevState.customizations[role].menu = new_order;
+            prevState.customizations[role].menu =
+                arrayMove(prevState.customizations[role].menu, args.oldIndex, args.newIndex);
 
             return prevState;
         });
@@ -590,14 +591,15 @@ class Editor extends React.Component {
         this.dataChange(false);
     }
 
-    reOrderSubmenu(new_order) {
+    reOrderSubmenu(args) {
 
         let submenu_edit = this.state.submenuEdit;
         let role         = this.props.role;
 
         this.setState((prevState) => {
 
-            prevState.customizations[role].submenu[submenu_edit] = new_order;
+            prevState.customizations[role].submenu[submenu_edit] =
+                arrayMove(prevState.customizations[role].submenu[submenu_edit], args.oldIndex, args.newIndex);
 
             return prevState;
         });
@@ -731,7 +733,7 @@ class Editor extends React.Component {
                         onMenuItemEdit={this.menuItemEdit}
                         onDeleteItem={this.menuItemDelete}
                         onSubmenuEdit={this.submenuEdit}
-                        onReOrderMenu={this.reOrderMenu}
+                        reOrderMenu={this.reOrderMenu}
                         onItemSubmitForm={this.previewChanges}
                     />
                 ;
@@ -783,7 +785,7 @@ class Editor extends React.Component {
                         onSubmenuItemEdit={this.submenuItemEdit}
                         submenuItems={available_items}
                         onDeleteItem={this.submenuItemDelete}
-                        onReOrderSubmenu={this.reOrderSubmenu}
+                        reOrderSubmenu={this.reOrderSubmenu}
                         onItemSubmitForm={this.previewChanges}
                     />
                 ;

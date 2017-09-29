@@ -130,7 +130,9 @@ class ClientDash_Modify {
 
 		foreach ( $menu as $i => $menu_item ) {
 
-			$customized_menu_item_key = cd_array_get_index_by_key( $this->menu, 'id', $menu_item[2] );
+			$processed_menu_item_id = $this->get_processed_menu_item_id( $menu_item[2] );
+
+			$customized_menu_item_key = cd_array_get_index_by_key( $this->menu, 'id', $processed_menu_item_id );
 
 			if ( $customized_menu_item_key === false ) {
 
@@ -157,6 +159,25 @@ class ClientDash_Modify {
 			);
 		}
 
+		// Add custom links and separators.
+		foreach ( $this->menu as $i => $menu_item ) {
+
+			switch ( $menu_item['type'] ) {
+
+				case 'custom_link':
+					$new_menu[ $i ] = array(
+						isset( $menu_item['title'] ) && $menu_item['title'] ? $menu_item['title'] : $menu_item['original_title'],
+						'read',
+						$menu_item['link'] ? $menu_item['link'] : '#',
+						isset( $menu_item['title'] ) && $menu_item['title'] ? $menu_item['title'] : $menu_item['original_title'],
+						'menu-top menu-custom-link',
+						'menu-custom-link',
+						$menu_item['icon'],
+					);
+					break;
+			}
+		}
+
 		// Sort and re-index
 		ksort( $new_menu );
 		$new_menu = array_values( $new_menu );
@@ -178,6 +199,11 @@ class ClientDash_Modify {
 
 		$new_submenu = array();
 
+		// Links generated for customizer. Taken from /wp-admin/menu.php:160-173 as of WP version 4.8.0
+		$customize_url            = esc_url( add_query_arg( 'return', urlencode( remove_query_arg( wp_removable_query_args(), wp_unslash( $_SERVER['REQUEST_URI'] ) ) ), 'customize.php' ) );
+		$customize_header_url     = esc_url( add_query_arg( array( 'autofocus' => array( 'control' => 'header_image' ) ), $customize_url ) );
+		$customize_background_url = esc_url( add_query_arg( array( 'autofocus' => array( 'control' => 'background_image' ) ), $customize_url ) );
+
 		foreach ( $submenu as $menu_parent => $submenu_items ) {
 
 			$menu_parent_i = cd_array_get_index_by_key( $menu, 2, $menu_parent );
@@ -192,10 +218,12 @@ class ClientDash_Modify {
 
 			foreach ( $submenu_items as $i => $submenu_item ) {
 
+				$processed_submenu_item_id = $this->get_processed_submenu_item_id( $submenu_item[2], $menu_parent );
+
 				$customized_submenu_item_key = cd_array_get_index_by_key(
 					$this->submenu[ $menu_parent ],
 					'id',
-					$submenu_item[2]
+					$processed_submenu_item_id
 				);
 
 				if ( $customized_submenu_item_key === false ) {
@@ -221,6 +249,28 @@ class ClientDash_Modify {
 			}
 
 			ksort( $new_submenu[ $menu_parent ] );
+
+			$process_submenu             = $new_submenu[ $menu_parent ];
+			$new_submenu[ $menu_parent ] = array();
+
+			// Process submenu
+			foreach ( $process_submenu as $i => $submenu_item ) {
+
+				// Edge-case: Header is in there twice under "Appearance" and then one is hidden via CSS. So, I remove
+				// one here, and then add it back on submenu modify. This way, they stay together and the user doesn't
+				// see 2 of them when customizing.
+				if ( $submenu_item[2] === $customize_header_url ) {
+
+					$new_submenu[ $menu_parent ][] = $submenu_item;
+
+					// Now duplicate, but with the proper link
+					$submenu_item[2] = 'custom-header';
+					$new_submenu[ $menu_parent ][] = $submenu_item;
+					continue;
+				}
+
+				$new_submenu[ $menu_parent ][] = $submenu_item;
+			}
 		}
 
 		/**
@@ -269,7 +319,9 @@ class ClientDash_Modify {
 
 					foreach ( $widgets as $i => $widget ) {
 
-						$custom_widget = cd_array_search_by_key( $this->dashboard, 'id', $widget['id'] );
+						$processed_widget_id = $this->get_processed_dashboard_item_id( $widget['id'] );
+
+						$custom_widget = cd_array_search_by_key( $this->dashboard, 'id', $processed_widget_id );
 
 						// No custom widget? remove it.
 						if ( $custom_widget === false ||
@@ -289,5 +341,95 @@ class ClientDash_Modify {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Gets a processed menu ID from the Customize tool.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 *
+	 * @param string $item Menu item ID
+	 *
+	 * @return string Processed menu item ID.
+	 */
+	private function get_processed_menu_item_id( $ID ) {
+
+		/**
+		 * Processed menu item ID for menu lookup.
+		 *
+		 * @since {{VERSION}}
+		 */
+		$ID = apply_filters( 'cd_customize_get_processed_menu_id', $ID );
+
+		return $ID;
+	}
+
+	/**
+	 * Gets a processed submenu ID from the Customize tool.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 *
+	 * @param string $item Submenu item ID
+	 * @param string $menu_ID Parent menu item ID.
+	 *
+	 * @return string Processed submenu item ID.
+	 */
+	private function get_processed_submenu_item_id( $ID, $menu_ID ) {
+
+		// Links generated for customizer. Taken from /wp-admin/menu.php:160-173 as of WP version 4.8.0
+		$customize_url            = esc_url( add_query_arg( 'return', urlencode( remove_query_arg( wp_removable_query_args(), wp_unslash( $_SERVER['REQUEST_URI'] ) ) ), 'customize.php' ) );
+		$customize_header_url     = esc_url( add_query_arg( array( 'autofocus' => array( 'control' => 'header_image' ) ), $customize_url ) );
+		$customize_background_url = esc_url( add_query_arg( array( 'autofocus' => array( 'control' => 'background_image' ) ), $customize_url ) );
+
+		switch ( $ID ) {
+
+			case $customize_url:
+
+				$ID = 'wp_customize';
+				break;
+
+			case $customize_header_url:
+
+				$ID = 'wp_customize_header';
+				break;
+
+			case $customize_background_url:
+
+				$ID = 'wp_customize_background';
+				break;
+		}
+
+		/**
+		 * Processed submenu item ID for submenu lookup.
+		 *
+		 * @since {{VERSION}}
+		 */
+		$ID = apply_filters( 'cd_customize_get_processed_submenu_id', $ID, $menu_ID );
+
+		return $ID;
+	}
+
+	/**
+	 * Gets a processed dashboard ID from the Customize tool.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 *
+	 * @param string $item Dashboard item ID
+	 *
+	 * @return string Processed dashboard item ID.
+	 */
+	private function get_processed_dashboard_item_id( $ID ) {
+
+		/**
+		 * Processed dashboard item ID for dashboard lookup.
+		 *
+		 * @since {{VERSION}}
+		 */
+		$ID = apply_filters( 'cd_customize_get_processed_dashboard_id', $ID );
+
+		return $ID;
 	}
 }

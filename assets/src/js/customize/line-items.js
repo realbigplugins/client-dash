@@ -37,7 +37,7 @@ class LineItemContent extends React.Component {
         super(props);
 
         this.handleToggleEdit = this.handleToggleEdit.bind(this);
-        this.handleAddItem     = this.handleAddItem.bind(this);
+        this.handleAddItem    = this.handleAddItem.bind(this);
         this.handleDelete     = this.handleDelete.bind(this);
     }
 
@@ -350,6 +350,12 @@ class MenuItemEdit extends React.Component {
 
                   </LineItemForm>
         ;
+
+        // let title = this.props.original_title;
+        //
+        // if (!  this.props.title ) {
+        //     title = processTitleDisplay(this.props.original_title, this.props.id);
+        // }
 
         return (
             <LineItemContent
