@@ -861,23 +861,23 @@ class ClientDash_Customize {
 
 						if ( $customized_widget ) {
 
-							$save_dashboard[] = wp_parse_args( $customized_widget, array(
+							$save_dashboard[] = $this->process_dashboard_item( wp_parse_args( $customized_widget, array(
 								'id'             => $widget['id'],
 								'title'          => '',
 								'original_title' => $widget_title,
 								'new'            => false,
 								'deleted'        => $customized_widget['deleted'] ? $customized_widget['deleted'] : false,
-							) );
+							) ) );
 
 						} else {
 
-							$save_dashboard[] = array(
+							$save_dashboard[] = $this->process_dashboard_item( array(
 								'id'             => $widget['id'],
 								'title'          => '',
 								'original_title' => $widget_title,
 								'new'            => ! empty( $customized_dashboard ) && ! $is_helper_page_widget,
 								'deleted'        => ! empty( $customized_dashboard ),
-							);
+							) );
 						}
 					}
 				}
@@ -986,6 +986,13 @@ class ClientDash_Customize {
 	 * @return array Processed dashboard item array.
 	 */
 	private function process_dashboard_item( $item ) {
+
+		switch ( $item['id'] ) {
+
+			case 'dashboard_quick_press':
+				$item['original_title'] = __( 'Quick Draft', 'client-dash' );
+				break;
+		}
 
 		/**
 		 * Processed dashboard item for insertion into the Customize tool.
