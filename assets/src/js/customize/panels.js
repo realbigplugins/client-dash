@@ -13,6 +13,7 @@ import {
     WidgetEdit,
 } from './line-items';
 import {arrayMove} from 'react-sortable-hoc';
+import ActionButton from "./action-button";
 
 const l10n = ClientdashCustomize_Data.l10n || false;
 
@@ -66,6 +67,36 @@ class PanelPrimary extends React.Component {
                     target="dashboard"
                     onLoadPanel={this.loadPanel}
                 />
+
+                <a href="#" className="cd-editor-sub-action delete"
+                   onClick={this.props.confirmReset}>
+                    <span className="fa fa-trash"/> Reset role customizations
+                </a>
+            </Panel>
+        )
+    }
+}
+
+/**
+ * Panel for confirming or cancelling resetting the role.
+ *
+ * @since {{VERSION}}
+ */
+class PanelConfirmReset extends React.Component {
+    render() {
+        return (
+            <Panel id="confirmReset">
+                <div className="cd-editor-lineitem-button delete"
+                        onClick={this.props.resetRole}>
+                    <span className="fa fa-trash"/>
+                    {l10n['yes_understand']}
+                </div>
+
+                <div className="cd-editor-lineitem-button"
+                        onClick={this.props.cancelReset}>
+                    <span className="fa fa-ban"/>
+                    {l10n['nevermind']}
+                </div>
             </Panel>
         )
     }
@@ -167,56 +198,56 @@ class PanelMenu extends React.Component {
                     case 'separator':
 
                         menu_item =
-                                <MenuItemSeparator
-                                    key={item.id}
-                                    id={item.id}
-                                    onDeleteItem={this.deleteItem}
-                                />
-                            ;
+                            <MenuItemSeparator
+                                key={item.id}
+                                id={item.id}
+                                onDeleteItem={this.deleteItem}
+                            />
+                        ;
 
                         break;
 
                     case 'custom_link':
 
                         menu_item =
-                                <MenuItemCustomLink
-                                    key={item.id}
-                                    id={item.id}
-                                    title={item.title}
-                                    link={item.link}
-                                    original_title={item.original_title}
-                                    icon={item.icon}
-                                    original_icon={item.original_icon}
-                                    editing={this.props.editing === item.id}
-                                    hasSubmenu={item.hasSubmenu}
-                                    onMenuItemEdit={this.menuItemEdit}
-                                    onSubmenuEdit={this.submenuEdit}
-                                    onDeleteItem={this.deleteItem}
-                                    onItemFormSubmit={this.itemSubmitForm}
-                                />
-                            ;
+                            <MenuItemCustomLink
+                                key={item.id}
+                                id={item.id}
+                                title={item.title}
+                                link={item.link}
+                                original_title={item.original_title}
+                                icon={item.icon}
+                                original_icon={item.original_icon}
+                                editing={this.props.editing === item.id}
+                                hasSubmenu={item.hasSubmenu}
+                                onMenuItemEdit={this.menuItemEdit}
+                                onSubmenuEdit={this.submenuEdit}
+                                onDeleteItem={this.deleteItem}
+                                onItemFormSubmit={this.itemSubmitForm}
+                            />
+                        ;
 
                         break;
 
                     default:
 
                         menu_item =
-                                <MenuItemEdit
-                                    key={item.id}
-                                    id={item.id}
-                                    title={item.title}
-                                    original_title={item.original_title}
-                                    icon={item.icon}
-                                    type={item.type}
-                                    original_icon={item.original_icon}
-                                    editing={this.props.editing === item.id}
-                                    hasSubmenu={item.hasSubmenu}
-                                    onMenuItemEdit={this.menuItemEdit}
-                                    onSubmenuEdit={this.submenuEdit}
-                                    onDeleteItem={this.deleteItem}
-                                    onItemFormSubmit={this.itemSubmitForm}
-                                />
-                            ;
+                            <MenuItemEdit
+                                key={item.id}
+                                id={item.id}
+                                title={item.title}
+                                original_title={item.original_title}
+                                icon={item.icon}
+                                type={item.type}
+                                original_icon={item.original_icon}
+                                editing={this.props.editing === item.id}
+                                hasSubmenu={item.hasSubmenu}
+                                onMenuItemEdit={this.menuItemEdit}
+                                onSubmenuEdit={this.submenuEdit}
+                                onDeleteItem={this.deleteItem}
+                                onItemFormSubmit={this.itemSubmitForm}
+                            />
+                        ;
                 }
 
 
@@ -541,6 +572,7 @@ class PanelBlank extends React.Component {
 export {
     Panel,
     PanelPrimary,
+    PanelConfirmReset,
     PanelAddItems,
     PanelBlank,
     PanelDashboard,

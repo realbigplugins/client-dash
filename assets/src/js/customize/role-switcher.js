@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {Select} from './form-fields';
+import ActionButton from './action-button';
 
 const roles = ClientdashCustomize_Data.roles || false;
 const l10n  = ClientdashCustomize_Data.l10n || false;
@@ -15,6 +16,10 @@ class RoleSwitcher extends React.Component {
     constructor(props) {
 
         super(props);
+
+        this.state = {
+            confirming: false,
+        }
 
         this.switchRole = this.switchRole.bind(this);
     }

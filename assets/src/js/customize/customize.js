@@ -35,15 +35,16 @@ class Customize extends React.Component {
             loadTutorial: loadTutorial,
         }
 
-        this.hideCustomizer      = this.hideCustomizer.bind(this);
-        this.showCustomizer      = this.showCustomizer.bind(this);
-        this.switchRole          = this.switchRole.bind(this);
-        this.resetRole           = this.resetRole.bind(this);
-        this.loadData            = this.loadData.bind(this);
-        this.refreshPreview      = this.refreshPreview.bind(this);
-        this.showMessage         = this.showMessage.bind(this);
-        this.closeTutorial       = this.closeTutorial.bind(this);
-        this.tutorialChangePanel = this.tutorialChangePanel.bind(this);
+        this.handleEditorHideClick = this.handleEditorHideClick.bind(this);
+        this.hideEditor            = this.hideEditor.bind(this);
+        this.showEditor            = this.showEditor.bind(this);
+        this.switchRole            = this.switchRole.bind(this);
+        this.resetRole             = this.resetRole.bind(this);
+        this.loadData              = this.loadData.bind(this);
+        this.refreshPreview        = this.refreshPreview.bind(this);
+        this.showMessage           = this.showMessage.bind(this);
+        this.closeTutorial         = this.closeTutorial.bind(this);
+        this.tutorialChangePanel   = this.tutorialChangePanel.bind(this);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -57,14 +58,28 @@ class Customize extends React.Component {
         return true;
     }
 
-    hideCustomizer() {
+    handleEditorHideClick(event) {
+
+        event.preventDefault();
+
+        if (this.state.hidden) {
+
+            this.showEditor();
+
+        } else {
+
+            this.hideEditor();
+        }
+    }
+
+    hideEditor() {
 
         this.setState({
             hidden: true,
         });
     }
 
-    showCustomizer() {
+    showEditor() {
 
         this.setState({
             hidden: false,
@@ -147,15 +162,8 @@ class Customize extends React.Component {
 
         return (
             <div className={"cd-customize-container " + (this.state.hidden ? "hidden" : "")}>
-                {this.state.hidden &&
-                <button type="button" className="cd-customize-show"
-                        title={l10n['show_controls']} onClick={this.showCustomizer}>
-                    <span className="cd-customize-show-icon fa fa-chevron-circle-right"/>
-                </button>
-                }
-
                 <Editor
-                    onHideCustomizer={this.hideCustomizer}
+                    onHideCustomizer={this.hideEditor}
                     onSwitchRole={this.switchRole}
                     onResetRole={this.resetRole}
                     refreshPreview={this.refreshPreview}
@@ -170,6 +178,12 @@ class Customize extends React.Component {
                     onShowMessage={this.showMessage}
                     ref="preview"
                 />
+
+                <div className={`cd-editor-hide ${this.state.hidden && 'hidden'}`}>
+                    <a href="#" onClick={this.handleEditorHideClick}>
+                        <span className={`fa fa-chevron-circle-${this.state.hidden && 'right' || 'left'}`}/>
+                    </a>
+                </div>
 
                 {this.state.previewLoading &&
                 <div id="cd-editor-preview-cover">

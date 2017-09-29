@@ -21,10 +21,18 @@ class SecondaryActions extends React.Component {
 
     loadNextPanel() {
 
+        if (this.props.disabled) {
+            return;
+        }
+
         this.props.onLoadPanel(this.props.nextPanel, 'forward');
     }
 
     loadPreviousPanel() {
+
+        if (this.props.disabled) {
+            return;
+        }
 
         this.props.onLoadPanel(this.props.previousPanel, 'backward');
     }
@@ -45,19 +53,17 @@ class SecondaryActions extends React.Component {
                         title={l10n['action_button_back']}
                         text={<span className="fa fa-chevron-left"/>}
                         align="left"
+                        size="large"
                         onHandleClick={this.loadPreviousPanel}
                         disabled={this.props.disabled}
                     />
                     }
 
                     {this.props.nextPanel &&
-                    <ActionButton
-                        title={this.props.loadNextText}
-                        text={<span className="fa fa-plus"/>}
-                        align="right"
-                        onHandleClick={this.loadNextPanel}
-                        disabled={this.props.disabled}
-                    />
+                        <a href="#" className="cd-editor-sub-action cd-editor-add-items"
+                           onClick={this.loadNextPanel}>
+                            <span className="fa fa-plus-square" /> {this.props.loadNextText}
+                        </a>
                     }
 
                     {this.props.nextPanelNotification &&
@@ -129,37 +135,11 @@ class SecondaryActionsPrimary extends React.Component {
 
         return (
             <div className="cd-editor-secondary-actions">
-                <div className="cd-editor-panel-actions-buttons">
-
-                    {(!this.state.confirming && !this.props.deleting) &&
-                    <ActionButton
-                        title={l10n['reset_role']}
-                        text={<span className="fa fa-trash"/>}
-                        align="left"
-                        type="delete"
-                        disabled={this.props.resettable}
-                        onHandleClick={this.confirmReset}
-                    />}
-
-                    {(this.state.confirming && !this.props.deleting) &&
-                    <ActionButton
-                        title={l10n['cancel']}
-                        text={<span className="fa fa-ban" />}
-                        align="left"
-                        onHandleClick={this.cancelReset}
-                    />}
-
-                    {(this.state.confirming || this.props.deleting) &&
-                    <ActionButton
-                        title={l10n['confirm']}
-                        text={this.props.deleting ? <span className="fa fa-circle-o-notch fa-spin"/> :
-                            <span className="fa fa-check"/>}
-                        align="right"
-                        type="delete"
-                        onHandleClick={this.resetRole}
-                    />}
-
+                {this.props.title &&
+                <div className="cd-editor-panel-actions-title">
+                    {this.props.title}
                 </div>
+                }
             </div>
         )
     }

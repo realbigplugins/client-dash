@@ -55,6 +55,11 @@ class Message extends React.Component {
             'cd-editor-message-' + this.props.type
         ]
 
+        if ( this.props.noHide) {
+
+            classes.push('cd-editor-message-inflow');
+        }
+
         if ( this.props.text && this.state.visible ) {
 
             classes.push('cd-editor-message-visible');

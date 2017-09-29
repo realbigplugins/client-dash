@@ -52,15 +52,24 @@ class ActionButton extends React.Component {
             classes.push(this.props.align);
         }
 
+        if (this.props.size) {
+
+            classes.push(this.props.size);
+        }
+
         if (this.props.disabled) {
 
             classes.push('cd-editor-action-button-disabled');
         }
 
         return (
-            <button type="button" title={this.props.title || this.props.text} aria-label={this.props.text} className={classes.join(' ')}
+            <button type="button" title={this.props.title || this.props.text} aria-label={this.title || this.props.text}
+                    className={classes.join(' ')}
                     onClick={this.handleClick}>
-                {this.props.text}
+                {this.props.icon &&
+                <span className={`fa fa-${this.props.icon}`} />
+                }
+                {this.props.text || ''}
             </button>
         )
     }

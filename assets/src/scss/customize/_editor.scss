@@ -9,8 +9,8 @@
   top: 0;
   left: 0;
   bottom: 0;
-  width: 300px;
-  margin-left: -300px;
+  width: $customizer-width;
+  margin-left: -$customizer-width;
   background-color: $light-gray;
   font-size: 14px;
   color: #444;
@@ -24,9 +24,20 @@
   z-index: 10;
 }
 
+.cd-editor-sub-header {
+  border-bottom: 1px solid $medium-gray;
+
+  &:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
 .cd-editor-primary-actions {
   position: relative;
   height: 50px;
+  background-color: #fff;
   z-index: 10;
 
   &:after {
@@ -36,10 +47,8 @@
   }
 
   .cd-editor-action-button {
-    width: 33.3333%;
-    float: left;
-    text-align: center;
     border-width: 0;
+    padding: 0 1em;
 
     &:not(:last-of-type) {
       border-right-width: 1px;
@@ -48,8 +57,48 @@
 }
 
 .cd-editor-secondary-actions {
+  .cd-editor-panel-actions-title {
+    font-style: italic;
+    border-top: 1px solid $medium-gray;
+    background-color: #fff;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 1em;
+  }
+
+  .cd-editor-panel-actions-buttons {
+    position: relative;
+    height: 50px;
+    border-top: 1px solid $medium-gray;
+  }
+
   .cd-editor-action-button {
-    font-size: $font-large;
+    border-top: 0;
+    border-bottom: 0;
+  }
+
+  .cd-editor-add-items {
+    float: right;
+    margin-right: 1em;
+  }
+
+  .cd-editor-panel-actions-notification {
+    &.next {
+      right: 5px;
+
+      &:after {
+        right: 10%;
+        left: auto;
+      }
+    }
+
+    &.previous {
+      left: 5px;
+
+      &:after {
+        left: 10%;
+      }
+    }
   }
 }
 
@@ -59,9 +108,7 @@
   height: 50px;
   line-height: 50px;
   font-style: italic;
-  border-top: 1px solid $medium-gray;
-  background-color: #fff;
-  border-bottom: 1px solid $medium-gray;
+  text-align: right;
   z-index: 10;
 
   select {
@@ -77,6 +124,7 @@
   background: #fff;
   min-height: 50px;
   padding: 0.8em 2em 0.8em 1em;
+  border-top: 1px solid $medium-gray;
   box-shadow: 0 0 10px rgba(#000, 0.2);
   transform: translateY(-100%);
   transition: transform 300ms;
@@ -102,6 +150,10 @@
     border-bottom: 5px solid $color-error;
   }
 
+  &.cd-editor-message-inflow {
+    position: relative;
+  }
+
   .cd-editor-message-close {
     position: absolute;
     right: 0.5em;
@@ -118,6 +170,7 @@
 
 .cd-editor-panels {
   position: relative;
+  width: 100%;
   overflow-y: scroll;
   height: calc(100% - 200px);
   z-index: 5;
@@ -194,46 +247,10 @@
   left: 0;
   width: 100%;
   box-shadow: 0 0 10px rgba(#000, 0.2);
+  padding-left: 20px;
+  background: #fff;
+  border-top: 1px solid $medium-gray;
   z-index: 10;
-
-  .cd-editor-panel-actions-title {
-    font-style: italic;
-    border-top: 1px solid $medium-gray;
-    background-color: #fff;
-    height: 50px;
-    line-height: 50px;
-    padding: 0 1em;
-  }
-
-  .cd-editor-panel-actions-buttons {
-    position: relative;
-    height: 50px;
-    border-top: 1px solid $medium-gray;
-  }
-
-  .cd-editor-action-button {
-    border-top: 0;
-    border-bottom: 0;
-  }
-
-  .cd-editor-panel-actions-notification {
-    &.next {
-      right: 5px;
-
-      &:after {
-        right: 10%;
-        left: auto;
-      }
-    }
-
-    &.previous {
-      left: 5px;
-
-      &:after {
-        left: 10%;
-      }
-    }
-  }
 }
 
 .cd-editor-lineitems {
@@ -279,6 +296,38 @@
         @extend .cd-icon-logo:before;
       }
     }
+  }
+}
+
+.cd-editor-lineitem-button {
+  background-color: $light-gray;
+  border: 1px solid $medium-gray;
+  font-size: $font-medium;
+  padding: 0.5em;
+  margin: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  width: auto;
+  color: $dark-gray;
+
+  &:hover {
+    color: #000;
+    border-color: darken($medium-gray, 20%);
+  }
+
+  &.delete {
+    background-color: $color-error;
+    color: mix($color-error, #fff, 30%);
+    border: 1px solid mix($color-error, #000, 90%);
+
+    &:hover {
+      color: #fff;
+      border-color: mix($color-error, #000, 40%);
+    }
+  }
+
+  .fa {
+    margin-right: 0.8em;
   }
 }
 

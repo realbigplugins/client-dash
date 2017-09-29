@@ -239,7 +239,7 @@ class ClientDash_Customize {
 			'load_tutorial'   => get_user_meta( get_current_user_id(), 'clientdash_hide_customize_tutorial', true ) !== 'yes',
 			'tutorial_panels' => $this->get_tutorial_panels(),
 			'l10n'            => array(
-				'role_switcher_label'               => __( 'Modifying for:', 'client-dash' ),
+				'role_switcher_label'               => __( 'Customizing:', 'client-dash' ),
 				'panel_text_menu'                   => __( 'Menu', 'client-dash' ),
 				'panel_text_dashboard'              => __( 'Dashboard', 'client-dash' ),
 				'panel_text_cd_pages'               => __( 'Pages', 'client-dash' ),
@@ -253,6 +253,9 @@ class ClientDash_Customize {
 				'panel_actions_title_cdpages_add'   => __( 'Adding: Pages', 'client-dash' ),
 				'action_button_back'                => __( 'Back', 'client-dash' ),
 				'action_button_add_items'           => __( 'Add Items', 'client-dash' ),
+				'choose_something_to_customize'     => __( 'Choose something to customize.', 'client-dash' ),
+				'yes_understand'                    => __( 'Yes, I understand.', 'client-dash' ),
+				'nevermind'                         => __( 'Nevermind.', 'client-dash' ),
 				'show_controls'                     => __( 'Show Controls', 'client-dash' ),
 				'title'                             => __( 'Title', 'client-dash' ),
 				'original_title'                    => __( 'Original title:', 'client-dash' ),

@@ -61,20 +61,18 @@ class PrimaryActions extends React.Component {
 
         return (
             <div className="cd-editor-primary-actions">
-
                 <ActionButton
-                    text="Hide"
-                    disabled={this.props.saving || this.props.disabled}
-                    onHandleClick={this.hideCustomizer}
-                />
-                <ActionButton
-                    text="Close"
+                    title="Close"
+                    icon="times"
+                    size="large"
                     disabled={this.props.saving || this.props.disabled}
                     onHandleClick={this.closeCustomizer}
                 />
+
                 <ActionButton
                     text={saveText}
                     title={this.props.saving ? l10n['saving'] : saveText}
+                    align="right"
                     disabled={!this.props.changes || this.props.saving || this.props.disabled}
                     type="primary"
                     onHandleClick={this.saveChanges}

@@ -23,9 +23,13 @@
     float: left;
   }
 
+  &.large {
+    font-size: $font-large;
+  }
+
   &.cd-editor-action-button-disabled {
-    background: darken($light-gray, 8%) !important;
-    color: lighten($dark-gray, 8%) !important;
+    background: darken($light-gray, 8%);
+    color: lighten($dark-gray, 8%);
     cursor: not-allowed;
   }
 
@@ -42,12 +46,17 @@
 
   &.cd-editor-action-button-primary {
     background: $primary-color;
-    color: mix($primary-color, #fff, 50%);
+    color: mix($primary-color, #fff, 15%);
     border-color: darken($primary-color, 10%);
 
-    &:hover {
+    &:not(.cd-editor-action-button-disabled):hover {
       background: linear-gradient(to bottom, $primary-color 0%, darken($primary-color, 10%) 100%);
       color: #fff;
+    }
+
+    &.cd-editor-action-button-disabled {
+      color: mix($primary-color, #fff, 50%);
+      cursor: not-allowed;
     }
   }
 
@@ -61,6 +70,24 @@
 
   .cd-editor-action-button-text {
     vertical-align: middle;
+  }
+}
+
+.cd-editor-sub-action {
+  line-height: 50px;
+  color: $dark-gray;
+  text-decoration: none;
+
+  &:hover {
+    color: inherit;
+  }
+
+  &.delete {
+    color: mix($color-error, #fff, 60%);
+
+    &:hover {
+      color: $color-error;
+    }
   }
 }
 
@@ -157,6 +184,30 @@
       margin-top: -7.5px;
       border-width: 7.5px 0 7.5px 10px;
       border-color: transparent transparent transparent $primary-color;
+    }
+  }
+}
+
+.cd-editor-hide {
+  position: fixed;
+  left: 10px;
+  bottom: 0;
+  line-height: 50px;
+  height: 50px;
+  font-size: 28px;
+  z-index: 20;
+
+  &.hidden {
+    a {
+      color: #fff;
+    }
+  }
+
+  a {
+    color: $dark-gray;
+
+    &:hover {
+      color: $primary-color;
     }
   }
 }

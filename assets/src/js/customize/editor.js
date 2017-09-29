@@ -12,8 +12,10 @@ import {
     getItemIndex,
     ensureArray
 } from './functions';
+
 import {
     PanelPrimary,
+    PanelConfirmReset,
     PanelAddItems,
     PanelBlank,
     PanelDashboard,
@@ -21,6 +23,7 @@ import {
     PanelMenu,
     PanelSubmenu
 } from './panels';
+
 import {SecondaryActions, SecondaryActionsPrimary} from './secondary-actions';
 import PrimaryActions from './primary-actions';
 import RoleSwitcher from './role-switcher';
@@ -82,7 +85,6 @@ class Editor extends React.Component {
         this.widgetAdd         = this.widgetAdd.bind(this);
         this.widgetDelete      = this.widgetDelete.bind(this);
         this.widgetEdit        = this.widgetEdit.bind(this);
-        this.handleEditorClick = this.handleEditorClick.bind(this);
         this.showMessage       = this.showMessage.bind(this);
     }
 
@@ -661,14 +663,6 @@ class Editor extends React.Component {
         this.dataChange();
     }
 
-    handleEditorClick() {
-
-        if ( !this.state.message.noHide ) {
-
-            this.resetMessage();
-        }
-    }
-
     showMessage(message) {
 
         this.setState({
@@ -685,24 +679,31 @@ class Editor extends React.Component {
 
         switch ( this.state.activePanel ) {
 
-            case 'primary':
-            case 'confirmReset':
-            case 'deleting': {
+            case 'primary': {
                 panel =
                     <PanelPrimary
                         key="primary"
                         onLoadPanel={this.loadPanel}
+                        confirmReset={this.confirmReset}
                     />
                 ;
 
                 secondary_actions =
                     <SecondaryActionsPrimary
                         key="primary"
-                        onResetRole={this.resetRole}
-                        onConfirmReset={this.confirmReset}
-                        onCancelReset={this.cancelReset}
+                        title={l10n['choose_something_to_customize']}
                         deleting={this.state.deleting}
                         disabled={this.state.saving || this.state.deleting}
+                    />
+                ;
+                break;
+            }
+            case 'confirmReset': {
+                panel =
+                    <PanelConfirmReset
+                        key="confirmReset"
+                        resetRole={this.resetRole}
+                        cancelReset={this.cancelReset}
                     />
                 ;
                 break;
@@ -952,6 +953,7 @@ class Editor extends React.Component {
                 break;
             }
 
+            case 'deleting':
             case 'loading': {
 
                 panel =
@@ -985,15 +987,6 @@ class Editor extends React.Component {
             }
         }
 
-        if ( this.state.activePanel === 'confirmReset' || this.state.activePanel === 'deleting' ) {
-
-            panel =
-                <PanelBlank
-                    key="blank"
-                />
-            ;
-        }
-
         return (
             <div id="cd-editor">
 
@@ -1008,12 +1001,6 @@ class Editor extends React.Component {
                         changes={this.state.changes}
                     />
 
-                    <RoleSwitcher
-                        role={this.props.role}
-                        disabled={this.state.saving || this.state.deleting || this.state.loading}
-                        onSwitchRole={this.switchRole}
-                    />
-
                     <Message
                         text={this.state.message.text || ''}
                         type={this.state.message.type || 'default'}
@@ -1022,9 +1009,17 @@ class Editor extends React.Component {
                     />
                 </div>
 
+                <div className="cd-editor-sub-header">
+                    <ReactCSSTransitionReplace
+                        transitionName={"panel-" + this.state.panelDirection}
+                        transitionEnterTimeout={300}
+                        transitionLeaveTimeout={300}>
+                        {secondary_actions}
+                    </ReactCSSTransitionReplace>
+                </div>
+
                 <div className={'cd-editor-panels' +
-                (this.state.saving || this.state.deleting ? ' cd-editor-panels-disabled' : '')}
-                     onClick={this.handleEditorClick}>
+                (this.state.saving || this.state.deleting ? ' cd-editor-panels-disabled' : '')}>
                     <ReactCSSTransitionReplace
                         transitionName={"panel-" + this.state.panelDirection}
                         transitionEnterTimeout={300}
@@ -1037,12 +1032,11 @@ class Editor extends React.Component {
                 </div>
 
                 <div className="cd-editor-footer">
-                    <ReactCSSTransitionReplace
-                        transitionName={"panel-" + this.state.panelDirection}
-                        transitionEnterTimeout={300}
-                        transitionLeaveTimeout={300}>
-                        {secondary_actions}
-                    </ReactCSSTransitionReplace>
+                    <RoleSwitcher
+                        role={this.props.role}
+                        disabled={this.state.saving || this.state.deleting || this.state.loading}
+                        onSwitchRole={this.switchRole}
+                    />
                 </div>
 
             </div>
