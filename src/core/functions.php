@@ -491,6 +491,12 @@ abstract class ClientDash_Functions {
 		global $current_user;
 		$user_roles = $current_user->roles;
 		$user_role  = array_shift( $user_roles );
+		
+		if ( $user_role === null ) {
+			global $user_ID;
+			$user_data          = get_userdata( $user_ID );
+			$user_role          = array_shift( $user_data->roles );
+		}
 
 		return $user_role;
 	}
