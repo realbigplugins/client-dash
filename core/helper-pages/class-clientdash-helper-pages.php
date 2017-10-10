@@ -78,10 +78,10 @@ class ClientDash_Helper_Pages {
 	 */
 	public static function load_user_pages( $pages ) {
 
-		$user = wp_get_current_user();
+		$user_data = get_userdata( get_current_user_id() );
 
 		// Admins can always view them all
-		if ( is_super_admin() || in_array( 'administrator', $user->roles ) ) {
+		if ( is_super_admin() || in_array( 'administrator', $user_data->roles ) ) {
 
 			return $pages;
 		}
@@ -90,7 +90,7 @@ class ClientDash_Helper_Pages {
 
 			foreach ( $page['tabs'] as $tab_ID => $tab ) {
 
-				if ( ! array_intersect( $tab['roles'], $user->roles ) ) {
+				if ( ! array_intersect( $tab['roles'], $user_data->roles ) ) {
 
 					unset( $pages[ $page_ID ]['tabs'][ $tab_ID ] );
 				}
@@ -398,8 +398,8 @@ class ClientDash_Helper_Pages {
 
 		global $wp_roles;
 
-		$current_user = wp_get_current_user();
-		$user_role    = $wp_roles->role_names[ $current_user->roles[0] ];
+		$user_data = get_userdata( get_current_user_id() );
+		$user_role = $wp_roles->role_names[ $user_data->roles[0] ];
 
 		include_once CLIENTDASH_DIR . 'core/helper-pages/views/account/about.php';
 	}
