@@ -227,10 +227,7 @@ class ClientDash_Helper_Pages {
 								$tab['title'] = $modified_tab['title'];
 							}
 
-							if ( isset( $modified_tab['roles'] ) ) {
-
-								$tab['roles'] = $modified_tab['roles'];
-							}
+							$tab['roles'] = isset( $modified_tab['roles'] ) ? $modified_tab['roles'] : array();
 						}
 					}
 				}
@@ -399,7 +396,7 @@ class ClientDash_Helper_Pages {
 		global $wp_roles;
 
 		$current_user = wp_get_current_user();
-		$user_role = $wp_roles->role_names[ $current_user->roles[0] ];
+		$user_role    = $wp_roles->role_names[ $current_user->roles[0] ];
 
 		include_once CLIENTDASH_DIR . 'core/helper-pages/views/account/about.php';
 	}
