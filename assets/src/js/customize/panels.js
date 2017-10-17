@@ -210,7 +210,6 @@ class PanelMenu extends React.Component {
                                 original_title={item.original_title}
                                 icon={item.icon}
                                 original_icon={item.original_icon}
-                                editing={this.props.editing === item.id}
                                 hasSubmenu={item.hasSubmenu}
                                 onMenuItemEdit={this.menuItemEdit}
                                 onSubmenuEdit={this.submenuEdit}
@@ -232,7 +231,6 @@ class PanelMenu extends React.Component {
                                 icon={item.icon}
                                 type={item.type}
                                 original_icon={item.original_icon}
-                                editing={this.props.editing === item.id}
                                 hasSubmenu={item.hasSubmenu}
                                 onMenuItemEdit={this.menuItemEdit}
                                 onSubmenuEdit={this.submenuEdit}
@@ -329,7 +327,6 @@ class PanelSubmenu extends React.Component {
                                 title={item.title}
                                 link={item.link}
                                 original_title={item.original_title}
-                                editing={this.props.editing === item.id}
                                 onSubmenuItemEdit={this.submenuItemEdit}
                                 onDeleteItem={this.deleteItem}
                                 onItemFormSubmit={this.itemSubmitForm}
@@ -345,7 +342,6 @@ class PanelSubmenu extends React.Component {
                                 id={item.id}
                                 title={item.title}
                                 type={item.type}
-                                editing={this.props.editing === item.id}
                                 onSubmenuItemEdit={this.submenuItemEdit}
                                 original_title={item.original_title}
                                 onDeleteItem={this.deleteItem}
@@ -494,7 +490,6 @@ class PanelDashboard extends React.Component {
                         id={item.id}
                         title={item.title}
                         original_title={item.original_title}
-                        editing={this.props.editing === item.id}
                         onWidgetEdit={this.widgetEdit}
                         onWidgetDelete={this.widgetDelete}
                         onItemFormSubmit={this.itemSubmitForm}
