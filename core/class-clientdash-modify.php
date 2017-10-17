@@ -74,19 +74,19 @@ class ClientDash_Modify {
 
 		$done = true;
 
-		$user_data = get_userdata( get_current_user_id() );
+		$current_user = wp_get_current_user();
 
-		if ( ! $user_data ) {
-
-			return;
-		}
-
-		if ( ! isset( $user_data->roles[0] ) ) {
+		if ( ! $current_user ) {
 
 			return;
 		}
 
-		$role = $user_data->roles[0];
+		if ( ! isset( $current_user->roles[0] ) ) {
+
+			return;
+		}
+
+		$role = $current_user->roles[0];
 
 		// If loading in the previewer, use temp data EXCEPT on initial role loading
 		if ( ClientDash_Customize::in_customizer() && ! ClientDash_Customize::is_saving_role() ) {
