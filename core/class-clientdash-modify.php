@@ -260,6 +260,27 @@ class ClientDash_Modify {
 				);
 			}
 
+			// Add custom links
+			if ( isset( $this->submenu[ $menu_parent])) {
+
+				foreach ( $this->submenu[ $menu_parent] as $i => $submenu_item ) {
+
+					switch ( $submenu_item['type'] ) {
+
+						case 'custom_link':
+							$new_submenu[ $menu_parent ][ $i ] = array(
+								isset( $submenu_item['title'] ) && $submenu_item['title'] ? $submenu_item['title'] : $submenu_item['original_title'],
+								'read',
+								$submenu_item['link'] ? $submenu_item['link'] : '#',
+								isset( $submenu_item['title'] ) && $submenu_item['title'] ? $submenu_item['title'] : $submenu_item['original_title'],
+								'submenu-custom-link',
+								'submenu-custom-link'
+							);
+							break;
+					}
+				}
+			}
+
 			ksort( $new_submenu[ $menu_parent ] );
 
 			$process_submenu             = $new_submenu[ $menu_parent ];

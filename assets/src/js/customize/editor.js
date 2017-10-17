@@ -582,8 +582,18 @@ class Editor extends React.Component {
 
         this.setState((prevState) => {
 
+            let menu = prevState.customizations[role].menu;
+
+            // Indices won't match because sorting doesn't count deleted items. Use sorted indices to get TRUE indicies
+            // of the customized menu.
+            let availableItems = getAvailableItems(menu);
+            let oldItem = availableItems[args.oldIndex];
+            let newItem = availableItems[args.newIndex];
+            let oldIndex = getItemIndex(menu, oldItem.id);
+            let newIndex = getItemIndex(menu, newItem.id);
+
             prevState.customizations[role].menu =
-                arrayMove(prevState.customizations[role].menu, args.oldIndex, args.newIndex);
+                arrayMove(prevState.customizations[role].menu, oldIndex, newIndex);
 
             return prevState;
         });

@@ -108,7 +108,7 @@ gulp.task('customize_js', function () {
                 console.log(e);
             })
         ))
-        .pipe(gulpIf(!process.env.NODE_ENV === 'production', sourcemaps.write('./')))
+        .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('./assets/dist/js/'))
         .pipe(notify({message: 'JS Customize complete'}));
 });
