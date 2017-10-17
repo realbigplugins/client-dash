@@ -307,6 +307,13 @@ function cd_reset_all_settings() {
 
 	ClientDash_DB::delete_everything();
 
+	// Some options
+	delete_option( 'cd_adminpage_feed_url' );
+	delete_option( 'cd_adminpage_feed_count' );
+	delete_option( 'cd_admin_page_title' );
+	delete_option( 'cd_admin_page_content' );
+	delete_option( 'cd_helper_pages' );
+
 	/**
 	 * Fires during Client Dash settings reset.
 	 *
