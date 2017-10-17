@@ -177,6 +177,16 @@ class ClientDash_Modify {
 						$menu_item['icon'],
 					);
 					break;
+
+				case 'separator':
+					$new_menu[ $i ] = array(
+						'',
+						'read',
+						$menu_item['id'],
+						'',
+						'wp-menu-separator',
+					);
+					break;
 			}
 		}
 
