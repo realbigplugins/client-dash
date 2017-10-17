@@ -39,7 +39,40 @@ class ClientDash_Bootstrapper {
 	 */
 	function __construct() {
 
+		add_action( 'plugins_loaded', array( $this, 'maybe_disable_client_dash_pro' ), 9 );
 		add_action( 'plugins_loaded', array( $this, 'maybe_load' ), 1 );
+	}
+
+	/**
+	 * Disable Client Dash Pro, if version is too low.
+	 *
+	 * Client Dash Pro, when configured for Client Dash < 2.0, will break with > 2.0 versions. Removing the load hook
+	 * is tricky because the Bootstrapper instance is not accessible, so I must loop through the tags to find it
+	 * manually so I can remove it.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 */
+	function maybe_disable_client_dash_pro() {
+
+		// Don't disable if active and past version 1.1
+		if ( ! defined( 'CLIENTDASH_PRO_VERSION' ) || version_compare( CLIENTDASH_PRO_VERSION, '1.1', '>=' ) ) {
+			return;
+		}
+
+		global $wp_filter;
+
+		if ( isset( $wp_filter['plugins_loaded'] ) && isset( $wp_filter['plugins_loaded']->callbacks['10'] ) ) {
+
+			foreach ( $wp_filter['plugins_loaded']->callbacks['10'] as $id => $callback ) {
+
+				if ( is_array( $callback['function'] ) && $callback['function'][0] instanceof ClientDash_Pro_Bootstrapper ) {
+
+					remove_action( 'plugins_loaded', array( $callback['function'][0], 'maybe_load' ) );
+					add_action( 'admin_notices', array( $this, 'disable_cd_pro_admin_notice' ) );
+				}
+			}
+		}
 	}
 
 	/**
@@ -101,8 +134,8 @@ class ClientDash_Bootstrapper {
 	 */
 	function notices() {
 		?>
-		<div class="notice error">
-			<p>
+        <div class="notice error">
+            <p>
 				<?php
 				printf(
 					__( '%sClient Dash%s could not load because of the following errors:', 'clientdash' ),
@@ -110,16 +143,38 @@ class ClientDash_Bootstrapper {
 					'</strong>'
 				);
 				?>
-			</p>
+            </p>
 
-			<ul>
+            <ul>
 				<?php foreach ( $this->notices as $notice ) : ?>
-					<li>
+                    <li>
 						<?php echo $notice; ?>
-					</li>
+                    </li>
 				<?php endforeach; ?>
-			</ul>
-		</div>
+            </ul>
+        </div>
+		<?php
+	}
+
+	/**
+	 * Shows notice on disabling of CD Pro.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 */
+	function disable_cd_pro_admin_notice() {
+		?>
+        <div class="notice error">
+            <p>
+				<?php
+				printf(
+					__( '%sClient Dash Pro%s could not load because it needs to be upgraded first.', 'clientdash' ),
+					'<strong>',
+					'</strong>'
+				);
+				?>
+            </p>
+        </div>
 		<?php
 	}
 }
