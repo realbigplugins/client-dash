@@ -68,7 +68,7 @@ class PanelPrimary extends React.Component {
                     onLoadPanel={this.loadPanel}
                 />
 
-                <a href="#" className="cd-editor-sub-action delete"
+                <a href="#" className="cd-editor-reset-role cd-editor-sub-action delete"
                    onClick={this.props.confirmReset}>
                     <span className="fa fa-trash"/> Reset role customizations
                 </a>

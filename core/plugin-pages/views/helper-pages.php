@@ -51,15 +51,6 @@ defined( 'ABSPATH' ) || die;
                                    placeholder="<?php _e( 'Helper Page Title', 'client-dash' ); ?>"
                                    value="<?php echo esc_attr( $page['title'] ? $page['title'] : $page['original_title'] ); ?>"/>
                         </div>
-
-                        <div class="clientdash-helper-page-disabled-notice">
-                            <span class="clientdash-helper-page-visible-icon dashicons dashicons-visibility"
-                                  aria-label="<?php _e( 'Visible', 'client-dash' ); ?>"
-                                  title="<?php _e( 'Visible', 'client-dash' ); ?>"></span>
-                            <span class="clientdash-helper-page-hidden-icon dashicons dashicons-hidden"
-                                  aria-label="<?php _e( 'Hidden', 'client-dash' ); ?>"
-                                  title="<?php _e( 'Hidden', 'client-dash' ); ?>"></span>
-                        </div>
                     </div>
 
                     <div class="clientdash-helper-page-description">
@@ -103,15 +94,6 @@ defined( 'ABSPATH' ) || die;
                                         <button type="button" class="button" data-select-toggle>
 											<?php _e( 'Select Roles', 'client-dash' ); ?>
                                         </button>
-                                    </div>
-
-                                    <div class="clientdash-helper-page-disabled-notice">
-                                        <span class="clientdash-helper-page-visible-icon dashicons dashicons-visibility"
-                                              aria-label="<?php _e( 'Visible', 'client-dash' ); ?>"
-                                              title="<?php _e( 'Visible', 'client-dash' ); ?>"></span>
-                                        <span class="clientdash-helper-page-hidden-icon dashicons dashicons-hidden"
-                                              aria-label="<?php _e( 'Hidden', 'client-dash' ); ?>"
-                                              title="<?php _e( 'Hidden', 'client-dash' ); ?>"></span>
                                     </div>
                                 </div>
 

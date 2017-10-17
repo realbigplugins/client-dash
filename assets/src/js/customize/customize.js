@@ -179,7 +179,7 @@ class Customize extends React.Component {
                     ref="preview"
                 />
 
-                <div className={`cd-editor-hide ${this.state.hidden && 'hidden'}`}>
+                <div className={`cd-editor-hide ${this.state.hidden ? 'hidden' : ''}`}>
                     <a href="#" onClick={this.handleEditorHideClick}>
                         <span className={`fa fa-chevron-circle-${this.state.hidden && 'right' || 'left'}`}/>
                     </a>

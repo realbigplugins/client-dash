@@ -380,11 +380,14 @@ class ClientDash_Customize {
 				),
 				'editor_panel' => 'primary',
 			),
-			'action_buttons'    => array(
-				'title'        => __( 'Action Buttons.', 'client-dash' ),
+			'close_save'    => array(
+				'title'        => __( 'Close/Save.', 'client-dash' ),
 				'content'      => array(
 					array(
-						'text' => __( 'The buttons at the top help you use the editor. Hover over each for more information. They include collapsing the editor, exiting the Customize Admin tool, refreshing the preview, and saving changes.', 'client-dash' ),
+						'text' => __( 'None of your changes will be saved for the role you are editing until you click "Save". You will be warned before leaving the page if you have any unsaved changes.', 'client-dash' ),
+					),
+					array(
+						'text' => __( 'Click the "X" to exit the Customize tool.', 'client-dash' ),
 					),
 				),
 				'highlights'   => array(
@@ -408,7 +411,22 @@ class ClientDash_Customize {
 				'highlights'   => array(
 					array(
 						'selector' => 'cd-editor-role-switcher',
-						'position' => 'bottom',
+						'position' => 'top',
+					),
+				),
+				'editor_panel' => 'primary',
+			),
+			'hide_editor'     => array(
+				'title'        => __( 'Hide the Editor.', 'client-dash' ),
+				'content'      => array(
+					array(
+						'text' => __( 'You can hide the Editor by clicking the arrow button. Click the button again to un-hide the Editor.', 'client-dash' ),
+					),
+				),
+				'highlights'   => array(
+					array(
+						'selector' => 'cd-editor-hide',
+						'position' => 'top',
 					),
 				),
 				'editor_panel' => 'primary',
@@ -423,7 +441,7 @@ class ClientDash_Customize {
 						'text' => __( 'You can drag and drop items, delete them, add any new items, rename them, and more!', 'client-dash' ),
 					),
 					array(
-						'text' => __( 'To edit each sub-menu, click on the sub-menu edit button (the list icon) on the menu item you would like to edit the sub-menu for. Once there, you can edit the sub-menu in the same way you edit the menu.', 'client-dash' ),
+						'text' => __( 'To edit each sub-menu, click on the sub-menu edit button that appears when editing a menu item. Once there, you can edit the sub-menu in the same way you edit the menu.', 'client-dash' ),
 					),
 					array(
 						'text'    => __( 'IMPORTANT: Once you save customizations for a role\'s menu, no menu items will be added automatically in the future. You will need to come back here and add any new items (which will be highlighted as "New"). Normally activating new plugins or themes might add menu items, but now you will need to add them manually for any roles with customizations.', 'client-dash' ),
@@ -440,22 +458,19 @@ class ClientDash_Customize {
 				'editor_panel' => 'menu',
 			),
 			'secondary_actions' => array(
-				'title'        => __( 'More Action Buttons.', 'client-dash' ),
+				'title'        => __( 'Action Buttons.', 'client-dash' ),
 				'content'      => array(
 					array(
-						'text' => __( 'Depending on what you are editing, the Action Buttons at the bottom may do different things.', 'client-dash' ),
+						'text' => __( 'When editing the Menu or the Dashboard, you can go back to the previous panel with the back arrow.', 'client-dash' ),
 					),
 					array(
-						'text' => __( 'Typically, the left botton will take you back a step, and the right button will take you where you can add more items.', 'client-dash' ),
-					),
-					array(
-						'text' => __( 'You can also find more information on what you are editing here.', 'client-dash' ),
+						'text' => __( 'You can add items by clicking the "Add Items" button.', 'client-dash' ),
 					),
 				),
 				'highlights'   => array(
 					array(
-						'selector' => 'cd-editor-footer',
-						'position' => 'top',
+						'selector' => 'cd-editor-sub-header',
+						'position' => 'bottom',
 					),
 				),
 				'editor_panel' => 'menu',
@@ -487,7 +502,7 @@ class ClientDash_Customize {
 				'title'        => __( 'Reset a Role.', 'client-dash' ),
 				'content'      => array(
 					array(
-						'text' => __( 'If you want to completely erase all customizations for the selected role, click the "Reset Role" button (trash can icon). This will reset the role customizations back to the original, un-modified state.', 'client-dash' ),
+						'text' => __( 'If you want to completely erase all customizations for the selected role, click the "Reset role customizations" button. This will reset the role customizations back to the original, un-modified state.', 'client-dash' ),
 					),
 					array(
 						'text'    => __( 'WARNING: Deleting a role\'s customizations cannot be undone.', 'client-dash' ),
@@ -496,10 +511,9 @@ class ClientDash_Customize {
 				),
 				'highlights'   => array(
 					array(
-						'selector' => 'cd-editor-footer',
-						'position' => 'top',
-						'size'     => 'medium',
-						'classes'  => 'reset-role',
+						'selector' => 'cd-editor-panels',
+						'position' => 'right',
+						'size'     => 'large',
 					),
 				),
 				'editor_panel' => 'primary',

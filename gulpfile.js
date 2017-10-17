@@ -20,6 +20,7 @@ const reactify    = require('reactify');
 const wpPot       = require('gulp-wp-pot');
 const sort        = require('gulp-sort');
 const justReplace = require('gulp-just-replace');
+const gulpIf      = require('gulp-if');
 
 gulp.task('admin_sass', function () {
     return gulp.src(['./assets/src/scss/admin/**/*.scss'])
@@ -102,9 +103,12 @@ gulp.task('customize_js', function () {
         .pipe(source('clientdash-customize.min.js'))
         .pipe(buffer())
         .pipe(sourcemaps.init({loadMaps: true}))
-        .pipe(uglify())
-        .on('error', gutil.log)
-        .pipe(sourcemaps.write('./'))
+        .pipe(gulpIf(process.env.NODE_ENV === 'production', uglify()
+            .on('error', e => {
+                console.log(e);
+            })
+        ))
+        .pipe(gulpIf(!process.env.NODE_ENV === 'production', sourcemaps.write('./')))
         .pipe(gulp.dest('./assets/dist/js/'))
         .pipe(notify({message: 'JS Customize complete'}));
 });

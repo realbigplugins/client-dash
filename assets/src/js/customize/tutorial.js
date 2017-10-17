@@ -25,13 +25,13 @@ class TutorialHighlight extends React.Component {
 
         if ( !anchor.length ) {
 
-            return;
+            return '';
         }
 
         anchor = anchor[0];
 
-        let offsetY = anchor.offsetTop;
-        let offsetX = anchor.offsetLeft;
+        let offsetY = anchor.getBoundingClientRect().top + window.scrollY;
+        let offsetX = anchor.getBoundingClientRect().left + window.scrollX;
 
         switch ( this.props.position ) {
 
