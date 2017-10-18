@@ -153,7 +153,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 			require_once CLIENTDASH_DIR . 'core/customize/class-clientdash-customize.php';
 			require_once CLIENTDASH_DIR . 'core/helper-pages/class-clientdash-helper-pages.php';
 
-			$this->upgrade     = new ClientDash_Upgrade();
+			$this->upgrade = new ClientDash_Upgrade();
 
 			// Don't load Client Dash unless fully upgraded
 			if ( $this->upgrade->needs_update() ) {
@@ -237,8 +237,9 @@ if ( ! class_exists( 'ClientDash' ) ) {
 						'you want to proceed?',
 						'client-dash'
 					),
-					'change'                 => __( 'Change', 'client-dash-pro' ),
-					'close'                  => __( 'Close', 'client-dash-pro' ),
+					'change'                 => __( 'Change', 'client-dash' ),
+					'close'                  => __( 'Close', 'client-dash' ),
+					'saving'                 => __( 'Saving...', 'client-dash' ),
 				),
 			) );
 

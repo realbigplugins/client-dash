@@ -42,6 +42,7 @@ class ClientDash_Helper_Pages {
 
 		add_action( 'admin_menu', array( $this, 'add_pages' ) );
 		add_action( 'wp_dashboard_setup', array( $this, 'add_widgets' ) );
+		add_shortcode( 'cd_feed', array( $this, 'shortcode_feed' ) );
 	}
 
 	/**
@@ -485,7 +486,6 @@ class ClientDash_Helper_Pages {
 	 */
 	static public function load_cd_page_admin_page_tab_main() {
 
-		$title   = get_option( 'cd_admin_page_title' );
 		$content = get_option( 'cd_admin_page_content' );
 
 		$content = apply_filters( 'the_content', $content );
@@ -501,30 +501,52 @@ class ClientDash_Helper_Pages {
 	static public function load_cd_page_admin_page_tab_feed() {
 
 		// Get the feed options
-		$feed_url = get_option( 'cd_adminpage_feed_url', null );
-
-		if ( ! $feed_url ) {
-
-			include_once CLIENTDASH_DIR . 'core/helper-pages/views/admin-page/feed-error.php';
-
-			return;
-		}
-
+		$feed_url   = get_option( 'cd_adminpage_feed_url', null );
 		$feed_count = get_option( 'cd_adminpage_feed_count', 5 );
 
+		include_once CLIENTDASH_DIR . 'core/helper-pages/views/admin-page/feed.php';
+	}
+
+	/**
+	 * Shortcode for RSS feed.
+	 *
+	 * @since {{VERSION}}
+	 *
+	 * @param array $atts
+	 */
+	static public function shortcode_feed( $atts = array() ) {
+
+		$atts = shortcode_atts( array(
+			'url'   => '',
+			'count' => '5',
+		), $atts, 'cd_feed' );
+
+
+		if ( ! $atts['url'] ) {
+
+			ob_start();
+			include_once CLIENTDASH_DIR . 'core/helper-pages/views/shortcodes/feed-error.php';
+
+			return ob_get_clean();
+		}
+
 		// Get the feed items
-		$feed = fetch_feed( $feed_url );
+		$feed = fetch_feed( $atts['url'] );
 
 		// Check for an error if there's no RSS feed
 		if ( is_wp_error( $feed ) ) {
 
-			include_once CLIENTDASH_DIR . 'core/helper-pages/views/admin-page/feed-error.php';
+			ob_start();
+			include_once CLIENTDASH_DIR . 'core/helper-pages/views/shortcodes/feed-error.php';
 
-			return;
+			return ob_get_clean();
 		}
 
-		$feed_items = $feed->get_items( 0, $feed_count );
+		$feed_items = $feed->get_items( 0, $atts['count'] );
 
-		include_once CLIENTDASH_DIR . 'core/helper-pages/views/admin-page/feed.php';
+		ob_start();
+		include_once CLIENTDASH_DIR . 'core/helper-pages/views/shortcodes/feed.php';
+
+		return ob_get_clean();
 	}
 }

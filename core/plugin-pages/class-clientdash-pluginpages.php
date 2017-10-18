@@ -37,7 +37,10 @@ class ClientDash_PluginPages {
 
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_action( 'admin_init', array( $this, 'get_current_tab' ) );
-		add_action( 'admin_menu', array( $this, 'add_pages' ) );
+		add_action( 'admin_menu', array( $this, 'add_pages' ), 9 );
+
+		add_action( 'clientdash_settings_page_content', array( __CLASS__, 'settings_page_feed' ) );
+		add_action( 'clientdash_settings_page_content', array( __CLASS__, 'settings_page_other' ), 20 );
 
 		add_action( 'clientdash_sidebar', array( __CLASS__, 'sidebar_pro_prompt' ), 10 );
 		add_action( 'clientdash_sidebar', array( __CLASS__, 'sidebar_review_support' ), 15 );
@@ -122,17 +125,6 @@ class ClientDash_PluginPages {
 	}
 
 	/**
-	 * Resets the Admin Page.
-	 *
-	 * @since {{VERSION}}
-	 */
-	public static function reset_admin_page() {
-
-		delete_option( 'cd_admin_page_title' );
-		delete_option( 'cd_admin_page_content' );
-	}
-
-	/**
 	 * Registers all of the Client Dash settings.
 	 *
 	 * @since {{VERSION}}
@@ -143,7 +135,6 @@ class ClientDash_PluginPages {
 		register_setting( 'clientdash_settings', 'cd_adminpage_feed_url' );
 		register_setting( 'clientdash_settings', 'cd_adminpage_feed_count' );
 
-		register_setting( 'clientdash_admin_page', 'cd_admin_page_title' );
 		register_setting( 'clientdash_admin_page', 'cd_admin_page_content' );
 
 		register_setting( 'clientdash_helper_pages', 'cd_helper_pages' );
@@ -242,7 +233,6 @@ class ClientDash_PluginPages {
 
 		add_action( 'clientdash_sidebar', array( __CLASS__, 'sidebar_admin_page_actions' ), 5 );
 
-		$admin_page_title   = get_option( 'cd_admin_page_title' );
 		$admin_page_content = get_option( 'cd_admin_page_content' );
 
 		include_once CLIENTDASH_DIR . 'core/plugin-pages/views/admin-page.php';
@@ -304,15 +294,37 @@ class ClientDash_PluginPages {
 	 */
 	static function load_settings() {
 
-		$feed_url   = get_option( 'cd_adminpage_feed_url', '' );
-		$feed_count = get_option( 'cd_adminpage_feed_count', 5 );
-
-		$reset_settings_link = admin_url( 'admin.php?page=clientdash_settings&cd_reset_settings' );
-		$enable_customize_tutorial_link = admin_url( 'admin.php?page=clientdash_settings&cd_enable_customize_tutorial' );
-
 		add_action( 'clientdash_sidebar', array( __CLASS__, 'sidebar_settings_page_actions' ), 5 );
 
 		include_once CLIENTDASH_DIR . 'core/plugin-pages/views/settings.php';
+	}
+
+	/**
+	 * Displays the "Feed" settings section.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 */
+	static function settings_page_feed() {
+
+		$feed_url   = get_option( 'cd_adminpage_feed_url', '' );
+		$feed_count = get_option( 'cd_adminpage_feed_count', 5 );
+
+		include CLIENTDASH_DIR . 'core/plugin-pages/views/settings/feed.php';
+	}
+
+	/**
+	 * Displays the "Other" settings section.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 */
+	static function settings_page_other() {
+
+		$reset_settings_link            = admin_url( 'admin.php?page=clientdash_settings&cd_reset_settings' );
+		$enable_customize_tutorial_link = admin_url( 'admin.php?page=clientdash_settings&cd_enable_customize_tutorial' );
+
+		include CLIENTDASH_DIR . 'core/plugin-pages/views/settings/other.php';
 	}
 
 	/**

@@ -19,8 +19,9 @@ defined( 'ABSPATH' ) || die;
 	 *
 	 * @since {{VERSION}}
 	 *
-	 * @hooked ClientDash_Page_Settings::sidebar_rbp_pro-prompt() 10
-	 * @hooked ClientDash_Page_Settings::sidebar_rbp_signup() 15
+	 * @hooked ClientDash_PluginPages::sidebar_rbp_pro-prompt() 10
+     * @hooked ClientDash_PluginPages::sidebar_review_support() 15
+	 * @hooked ClientDash_PluginPages::sidebar_rbp_signup() 20
 	 */
 	do_action( 'clientdash_sidebar' );
 	?>

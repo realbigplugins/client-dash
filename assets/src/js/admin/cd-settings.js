@@ -25,7 +25,18 @@ var ClientDash_Settings;
                 return;
             }
 
+            $('#submit').click(api.submitSettings);
             $('#cd_reset_all_settings').click(api.confirmReset);
+        },
+
+        submitSettings: function (e) {
+
+            e.preventDefault();
+
+            $(this).prop('disabled', true)
+                .html(l10n['saving']);
+
+            $('#clientdash-settings-page-form').submit();
         },
 
         /**

@@ -262,7 +262,7 @@ class ClientDash_Customize {
 				'original_icon'                     => __( 'Original icon:', 'client-dash' ),
 				'icon'                              => __( 'Icon', 'client-dash' ),
 				'link'                              => __( 'Link', 'client-dash' ),
-				'no_items_added'                    => __( 'No items added yet. Click the add items "+" button to add your first item.', 'client-dash' ),
+				'no_items_added'                    => __( 'No items added yet. Click the "Add Items" button to add your first item.', 'client-dash' ),
 				'no_items_available'                => __( 'No items available.', 'client-dash' ),
 				'separator'                         => __( 'Separator', 'client-dash' ),
 				'custom_link'                       => __( 'Custom Link', 'client-dash' ),
@@ -910,13 +910,12 @@ class ClientDash_Customize {
 	 * Processes a menu item before inserting into the Customize tool.
 	 *
 	 * @since {{VERSION}}
-	 * @access private
 	 *
 	 * @param array $item Menu item array.
 	 *
 	 * @return array Processed menu item array.
 	 */
-	private function process_menu_item( $item ) {
+	public static function process_menu_item( $item ) {
 
 		switch ( $item['id'] ) {
 
@@ -943,14 +942,13 @@ class ClientDash_Customize {
 	 * Processes a submenu item before inserting into the Customize tool.
 	 *
 	 * @since {{VERSION}}
-	 * @access private
 	 *
 	 * @param array $item Submenu item array.
 	 * @param string $menu_ID Parent menu item ID.
 	 *
 	 * @return array Processed submenu item array.
 	 */
-	private function process_submenu_item( $item, $menu_ID ) {
+	public static function process_submenu_item( $item, $menu_ID ) {
 
 		// Links generated for customizer. Taken from /wp-admin/menu.php:160-173 as of WP version 4.8.0
 		$customize_url            = esc_url( add_query_arg( 'return', urlencode( remove_query_arg( wp_removable_query_args(), wp_unslash( $_SERVER['REQUEST_URI'] ) ) ), 'customize.php' ) );
@@ -993,13 +991,12 @@ class ClientDash_Customize {
 	 * Processes a dashboard item before inserting into the Customize tool.
 	 *
 	 * @since {{VERSION}}
-	 * @access private
 	 *
 	 * @param array $item Dashboard item array.
 	 *
 	 * @return array Processed dashboard item array.
 	 */
-	private function process_dashboard_item( $item ) {
+	public static function process_dashboard_item( $item ) {
 
 		switch ( $item['id'] ) {
 
