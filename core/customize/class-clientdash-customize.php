@@ -238,6 +238,7 @@ class ClientDash_Customize {
 			'current_user_id' => get_current_user_id(),
 			'load_tutorial'   => get_user_meta( get_current_user_id(), 'clientdash_hide_customize_tutorial', true ) !== 'yes',
 			'tutorial_panels' => $this->get_tutorial_panels(),
+			'widgets'         => $this->get_custom_dashboard_widgets(),
 			'l10n'            => array(
 				'role_switcher_label'               => __( 'Customizing:', 'client-dash' ),
 				'panel_text_menu'                   => __( 'Menu', 'client-dash' ),
@@ -332,6 +333,39 @@ class ClientDash_Customize {
 	}
 
 	/**
+	 * Extra dashboard widgets.
+	 *
+	 * @since {{VERSION}}
+	 * @access private
+	 */
+	function get_custom_dashboard_widgets() {
+
+		/**
+		 * Extra, re-usable dashboard widgets.
+		 *
+		 * @since {{VERSION}}
+		 */
+		$settings = apply_filters( 'cd_customize_dashboard_widgets', array(
+			array(
+				'id'       => 'text',
+				'label'    => __( 'Text', 'client-dash' ),
+				'settings' => array(
+					array(
+						'name'  => 'title',
+						'label' => __( 'Title', 'client-dash' ),
+						'type'  => 'text',
+					),
+				),
+				'callback' => function ( $settings ) {
+					echo 'Widget';
+				},
+			),
+		) );
+
+		return $settings;
+	}
+
+	/**
 	 * Gets the tutorial panels.
 	 *
 	 * Each panel should have a unique key as the ID, a title, and an array of content where each item is a new line.
@@ -380,7 +414,7 @@ class ClientDash_Customize {
 				),
 				'editor_panel' => 'primary',
 			),
-			'close_save'    => array(
+			'close_save'        => array(
 				'title'        => __( 'Close/Save.', 'client-dash' ),
 				'content'      => array(
 					array(
@@ -416,7 +450,7 @@ class ClientDash_Customize {
 				),
 				'editor_panel' => 'primary',
 			),
-			'hide_editor'     => array(
+			'hide_editor'       => array(
 				'title'        => __( 'Hide the Editor.', 'client-dash' ),
 				'content'      => array(
 					array(
@@ -881,6 +915,7 @@ class ClientDash_Customize {
 								'original_title' => $widget_title,
 								'new'            => false,
 								'deleted'        => $customized_widget['deleted'] ? $customized_widget['deleted'] : false,
+								'type'           => 'default',
 							) ) );
 
 						} else {
@@ -891,6 +926,7 @@ class ClientDash_Customize {
 								'original_title' => $widget_title,
 								'new'            => ! empty( $customized_dashboard ) && ! $is_helper_page_widget,
 								'deleted'        => ! empty( $customized_dashboard ),
+								'type'           => 'default',
 							) );
 						}
 					}

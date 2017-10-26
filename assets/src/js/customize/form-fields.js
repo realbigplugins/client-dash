@@ -28,7 +28,7 @@ class InputText extends React.Component {
             value: event.target.value
         });
 
-        this.props.onHandleChange(event.target.value);
+        this.props.onHandleChange(this.props.name, event.target.value);
     }
 
     render() {
@@ -50,15 +50,15 @@ class InputText extends React.Component {
 }
 
 /**
- * Select box.
+ * Textarea input.
  *
  * @since {{VERSION}}
  *
- * @prop (array) options The options to show in value => text format.
- * @prop (string) selected The option value which is currently selected.
- * @prop (bool) multi If the select allows multiple selections or not.
+ * @prop (string) name Input name.
+ * @prop (string) label Input label.
+ * @prop (string) value Input value.
  */
-class Select extends React.Component {
+class InputTextArea extends React.Component {
 
     constructor(props) {
 
@@ -77,7 +77,55 @@ class Select extends React.Component {
             value: event.target.value
         });
 
-        this.props.onHandleChange(event.target.value);
+        this.props.onHandleChange(this.props.name, event.target.value);
+    }
+
+    render() {
+        return (
+            <div className="cd-editor-input cd-editor-input-text">
+                <label>
+                    {this.props.label}
+                    <textarea
+                        name={this.props.name}
+                        defaultValue={this.props.value}
+                        placeholder={this.props.placeholder}
+                        onChange={this.handleChange}
+                    />
+                </label>
+            </div>
+        )
+    }
+}
+
+/**
+ * Select box.
+ *
+ * @since {{VERSION}}
+ *
+ * @prop (array) options The options to show in value => text format.
+ * @prop (string) selected The option value which is currently selected.
+ * @prop (bool) multi If the select allows multiple selections or not.
+ */
+class InputSelect extends React.Component {
+
+    constructor(props) {
+
+        super(props);
+
+        this.state = {
+            value: ''
+        };
+
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange(event) {
+
+        this.setState({
+            value: event.target.value
+        });
+
+        this.props.onHandleChange(this.props.name, event.target.value);
     }
 
     render() {
@@ -98,7 +146,7 @@ class Select extends React.Component {
                     {this.props.label}
                     <select
                         name={this.props.name}
-                        value={this.props.selected}
+                        value={this.props.value}
                         multiple={this.props.multi}
                         onChange={this.handleChange}
                         disabled={this.props.disabled}>
@@ -131,8 +179,35 @@ class SelectOption extends React.Component {
     }
 }
 
+/**
+ * Gets an input.
+ *
+ * @since {{VERSION}}
+ *
+ * @param {string} field Type of input field.
+ * @param {[]} args Field arguments.
+ * @returns {XML}
+ */
+const getInput = (field, args) => {
+
+    switch ( field ) {
+        case 'text':
+            return <InputText key={args.name} {...args} />
+            break;
+
+        case 'textarea':
+            return <InputTextArea key={args.name} {...args} />
+            break;
+
+        case 'select':
+            return <InputSelect key={args.name} {...args} />
+            break;
+
+        default:
+            return `Invalid field type: ${field}`;
+    }
+}
+
 export {
-    InputText,
-    Select,
-    SelectOption
+    getInput
 }

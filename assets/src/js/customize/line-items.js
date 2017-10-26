@@ -1,10 +1,12 @@
 import React from 'react';
 
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
-import {InputText} from './form-fields';
+import {getInput} from './form-fields';
+import {getItem} from './functions';
 import {DashiconsSelector} from './dashicons-selector';
 
-const l10n = ClientdashCustomize_Data.l10n || false;
+const l10n          = ClientdashCustomize_Data.l10n || false;
+const customWidgets = ClientdashCustomize_Data.widgets || {};
 
 /**
  * Line item wrapper.
@@ -351,12 +353,6 @@ class MenuItemEdit extends React.Component {
                   </LineItemForm>
         ;
 
-        // let title = this.props.original_title;
-        //
-        // if (!  this.props.title ) {
-        //     title = processTitleDisplay(this.props.original_title, this.props.id);
-        // }
-
         return (
             <LineItemContent
                 key={this.props.id}
@@ -554,7 +550,7 @@ class SubmenuItemEdit extends React.Component {
     toggleEdit() {
 
         this.setState((prevState) => ({
-            editing: !prevState.editing
+            editing: !prevState.editing,
         }));
     }
 
@@ -788,10 +784,10 @@ class WidgetEdit extends React.Component {
             editing: this.props.editing || false,
         }
 
-        this.toggleEdit   = this.toggleEdit.bind(this);
-        this.titleChange  = this.titleChange.bind(this);
-        this.widgetDelete = this.widgetDelete.bind(this);
-        this.submitForm   = this.submitForm.bind(this);
+        this.toggleEdit    = this.toggleEdit.bind(this);
+        this.settingChange = this.settingChange.bind(this);
+        this.widgetDelete  = this.widgetDelete.bind(this);
+        this.submitForm    = this.submitForm.bind(this);
     }
 
     toggleEdit() {
@@ -801,13 +797,13 @@ class WidgetEdit extends React.Component {
         }));
     }
 
-    titleChange(value) {
+    settingChange(setting, value) {
 
         this.props.onWidgetEdit({
             id: this.props.id,
-            title: value,
-            original_title: this.props.original_title,
-        });
+            setting,
+            value,
+        })
     }
 
     widgetDelete() {
@@ -822,21 +818,37 @@ class WidgetEdit extends React.Component {
 
     render() {
 
+        const customWidget   = getItem(customWidgets, this.props.id);
+        const widgetSettings = customWidget ? customWidget.settings : [];
+
         const form =
                   <LineItemForm
                       onSubmit={this.submitForm}
                       onDelete={this.widgetDelete}
                   >
-                      <InputText
-                          label={l10n['title']}
-                          value={this.props.title}
-                          placeholder={this.props.original_title}
-                          onHandleChange={this.titleChange}
-                      />
+
+                      {getInput('text', {
+                          label: l10n['title'],
+                          name: 'title',
+                          value: this.props.title,
+                          placeholder: this.props.original_title,
+                          onHandleChange: this.settingChange,
+                      })}
 
                       <p className="cd-editor-lineitem-form-subfield cd-editor-lineitem-form-subtext">
                           {l10n['original_title'] + " "}<strong>{this.props.original_title}</strong>
                       </p>
+
+                      {widgetSettings.map((setting) => {
+
+                          let {type, ...args} = setting;
+
+                          args.onHandleChange = this.settingChange;
+                          args.value          = this.props.settings[args.name] || '';
+
+                          return getInput(type, args);
+                      })}
+
                   </LineItemForm>
         ;
 

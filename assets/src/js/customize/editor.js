@@ -29,9 +29,10 @@ import PrimaryActions from './primary-actions';
 import RoleSwitcher from './role-switcher';
 import Message from './message';
 
-const l10n      = ClientdashCustomize_Data.l10n || false;
-const adminurl  = ClientdashCustomize_Data.adminurl || false;
-const api_nonce = ClientdashCustomize_Data.api_nonce || false;
+const l10n          = ClientdashCustomize_Data.l10n || false;
+const adminurl      = ClientdashCustomize_Data.adminurl || false;
+const api_nonce     = ClientdashCustomize_Data.api_nonce || false;
+const customWidgets = ClientdashCustomize_Data.widgets || [];
 
 /**
  * The Customize editor.
@@ -587,10 +588,10 @@ class Editor extends React.Component {
             // Indices won't match because sorting doesn't count deleted items. Use sorted indices to get TRUE indicies
             // of the customized menu.
             let availableItems = getAvailableItems(menu);
-            let oldItem = availableItems[args.oldIndex];
-            let newItem = availableItems[args.newIndex];
-            let oldIndex = getItemIndex(menu, oldItem.id);
-            let newIndex = getItemIndex(menu, newItem.id);
+            let oldItem        = availableItems[args.oldIndex];
+            let newItem        = availableItems[args.newIndex];
+            let oldIndex       = getItemIndex(menu, oldItem.id);
+            let newIndex       = getItemIndex(menu, newItem.id);
 
             prevState.customizations[role].menu =
                 arrayMove(prevState.customizations[role].menu, oldIndex, newIndex);
@@ -619,17 +620,37 @@ class Editor extends React.Component {
 
     widgetAdd(widget) {
 
-        let role = this.props.role;
-
         this.setState((prevState) => {
 
-            prevState.customizations[role].dashboard = modifyItem(
-                prevState.customizations[role].dashboard,
-                widget.id,
-                {deleted: false, new: false}
-            );
+            let role      = this.props.role;
+            let dashboard = prevState.customizations[role].dashboard;
 
-            prevState.history[role].widgetItemLastAdded = widget.id;
+            switch ( widget.type ) {
+
+                case 'default': // Core/Plugin added widget
+
+                    prevState.customizations[role].dashboard = modifyItem(
+                        prevState.customizations[role].dashboard,
+                        widget.id,
+                        {deleted: false, new: false}
+                    );
+
+                    prevState.history[role].widgetItemLastAdded = widget.id;
+
+                    break;
+
+                default: // Custom added widget
+
+                    let new_item_id = getNewItemID(dashboard, widget.id);
+
+                    prevState.customizations[role].dashboard.unshift({
+                        id: new_item_id,
+                        original_title: widget.original_title,
+                        type: widget.id,
+                    });
+
+                    prevState.history[role].widgetItemLastAdded = new_item_id;
+            }
 
             return prevState;
         });
@@ -641,15 +662,27 @@ class Editor extends React.Component {
 
     widgetDelete(ID) {
 
-        let role = this.props.role;
-
         this.setState((prevState) => {
 
-            prevState.customizations[role].dashboard = modifyItem(
-                prevState.customizations[role].dashboard,
-                ID,
-                {deleted: true, title: ''}
-            );
+            let role   = this.props.role;
+            let widget = getItem(prevState.customizations[role].dashboard, ID);
+
+            switch ( widget.type ) {
+
+                case 'default': // Core/Plugin added widget
+
+                    prevState.customizations[role].dashboard = modifyItem(
+                        prevState.customizations[role].dashboard,
+                        ID,
+                        {deleted: true, title: '', settings: {}}
+                    );
+
+                    break;
+
+                default: // Custom added widget
+
+                    prevState.customizations[role].dashboard = deleteItem(prevState.customizations[role].dashboard, ID);
+            }
 
             return prevState;
         });
@@ -657,16 +690,33 @@ class Editor extends React.Component {
         this.dataChange(false);
     }
 
-    widgetEdit(widget) {
-
-        let role = this.props.role;
+    widgetEdit(args) {
 
         this.setState((prevState) => {
 
+            let role                 = this.props.role;
+            let {id, setting, value} = args;
+            let changes              = {};
+
+            // Reserved vs generic settings
+            switch ( setting ) {
+                case 'title':
+
+                    changes[setting] = value;
+                    break;
+
+                default:
+
+                    let prevItem              = getItem(prevState.customizations[role].dashboard, id);
+                    changes.settings          = prevItem.settings || {};
+                    changes.settings[setting] = value;
+                    break;
+            }
+
             prevState.customizations[role].dashboard = modifyItem(
                 prevState.customizations[role].dashboard,
-                widget.id,
-                widget
+                id,
+                changes
             );
 
             return prevState;
@@ -944,6 +994,23 @@ class Editor extends React.Component {
 
                 let current_items   = customizations.dashboard;
                 let available_items = getDeletedItems(current_items);
+
+                // Add custom widgets
+                if ( customWidgets ) {
+
+                    customWidgets.map((widget) => {
+
+                        available_items.push({
+                            deleted: true,
+                            new: false,
+                            id: widget.id,
+                            original_title: widget.label,
+                            title: '',
+                            settings: {},
+                            type: widget.id,
+                        });
+                    });
+                }
 
                 panel =
                     <PanelAddItems

@@ -41,7 +41,7 @@ function getNewItemID(items, type) {
     // Get all current item indexes
     items.map((item) => {
 
-        if ( item.type == type ) {
+        if ( item.type === type ) {
 
             let regex   = new RegExp(type + '(\\d+)');
             let matches = item.id.match(regex);

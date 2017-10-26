@@ -465,9 +465,9 @@ class PanelDashboard extends React.Component {
         this.props.onDeleteWidget(ID);
     }
 
-    widgetEdit(widget) {
+    widgetEdit(args) {
 
-        this.props.onWidgetEdit(widget);
+        this.props.onWidgetEdit(args);
     }
 
     itemSubmitForm(event) {
@@ -490,6 +490,7 @@ class PanelDashboard extends React.Component {
                         id={item.id}
                         title={item.title}
                         original_title={item.original_title}
+                        settings={item.settings || {}}
                         onWidgetEdit={this.widgetEdit}
                         onWidgetDelete={this.widgetDelete}
                         onItemFormSubmit={this.itemSubmitForm}

@@ -350,7 +350,7 @@ class ClientDash_Modify {
 
 				foreach ( $priorities as $priority => $widgets ) {
 
-					foreach ( $widgets as $i => $widget ) {
+					foreach ( $widgets as $i => &$widget ) {
 
 						$processed_widget_id = $this->get_processed_dashboard_item_id( $widget['id'] );
 
@@ -361,15 +361,18 @@ class ClientDash_Modify {
 						     ( isset( $custom_widget['deleted'] ) && $custom_widget['deleted'] )
 						) {
 
-							unset( $wp_meta_boxes['dashboard'][ $position ][ $priority ][ $i ]['title'] );
+							unset( $widget['title'] );
 							continue;
 						}
 
 						// Customized title
 						if ( isset( $custom_widget['title'] ) && $custom_widget['title'] ) {
 
-							$wp_meta_boxes['dashboard'][ $position ][ $priority ][ $i ]['title'] = $custom_widget['title'];
+							$widget['title'] = $custom_widget['title'];
 						}
+
+						// Other customizations
+						$widget['settings'] = $custom_widget['settings'];
 					}
 				}
 			}
