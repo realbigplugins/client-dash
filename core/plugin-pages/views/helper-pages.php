@@ -15,15 +15,17 @@ defined( 'ABSPATH' ) || die;
 
 <div class="wrap clientdash">
 
-    <form method="post" action="options.php" id="clientdash-admin-page-form">
+    <h1 class="clientdash-page-title">
+		<?php echo get_admin_page_title(); ?>
+    </h1>
 
-		<?php settings_fields( 'clientdash_helper_pages' ); ?>
+	<?php settings_errors(); ?>
 
-        <h1 class="clientdash-page-title">
-			<?php echo get_admin_page_title(); ?>
-        </h1>
+    <section class="clientdash-page-wrap">
 
-        <section class="clientdash-page-wrap">
+        <form method="post" action="options.php" id="clientdash-helper-pages-form">
+
+			<?php settings_fields( 'clientdash_helper_pages' ); ?>
 
             <div class="clientdash-page-description">
 				<?php
@@ -62,7 +64,8 @@ defined( 'ABSPATH' ) || die;
                             <div class="clientdash-helper-page-tab-wrap">
                                 <div class="clientdash-helper-page-tab-title">
                                     <div class="clientdash-helper-page-tab-title-input">
-                                        <input type="text" name="<?php echo "cd_helper_pages[$page_ID][tabs][$tab_ID][title]"; ?>"
+                                        <input type="text"
+                                               name="<?php echo "cd_helper_pages[$page_ID][tabs][$tab_ID][title]"; ?>"
                                                id="<?php echo "cd_helper_pages[$page_ID][tabs][$tab_ID][title]"; ?>"
                                                class="cd-title-input widefat"
                                                placeholder="<?php _e( 'Helper Page Tab Title', 'client-dash' ); ?>"
@@ -106,9 +109,10 @@ defined( 'ABSPATH' ) || die;
                 </div>
 			<?php endforeach; ?>
 
-        </section>
+        </form>
 
-		<?php include_once CLIENTDASH_DIR . 'core/plugin-pages/views/sidebar/sidebar.php'; ?>
+    </section>
 
-    </form>
+	<?php include_once CLIENTDASH_DIR . 'core/plugin-pages/views/sidebar/sidebar.php'; ?>
+
 </div>

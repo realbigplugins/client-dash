@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {sortableCancelStart} from './functions';
+import LoadingIcon from './loading-icon';
 import {
     LineItems,
     ItemAdd,
@@ -12,8 +13,6 @@ import {
     SortableLineItems,
     WidgetEdit,
 } from './line-items';
-import {arrayMove} from 'react-sortable-hoc';
-import ActionButton from "./action-button";
 
 const l10n = ClientdashCustomize_Data.l10n || false;
 
@@ -489,6 +488,7 @@ class PanelDashboard extends React.Component {
                         key={item.id}
                         id={item.id}
                         title={item.title}
+                        type={item.type}
                         original_title={item.original_title}
                         settings={item.settings || {}}
                         onWidgetEdit={this.widgetEdit}
@@ -528,7 +528,7 @@ class PanelLoading extends React.Component {
 
         return (
             <Panel id="loading">
-                <span className="fa fa-circle-o-notch fa-spin"></span>
+                <LoadingIcon />
             </Panel>
         )
     }

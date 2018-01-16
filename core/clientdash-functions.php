@@ -310,7 +310,7 @@ function cd_reset_all_settings() {
 	// Some options
 	delete_option( 'cd_adminpage_feed_url' );
 	delete_option( 'cd_adminpage_feed_count' );
-	delete_option( 'cd_admin_page_content' );
+	delete_option( 'cd_adminpage_content' );
 	delete_option( 'cd_helper_pages' );
 
 	/**
@@ -340,4 +340,20 @@ function cd_dashicon_selector( $args = array() ) {
 	$icons = json_decode( file_get_contents( CLIENTDASH_DIR . 'core/includes/dashicons.json' ) );
 
 	include CLIENTDASH_DIR . 'core/includes/views/dashicon-selector.php';
+}
+
+if ( ! function_exists( 'clientdash_custom_widget_text' ) ) {
+
+	/**
+	 * Output for the Text custom widget.
+	 *
+	 * @since {{VERSION}}
+	 *
+	 * @param array $settings Widget settings (if any).
+	 * @param array $widget Widget array.
+	 */
+	function clientdash_custom_widget_text( $settings = array(), $widget ) {
+
+		return do_shortcode( wp_kses_post( $settings['text'] ) );
+	}
 }

@@ -261,9 +261,9 @@ class ClientDash_Modify {
 			}
 
 			// Add custom links
-			if ( isset( $this->submenu[ $menu_parent])) {
+			if ( isset( $this->submenu[ $menu_parent ] ) ) {
 
-				foreach ( $this->submenu[ $menu_parent] as $i => $submenu_item ) {
+				foreach ( $this->submenu[ $menu_parent ] as $i => $submenu_item ) {
 
 					switch ( $submenu_item['type'] ) {
 
@@ -297,7 +297,7 @@ class ClientDash_Modify {
 					$new_submenu[ $menu_parent ][] = $submenu_item;
 
 					// Now duplicate, but with the proper link
-					$submenu_item[2] = 'custom-header';
+					$submenu_item[2]               = 'custom-header';
 					$new_submenu[ $menu_parent ][] = $submenu_item;
 					continue;
 				}
@@ -344,11 +344,37 @@ class ClientDash_Modify {
 			return;
 		}
 
+		// Add any custom widgets
+		$custom_widgets = ClientDash_Customize::get_custom_dashboard_widgets();
+
+		foreach ( $this->dashboard as $widget ) {
+
+			// Only concerned with non-default (custom) widgets
+			if ( $widget['type'] === 'default' ) {
+
+				continue;
+			}
+
+			foreach ( $custom_widgets as $custom_widget ) {
+
+				if ( $widget['type'] === $custom_widget['id'] ) {
+
+					wp_add_dashboard_widget(
+						$widget['id'],
+						$widget['title'] ? $widget['title'] : $widget['original_title'],
+						array( 'ClientDash_Customize', 'custom_widget_callback'),
+						null,
+						$widget
+					);
+				}
+			}
+		}
+
 		if ( isset( $wp_meta_boxes['dashboard'] ) ) {
 
-			foreach ( $wp_meta_boxes['dashboard'] as $position => $priorities ) {
+			foreach ( $wp_meta_boxes['dashboard'] as $position => &$priorities ) {
 
-				foreach ( $priorities as $priority => $widgets ) {
+				foreach ( $priorities as $priority => &$widgets ) {
 
 					foreach ( $widgets as $i => &$widget ) {
 

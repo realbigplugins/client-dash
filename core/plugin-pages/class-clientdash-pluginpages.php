@@ -39,9 +39,6 @@ class ClientDash_PluginPages {
 		add_action( 'admin_init', array( $this, 'get_current_tab' ) );
 		add_action( 'admin_menu', array( $this, 'add_pages' ), 9 );
 
-		add_action( 'clientdash_settings_page_content', array( __CLASS__, 'settings_page_feed' ) );
-		add_action( 'clientdash_settings_page_content', array( __CLASS__, 'settings_page_other' ), 20 );
-
 		add_action( 'clientdash_sidebar', array( __CLASS__, 'sidebar_pro_prompt' ), 10 );
 		add_action( 'clientdash_sidebar', array( __CLASS__, 'sidebar_review_support' ), 15 );
 		add_action( 'clientdash_sidebar', array( __CLASS__, 'sidebar_rbp_signup' ), 20 );
@@ -132,11 +129,6 @@ class ClientDash_PluginPages {
 	 */
 	function register_settings() {
 
-		register_setting( 'clientdash_settings', 'cd_adminpage_feed_url' );
-		register_setting( 'clientdash_settings', 'cd_adminpage_feed_count' );
-
-		register_setting( 'clientdash_admin_page', 'cd_admin_page_content' );
-
 		register_setting( 'clientdash_helper_pages', 'cd_helper_pages' );
 	}
 
@@ -197,20 +189,20 @@ class ClientDash_PluginPages {
 
 		add_submenu_page(
 			'clientdash',
-			__( 'Addons', 'clientdash' ),
-			__( 'Addons', 'clientdash' ),
-			'manage_options',
-			'clientdash_addons',
-			array( __CLASS__, 'load_addons' )
-		);
-
-		add_submenu_page(
-			'clientdash',
 			__( 'Settings', 'clientdash' ),
 			__( 'Settings', 'clientdash' ),
 			'manage_options',
 			'clientdash_settings',
 			array( __CLASS__, 'load_settings' )
+		);
+
+		add_submenu_page(
+			'clientdash',
+			__( 'Addons', 'clientdash' ),
+			__( 'Addons', 'clientdash' ),
+			'manage_options',
+			'clientdash_addons',
+			array( __CLASS__, 'load_addons' )
 		);
 
 		if ( current_user_can( 'manage_options' ) ) {
@@ -233,7 +225,7 @@ class ClientDash_PluginPages {
 
 		add_action( 'clientdash_sidebar', array( __CLASS__, 'sidebar_admin_page_actions' ), 5 );
 
-		$admin_page_content = get_option( 'cd_admin_page_content' );
+		$admin_page_content = get_option( 'cd_adminpage_content' );
 
 		include_once CLIENTDASH_DIR . 'core/plugin-pages/views/admin-page.php';
 	}

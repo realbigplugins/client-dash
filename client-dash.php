@@ -2,7 +2,7 @@
 /**
  * Client Dash
  *
- * @package     LearnDash_Gradebook
+ * @package     ClientDash
  * @author      Real Big Plugins
  * @license     GPL2
  *
@@ -21,16 +21,6 @@
 
 defined( 'ABSPATH' ) || die;
 
-
-
-
-
-// TODO BREAKPOINT: Just got custom widget types (text specifically) functional. Keep testing that, then itegrate with menus/submenus
-
-
-
-
-
 if ( ! class_exists( 'ClientDash' ) ) {
 
 	define( 'CLIENTDASH_VERSION', '2.0.0' );
@@ -44,7 +34,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 	 *
 	 * @since 2.0.0
 	 */
-	final class ClientDash {
+	class ClientDash {
 
 		/**
 		 * Database functions.
@@ -65,6 +55,24 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		public $api;
 
 		/**
+		 * RBM Field Helpers instance.
+		 *
+		 * @since {{VERSION}}
+		 *
+		 * @var RBM_FieldHelpers
+		 */
+		public $field_helpers;
+
+		/**
+		 * RBP Support instance.
+		 *
+		 * @since {{VERSION}}
+		 *
+		 * @var RBP_Support
+		 */
+		public $support;
+
+		/**
 		 * Handles the plugin upgrades.
 		 *
 		 * @since 2.0.0
@@ -81,6 +89,15 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		 * @var ClientDash_PluginPages
 		 */
 		public $pluginpages;
+
+		/**
+		 * Handles the plugin settings.
+		 *
+		 * @since {{VERSION}}
+		 *
+		 * @var ClientDash_Settings
+		 */
+		public $settings;
 
 		/**
 		 * Loads the Client Dash Customizer.
@@ -142,6 +159,9 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		function __construct() {
 
 			$this->require_necessities();
+			$this->legacy_apis();
+
+			$this->setup_fieldhelpers();
 
 			add_action( 'init', array( $this, 'register_assets' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
@@ -179,11 +199,80 @@ if ( ! class_exists( 'ClientDash' ) ) {
 			if ( is_admin() ) {
 
 				require_once CLIENTDASH_DIR . 'core/plugin-pages/class-clientdash-pluginpages.php';
+				require_once CLIENTDASH_DIR . 'core/plugin-pages/class-clientdash-settings.php';
 				require_once CLIENTDASH_DIR . 'core/class-clientdash-modify.php';
 
 				$this->pluginpages = new ClientDash_PluginPages();
+				$this->settings    = new ClientDash_Settings();
 				$this->modify      = new ClientDash_Modify();
 			}
+		}
+
+		/**
+		 * Includes and sets up everything required to maintain rough support for legacy extension APIs.
+		 *
+		 * @since {{VERSION}}
+		 * @access private
+		 */
+		private function legacy_apis() {
+
+			global $ClientDash_Core_Page_Settings_Tab_Widgets;
+
+			require_once CLIENTDASH_DIR . 'core/legacy-extension-apis/clientdash-menus-api.php';
+			require_once CLIENTDASH_DIR . 'core/legacy-extension-apis/clientdash-widgets-api.php';
+			require_once CLIENTDASH_DIR . 'core/legacy-extension-apis/clientdash-settings-api.php';
+			require_once CLIENTDASH_DIR . 'core/legacy-extension-apis/class-clientdash-core-page-settings-tab-widgets.php';
+
+			$ClientDash_Core_Page_Settings_Tab_Widgets = new ClientDash_Core_Page_Settings_Tab_Widgets();
+		}
+
+		/**
+		 * Initializes Field Helpers.
+		 *
+		 * @since {{VERSION}}
+		 * @access private
+		 */
+		private function setup_fieldhelpers() {
+
+			require_once CLIENTDASH_DIR . 'core/clientdash-fieldhelper-functions.php';
+			require_once CLIENTDASH_DIR . 'core/library/rbm-field-helpers/rbm-field-helpers.php';
+
+			$this->field_helpers = new RBM_FieldHelpers( array(
+				'ID'   => 'cd',
+				'l10n' => array(
+					'field_table'    => array(
+						'delete_row'    => __( 'Delete Row', 'client-dash' ),
+						'delete_column' => __( 'Delete Column', 'client-dash' ),
+					),
+					'field_select'   => array(
+						'no_options'       => __( 'No select options.', 'client-dash' ),
+						'error_loading'    => __( 'The results could not be loaded', 'client-dash' ),
+						/* translators: %d is number of characters over input limit */
+						'input_too_long'   => __( 'Please delete %d character(s)', 'client-dash' ),
+						/* translators: %d is number of characters under input limit */
+						'input_too_short'  => __( 'Please enter %d or more characters', 'client-dash' ),
+						'loading_more'     => __( 'Loading more results...', 'client-dash' ),
+						/* translators: %d is maximum number items selectable */
+						'maximum_selected' => __( 'You can only select %d item(s)', 'client-dash' ),
+						'no_results'       => __( 'No results found', 'client-dash' ),
+						'searching'        => __( 'Searching...', 'client-dash' ),
+					),
+					'field_repeater' => array(
+						'collapsable_title' => __( 'New Row', 'client-dash' ),
+						'confirm_delete'    => __( 'Are you sure you want to delete this element?', 'client-dash' ),
+						'delete_item'       => __( 'Delete', 'client-dash' ),
+						'add_item'          => __( 'Add', 'client-dash' ),
+					),
+					'field_media'    => array(
+						'button_text'        => __( 'Upload / Choose Media', 'client-dash' ),
+						'button_remove_text' => __( 'Remove Media', 'client-dash' ),
+						'window_title'       => __( 'Choose Media', 'client-dash' ),
+					),
+					'field_checkbox' => array(
+						'no_options_text' => __( 'No options available.', 'client-dash' ),
+					),
+				),
+			) );
 		}
 
 		/**
@@ -300,6 +389,44 @@ if ( ! class_exists( 'ClientDash' ) ) {
 			           '</a>';
 
 			return $links;
+		}
+
+		/**
+		 * Adds a content section.
+		 *
+		 * @deprecated
+		 */
+		public function add_content_section( $section ) {
+		}
+
+		/**
+		 * Strips out spaces and dashes and replaces them with underscores. Also
+		 * translates to lowercase.
+		 *
+		 * @deprecated
+		 *
+		 * @param string $name The name to be translated.
+		 *
+		 * @return string Translated ID.
+		 */
+		public static function translate_name_to_id( $name ) {
+
+			return strtolower( str_replace( array( ' ', '-' ), '_', $name ) );
+		}
+
+		/**
+		 * Checks to see if we're on a specific page and tab.
+		 *
+		 * @deprecated
+		 *
+		 * @param string $page The page to check.
+		 * @param        bool /string $tab If supplied, will also check that the given tab is active.
+		 *
+		 * @return bool True of on the page (and tab), false otherwise.
+		 */
+		public static function is_cd_page( $page, $tab = false ) {
+
+			return false;
 		}
 	}
 

@@ -4,6 +4,8 @@
  * @since {{VERSION}}
  */
 
+var l10n = typeof ClientDash_Data != 'undefined' ? ClientDash_Data.l10n : {};
+
 (function ($) {
     'use strict';
 
@@ -86,6 +88,23 @@
         });
     }
 
+    function submit_button(e) {
+
+        e.preventDefault();
+
+        $(this).prop('disabled', true).html(l10n['saving']);
+
+        var $form = $('#' + $(this).attr('data-cd-submit-form'));
+
+        $form.submit();
+    }
+
     init_url();
-    $(init_select2);
+    $(function () {
+
+        init_select2();
+
+        $('[data-cd-submit-form]').click(submit_button);
+        $('[data-cd-submit-form]').prop('disabled', false);
+    });
 })(jQuery);

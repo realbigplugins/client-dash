@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Promise from 'promise-polyfill';
 import 'whatwg-fetch';
 
 import './functions';
 import Editor from './editor';
 import Preview from './preview';
 import Tutorial from './tutorial';
+import LoadingIcon from "./loading-icon";
 
 const l10n         = ClientdashCustomize_Data.l10n || false;
 const roles        = ClientdashCustomize_Data.roles || false;
@@ -187,7 +187,7 @@ class Customize extends React.Component {
 
                 {this.state.previewLoading &&
                 <div id="cd-editor-preview-cover">
-                    <span className="cd-editor-preview-cover-icon fa fa-circle-o-notch fa-spin"/>
+                    <LoadingIcon/>
                 </div>}
 
                 {(this.state.loadTutorial && !this.state.previewLoading) &&

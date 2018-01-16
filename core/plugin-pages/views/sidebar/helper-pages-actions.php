@@ -13,7 +13,8 @@ defined( 'ABSPATH' ) || die;
 
 <section
         class="clientdash-page-sidebar-section clientdash-page-sidebar-helper-pages-actions clientdash-page-sidebar-actions">
-    <button type="submit" name="submit" id="submit" class="button button-primary button-hero widefat">
+    <button type="submit" name="submit" id="submit" class="button button-primary button-hero widefat"
+            data-cd-submit-form="clientdash-helper-pages-form" disabled>
 		<?php _e( 'Save Helper Pages', 'client-dash' ); ?>
     </button>
 </section>

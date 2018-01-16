@@ -238,7 +238,7 @@ class ClientDash_Customize {
 			'current_user_id' => get_current_user_id(),
 			'load_tutorial'   => get_user_meta( get_current_user_id(), 'clientdash_hide_customize_tutorial', true ) !== 'yes',
 			'tutorial_panels' => $this->get_tutorial_panels(),
-			'widgets'         => $this->get_custom_dashboard_widgets(),
+			'widgets'         => self::get_custom_dashboard_widgets(),
 			'l10n'            => array(
 				'role_switcher_label'               => __( 'Customizing:', 'client-dash' ),
 				'panel_text_menu'                   => __( 'Menu', 'client-dash' ),
@@ -338,31 +338,71 @@ class ClientDash_Customize {
 	 * @since {{VERSION}}
 	 * @access private
 	 */
-	function get_custom_dashboard_widgets() {
+	public static function get_custom_dashboard_widgets() {
 
 		/**
 		 * Extra, re-usable dashboard widgets.
 		 *
 		 * @since {{VERSION}}
 		 */
-		$settings = apply_filters( 'cd_customize_dashboard_widgets', array(
+		$widgets = apply_filters( 'cd_customize_dashboard_widgets', array(
 			array(
 				'id'       => 'text',
 				'label'    => __( 'Text', 'client-dash' ),
 				'settings' => array(
 					array(
-						'name'  => 'title',
-						'label' => __( 'Title', 'client-dash' ),
-						'type'  => 'text',
+						'name'  => 'text',
+						'label' => __( 'Text or HTML', 'client-dash' ),
+						'type'  => 'textarea',
 					),
 				),
-				'callback' => function ( $settings ) {
-					echo 'Widget';
-				},
+				'callback' => 'clientdash_custom_widget_text',
 			),
 		) );
 
-		return $settings;
+		return $widgets;
+	}
+
+	/**
+	 * Callback for displaying custom widgets.
+	 *
+	 * @since {{VERSION}}
+	 *
+	 * @param array $object
+	 * @param array $box
+	 */
+	public static function custom_widget_callback( $object, $box ) {
+
+		$custom_widgets = ClientDash_Customize::get_custom_dashboard_widgets();
+
+		foreach ( $custom_widgets as $custom_widget ) {
+
+			if ( $box['args']['type'] === $custom_widget['id'] ) {
+
+				$settings = isset( $box['args']['settings'] ) ? $box['args']['settings'] : array();
+				$output   = call_user_func( $custom_widget['callback'], $settings, $box['args'] );
+
+				/**
+				 * Output for a custom widget.
+				 *
+				 * @since {{VERSION}}
+				 *
+				 * @param string $output Widget output.
+				 * @param array $args Current widget args.
+				 * @param array $custom_widget Custom widget global args.
+				 *
+				 * @return string Widget output.
+				 */
+				$output = apply_filters(
+					"clientdash_custom_widget_{$custom_widget['id']}_output",
+					$output,
+					$box['args'],
+					$custom_widget
+				);
+
+				echo $output;
+			}
+		}
 	}
 
 	/**

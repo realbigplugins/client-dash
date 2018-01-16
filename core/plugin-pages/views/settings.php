@@ -31,17 +31,7 @@ defined( 'ABSPATH' ) || die;
 				?>
             </div>
 
-			<?php
-			/**
-			 * Settings page content hook.
-			 *
-			 * @since {{VERSION}}
-			 *
-			 * @hooked ClientDash_PluginPages::settings_page_feed() 10
-			 * @hooked ClientDash_PluginPages::settings_page_other() 20
-			 */
-			do_action( 'clientdash_settings_page_content' );
-			?>
+			<?php do_settings_sections( 'clientdash_settings' ); ?>
 
         </section>
 

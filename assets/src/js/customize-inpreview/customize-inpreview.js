@@ -1,93 +1,57 @@
-/**
- * Loads on page-load for inside the customize preview iframe.
- *
- * @since {{VERSION}}
- */
-function cd_customize_links(e) {
+(function ($) {
+    /**
+     * Loads on page-load for inside the customize preview iframe.
+     *
+     * @since {{VERSION}}
+     */
+    function cd_customize_links(e) {
 
-    var links = document.getElementsByTagName('a');
+        $('a').click(function (e) {
+            e.preventDefault();
+            return false;
+        });
+    }
 
-    for (var i = 0, len = links.length; i < len; i++) {
+    /**
+     * Adds a "protective" overlay to non-dashboard pages to signal user that it is only a preview.
+     *
+     * @since {{VERSION}}
+     */
+    function cd_customize_overlay() {
 
-        links[i].onclick = function (event) {
+        $('#wpwrap').append(
+            '<div id="cd-customize-preview-cover">' +
+            '<div class="cd-customize-preview-cover-text">' +
+            ClientDashCustomizeInPreview_Data['l10n']['preview_only'] +
+            '</div>' +
+            '</div>'
+        );
+    }
 
-            event.preventDefault();
+    /**
+     * Deal with forms.
+     *
+     * @since {{VERSION}}
+     */
+    function cd_customize_forms() {
 
-            // Try to get nearest link if clicked item isn't a link (nested)
-            var node = event.target
-
-            while (node && !node.href) {
-
-                node = node.parentNode
-            }
-
-            if (!node.href) {
-
-                return false;
-            }
+        $('form').submit(function (e) {
 
             window.parent.postMessage({
-                id: 'cd_customize_preview_link_clicked',
-                link: node.href
+                id: 'cd_customize_preview_form_submit'
             }, ClientDashCustomizeInPreview_Data.domain);
 
+            e.preventDefault();
             return false;
-        }
+        });
     }
-}
 
-/**
- * Adds a "protective" overlay to non-dashboard pages to signal user that it is only a preview.
- *
- * @since {{VERSION}}
- */
-function cd_customize_overlay() {
+    // On Ready
+    $(function () {
 
-    var content = document.getElementById('wpwrap');
-    var cover = document.createElement('div');
-    var cover_text = document.createElement('div');
+        cd_customize_links();
+        cd_customize_overlay();
+        cd_customize_forms();
+    });
 
-    cover.id = 'cd-customize-preview-cover';
-    cover_text.className = 'cd-customize-preview-cover-text';
-    cover_text.innerHTML = ClientDashCustomizeInPreview_Data['l10n']['preview_only'];
-
-    cover.appendChild(cover_text);
-    content.appendChild(cover);
-}
-
-/**
- * Deal with forms.
- *
- * @since {{VERSION}}
- */
-function cd_customize_forms() {
-
-    for (var i = 0; i < document.forms.length; i++) {
-
-        var form = document.forms[i];
-
-        form.addEventListener('submit', cd_customize_forms_prevent_submit, false);
-    }
-}
-
-/**
- * Prevent forms from submitting.
- *
- * @since {{VERSION}}
- *
- * @param event
- * @returns {boolean}
- */
-function cd_customize_forms_prevent_submit(event) {
-
-    window.parent.postMessage({
-        id: 'cd_customize_preview_form_submit'
-    }, ClientDashCustomizeInPreview_Data.domain);
-
-    event.preventDefault();
-    return false;
-}
-
-document.addEventListener('DOMContentLoaded', cd_customize_links, false);
-document.addEventListener('DOMContentLoaded', cd_customize_overlay, false);
-document.addEventListener('DOMContentLoaded', cd_customize_forms, false);
+}(jQuery));

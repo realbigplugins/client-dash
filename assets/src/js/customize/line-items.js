@@ -273,8 +273,7 @@ class MenuItemEdit extends React.Component {
         }
 
         this.toggleEdit  = this.toggleEdit.bind(this);
-        this.titleChange = this.titleChange.bind(this);
-        this.iconChange  = this.iconChange.bind(this);
+        this.settingChange = this.settingChange.bind(this);
         this.deleteItem  = this.deleteItem.bind(this);
         this.submenuEdit = this.submenuEdit.bind(this);
         this.submitForm  = this.submitForm.bind(this);
@@ -287,20 +286,15 @@ class MenuItemEdit extends React.Component {
         }));
     }
 
-    titleChange(value) {
+    settingChange(setting, value) {
 
-        this.props.onMenuItemEdit({
+        let newItem = {
             id: this.props.id,
-            title: value,
-        });
-    }
+        }
 
-    iconChange(value) {
+        newItem[setting] = value;
 
-        this.props.onMenuItemEdit({
-            id: this.props.id,
-            icon: value,
-        });
+        this.props.onMenuItemEdit(newItem);
     }
 
     deleteItem() {
@@ -329,12 +323,14 @@ class MenuItemEdit extends React.Component {
                       onDelete={this.deleteItem}
                       onSubmenuEdit={this.submenuEdit}
                   >
-                      <InputText
-                          label={l10n['title']}
-                          value={this.props.title}
-                          placeholder={this.props.original_title}
-                          onHandleChange={this.titleChange}
-                      />
+
+                      {getInput('text', {
+                          label: l10n['title'],
+                          name: 'title',
+                          value: this.props.title,
+                          placeholder: this.props.original_title,
+                          onHandleChange: this.settingChange,
+                      })}
 
                       <p className="cd-editor-lineitem-form-subfield cd-editor-lineitem-form-subtext">
                           {l10n['original_title'] + " "}<strong>{this.props.original_title}</strong>
@@ -343,7 +339,7 @@ class MenuItemEdit extends React.Component {
                       <DashiconsSelector
                           value={this.props.icon}
                           placeholder={this.props.original_icon}
-                          onSelectDashicon={this.iconChange}
+                          onSelectDashicon={(dashicon) => this.settingChange('icon', dashicon)}
                       />
 
                       <p className="cd-editor-lineitem-form-subfield cd-editor-lineitem-form-subtext">
@@ -416,9 +412,7 @@ class MenuItemCustomLink extends React.Component {
         }
 
         this.toggleEdit  = this.toggleEdit.bind(this);
-        this.titleChange = this.titleChange.bind(this);
-        this.linkChange  = this.linkChange.bind(this);
-        this.iconChange  = this.iconChange.bind(this);
+        this.settingChange    = this.settingChange.bind(this);
         this.deleteItem  = this.deleteItem.bind(this);
         this.submenuEdit = this.submenuEdit.bind(this);
         this.submitForm  = this.submitForm.bind(this);
@@ -431,28 +425,15 @@ class MenuItemCustomLink extends React.Component {
         }));
     }
 
-    titleChange(value) {
+    settingChange(setting, value) {
 
-        this.props.onMenuItemEdit({
+        let newItem = {
             id: this.props.id,
-            title: value,
-        });
-    }
+        }
 
-    linkChange(value) {
+        newItem[setting] = value;
 
-        this.props.onMenuItemEdit({
-            id: this.props.id,
-            link: value,
-        });
-    }
-
-    iconChange(value) {
-
-        this.props.onMenuItemEdit({
-            id: this.props.id,
-            icon: value,
-        });
+        this.props.onMenuItemEdit(newItem);
     }
 
     deleteItem() {
@@ -479,28 +460,31 @@ class MenuItemCustomLink extends React.Component {
                       onSubmit={this.submitForm}
                       onDelete={this.deleteItem}
                   >
-                      <InputText
-                          label={l10n['title']}
-                          value={this.props.title}
-                          placeholder={this.props.original_title}
-                          onHandleChange={this.titleChange}
-                      />
+
+                      {getInput('text', {
+                          label: l10n['title'],
+                          name: 'title',
+                          value: this.props.title,
+                          placeholder: this.props.original_title,
+                          onHandleChange: this.settingChange,
+                      })}
 
                       <p className="cd-editor-lineitem-form-subfield cd-editor-lineitem-form-subtext">
                           {l10n['original_title'] + " "}<strong>{this.props.original_title}</strong>
                       </p>
 
-                      <InputText
-                          label={l10n['link']}
-                          value={this.props.link}
-                          placeholder="http://"
-                          onHandleChange={this.linkChange}
-                      />
+                      {getInput('text', {
+                          label: l10n['link'],
+                          name: 'link',
+                          value: this.props.link,
+                          placeholder: 'http://',
+                          onHandleChange: this.settingChange,
+                      })}
 
                       <DashiconsSelector
                           value={this.props.icon}
                           placeholder={this.props.original_icon}
-                          onSelectDashicon={this.iconChange}
+                          onSelectDashicon={(dashicon) => this.settingChange('icon', dashicon)}
                       />
 
                       <p className="cd-editor-lineitem-form-subfield cd-editor-lineitem-form-subtext">
@@ -542,7 +526,7 @@ class SubmenuItemEdit extends React.Component {
         }
 
         this.toggleEdit  = this.toggleEdit.bind(this);
-        this.titleChange = this.titleChange.bind(this);
+        this.settingChange = this.settingChange.bind(this);
         this.deleteItem  = this.deleteItem.bind(this);
         this.submitForm  = this.submitForm.bind(this);
     }
@@ -554,15 +538,16 @@ class SubmenuItemEdit extends React.Component {
         }));
     }
 
-    titleChange(value) {
+    settingChange(setting, value) {
 
-        this.props.onSubmenuItemEdit({
+        let newItem = {
             id: this.props.id,
-            title: value,
-            original_title: this.props.original_title,
-        });
-    }
+        }
 
+        newItem[setting] = value;
+
+        this.props.onSubmenuItemEdit(newItem);
+    }
     deleteItem() {
 
         this.props.onDeleteItem(this.props.id);
@@ -586,12 +571,14 @@ class SubmenuItemEdit extends React.Component {
                       onSubmit={this.submitForm}
                       onDelete={this.deleteItem}
                   >
-                      <InputText
-                          label={l10n['title']}
-                          value={this.props.title}
-                          placeholder={this.props.original_title}
-                          onHandleChange={this.titleChange}
-                      />
+
+                      {getInput('text', {
+                          label: l10n['title'],
+                          name: 'title',
+                          value: this.props.title,
+                          placeholder: this.props.original_title,
+                          onHandleChange: this.settingChange,
+                      })}
 
                       <p className="cd-editor-lineitem-form-subfield cd-editor-lineitem-form-subtext">
                           {l10n['original_title'] + " "}<strong>{this.props.original_title}</strong>
@@ -629,8 +616,7 @@ class SubmenuItemCustomLink extends React.Component {
         }
 
         this.toggleEdit  = this.toggleEdit.bind(this);
-        this.titleChange = this.titleChange.bind(this);
-        this.linkChange  = this.linkChange.bind(this);
+        this.settingChange = this.settingChange.bind(this);
         this.deleteItem  = this.deleteItem.bind(this);
         this.submitForm  = this.submitForm.bind(this);
     }
@@ -642,26 +628,15 @@ class SubmenuItemCustomLink extends React.Component {
         }));
     }
 
-    titleChange(value) {
+    settingChange(setting, value) {
 
-        this.props.onSubmenuItemEdit({
+        let newItem = {
             id: this.props.id,
-            title: value,
-            link: this.props.link,
-            original_title: this.props.original_title,
-            type: 'custom_link',
-        });
-    }
+        }
 
-    linkChange(value) {
+        newItem[setting] = value;
 
-        this.props.onSubmenuItemEdit({
-            id: this.props.id,
-            link: value,
-            title: this.props.title,
-            original_title: this.props.original_title,
-            type: 'custom_link',
-        });
+        this.props.onSubmenuItemEdit(newItem);
     }
 
     deleteItem() {
@@ -681,23 +656,26 @@ class SubmenuItemCustomLink extends React.Component {
                       onSubmit={this.submitForm}
                       onDelete={this.deleteItem}
                   >
-                      <InputText
-                          label={l10n['title']}
-                          value={this.props.title}
-                          placeholder={this.props.original_title}
-                          onHandleChange={this.titleChange}
-                      />
+
+                      {getInput('text', {
+                          label: l10n['title'],
+                          name: 'title',
+                          value: this.props.title,
+                          placeholder: this.props.original_title,
+                          onHandleChange: this.settingChange,
+                      })}
 
                       <p className="cd-editor-lineitem-form-subfield cd-editor-lineitem-form-subtext">
                           {l10n['original_title'] + " "}<strong>{this.props.original_title}</strong>
                       </p>
 
-                      <InputText
-                          label={l10n['link']}
-                          value={this.props.link}
-                          placeholder="http://"
-                          onHandleChange={this.linkChange}
-                      />
+                      {getInput('text', {
+                          label: l10n['link'],
+                          name: 'link',
+                          value: this.props.link,
+                          placeholder: 'http://',
+                          onHandleChange: this.settingChange,
+                      })}
                   </LineItemForm>
         ;
 
@@ -818,7 +796,7 @@ class WidgetEdit extends React.Component {
 
     render() {
 
-        const customWidget   = getItem(customWidgets, this.props.id);
+        const customWidget   = getItem(customWidgets, this.props.type);
         const widgetSettings = customWidget ? customWidget.settings : [];
 
         const form =

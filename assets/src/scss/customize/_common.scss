@@ -1,3 +1,21 @@
+@keyframes cd-icon-loading {
+  0% {
+    transform: rotate(-40deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+  60% {
+    transform: rotate(-5deg);
+  }
+  90% {
+    transform: rotate(5deg);
+  }
+  100% {
+    transform: rotate(-40deg);
+  }
+}
+
 .cd-editor-action-button {
   color: $dark-gray;
   background: $light-gray;
@@ -209,5 +227,17 @@
     &:hover {
       color: $primary-color;
     }
+  }
+}
+
+.cd-loading-icon {
+  fill: $dark-gray;
+  width: 100px;
+  max-width: 100%;
+
+  .cd-loading-icon-arrow {
+    transform-origin: 15% 100%;
+    animation: cd-icon-loading infinite 1s;
+    animation-timing-function: ease-in;
   }
 }

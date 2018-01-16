@@ -1,6 +1,7 @@
 import React from 'react';
 
 const adminurl = ClientdashCustomize_Data.adminurl || false;
+const l10n     = ClientdashCustomize_Data.l10n || false;
 
 /**
  * The Customize preview.

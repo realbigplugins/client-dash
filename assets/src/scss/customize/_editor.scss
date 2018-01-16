@@ -37,7 +37,7 @@
 .cd-editor-primary-actions {
   position: relative;
   height: 50px;
-  background-color: #fff;
+  background: #fff;
   z-index: 10;
 
   &:after {
@@ -296,6 +296,12 @@
         @extend .cd-icon-logo:before;
       }
     }
+  }
+
+  textarea {
+    font-size: inherit;
+    font-family: inherit;
+    resize: vertical;
   }
 }
 

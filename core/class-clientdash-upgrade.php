@@ -672,7 +672,7 @@ class ClientDash_Upgrade {
 
 		if ( $admin_page['content'] ) {
 
-			update_option( 'cd_admin_page_content', $admin_page['content'] );
+			update_option( 'cd_adminpage_content', $admin_page['content'] );
 			delete_option( 'cd_webmaster_main_tab_content' );
 		}
 

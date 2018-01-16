@@ -89,6 +89,7 @@ class InputTextArea extends React.Component {
                         name={this.props.name}
                         defaultValue={this.props.value}
                         placeholder={this.props.placeholder}
+                        rows="6"
                         onChange={this.handleChange}
                     />
                 </label>

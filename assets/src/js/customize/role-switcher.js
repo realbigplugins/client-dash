@@ -23,7 +23,7 @@ class RoleSwitcher extends React.Component {
         this.switchRole = this.switchRole.bind(this);
     }
 
-    switchRole(value) {
+    switchRole(name, value) {
 
         this.props.onSwitchRole(value);
     }

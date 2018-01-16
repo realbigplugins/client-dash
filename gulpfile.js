@@ -161,7 +161,7 @@ gulp.task('default', ['admin_sass', 'admin_js', 'customize_sass', 'customize_inp
     gulp.watch(['./assets/src/scss/customize-inpreview/*.scss'], ['customize_inpreview_sass']);
     gulp.watch(['./assets/src/js/admin/**/*.js'], ['admin_js']);
     gulp.watch(['./assets/src/js/customize/*.js'], ['customize_js']);
-    gulp.watch(['./assets/src/js/customize/customize-inpreview.js'], ['customize_inpreview_js']);
+    gulp.watch(['./assets/src/js/customize-inpreview/customize-inpreview.js'], ['customize_inpreview_js']);
 });
 
 gulp.task('build', ['version', 'apply-prod-environment', 'admin_sass', 'admin_js', 'customize_sass', 'customize_inpreview_sass', 'customize_inpreview_js', 'customize_js', 'generate_pot']);

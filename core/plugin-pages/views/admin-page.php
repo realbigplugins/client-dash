@@ -16,15 +16,17 @@ defined( 'ABSPATH' ) || die;
 
 <div class="wrap clientdash">
 
-    <form method="post" action="options.php" id="clientdash-admin-page-form">
+    <h1 class="clientdash-page-title">
+		<?php echo get_admin_page_title(); ?>
+    </h1>
 
-		<?php settings_fields( 'clientdash_admin_page' ); ?>
+	<?php settings_errors(); ?>
 
-        <h1 class="clientdash-page-title">
-			<?php echo get_admin_page_title(); ?>
-        </h1>
+    <section class="clientdash-page-wrap">
 
-        <section class="clientdash-page-wrap">
+        <form method="post" action="options.php" id="clientdash-admin-page-form">
+
+			<?php settings_fields( 'clientdash_admin_page' ); ?>
 
             <div class="clientdash-page-description">
 				<?php
@@ -34,11 +36,12 @@ defined( 'ABSPATH' ) || die;
 				?>
             </div>
 
-			<?php wp_editor( $admin_page_content, 'cd_admin_page_content', array() ); ?>
+			<?php wp_editor( $admin_page_content, 'cd_adminpage_content', array() ); ?>
 
-        </section>
+        </form>
 
-		<?php include_once CLIENTDASH_DIR . 'core/plugin-pages/views/sidebar/sidebar.php'; ?>
+    </section>
 
-    </form>
+	<?php include_once CLIENTDASH_DIR . 'core/plugin-pages/views/sidebar/sidebar.php'; ?>
+
 </div>

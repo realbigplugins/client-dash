@@ -486,7 +486,7 @@ class ClientDash_Helper_Pages {
 	 */
 	static public function load_cd_page_admin_page_tab_main() {
 
-		$content = get_option( 'cd_admin_page_content' );
+		$content = get_option( 'cd_adminpage_content' );
 
 		$content = apply_filters( 'the_content', $content );
 
@@ -520,7 +520,6 @@ class ClientDash_Helper_Pages {
 			'url'   => '',
 			'count' => '5',
 		), $atts, 'cd_feed' );
-
 
 		if ( ! $atts['url'] ) {
 

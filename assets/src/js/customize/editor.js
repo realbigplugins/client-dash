@@ -646,7 +646,7 @@ class Editor extends React.Component {
                     prevState.customizations[role].dashboard.unshift({
                         id: new_item_id,
                         original_title: widget.original_title,
-                        type: widget.id,
+                        type: widget.type,
                     });
 
                     prevState.history[role].widgetItemLastAdded = new_item_id;
