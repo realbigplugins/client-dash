@@ -116,7 +116,7 @@ class ClientDash_Upgrade {
 		$confirm_text_1 = sprintf(
 		/* translators: %s is current Client Dash version */
 			__(
-				'Important: If you have made any customizations since udpating Client Dash to %s, all customizations ' .
+				'Important: If you have made any customizations since updating Client Dash to %s, all customizations ' .
 				'will be overwritten by previous Client Dash customizations. It is recommended to backup your website ' .
 				'first.',
 				'client-dash'
