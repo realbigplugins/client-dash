@@ -133,7 +133,7 @@ class ClientDash_Modify {
 		foreach ( $menu as $i => $menu_item ) {
 
 			// Make sure all 6 indices exist.
-			$menu_item = wp_parse_args( $menu_item, array( '', '', '', '', '', '', '' ) );
+			$menu_item = array_pad( $menu_item, 7, '');
 
 			$processed_menu_item_id = $this->get_processed_menu_item_id( $menu_item[2] );
 
@@ -240,7 +240,7 @@ class ClientDash_Modify {
 				}
 
 				// Make sure all 4 indices exist.
-				$submenu_item = wp_parse_args( $submenu_item, array( '', '', '', '' ) );
+				$submenu_item = array_pad( $submenu_item, 4, '');
 
 				$processed_submenu_item_id = $this->get_processed_submenu_item_id( $submenu_item[2], $menu_parent );
 

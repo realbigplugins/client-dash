@@ -137,7 +137,7 @@ class ClientDash_Upgrade {
 					__(
 					/* translators: Both %s are HTML for <strong> */
 						'In order to use %sClient Dash%s, your database needs to be upgraded and your previous ' .
-						'customizations need to be migrated.',
+						'customizations need to be migrated. It is highly advised to backup your database first.',
 						'client-dash'
 					),
 					'<strong>',
@@ -426,6 +426,12 @@ class ClientDash_Upgrade {
 
 				switch ( $item_type ) {
 
+                    case 'link':
+
+                        $menu_item['link'] = $item->url;
+                        $menu_item['type'] = 'custom_link';
+                        break;
+
 					case 'separator':
 
 						$menu_item['type'] = 'separator';
@@ -433,7 +439,7 @@ class ClientDash_Upgrade {
 
 					default:
 
-						$menu_item['type'] = 'menu_item';
+						$menu_item['type'] = 'default';
 						break;
 				}
 
@@ -447,7 +453,7 @@ class ClientDash_Upgrade {
 
 				if ( cd_array_get_index_by_key( $new_menu, 'id', $menu_item[2] ) === false ) {
 
-					$type = 'menu_item';
+					$type = 'default';
 
 					if ( strpos( $menu_item[4], 'wp-menu-separator' ) !== false ) {
 
@@ -595,6 +601,11 @@ class ClientDash_Upgrade {
 		$pages = ClientDash_Helper_Pages::get_pages();
 		foreach ( $pages as $page_ID => &$page ) {
 
+		    if ( $page_ID === 'admin_page' ) {
+
+		        $page_ID = 'webmaster';
+            }
+
 			if ( $helper_pages['icons'] && isset( $helper_pages['icons'][ $page_ID ] ) ) {
 
 				$page['icon'] = $helper_pages['icons'][ $page_ID ];
@@ -623,7 +634,7 @@ class ClientDash_Upgrade {
 			}
 
 			// Admin Page (previously "Webmaster") customizations
-			if ( $page_ID === 'admin_page' ) {
+			if ( $page_ID === 'webmaster' ) {
 
 				$admin_page_title = get_option( 'cd_webmaster_name' );
 

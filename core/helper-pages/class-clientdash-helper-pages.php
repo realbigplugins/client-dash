@@ -114,7 +114,19 @@ class ClientDash_Helper_Pages {
 	 */
 	static public function get_pages() {
 
-		$page_modifications = get_option( 'cd_helper_pages', array() );
+		static $page_modifications;
+
+		if ( $page_modifications === null ) {
+
+			$page_modifications = get_option( 'cd_helper_pages', array() );
+		}
+
+		/**
+		 * Client Dash helper pages modifications (straight from the DB).
+		 *
+		 * @since {{VERSION}}
+		 */
+		$pages = apply_filters( 'cd_helper_pages_modifications', $page_modifications );
 
 		$pages = array(
 			'account'    => array(
