@@ -132,6 +132,9 @@ class ClientDash_Modify {
 
 		foreach ( $menu as $i => $menu_item ) {
 
+			// Make sure all 6 indices exist.
+			$menu_item = wp_parse_args( $menu_item, array( '', '', '', '', '', '', '' ) );
+
 			$processed_menu_item_id = $this->get_processed_menu_item_id( $menu_item[2] );
 
 			$customized_menu_item_key = cd_array_get_index_by_key( $this->menu, 'id', $processed_menu_item_id );
@@ -230,6 +233,15 @@ class ClientDash_Modify {
 
 			foreach ( $submenu_items as $i => $submenu_item ) {
 
+				// If not customized, continue
+				if ( ! isset( $this->submenu[ $menu_parent ] ) ) {
+
+					continue;
+				}
+
+				// Make sure all 4 indices exist.
+				$submenu_item = wp_parse_args( $submenu_item, array( '', '', '', '' ) );
+
 				$processed_submenu_item_id = $this->get_processed_submenu_item_id( $submenu_item[2], $menu_parent );
 
 				$customized_submenu_item_key = cd_array_get_index_by_key(
@@ -264,6 +276,8 @@ class ClientDash_Modify {
 			if ( isset( $this->submenu[ $menu_parent ] ) ) {
 
 				foreach ( $this->submenu[ $menu_parent ] as $i => $submenu_item ) {
+
+					$type = isset( $submenu_item['type'] ) ? $submenu_item['type'] : 'default';
 
 					switch ( $submenu_item['type'] ) {
 
@@ -362,7 +376,7 @@ class ClientDash_Modify {
 					wp_add_dashboard_widget(
 						$widget['id'],
 						$widget['title'] ? $widget['title'] : $widget['original_title'],
-						array( 'ClientDash_Customize', 'custom_widget_callback'),
+						array( 'ClientDash_Customize', 'custom_widget_callback' ),
 						null,
 						$widget
 					);
