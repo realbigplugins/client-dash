@@ -110,7 +110,9 @@ class ClientDash_Settings {
 				'callback' => 'cd_do_field_html',
 				'args'     => array(
 					'html' =>
-						"<a href=\"{$reset_settings_link}\" class=\"button\">" .
+						"<a href=\"{$reset_settings_link}\" class=\"button\" onclick=\"return confirm('" .
+						__( 'Are you sure you want to reset ALL plugin settings? This cannot be undone.', 'client-dash' ) .
+						"');\">" .
 						__( 'Reset', 'client-dash' ) .
 						'</a>',
 				),
