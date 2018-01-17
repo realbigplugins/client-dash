@@ -405,7 +405,7 @@ class ClientDash_Modify {
 						     ( isset( $custom_widget['deleted'] ) && $custom_widget['deleted'] )
 						) {
 
-							unset( $widget['title'] );
+							unset( $wp_meta_boxes['dashboard'][$position][$priority][$i] );
 							continue;
 						}
 
