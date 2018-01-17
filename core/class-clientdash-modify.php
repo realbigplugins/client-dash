@@ -167,7 +167,9 @@ class ClientDash_Modify {
 		// Add custom links and separators.
 		foreach ( $this->menu as $i => $menu_item ) {
 
-			switch ( $menu_item['type'] ) {
+			$type = isset( $menu_item['type'] ) ? $menu_item['type'] : 'default';
+
+			switch ( $type ) {
 
 				case 'custom_link':
 					$new_menu[ $i ] = array(
@@ -279,7 +281,7 @@ class ClientDash_Modify {
 
 					$type = isset( $submenu_item['type'] ) ? $submenu_item['type'] : 'default';
 
-					switch ( $submenu_item['type'] ) {
+					switch ( $type ) {
 
 						case 'custom_link':
 							$new_submenu[ $menu_parent ][ $i ] = array(
