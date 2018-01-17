@@ -365,15 +365,17 @@ class ClientDash_Modify {
 
 		foreach ( $this->dashboard as $widget ) {
 
+			$type = isset( $widget['type']) ? $widget['type'] : 'default';
+
 			// Only concerned with non-default (custom) widgets
-			if ( $widget['type'] === 'default' ) {
+			if ( $type === 'default' ) {
 
 				continue;
 			}
 
 			foreach ( $custom_widgets as $custom_widget ) {
 
-				if ( $widget['type'] === $custom_widget['id'] ) {
+				if ( $type === $custom_widget['id'] ) {
 
 					wp_add_dashboard_widget(
 						$widget['id'],
@@ -414,7 +416,7 @@ class ClientDash_Modify {
 						}
 
 						// Other customizations
-						$widget['settings'] = $custom_widget['settings'];
+						$widget['settings'] = isset( $custom_widget['settings'] ) ? $custom_widget['settings'] : array();
 					}
 				}
 			}

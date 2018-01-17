@@ -333,7 +333,7 @@ class ClientDash_Helper_Pages {
 				array(
 					'icon' => $page['icon'],
 					'link' => admin_url( ( $page['parent'] == 'toplevel' ? 'admin.php' : $page['parent'] ) .
-					                     "?page=$page[id]" ),
+					                     "?page=cd_{$page_ID}" ),
 				)
 			);
 		}
