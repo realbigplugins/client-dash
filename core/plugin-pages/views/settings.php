@@ -18,18 +18,12 @@ defined( 'ABSPATH' ) || die;
 		<?php settings_fields( 'clientdash_settings' ); ?>
 
         <h1 class="clientdash-page-title">
-			<?php echo get_admin_page_title(); ?>
+			<?php _e( 'Settings', 'client-dash' ); ?>
         </h1>
 
 		<?php settings_errors(); ?>
 
         <section class="clientdash-page-wrap">
-
-            <div class="clientdash-page-description">
-				<?php
-				_e( 'Modify Client Dash settings on this page.', 'client-dash' );
-				?>
-            </div>
 
 			<?php do_settings_sections( 'clientdash_settings' ); ?>
 

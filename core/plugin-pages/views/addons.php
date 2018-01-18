@@ -21,12 +21,6 @@ defined( 'ABSPATH' ) || die;
 
     <section class="clientdash-page-wrap">
 
-        <div class="clientdash-page-description">
-			<?php
-			_e( 'These are extra plugins that you can use to enhance the Client Dash experience.', 'client-dash' );
-			?>
-        </div>
-
         <ul class="clientdash-addons-list">
 			<?php foreach ( $addons as $addon ) : ?>
                 <li class="clientdash-addons-list-item">

@@ -17,6 +17,10 @@ defined( 'ABSPATH' ) || die;
 
     <h1 class="clientdash-page-title">
 		<?php echo get_admin_page_title(); ?>
+		<?php
+		cd_field_tip( __( 'Helper pages are special admin pages that Client Dash provides. You can enable or disable them' .
+		                  ' for different roles.', 'client-dash' ) );
+		?>
     </h1>
 
 	<?php settings_errors(); ?>
@@ -26,13 +30,6 @@ defined( 'ABSPATH' ) || die;
         <form method="post" action="options.php" id="clientdash-helper-pages-form">
 
 			<?php settings_fields( 'clientdash_helper_pages' ); ?>
-
-            <div class="clientdash-page-description">
-				<?php
-				_e( 'Helper pages are special admin pages that Client Dash provides. You can enable or disable them' .
-				    ' for different roles.', 'client-dash' );
-				?>
-            </div>
 
 			<?php foreach ( $pages as $page_ID => $page ) : ?>
                 <div class="clientdash-helper-page-wrap">

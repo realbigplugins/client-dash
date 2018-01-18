@@ -1,7 +1,7 @@
 === Client Dash ===
 
 Contributors: BrashRebel, joelworsham
-Tags: client, portal, dashboard, admin, users, webmaster
+Tags: client, portal, dashboard, admin, users, webmaster, customize
 Requires at least: 4.7.0
 Tested up to: 4.8.1
 Stable tag: 2.0.0

@@ -18,6 +18,11 @@ defined( 'ABSPATH' ) || die;
 
     <h1 class="clientdash-page-title">
 		<?php echo get_admin_page_title(); ?>
+		<?php
+		cd_field_tip( __( 'This is where you can manage your custom Admin Page. Use this page for anything like, such as: your ' .
+		                  'company landing page, a help page for employees using this website, displaying all of your favorite ' .
+		                  'kinds of ice cream, so much more.', 'client-dash' ) );
+		?>
     </h1>
 
 	<?php settings_errors(); ?>
@@ -28,15 +33,7 @@ defined( 'ABSPATH' ) || die;
 
 			<?php settings_fields( 'clientdash_admin_page' ); ?>
 
-            <div class="clientdash-page-description">
-				<?php
-				_e( 'This is where you can manage your custom Admin Page. Use this page for anything like, such as: your ' .
-				    'company landing page, a help page for employees using this website, displaying all of your favorite ' .
-				    'kinds of ice cream, so much more.', 'client-dash' );
-				?>
-            </div>
-
-			<?php wp_editor( $admin_page_content, 'cd_adminpage_content', array() ); ?>
+			<?php wp_editor( $admin_page_content, 'cd_adminpage_content' ); ?>
 
         </form>
 
