@@ -272,11 +272,11 @@ class MenuItemEdit extends React.Component {
             editing: this.props.editing || false,
         }
 
-        this.toggleEdit  = this.toggleEdit.bind(this);
+        this.toggleEdit    = this.toggleEdit.bind(this);
         this.settingChange = this.settingChange.bind(this);
-        this.deleteItem  = this.deleteItem.bind(this);
-        this.submenuEdit = this.submenuEdit.bind(this);
-        this.submitForm  = this.submitForm.bind(this);
+        this.deleteItem    = this.deleteItem.bind(this);
+        this.submenuEdit   = this.submenuEdit.bind(this);
+        this.submitForm    = this.submitForm.bind(this);
     }
 
     toggleEdit() {
@@ -316,48 +316,52 @@ class MenuItemEdit extends React.Component {
 
         let actions = [];
 
+        let form;
 
-        const form =
-                  <LineItemForm
-                      onSubmit={this.submitForm}
-                      onDelete={this.deleteItem}
-                      onSubmenuEdit={this.submenuEdit}
-                  >
+        if ( !this.props.missing ) {
+            form =
+                <LineItemForm
+                    onSubmit={this.submitForm}
+                    onDelete={this.deleteItem}
+                    onSubmenuEdit={this.submenuEdit}
+                >
 
-                      {getInput('text', {
-                          label: l10n['title'],
-                          name: 'title',
-                          value: this.props.title,
-                          placeholder: this.props.original_title,
-                          onHandleChange: this.settingChange,
-                      })}
+                    {getInput('text', {
+                        label: l10n['title'],
+                        name: 'title',
+                        value: this.props.title,
+                        placeholder: this.props.original_title,
+                        onHandleChange: this.settingChange,
+                    })}
 
-                      <p className="cd-editor-lineitem-form-subfield cd-editor-lineitem-form-subtext">
-                          {l10n['original_title'] + " "}<strong>{this.props.original_title}</strong>
-                      </p>
+                    <p className="cd-editor-lineitem-form-subfield cd-editor-lineitem-form-subtext">
+                        {l10n['original_title'] + " "}<strong>{this.props.original_title}</strong>
+                    </p>
 
-                      <DashiconsSelector
-                          value={this.props.icon}
-                          placeholder={this.props.original_icon}
-                          onSelectDashicon={(dashicon) => this.settingChange('icon', dashicon)}
-                      />
+                    <DashiconsSelector
+                        value={this.props.icon}
+                        placeholder={this.props.original_icon}
+                        onSelectDashicon={(dashicon) => this.settingChange('icon', dashicon)}
+                    />
 
-                      <p className="cd-editor-lineitem-form-subfield cd-editor-lineitem-form-subtext">
-                          {l10n['original_icon'] + " "}<span className={"dashicons " + this.props.original_icon}/>
-                      </p>
+                    <p className="cd-editor-lineitem-form-subfield cd-editor-lineitem-form-subtext">
+                        {l10n['original_icon'] + " "}<span className={"dashicons " + this.props.original_icon}/>
+                    </p>
 
-                  </LineItemForm>
-        ;
+                </LineItemForm>
+            ;
+        }
 
         return (
             <LineItemContent
                 key={this.props.id}
                 id={this.props.id}
-                title={this.props.title || this.props.original_title}
+                classes={this.props.missing ? 'missing' : ''}
+                title={(this.props.missing ? `(${l10n['missing']}) ` : '') + (this.props.title || this.props.original_title)}
                 icon={this.props.icon || this.props.original_icon}
                 form={this.state.editing ? form : false}
                 editing={this.state.editing}
-                toggleEdit={this.props.type !== 'clientdash' ? this.toggleEdit : false}
+                toggleEdit={this.props.type !== 'clientdash' && !this.props.missing ? this.toggleEdit : false}
             />
         )
     }
@@ -411,11 +415,11 @@ class MenuItemCustomLink extends React.Component {
             editing: this.props.editing || false,
         }
 
-        this.toggleEdit  = this.toggleEdit.bind(this);
-        this.settingChange    = this.settingChange.bind(this);
-        this.deleteItem  = this.deleteItem.bind(this);
-        this.submenuEdit = this.submenuEdit.bind(this);
-        this.submitForm  = this.submitForm.bind(this);
+        this.toggleEdit    = this.toggleEdit.bind(this);
+        this.settingChange = this.settingChange.bind(this);
+        this.deleteItem    = this.deleteItem.bind(this);
+        this.submenuEdit   = this.submenuEdit.bind(this);
+        this.submitForm    = this.submitForm.bind(this);
     }
 
     toggleEdit() {
@@ -525,10 +529,10 @@ class SubmenuItemEdit extends React.Component {
             icon: this.props.icon
         }
 
-        this.toggleEdit  = this.toggleEdit.bind(this);
+        this.toggleEdit    = this.toggleEdit.bind(this);
         this.settingChange = this.settingChange.bind(this);
-        this.deleteItem  = this.deleteItem.bind(this);
-        this.submitForm  = this.submitForm.bind(this);
+        this.deleteItem    = this.deleteItem.bind(this);
+        this.submitForm    = this.submitForm.bind(this);
     }
 
     toggleEdit() {
@@ -548,6 +552,7 @@ class SubmenuItemEdit extends React.Component {
 
         this.props.onSubmenuItemEdit(newItem);
     }
+
     deleteItem() {
 
         this.props.onDeleteItem(this.props.id);
@@ -615,10 +620,10 @@ class SubmenuItemCustomLink extends React.Component {
             editing: this.props.editing || false,
         }
 
-        this.toggleEdit  = this.toggleEdit.bind(this);
+        this.toggleEdit    = this.toggleEdit.bind(this);
         this.settingChange = this.settingChange.bind(this);
-        this.deleteItem  = this.deleteItem.bind(this);
-        this.submitForm  = this.submitForm.bind(this);
+        this.deleteItem    = this.deleteItem.bind(this);
+        this.submitForm    = this.submitForm.bind(this);
     }
 
     toggleEdit() {

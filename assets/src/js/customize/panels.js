@@ -229,6 +229,7 @@ class PanelMenu extends React.Component {
                                 original_title={item.original_title}
                                 icon={item.icon}
                                 type={item.type}
+                                missing={item.missing}
                                 original_icon={item.original_icon}
                                 hasSubmenu={item.hasSubmenu}
                                 onMenuItemEdit={this.menuItemEdit}

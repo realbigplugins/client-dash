@@ -354,6 +354,6 @@ if ( ! function_exists( 'clientdash_custom_widget_text' ) ) {
 	 */
 	function clientdash_custom_widget_text( $settings = array(), $widget ) {
 
-		return do_shortcode( wp_kses_post( $settings['text'] ) );
+		return do_shortcode( wpautop( wp_kses_post( $settings['text'] ) ) );
 	}
 }

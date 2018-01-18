@@ -383,6 +383,12 @@ body > .cd-editor-lineitem-li {
       line-height: normal;
     }
   }
+
+  &.missing {
+    border-color: darken($color-error, 10%);
+    background: $color-error;
+    color: #fff;
+  }
 }
 
 .cd-editor-menuitem-separator {

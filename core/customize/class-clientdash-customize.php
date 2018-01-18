@@ -293,6 +293,7 @@ class ClientDash_Customize {
 				'next'                              => __( 'Next', 'client-dash' ),
 				'previous'                          => __( 'Previous', 'client-dash' ),
 				'finish'                            => __( 'Finish', 'client-dash' ),
+				'missing'                           => __( 'Missing', 'client-dash' ),
 			),
 		) );
 	}
@@ -790,6 +791,12 @@ class ClientDash_Customize {
 			$customized_menu = $customizations['menu'];
 			$save_menu       = $customized_menu;
 
+			// Set all to "missing" by default
+			foreach ( $save_menu as &$menu_item ) {
+
+				$menu_item['missing'] = true;
+			}
+
 		} else {
 
 			$save_menu = array();
@@ -800,6 +807,8 @@ class ClientDash_Customize {
 			$customized_menu_item_key = cd_array_get_index_by_key( $save_menu, 'id', $menu_item[2] );
 
 			if ( $customized_menu_item_key !== false ) {
+
+				$save_menu[ $customized_menu_item_key ]['missing'] = false;
 				continue;
 			}
 
@@ -847,6 +856,12 @@ class ClientDash_Customize {
 			$customized_submenu = $customizations['submenu'];
 			$save_submenu       = $customized_submenu;
 
+			// Set all to "missing" by default
+			foreach ( $save_submenu as &$submenu_item ) {
+
+				$submenu_item['missing'] = true;
+			}
+
 		} else {
 
 			$save_submenu = array();
@@ -859,6 +874,8 @@ class ClientDash_Customize {
 				$customized_submenu_item_key = cd_array_get_index_by_key( $save_submenu[ $menu_ID ], 'id', $submenu_item[2] );
 
 				if ( $customized_submenu_item_key !== false ) {
+
+					$save_submenu[ $customized_submenu_item_key ]['missing'] = false;
 					continue;
 				}
 
