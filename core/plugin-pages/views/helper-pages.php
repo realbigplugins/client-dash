@@ -98,7 +98,7 @@ defined( 'ABSPATH' ) || die;
                                 </div>
 
                                 <div class="clientdash-helper-page-tab-description">
-									<?php echo $tab['description']; ?>
+									<?php echo isset( $tab['description'] ) ? $tab['description'] : ''; ?>
                                 </div>
                             </div>
 						<?php endforeach; ?>

@@ -871,12 +871,15 @@ class ClientDash_Customize {
 
 			foreach ( $submenu_items as $i => $submenu_item ) {
 
-				$customized_submenu_item_key = cd_array_get_index_by_key( $save_submenu[ $menu_ID ], 'id', $submenu_item[2] );
+				if ( isset( $save_submenu[ $menu_ID ] ) ) {
 
-				if ( $customized_submenu_item_key !== false ) {
+					$customized_submenu_item_key = cd_array_get_index_by_key( $save_submenu[ $menu_ID ], 'id', $submenu_item[2] );
 
-					$save_submenu[ $customized_submenu_item_key ]['missing'] = false;
-					continue;
+					if ( $customized_submenu_item_key !== false ) {
+
+						$save_submenu[ $customized_submenu_item_key ]['missing'] = false;
+						continue;
+					}
 				}
 
 				$type = 'menu_item';
