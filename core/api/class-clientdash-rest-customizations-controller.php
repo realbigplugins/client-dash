@@ -48,13 +48,13 @@ class ClientDash_REST_Customizations_Controller {
 				'methods'             => WP_REST_Server::CREATABLE,
 				'callback'            => array( $this, 'create_item' ),
 				'permission_callback' => array( $this, 'create_item_permissions_check' ),
-				'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::CREATABLE ),
+//				'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::CREATABLE ),
 			),
 			array(
 				'methods'             => WP_REST_Server::EDITABLE,
 				'callback'            => array( $this, 'update_item' ),
 				'permission_callback' => array( $this, 'update_item_permissions_check' ),
-				'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
+//				'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
 			),
 			array(
 				'methods'             => WP_REST_Server::DELETABLE,
@@ -295,24 +295,11 @@ class ClientDash_REST_Customizations_Controller {
 	 */
 	public function prepare_item_for_response( $data ) {
 
-		$response = array();
-
-		$schema = $this->get_item_schema();
-
-		if ( isset( $schema['properties']['menu'] ) ) {
-
-			$response['menu'] = $data['menu'];
-		}
-
-		if ( isset( $schema['properties']['submenu'] ) ) {
-
-			$response['submenu'] = $data['submenu'];
-		}
-
-		if ( isset( $schema['properties']['dashboard'] ) ) {
-
-			$response['dashboard'] = $data['dashboard'];
-		}
+		$response = array(
+			'menu'      => $data['menu'],
+			'submenu'   => $data['submenu'],
+			'dashboard' => $data['dashboard'],
+		);
 
 		return rest_ensure_response( $response );
 	}
@@ -329,24 +316,11 @@ class ClientDash_REST_Customizations_Controller {
 	 */
 	protected function prepare_item_for_database( $request ) {
 
-		$customizations = array();
-
-		$schema = $this->get_item_schema()['customizations'];
-
-		if ( isset( $schema['properties']['menu'] ) ) {
-
-			$customizations['menu'] = $request->get_param( 'menu' );
-		}
-
-		if ( isset( $schema['properties']['submenu'] ) ) {
-
-			$customizations['submenu'] = $request->get_param( 'submenu' );
-		}
-
-		if ( isset( $schema['properties']['dashboard'] ) ) {
-
-			$customizations['dashboard'] = $request->get_param( 'dashboard' );
-		}
+		$customizations = array(
+			'menu'      => $request->get_param( 'menu' ),
+			'submenu'   => $request->get_param( 'submenu' ),
+			'dashboard' => $request->get_param( 'dashboard' ),
+		);
 
 		/**
 		 * Filters before instering the customization.
@@ -354,101 +328,6 @@ class ClientDash_REST_Customizations_Controller {
 		 * @since {{VERSION}}
 		 */
 		return apply_filters( 'rest_pre_insert_cd_customizations', $customizations, $request );
-	}
-
-	/**
-	 * Retrieves an array of endpoint arguments from the item schema for the controller.
-	 *
-	 * @since {{VERSION}}
-	 * @access public
-	 *
-	 * @param string $method Optional. HTTP method of the request. The arguments for `CREATABLE` requests are
-	 *                       checked for required values and may fall-back to a given default, this is not done
-	 *                       on `EDITABLE` requests. Default WP_REST_Server::CREATABLE.
-	 *
-	 * @return array Endpoint arguments.
-	 */
-	public function get_endpoint_args_for_item_schema( $method = WP_REST_Server::CREATABLE ) {
-
-		$schema            = $this->get_item_schema();
-		$schema_properties = ! empty( $schema['properties'] ) ? $schema['properties'] : array();
-		$endpoint_args     = array();
-
-		foreach ( $schema_properties as $field_id => $params ) {
-
-			// Arguments specified as `readonly` are not allowed to be set.
-			if ( ! empty( $params['readonly'] ) ) {
-
-				continue;
-			}
-
-			$endpoint_args[ $field_id ] = array(
-				'validate_callback' => 'rest_validate_request_arg',
-				'sanitize_callback' => 'rest_sanitize_request_arg',
-			);
-
-			if ( isset( $params['description'] ) ) {
-				$endpoint_args[ $field_id ]['description'] = $params['description'];
-			}
-
-			if ( WP_REST_Server::CREATABLE === $method && isset( $params['default'] ) ) {
-				$endpoint_args[ $field_id ]['default'] = $params['default'];
-			}
-
-			if ( WP_REST_Server::CREATABLE === $method && ! empty( $params['required'] ) ) {
-				$endpoint_args[ $field_id ]['required'] = true;
-			}
-
-			foreach ( array( 'type', 'format', 'enum', 'items' ) as $schema_prop ) {
-				if ( isset( $params[ $schema_prop ] ) ) {
-					$endpoint_args[ $field_id ][ $schema_prop ] = $params[ $schema_prop ];
-				}
-			}
-
-			// Merge in any options provided by the schema property.
-			if ( isset( $params['arg_options'] ) ) {
-
-				// Only use required / default from arg_options on CREATABLE endpoints.
-				if ( WP_REST_Server::CREATABLE !== $method ) {
-					$params['arg_options'] = array_diff_key( $params['arg_options'], array(
-						'required' => '',
-						'default'  => ''
-					) );
-				}
-
-				$endpoint_args[ $field_id ] = array_merge( $endpoint_args[ $field_id ], $params['arg_options'] );
-			}
-		}
-
-		return $endpoint_args;
-	}
-
-	/**
-	 * Get our sample schema for customizations.
-	 *
-	 * @return array Schema.
-	 */
-	public function get_item_schema() {
-
-		return array(
-			'$schema'    => 'http://json-schema.org/draft-04/schema#',
-			'title'      => 'cd_customizations',
-			'type'       => 'object',
-			'properties' => array(
-				'menu'      => array(
-					'description' => esc_html__( 'The customizations menu.', 'clientdash' ),
-					'type'        => 'array',
-				),
-				'submenu'   => array(
-					'description' => esc_html__( 'The customizations submenu.', 'clientdash' ),
-					'type'        => 'object',
-				),
-				'dashboard' => array(
-					'description' => esc_html__( 'The customizations dashboard.', 'clientdash' ),
-					'type'        => 'array',
-				),
-			),
-		);
 	}
 
 	/**

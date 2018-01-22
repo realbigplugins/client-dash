@@ -792,9 +792,9 @@ class ClientDash_Customize {
 			$save_menu       = $customized_menu;
 
 			// Set all to "missing" by default
-			foreach ( $save_menu as &$menu_item ) {
+			foreach ( $save_menu as $i => $menu_item ) {
 
-				$menu_item['missing'] = true;
+				$save_menu[ $i ]['missing'] = true;
 			}
 
 		} else {
@@ -857,9 +857,9 @@ class ClientDash_Customize {
 			$save_submenu       = $customized_submenu;
 
 			// Set all to "missing" by default
-			foreach ( $save_submenu as &$submenu_item ) {
+			foreach ( $save_submenu as $i => $submenu_item ) {
 
-				$submenu_item['missing'] = true;
+				$save_submenu[ $i ]['missing'] = true;
 			}
 
 		} else {
