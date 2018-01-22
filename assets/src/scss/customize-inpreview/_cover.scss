@@ -1,0 +1,62 @@
+#cd-customize-preview-cover {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  margin-left: 160px;
+  width: calc(100% - 160px);
+  background-color: rgba(#fff, 0.5);
+  cursor: not-allowed;
+  z-index: 1000;
+
+  @media only screen and (max-width: 960px) {
+    margin-left: 36px;
+    width: calc(100% - 36px);
+  }
+
+  @media only screen and (max-width: 782px) {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .cd-customize-preview-cover-text {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    font-size: 2em;
+    font-style: italic;
+    color: #888;
+    font-weight: bold;
+    transform: translateY(-50%);
+  }
+}
+
+#wpwrap.wp-responsive-open {
+  #cd-customize-preview-cover {
+    @media only screen and (max-width: 782px) {
+      margin-left: 190px;
+      width: calc(100% - 190px);
+    }
+  }
+}
+
+body{
+  &.folded {
+    #cd-customize-preview-cover {
+      @media only screen and (min-width: 960px) {
+        margin-left: 36px;
+        width: calc(100% - 36px);
+      }
+    }
+  }
+
+  &:not(.auto-fold) {
+    #cd-customize-preview-cover {
+      @media only screen and (max-width: 960px) {
+        margin-left: 160px;
+        width: calc(100% - 160px);
+      }
+    }
+  }
+}

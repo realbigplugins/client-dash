@@ -1,0 +1,92 @@
+.clientdash-page-sidebar {
+  box-sizing: border-box;
+  padding-left: 1em;
+
+  @media only screen and (min-width: 782px) {
+    float: right;
+    width: 30%;
+  }
+
+  @media only screen and (min-width: 1200px) {
+    width: 20%;
+  }
+
+  .clientdash-page-sidebar-section {
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    border-bottom-width: 0;
+    padding: 10px;
+    box-sizing: border-box;
+
+    &:last-of-type {
+      border-bottom-width: 1px;
+      background: url("../images/rbp-logo.png") no-repeat bottom center #fff;
+      padding-bottom: 83px;
+    }
+
+    &.clientdash-page-sidebar-section-highlight {
+      background-color: #0073AA;
+      border-color: lighten(#0073AA, 10%);
+      color: #fff;
+    }
+
+    p {
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+
+    img {
+      max-width: 100%;
+    }
+  }
+
+  .clientdash-page-sidebar-centered {
+    text-align: center;
+  }
+
+  .clientdash-page-sidebar-actions {
+    .button-hero {
+      padding-left: 0.5em;
+      padding-right: 0.5em;
+    }
+  }
+
+  .clientdash-page-sidebar-ratings {
+    direction: rtl;
+    text-align: center;
+
+    a {
+      text-decoration: none;
+
+      &:hover {
+        &:before, & ~ a:before {
+          content: "\f155";
+        }
+      }
+    }
+  }
+}
+
+#wpbody-content .clientdash-page-wrap {
+  @media only screen and (min-width: 782px) and (max-width: 1200px) {
+    float: left;
+    width: 70%;
+
+    #menu-settings-column {
+      display: block;
+      width: 100%;
+      float: none;
+      margin-left: 0;
+    }
+
+    #nav-menus-frame {
+      margin-left: 0;
+    }
+  }
+
+  @media only screen and (min-width: 1200px) {
+    float: left;
+    width: 80%;
+  }
+}

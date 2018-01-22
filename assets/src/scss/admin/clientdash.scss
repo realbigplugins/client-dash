@@ -1,0 +1,20 @@
+// Vendor
+@import "../../../vendor/select2/src/scss/core";
+
+// Global
+@import "../global/icons";
+
+// Includes
+@import "includes/dashicon-selector";
+
+// Pages
+@import "pages/admin-page";
+@import "pages/helper-pages";
+@import "pages/addons";
+
+@import "elements";
+@import "admin-menu";
+@import "cd-page";
+@import "cd-page-sidebar";
+@import "admin-page";
+@import "dashboard";

@@ -1,0 +1,43 @@
+#cd-preview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  z-index: 15;
+
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+}
+
+#cd-editor-preview-cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  background-color: rgba(#fff, 0.8);
+  cursor: wait;
+  z-index: 20;
+
+  .cd-loading-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 4em;
+    fill: $medium-gray;
+    transform: translateY(-50%) translateX(-50%);
+  }
+}

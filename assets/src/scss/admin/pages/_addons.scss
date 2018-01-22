@@ -1,0 +1,62 @@
+.clientdash-addons-list {
+  max-width: 100%;
+  width: 1000px;
+
+  &:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+.clientdash-addons-list-item {
+  box-sizing: border-box;
+  margin-bottom: 20px;
+
+  @media only screen and (min-width: 782px) and (max-width: 1200px) {
+    float: left;
+    width: 50%;
+
+    &:nth-child(odd) {
+      padding-right: 10px;
+    }
+
+    &:nth-child(even) {
+      padding-left: 10px;
+    }
+  }
+
+  @media only screen and (min-width: 1200px) {
+    float: left;
+    padding-right: 5px;
+    padding-left: 5px;
+    width: 33.3333%;
+
+    &:nth-child(3n - 5) {
+      padding-left: 0;
+      padding-right: 10px;
+    }
+
+    &:nth-child(3n) {
+      padding-right: 0;
+      padding-left: 10px;
+    }
+  }
+}
+
+.clientdash-addons-list-item-container {
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
+.clientdash-addon-image {
+  max-width: 100%;
+}
+
+.clientdash-addon-content {
+  padding: 1em;
+}
+
+.clientdash-addon-title {
+  font-size: 1.2em;
+}

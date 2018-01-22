@@ -1,0 +1,7 @@
+#adminmenu #toplevel_page_clientdash div.wp-menu-image {
+  @extend .cd-icon-logo;
+
+  &:before {
+    font-family: "ClientDash";
+  }
+}

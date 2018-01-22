@@ -1,0 +1,36 @@
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+select, input {
+  border: 1px solid $medium-gray;
+  background-color: #fff;
+  border-radius: 0;
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: inherit;
+}
+
+#clientdash-customize {
+  .cd-customize-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin-left: $customizer-width;
+    transition: margin-left 300ms;
+
+    &.hidden {
+      margin-left: -1px;
+    }
+  }
+}

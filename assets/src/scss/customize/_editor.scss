@@ -1,0 +1,552 @@
+@mixin separator {
+  background-color: #ececec;
+  font-style: italic;
+  color: #777;
+}
+
+#cd-editor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: $customizer-width;
+  margin-left: -$customizer-width;
+  background-color: $light-gray;
+  font-size: 14px;
+  color: #444;
+  border-right: 1px solid $medium-gray;
+  z-index: 15;
+}
+
+.cd-editor-header {
+  position: relative;
+  box-shadow: 0 0 10px rgba(#000, 0.2);
+  z-index: 10;
+}
+
+.cd-editor-sub-header {
+  border-bottom: 1px solid $medium-gray;
+
+  &:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+.cd-editor-primary-actions {
+  position: relative;
+  height: 50px;
+  background: #fff;
+  z-index: 10;
+
+  &:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+
+  .cd-editor-action-button {
+    border-width: 0;
+    padding: 0 1em;
+
+    &:not(:last-of-type) {
+      border-right-width: 1px;
+    }
+  }
+}
+
+.cd-editor-secondary-actions {
+  .cd-editor-panel-actions-title {
+    font-style: italic;
+    border-top: 1px solid $medium-gray;
+    background-color: #fff;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 1em;
+  }
+
+  .cd-editor-panel-actions-buttons {
+    position: relative;
+    height: 50px;
+    border-top: 1px solid $medium-gray;
+  }
+
+  .cd-editor-action-button {
+    border-top: 0;
+    border-bottom: 0;
+  }
+
+  .cd-editor-add-items {
+    float: right;
+    margin-right: 1em;
+  }
+
+  .cd-editor-panel-actions-notification {
+    &.next {
+      right: 5px;
+
+      &:after {
+        right: 10%;
+        left: auto;
+      }
+    }
+
+    &.previous {
+      left: 5px;
+
+      &:after {
+        left: 10%;
+      }
+    }
+  }
+}
+
+.cd-editor-role-switcher {
+  position: relative;
+  padding: 0 1em;
+  height: 50px;
+  line-height: 50px;
+  font-style: italic;
+  text-align: right;
+  z-index: 10;
+
+  select {
+    margin-left: 0.5em;
+  }
+}
+
+.cd-editor-message {
+  position: absolute;
+  top: 100%;
+  line-height: 1.5em;
+  width: 100%;
+  background: #fff;
+  min-height: 50px;
+  padding: 0.8em 2em 0.8em 1em;
+  border-top: 1px solid $medium-gray;
+  box-shadow: 0 0 10px rgba(#000, 0.2);
+  transform: translateY(-100%);
+  transition: transform 300ms;
+  z-index: 5;
+
+  &.cd-editor-message-visible {
+    transform: translateY(0);
+  }
+
+  &.cd-editor-message-default {
+    border-bottom: 5px solid $primary-color;
+  }
+
+  &.cd-editor-message-success {
+    border-bottom: 5px solid $color-success;
+  }
+
+  &.cd-editor-message-warning {
+    border-bottom: 5px solid $color-warning;
+  }
+
+  &.cd-editor-message-error {
+    border-bottom: 5px solid $color-error;
+  }
+
+  &.cd-editor-message-inflow {
+    position: relative;
+  }
+
+  .cd-editor-message-close {
+    position: absolute;
+    right: 0.5em;
+    top: 50%;
+    margin-top: -10px;
+    color: $medium-gray;
+    cursor: pointer;
+
+    &:hover {
+      color: $dark-gray;
+    }
+  }
+}
+
+.cd-editor-panels {
+  position: relative;
+  width: 100%;
+  overflow-y: scroll;
+  height: calc(100% - 200px);
+  z-index: 5;
+
+  &.cd-editor-panels-disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.cd-editor-panels-cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 100;
+}
+
+.cd-editor-panel {
+  background-color: #fff;
+  border-bottom: 1px solid $medium-gray;
+  padding: 1em 0;
+
+  &.cd-editor-panel-loading {
+    text-align: center;
+    font-size: 3em;
+  }
+
+  &.cd-editor-panel-blank {
+    padding: 0;
+    border: 0;
+  }
+
+  .cd-editor-panel-icon {
+    float: right;
+    font-size: 1.4em;
+    color: $dark-gray;
+  }
+
+  .cd-editor-panel-helptext {
+    margin: 0 1em;
+    font-style: italic;
+    color: $dark-gray;
+  }
+
+  .cd-editor-panel-menuinfo {
+    margin: 0 1em 1em;
+    color: $dark-gray;
+
+    .cd-editor-panel-menuinfo-icon {
+      margin-right: 0.2em;
+    }
+  }
+}
+
+.cd-editor-panel-load-button {
+  background-color: $light-gray;
+  border: 1px solid $medium-gray;
+  font-size: $font-medium;
+  padding: 0.5em;
+  margin: 1em;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    border-color: darken($medium-gray, 20%);
+  }
+}
+
+.cd-editor-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  box-shadow: 0 0 10px rgba(#000, 0.2);
+  padding-left: 20px;
+  background: #fff;
+  border-top: 1px solid $medium-gray;
+  z-index: 10;
+}
+
+.cd-editor-lineitems {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  p {
+    margin-top: 0;
+    margin-bottom: 1em;
+  }
+
+  &.sortable {
+    .cd-editor-lineitem {
+      cursor: move;
+    }
+  }
+}
+
+.cd-editor-lineitem-li {
+  margin: 0 1em 1em;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+
+  &[data-id="clientdash"],
+  &[data-id="cd_account"],
+  &[data-id="cd_reports"],
+  &[data-id="cd_help"],
+  &[data-id="cd_admin_page"] {
+
+    .cd-editor-lineitem-block {
+      background-color: $primary-color;
+      color: #fff;
+    }
+  }
+
+  &[data-id="clientdash"] {
+    .cd-editor-lineitem-icon {
+      &:before {
+        font-family: 'ClientDash';
+        @extend .cd-icon-logo:before;
+      }
+    }
+  }
+
+  textarea {
+    font-size: inherit;
+    font-family: inherit;
+    resize: vertical;
+  }
+}
+
+.cd-editor-lineitem-button {
+  background-color: $light-gray;
+  border: 1px solid $medium-gray;
+  font-size: $font-medium;
+  padding: 0.5em;
+  margin: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  width: auto;
+  color: $dark-gray;
+
+  &:hover {
+    color: #000;
+    border-color: darken($medium-gray, 20%);
+  }
+
+  &.delete {
+    background-color: $color-error;
+    color: mix($color-error, #fff, 30%);
+    border: 1px solid mix($color-error, #000, 90%);
+
+    &:hover {
+      color: #fff;
+      border-color: mix($color-error, #000, 40%);
+    }
+  }
+
+  .fa {
+    margin-right: 0.8em;
+  }
+}
+
+// Sortable preview item
+body > .cd-editor-lineitem-li {
+  list-style: none;
+  background-color: #fff;
+  box-shadow: 0 0 20px rgba(#000, 0.2);
+  margin-left: 1em;
+  font-size: 14px;
+
+  .cd-editor-lineitem {
+    border-color: darken($medium-gray, 20%);
+  }
+}
+
+.cd-editor-lineitem {
+  border: 1px solid $medium-gray;
+
+  &:hover {
+    border-color: darken($medium-gray, 20%);
+  }
+
+  &:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+
+  &.cd-editor-lineitem-disabled {
+    .cd-editor-lineitem-block {
+      background-color: $light-gray;
+      color: $dark-gray;
+    }
+  }
+
+  &.separator {
+    @include separator;
+  }
+
+  &.new {
+    .cd-editor-tip {
+      right: 35px; // Button width (30px) + 5px
+      left: auto;
+      margin-top: -1px; // Cover top border (1px)
+      height: 32px; // Tall enough to cover height (30px) + top/bottom borders (2px total)
+      line-height: normal;
+    }
+  }
+
+  &.missing {
+    border-color: darken($color-error, 10%);
+    background: $color-error;
+    color: #fff;
+  }
+}
+
+.cd-editor-menuitem-separator {
+  @include separator;
+}
+
+.cd-editor-lineitem-block {
+  &:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+.cd-editor-lineitem-title {
+  position: relative;
+  float: left;
+  width: calc(100% - 30px);
+  padding-left: 0.5em;
+  height: 30px;
+  line-height: 30px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+
+  .cd-editor-lineitem-icon {
+    height: 30px;
+    line-height: 30px;
+    margin-right: 0.2em;
+  }
+}
+
+.cd-editor-lineitem-action {
+  float: right;
+  height: 30px;
+  line-height: 30px;
+  width: 30px;
+  border: none;
+  padding: 0;
+  margin: 0;
+  border-left: 1px solid $medium-gray;
+  background-color: #fff;
+  outline: none;
+  box-shadow: none;
+  vertical-align: top;
+  color: $dark-gray;
+  cursor: pointer;
+
+  &:hover {
+    background-color: darken(#fff, 5%);
+  }
+
+  &.cd-editor-lineitem-action-close {
+    color: $color-error;
+  }
+
+  &.cd-editor-lineitem-action-add {
+    color: $color-success;
+  }
+
+  .cd-editor-lineitem-action-icon {
+    font-size: 2em;
+    vertical-align: middle;
+  }
+}
+
+.cd-editor-lineitem-form {
+  padding: 0.5em;
+  border-top: 1px solid $medium-gray;
+
+  input, select, textarea {
+    width: 100%;
+    padding: 0.3em;
+  }
+
+  .cd-editor-lineitem-form-subtext {
+    font-style: italic;
+    color: $medium-gray;
+  }
+
+  .cd-editor-input {
+    margin-bottom: 1em;
+
+    & + .cd-editor-lineitem-form-subfield {
+      margin-top: -0.8em;
+    }
+  }
+
+  .cd-editor-lineitem-form-actions {
+    margin: 0.5em -0.5em -0.5em -0.5em;
+    border-top: 1px solid $medium-gray;
+    font-size: 1em;
+
+    &:after {
+      content: '';
+      clear: both;
+      display: table;
+    }
+  }
+
+  .cd-editor-lineitem-form-action {
+    float: left;
+    height: 30px;
+    line-height: 30px;
+    width: 50%;
+    border: none;
+    padding: 0;
+    margin: 0;
+    background-color: #fff;
+    outline: none;
+    box-shadow: none;
+    vertical-align: top;
+    color: $dark-gray;
+    cursor: pointer;
+    font-size: inherit;
+
+    &:hover {
+      background-color: darken(#fff, 5%);
+      color: #000;
+    }
+
+    &:first-of-type {
+      border-right: 1px solid $medium-gray;
+    }
+
+    &.cd-editor-lineitem-form-action-delete {
+      //background-color: $color-error;
+      color: $color-error;
+    }
+  }
+}
+
+// Animations
+.panel-forward-enter {
+  transform: translateX(100%);
+}
+
+.panel-backward-enter {
+  transform: translateX(-100%);
+}
+
+.panel-forward-enter.panel-forward-enter-active,
+.panel-backward-enter.panel-backward-enter-active {
+  transform: translateX(0);
+  transition: transform 300ms;
+}
+
+.panel-forward-leave,
+.panel-backward-leave {
+  transform: translateX(0);
+}
+
+.panel-forward-leave.panel-forward-leave-active {
+  transform: translateX(-100%);
+  transition: transform 300ms;
+}
+
+.panel-backward-leave.panel-backward-leave-active {
+  transform: translateX(100%);
+  transition: transform 300ms;
+}
