@@ -37,7 +37,7 @@ const customWidgets = ClientdashCustomize_Data.widgets || [];
 /**
  * The Customize editor.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class Editor extends React.Component {
 

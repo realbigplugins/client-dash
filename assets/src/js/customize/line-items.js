@@ -11,7 +11,7 @@ const customWidgets = ClientdashCustomize_Data.widgets || {};
 /**
  * Line item wrapper.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class LineItem extends React.Component {
     render() {
@@ -26,7 +26,7 @@ class LineItem extends React.Component {
 /**
  * Generic line item.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @prop (string) title Item title.
  * @prop (string) icon The item icon class (complete).
@@ -115,7 +115,7 @@ class LineItemContent extends React.Component {
 /**
  * Action buttons for line items.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class LineItemAction extends React.Component {
 
@@ -147,7 +147,7 @@ class LineItemAction extends React.Component {
 /**
  * The edit form for a line item.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class LineItemForm extends React.Component {
 
@@ -208,7 +208,7 @@ class LineItemForm extends React.Component {
 /**
  * Sortable line item wrapper.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 const SortableLineItem = SortableElement(({item}) => {
     return (
@@ -221,7 +221,7 @@ const SortableLineItem = SortableElement(({item}) => {
 /**
  * Line items container.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class LineItems extends React.Component {
     render() {
@@ -241,7 +241,7 @@ class LineItems extends React.Component {
 /**
  * Sortable line items container.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 const SortableLineItems = SortableContainer(({items}) => {
     return (
@@ -260,7 +260,7 @@ const SortableLineItems = SortableContainer(({items}) => {
 /**
  * Line item for editing a menu item.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class MenuItemEdit extends React.Component {
 
@@ -370,7 +370,7 @@ class MenuItemEdit extends React.Component {
 /**
  * Line item for a separator.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class MenuItemSeparator extends React.Component {
 
@@ -403,7 +403,7 @@ class MenuItemSeparator extends React.Component {
 /**
  * Line item for editing a menu item custom link.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class MenuItemCustomLink extends React.Component {
 
@@ -515,7 +515,7 @@ class MenuItemCustomLink extends React.Component {
 /**
  * Line item for editing a sub menu item.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class SubmenuItemEdit extends React.Component {
 
@@ -608,7 +608,7 @@ class SubmenuItemEdit extends React.Component {
 /**
  * Line item for editing a submenu item custom link.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class SubmenuItemCustomLink extends React.Component {
 
@@ -700,7 +700,7 @@ class SubmenuItemCustomLink extends React.Component {
 /**
  * Line item for adding an item.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class ItemAdd extends React.Component {
 
@@ -755,7 +755,7 @@ class ItemAdd extends React.Component {
 /**
  * Line item for editing a widget.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class WidgetEdit extends React.Component {
 

@@ -5,7 +5,7 @@
  * Page: Help
  * Tab: Info
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @package ClientDash
  * @subpackage ClientDash/core/core-pages/views/help
@@ -38,6 +38,7 @@ defined( 'ABSPATH' ) || die();
 				if ( $child_theme ) {
 
 					printf(
+                        /* translators: %s is a child theme name */
 						__( 'child of %s', 'client-dash' ),
 						$child_theme
 					);

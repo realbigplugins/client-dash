@@ -2,7 +2,7 @@
     /**
      * Loads on page-load for inside the customize preview iframe.
      *
-     * @since {{VERSION}}
+     * @since 2.0.0
      */
     function cd_customize_links(e) {
 
@@ -15,7 +15,7 @@
     /**
      * Adds a "protective" overlay to non-dashboard pages to signal user that it is only a preview.
      *
-     * @since {{VERSION}}
+     * @since 2.0.0
      */
     function cd_customize_overlay() {
 
@@ -31,7 +31,7 @@
     /**
      * Deal with forms.
      *
-     * @since {{VERSION}}
+     * @since 2.0.0
      */
     function cd_customize_forms() {
 

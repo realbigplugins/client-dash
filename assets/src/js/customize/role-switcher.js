@@ -8,7 +8,7 @@ const l10n  = ClientdashCustomize_Data.l10n || false;
 /**
  * Select box for switching witch role is being edited.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class RoleSwitcher extends React.Component {
 

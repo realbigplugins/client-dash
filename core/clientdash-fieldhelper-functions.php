@@ -2,7 +2,7 @@
 /**
  * Adds helper functions for easy use of Field Helpers.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 
 defined( 'ABSPATH' ) || die();
@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || die();
 /**
  * Quick access to plugin field helpers.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @return RBM_FieldHelpers
  */
@@ -22,7 +22,7 @@ function cd_fieldhelpers() {
 /**
  * Initializes a field group for automatic saving.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param $group
  */
@@ -34,7 +34,7 @@ function cd_init_field_group( $group ) {
 /**
  * Gets a meta field helpers field.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param string $name Field name.
  * @param string|int $post_ID Optional post ID.
@@ -53,7 +53,7 @@ function cd_get_field( $name, $post_ID = false, $default = '', $args = array() )
 /**
  * Gets a option field helpers field.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param string $name Field name.
  * @param mixed $default Default value if none is retrieved.
@@ -71,7 +71,7 @@ function cd_get_option_field( $name, $default = '', $args = array() ) {
 /**
  * Outputs a text field.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param array $args
  */
@@ -83,7 +83,7 @@ function cd_do_field_text( $args = array() ) {
 /**
  * Outputs a textarea field.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param array $args
  */
@@ -95,7 +95,7 @@ function cd_do_field_textarea( $args = array() ) {
 /**
  * Outputs a checkbox field.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param array $args
  */
@@ -107,7 +107,7 @@ function cd_do_field_checkbox( $args = array() ) {
 /**
  * Outputs a toggle field.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param array $args
  */
@@ -119,7 +119,7 @@ function cd_do_field_toggle( $args = array() ) {
 /**
  * Outputs a radio field.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param array $args
  */
@@ -131,7 +131,7 @@ function cd_do_field_radio( $args = array() ) {
 /**
  * Outputs a select field.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param array $args
  */
@@ -143,7 +143,7 @@ function cd_do_field_select( $args = array() ) {
 /**
  * Outputs a number field.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param array $args
  */
@@ -155,7 +155,7 @@ function cd_do_field_number( $args = array() ) {
 /**
  * Outputs an image field.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param array $args
  */
@@ -167,7 +167,7 @@ function cd_do_field_media( $args = array() ) {
 /**
  * Outputs a datepicker field.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param array $args
  */
@@ -179,7 +179,7 @@ function cd_do_field_datepicker( $args = array() ) {
 /**
  * Outputs a timepicker field.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param array $args
  */
@@ -191,7 +191,7 @@ function cd_do_field_timepicker( $args = array() ) {
 /**
  * Outputs a datetimepicker field.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param array $args
  */
@@ -203,7 +203,7 @@ function cd_do_field_datetimepicker( $args = array() ) {
 /**
  * Outputs a colorpicker field.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param array $args
  */
@@ -215,7 +215,7 @@ function cd_do_field_colorpicker( $args = array() ) {
 /**
  * Outputs a list field.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param array $args
  */
@@ -227,7 +227,7 @@ function cd_do_field_list( $args = array() ) {
 /**
  * Outputs a hidden field.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param array $args
  */
@@ -239,7 +239,7 @@ function cd_do_field_hidden( $args = array() ) {
 /**
  * Outputs a table field.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param array $args
  */
@@ -251,7 +251,7 @@ function cd_do_field_table( $args = array() ) {
 /**
  * Outputs a HTML field.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param array $args
  */
@@ -263,7 +263,7 @@ function cd_do_field_html( $args = array() ) {
 /**
  * Outputs a repeater field.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param mixed $values
  */
@@ -275,7 +275,7 @@ function cd_do_field_repeater( $args = array() ) {
 /**
  * Gets a field description tip.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param string $description Description text.
  */
@@ -297,7 +297,7 @@ function cd_get_field_tip( $description ) {
 /**
  * Outputs a field description tip.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param string $description Description text.
  */

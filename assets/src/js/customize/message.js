@@ -5,7 +5,7 @@ const l10n = ClientdashCustomize_Data.l10n || false;
 /**
  * Shows a message to the user.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class Message extends React.Component {
 

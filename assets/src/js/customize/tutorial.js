@@ -7,7 +7,7 @@ const panelList      = Object.keys(tutorialPanels);
 /**
  * A highlight item to help the user see what is being described.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class TutorialHighlight extends React.Component {
     render() {
@@ -75,7 +75,7 @@ class TutorialHighlight extends React.Component {
 /**
  * Tutorial Panel
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class TutorialPanel extends React.Component {
     render() {
@@ -141,7 +141,7 @@ class TutorialPanel extends React.Component {
 /**
  * The Tutorial modal.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class Tutorial extends React.Component {
 

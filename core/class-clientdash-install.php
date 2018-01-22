@@ -2,7 +2,7 @@
 /**
  * Installs the plugin.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @package ClientDash
  * @subpackage ClientDash/core
@@ -15,14 +15,14 @@ defined( 'ABSPATH' ) || die;
  *
  * Installs the plugin.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class ClientDash_Install {
 
 	/**
 	 * Loads the install functions.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 */
 	static function install() {
 
@@ -35,7 +35,7 @@ class ClientDash_Install {
 	/**
 	 * Sets up the tables.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 *
 	 * @global wpdb $wpdb
@@ -61,7 +61,7 @@ class ClientDash_Install {
 	/**
 	 * Sets up custom capabilities
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	private static function setup_capabilities() {

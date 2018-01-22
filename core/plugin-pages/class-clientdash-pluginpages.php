@@ -2,7 +2,7 @@
 /**
  * Adds plugin page(s) to the wp admin.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @package ClientDash
  * @subpackage ClientDash/core/pluginpages
@@ -15,14 +15,14 @@ defined( 'ABSPATH' ) || die;
  *
  * Adds plugin page(s) to the wp admin
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class ClientDash_PluginPages {
 
 	/**
 	 * The current page tab, if any.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @var null|string
 	 */
@@ -31,7 +31,7 @@ class ClientDash_PluginPages {
 	/**
 	 * ClientDash_PluginPages constructor.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 */
 	function __construct() {
 
@@ -64,7 +64,7 @@ class ClientDash_PluginPages {
 	/**
 	 * Handles resetting all settings.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function reset_all_settings() {
@@ -87,7 +87,7 @@ class ClientDash_PluginPages {
 	/**
 	 * Enables the customize tutorial.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function enable_customize_tutorial() {
@@ -110,7 +110,7 @@ class ClientDash_PluginPages {
 	/**
 	 * Resets the addons cache.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function flush_addons_cache() {
@@ -124,7 +124,7 @@ class ClientDash_PluginPages {
 	/**
 	 * Registers all of the Client Dash settings.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function register_settings() {
@@ -135,7 +135,7 @@ class ClientDash_PluginPages {
 	/**
 	 * Gets the current page tab, if any.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function get_current_tab() {
@@ -152,7 +152,7 @@ class ClientDash_PluginPages {
 	/**
 	 * Adds the sub-menu item to the toolbar.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function add_pages() {
@@ -160,8 +160,8 @@ class ClientDash_PluginPages {
 		global $submenu;
 
 		add_menu_page(
-			__( 'Client Dash', 'clientdash' ),
-			__( 'Client Dash', 'clientdash' ),
+			__( 'Client Dash', 'client-dash' ),
+			__( 'Client Dash', 'client-dash' ),
 			'manage_options',
 			'clientdash',
 			null,
@@ -171,8 +171,8 @@ class ClientDash_PluginPages {
 
 		add_submenu_page(
 			'clientdash',
-			__( 'Admin Page', 'clientdash' ),
-			__( 'Admin Page', 'clientdash' ),
+			__( 'Admin Page', 'client-dash' ),
+			__( 'Admin Page', 'client-dash' ),
 			'manage_options',
 			'clientdash_admin_page',
 			array( __CLASS__, 'load_admin_page' )
@@ -180,8 +180,8 @@ class ClientDash_PluginPages {
 
 		add_submenu_page(
 			'clientdash',
-			__( 'Helper Pages', 'clientdash' ),
-			__( 'Helper Pages', 'clientdash' ),
+			__( 'Helper Pages', 'client-dash' ),
+			__( 'Helper Pages', 'client-dash' ),
 			'manage_options',
 			'clientdash_helper_pages',
 			array( __CLASS__, 'load_helper_pages' )
@@ -189,8 +189,8 @@ class ClientDash_PluginPages {
 
 		add_submenu_page(
 			'clientdash',
-			__( 'Settings', 'clientdash' ),
-			__( 'Settings', 'clientdash' ),
+			__( 'Settings', 'client-dash' ),
+			__( 'Settings', 'client-dash' ),
 			'manage_options',
 			'clientdash_settings',
 			array( __CLASS__, 'load_settings' )
@@ -198,8 +198,8 @@ class ClientDash_PluginPages {
 
 		add_submenu_page(
 			'clientdash',
-			__( 'Addons', 'clientdash' ),
-			__( 'Addons', 'clientdash' ),
+			__( 'Addons', 'client-dash' ),
+			__( 'Addons', 'client-dash' ),
 			'manage_options',
 			'clientdash_addons',
 			array( __CLASS__, 'load_addons' )
@@ -208,7 +208,7 @@ class ClientDash_PluginPages {
 		if ( current_user_can( 'manage_options' ) ) {
 
 			$submenu['clientdash'][0] = array(
-				__( 'Customize Admin', 'clientdash' ),
+				__( 'Customize Admin', 'client-dash' ),
 				'customize_admin',
 				'/?clientdash_customize=1'
 			);
@@ -218,7 +218,7 @@ class ClientDash_PluginPages {
 	/**
 	 * Loads the Admin Page screen.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	static function load_admin_page() {
@@ -233,7 +233,7 @@ class ClientDash_PluginPages {
 	/**
 	 * Loads the Helper Pages screen.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	static function load_helper_pages() {
@@ -248,7 +248,7 @@ class ClientDash_PluginPages {
 	/**
 	 * Loads the Addons screen.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	static function load_addons() {
@@ -281,7 +281,7 @@ class ClientDash_PluginPages {
 	/**
 	 * Loads the Settings screen.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	static function load_settings() {
@@ -294,7 +294,7 @@ class ClientDash_PluginPages {
 	/**
 	 * Displays the "Feed" settings section.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	static function settings_page_feed() {
@@ -308,7 +308,7 @@ class ClientDash_PluginPages {
 	/**
 	 * Displays the "Other" settings section.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	static function settings_page_other() {
@@ -322,7 +322,7 @@ class ClientDash_PluginPages {
 	/**
 	 * Outputs the sidebar pro prompt section.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	static function sidebar_pro_prompt() {
@@ -333,16 +333,13 @@ class ClientDash_PluginPages {
 	/**
 	 * Outputs the sidebar wordpress.org review/support links.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	static function sidebar_review_support() {
 
 		$rating_confirm = 'onclick="return confirm(\'' .
-		                  __( "Is there something we can do better?\\n\\nIf you\\'re having an issue with the " .
-		                      "plugin, please consider asking us in the support forums instead.\\n\\nIf you " .
-		                      "still want to leave a low rating, please consider changing it in the future " .
-		                      "if we fix your issue. Thanks!" ) .
+		                  __( "Is there something we can do better?\\n\\nIf you\\'re having an issue with the plugin, please consider asking us in the support forums instead.\\n\\nIf you still want to leave a low rating, please consider changing it in the future if we fix your issue. Thanks!", 'client-dash' ) .
 		                  '\');"';
 
 		include_once CLIENTDASH_DIR . 'core/plugin-pages/views/sidebar/review-support.php';
@@ -351,7 +348,7 @@ class ClientDash_PluginPages {
 	/**
 	 * Outputs the sidebar Real Big Plugins signup section.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	static function sidebar_rbp_signup() {
@@ -362,7 +359,7 @@ class ClientDash_PluginPages {
 	/**
 	 * Outputs the sidebar admin page actions section.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	static function sidebar_admin_page_actions() {
@@ -373,7 +370,7 @@ class ClientDash_PluginPages {
 	/**
 	 * Outputs the sidebar settings page actions section.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	static function sidebar_settings_page_actions() {
@@ -384,7 +381,7 @@ class ClientDash_PluginPages {
 	/**
 	 * Outputs the sidebar helper pages actions section.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	static function sidebar_helper_pages_actions() {
@@ -395,7 +392,7 @@ class ClientDash_PluginPages {
 	/**
 	 * Outputs the sidebar addons Real Big Plugins promote section.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	static function sidebar_addons_rbp_promote() {

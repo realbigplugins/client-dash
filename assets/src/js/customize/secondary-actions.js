@@ -7,7 +7,7 @@ const l10n = ClientdashCustomize_Data.l10n || false;
 /**
  * Secondary actions for panels.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class SecondaryActions extends React.Component {
 
@@ -82,7 +82,7 @@ class SecondaryActions extends React.Component {
 /**
  * Secondary actions for the Primary panel.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class SecondaryActionsPrimary extends React.Component {
 

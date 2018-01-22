@@ -2,7 +2,7 @@
 /**
  * API functionality.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @package ClientDash
  * @subpackage ClientDash/core
@@ -15,14 +15,14 @@ defined( 'ABSPATH' ) || die;
  *
  * API functionality.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class ClientDash_API {
 
 	/**
 	 * The controller for the REST Customizations endpoint.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @var ClientDash_REST_Customizations_Controller
 	 */
@@ -31,7 +31,7 @@ class ClientDash_API {
 	/**
 	 * ClientDash_API constructor.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 */
 	function __construct() {
 
@@ -41,7 +41,7 @@ class ClientDash_API {
 	/**
 	 * Registers all routes.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function register_rest_routes() {

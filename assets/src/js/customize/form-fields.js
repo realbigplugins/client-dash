@@ -3,7 +3,7 @@ import React from 'react';
 /**
  * Text input.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @prop (string) name Input name.
  * @prop (string) label Input label.
@@ -52,7 +52,7 @@ class InputText extends React.Component {
 /**
  * Textarea input.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @prop (string) name Input name.
  * @prop (string) label Input label.
@@ -101,7 +101,7 @@ class InputTextArea extends React.Component {
 /**
  * Select box.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @prop (array) options The options to show in value => text format.
  * @prop (string) selected The option value which is currently selected.
@@ -164,7 +164,7 @@ class InputSelect extends React.Component {
 /**
  * Select box option.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @prop (string) value The option value.
  * @prop (string) text The option text.
@@ -183,7 +183,7 @@ class SelectOption extends React.Component {
 /**
  * Gets an input.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param {string} field Type of input field.
  * @param {[]} args Field arguments.

@@ -4,7 +4,7 @@
  * Example: You have [1,2,4]. This will return 3.
  * Example2: You have [1,2,3]. This will return 4.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param {[]} indexes
  *
@@ -28,7 +28,7 @@ function getFirstAvailableIndex(indexes) {
 /**
  * Given a list of items, this finds the first available index for the item of a given type and then returns the new ID.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param {[]} items
  * @param {string} type
@@ -59,7 +59,7 @@ function getNewItemID(items, type) {
 /**
  * Returns an item in an array based on the item ID.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param items
  * @param ID
@@ -83,7 +83,7 @@ function getItem(items, ID) {
 /**
  * Gets an items index by the item ID.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param items
  * @param ID
@@ -107,7 +107,7 @@ function getItemIndex(items, ID) {
 /**
  * Delets an item in an array based on the item ID.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param items
  * @param ID
@@ -126,7 +126,7 @@ function deleteItem(items, ID) {
 /**
  * Modifies an item in an array based on the supplied new item.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param items
  * @param ID
@@ -154,7 +154,7 @@ function modifyItem(items, ID, new_item) {
 /**
  * Returns all items marked "deleted" from a list.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param {[]} items
  * @returns {[]}
@@ -172,7 +172,7 @@ function getDeletedItems(items) {
 /**
  * Returns all items not marked "deleted" from a list.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param {{}} items
  * @returns {{}}
@@ -190,7 +190,7 @@ function getAvailableItems(items) {
 /**
  * Sets each item's title to the original title.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param items
  * @returns {*}
@@ -210,7 +210,7 @@ function setToOriginalTitles(items) {
 /**
  * Modify the sortable cancel start callback to include <button>'s.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param e
  */
@@ -253,7 +253,7 @@ function sortableCancelStart(e) {
 /**
  * Makes sure the supplied parameter comes out an array.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param maybeObject
  * @returns {*}

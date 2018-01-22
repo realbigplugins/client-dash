@@ -2,7 +2,7 @@
 /**
  * The REST Customizations controller.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @package ClientDash
  * @subpackage ClientDash/core
@@ -15,14 +15,14 @@ defined( 'ABSPATH' ) || die;
  *
  * The REST Customizations controller.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class ClientDash_REST_Customizations_Controller {
 
 	/**
 	 * ClientDash_REST_Customizations_Controller constructor.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 */
 	function __construct() {
 
@@ -33,7 +33,7 @@ class ClientDash_REST_Customizations_Controller {
 	/**
 	 * Register all endpoint routes.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	public function register_routes() {
@@ -75,7 +75,7 @@ class ClientDash_REST_Customizations_Controller {
 	/**
 	 * Check permissions for the customizations.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @param WP_REST_Request $request Current request.
 	 */
@@ -83,7 +83,7 @@ class ClientDash_REST_Customizations_Controller {
 
 		if ( ! current_user_can( 'customize_admin' ) ) {
 
-			return new WP_Error( 'rest_forbidden', esc_html__( 'You cannot view the customizations resource.' ), array( 'status' => $this->authorization_status_code() ) );
+			return new WP_Error( 'rest_forbidden', esc_html__( 'You cannot view the customizations resource.', 'client-dash' ), array( 'status' => $this->authorization_status_code() ) );
 		}
 
 		return true;
@@ -92,7 +92,7 @@ class ClientDash_REST_Customizations_Controller {
 	/**
 	 * Checks if a given request has access to create a customizations.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access public
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
@@ -103,7 +103,7 @@ class ClientDash_REST_Customizations_Controller {
 
 		if ( ! current_user_can( 'customize_admin' ) ) {
 
-			return new WP_Error( 'rest_forbidden', esc_html__( 'You cannot edit the customizations resource.' ), array( 'status' => $this->authorization_status_code() ) );
+			return new WP_Error( 'rest_forbidden', esc_html__( 'You cannot edit the customizations resource.', 'client-dash'  ), array( 'status' => $this->authorization_status_code() ) );
 		}
 
 		return true;
@@ -112,7 +112,7 @@ class ClientDash_REST_Customizations_Controller {
 	/**
 	 * Check permissions for the customizations.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @param WP_REST_Request $request Current request.
 	 */
@@ -120,7 +120,7 @@ class ClientDash_REST_Customizations_Controller {
 
 		if ( ! current_user_can( 'customize_admin' ) ) {
 
-			return new WP_Error( 'rest_forbidden', esc_html__( 'You cannot view the customizations resource.' ), array( 'status' => $this->authorization_status_code() ) );
+			return new WP_Error( 'rest_forbidden', esc_html__( 'You cannot view the customizations resource.', 'client-dash'  ), array( 'status' => $this->authorization_status_code() ) );
 		}
 
 		return true;
@@ -129,7 +129,7 @@ class ClientDash_REST_Customizations_Controller {
 	/**
 	 * Check permissions for the customizations.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @param WP_REST_Request $request Current request.
 	 */
@@ -137,7 +137,7 @@ class ClientDash_REST_Customizations_Controller {
 
 		if ( ! current_user_can( 'customize_admin' ) ) {
 
-			return new WP_Error( 'rest_forbidden', esc_html__( 'You cannot view the customizations resource.' ), array( 'status' => $this->authorization_status_code() ) );
+			return new WP_Error( 'rest_forbidden', esc_html__( 'You cannot view the customizations resource.', 'client-dash'  ), array( 'status' => $this->authorization_status_code() ) );
 		}
 
 		return true;
@@ -176,7 +176,7 @@ class ClientDash_REST_Customizations_Controller {
 
 			return new WP_Error(
 				'rest_customizations_cant_create',
-				__( 'Cannot create customization for unkown reasons.', 'clientdash' ),
+				__( 'Cannot create customization for unkown reasons.', 'client-dash' ),
 				array( 'status' => 500 )
 			);
 		}
@@ -205,7 +205,7 @@ class ClientDash_REST_Customizations_Controller {
 
 			return new WP_Error(
 				'rest_customizations_invalid_role',
-				__( 'Invalid customizations Role.', 'clientdash' ),
+				__( 'Invalid customizations Role.', 'client-dash' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -222,7 +222,7 @@ class ClientDash_REST_Customizations_Controller {
 
 			return new WP_Error(
 				'rest_customizations_cant_update',
-				__( 'Cannot update customization for unkown reasons.', 'clientdash' ),
+				__( 'Cannot update customization for unkown reasons.', 'client-dash' ),
 				array( 'status' => 500 )
 			);
 		}
@@ -247,7 +247,7 @@ class ClientDash_REST_Customizations_Controller {
 
 			return new WP_Error(
 				'rest_customizations_invalid_role',
-				__( 'Invalid customizations Role.', 'clientdash' ),
+				__( 'Invalid customizations Role.', 'client-dash' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -259,7 +259,7 @@ class ClientDash_REST_Customizations_Controller {
 			$response = new WP_REST_Response();
 			$response->set_data( array(
 				'deleted' => false,
-				'message' => __( 'Role has no customizations.', 'clientdash' ),
+				'message' => __( 'Role has no customizations.', 'client-dash' ),
 			) );
 
 			return $response;
@@ -271,7 +271,7 @@ class ClientDash_REST_Customizations_Controller {
 
 			return new WP_Error(
 				'rest_customizations_cant_delete',
-				__( 'Cannot delete customization for unknown reasons.', 'clientdash' ),
+				__( 'Cannot delete customization for unknown reasons.', 'client-dash' ),
 				array( 'status' => 500 )
 			);
 		}
@@ -307,7 +307,7 @@ class ClientDash_REST_Customizations_Controller {
 	/**
 	 * Prepares a single customization for create or update.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access protected
 	 *
 	 * @param WP_REST_Request $request Request object.
@@ -325,7 +325,7 @@ class ClientDash_REST_Customizations_Controller {
 		/**
 		 * Filters before instering the customization.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 */
 		return apply_filters( 'rest_pre_insert_cd_customizations', $customizations, $request );
 	}
@@ -333,7 +333,7 @@ class ClientDash_REST_Customizations_Controller {
 	/**
 	 * Returns proper auth code.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @return int
 	 */

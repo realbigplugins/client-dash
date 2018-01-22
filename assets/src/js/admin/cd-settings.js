@@ -1,7 +1,7 @@
 /**
  * Settings Page functionality.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 
 var ClientDash_Settings;
@@ -16,7 +16,7 @@ var ClientDash_Settings;
         /**
          * Initializes the api.
          *
-         * @since {{VERSION}}
+         * @since 2.0.0
          */
         init: function () {
 
@@ -31,7 +31,7 @@ var ClientDash_Settings;
         /**
          * Confirms resetting CD settings.
          *
-         * @since {{VERSION}}
+         * @since 2.0.0
          */
         confirmReset: function (e) {
 

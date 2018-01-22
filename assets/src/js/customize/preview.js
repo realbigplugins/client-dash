@@ -6,7 +6,7 @@ const l10n     = ClientdashCustomize_Data.l10n || false;
 /**
  * The Customize preview.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class Preview extends React.Component {
 

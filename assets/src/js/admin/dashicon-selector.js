@@ -1,7 +1,7 @@
 /**
  * Handles functionality for the Dashicons Selector field.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 (function ($, data) {
     'use strict';

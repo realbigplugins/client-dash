@@ -6,7 +6,7 @@ const dashicons = ClientdashCustomize_Data.dashicons || false;
 /**
  * Provies an expandable window for choosing a Dashicon.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class DashiconsSelector extends React.Component {
 
@@ -95,7 +95,7 @@ class DashiconsSelector extends React.Component {
 /**
  * Individual Dashicon option within the DashiconsSelector
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class DashiconsSelectorOption extends React.Component {
 

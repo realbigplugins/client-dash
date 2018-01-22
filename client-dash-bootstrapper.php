@@ -4,7 +4,7 @@
  *
  * Makes sure everything is good to go for loading the plugin, and then loads it.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @package ClientDash
  */
@@ -18,14 +18,14 @@ defined( 'ABSPATH' ) || die;
  *
  * Makes sure everything is good to go for loading the plugin, and then loads it.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class ClientDash_Bootstrapper {
 
 	/**
 	 * Notices to show if cannot load.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 *
 	 * @var array
@@ -35,7 +35,7 @@ class ClientDash_Bootstrapper {
 	/**
 	 * ClientDash_Bootstrapper constructor.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 */
 	function __construct() {
 
@@ -50,7 +50,7 @@ class ClientDash_Bootstrapper {
 	 * is tricky because the Bootstrapper instance is not accessible, so I must loop through the tags to find it
 	 * manually so I can remove it.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function maybe_disable_client_dash_pro() {
@@ -78,7 +78,7 @@ class ClientDash_Bootstrapper {
 	/**
 	 * Maybe loads the plugin.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function maybe_load() {
@@ -90,7 +90,7 @@ class ClientDash_Bootstrapper {
 		if ( version_compare( $php_version, '5.3.0' ) === - 1 ) {
 
 			$this->notices[] = sprintf(
-				__( 'Minimum PHP version of 5.3.0 required. Current version is %s. Please contact your system administrator to upgrade PHP to its latest version.', 'clientdash' ),
+				__( 'Minimum PHP version of 5.3.0 required. Current version is %s. Please contact your system administrator to upgrade PHP to its latest version.', 'client-dash' ),
 				$php_version
 			);
 		}
@@ -99,7 +99,7 @@ class ClientDash_Bootstrapper {
 		if ( version_compare( $wp_version, '4.7.0' ) === - 1 ) {
 
 			$this->notices[] = sprintf(
-				__( 'Minimum WordPress version of 4.0.0 required. Current version is %s. Please contact your system administrator to upgrade WordPress to its latest version.', 'clientdash' ),
+				__( 'Minimum WordPress version of 4.0.0 required. Current version is %s. Please contact your system administrator to upgrade WordPress to its latest version.', 'client-dash' ),
 				$wp_version
 			);
 		}
@@ -118,7 +118,7 @@ class ClientDash_Bootstrapper {
 	/**
 	 * Loads the plugin.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	private function load() {
@@ -129,7 +129,7 @@ class ClientDash_Bootstrapper {
 	/**
 	 * Shows notices on failure to load.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function notices() {
@@ -138,7 +138,7 @@ class ClientDash_Bootstrapper {
             <p>
 				<?php
 				printf(
-					__( '%sClient Dash%s could not load because of the following errors:', 'clientdash' ),
+					__( '%sClient Dash%s could not load because of the following errors:', 'client-dash' ),
 					'<strong>',
 					'</strong>'
 				);
@@ -159,7 +159,7 @@ class ClientDash_Bootstrapper {
 	/**
 	 * Shows notice on disabling of CD Pro.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function disable_cd_pro_admin_notice() {
@@ -168,7 +168,7 @@ class ClientDash_Bootstrapper {
             <p>
 				<?php
 				printf(
-					__( '%sClient Dash Pro%s could not load because it needs to be upgraded first.', 'clientdash' ),
+					__( '%sClient Dash Pro%s could not load because it needs to be upgraded first.', 'client-dash' ),
 					'<strong>',
 					'</strong>'
 				);

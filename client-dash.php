@@ -57,7 +57,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		/**
 		 * RBM Field Helpers instance.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 *
 		 * @var RBM_FieldHelpers
 		 */
@@ -66,7 +66,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		/**
 		 * RBP Support instance.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 *
 		 * @var RBP_Support
 		 */
@@ -93,7 +93,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		/**
 		 * Handles the plugin settings.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 *
 		 * @var ClientDash_Settings
 		 */
@@ -211,7 +211,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		/**
 		 * Includes and sets up everything required to maintain rough support for legacy extension APIs.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 * @access private
 		 */
 		private function legacy_apis() {
@@ -229,7 +229,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		/**
 		 * Initializes Field Helpers.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 * @access private
 		 */
 		private function setup_fieldhelpers() {
@@ -331,11 +331,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 			wp_localize_script( 'clientdash-admin', 'ClientDash_Data', array(
 				'nonce' => wp_create_nonce( 'clientdash_nonce' ),
 				'l10n'  => array(
-					'reset_settings_confirm' => __(
-						'This will reset ALL Client Dash settings permanently. This can NOT be undone. Are you sure ' .
-						'you want to proceed?',
-						'client-dash'
-					),
+					'reset_settings_confirm' => __( 'This will reset ALL Client Dash settings permanently. This can NOT be undone. Are you sure you want to proceed?', 'client-dash' ),
 					'change'                 => __( 'Change', 'client-dash' ),
 					'close'                  => __( 'Close', 'client-dash' ),
 					'saving'                 => __( 'Saving...', 'client-dash' ),
@@ -368,7 +364,7 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		/**
 		 * Adds more action links to the plugin row.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 * @access private
 		 *
 		 * @param array $links

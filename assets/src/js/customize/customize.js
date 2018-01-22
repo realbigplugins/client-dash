@@ -18,7 +18,7 @@ const loadTutorial = ClientdashCustomize_Data.load_tutorial || false;
 /**
  * The main Customize component.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class Customize extends React.Component {
 

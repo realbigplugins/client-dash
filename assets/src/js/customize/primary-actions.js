@@ -9,7 +9,7 @@ const l10n = ClientdashCustomize_Data.l10n || false;
  *
  * Actions are: Hide Customizer, Close Customizer, Save Settings
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class PrimaryActions extends React.Component {
 

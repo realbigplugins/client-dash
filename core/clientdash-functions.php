@@ -2,7 +2,7 @@
 /**
  * Helper functions.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @package ClientDash
  * @subpackage ClientDash/core
@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || die;
  *
  * Wrapper for ClientDashDB()::get_customizations()
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param string $role Customizations role.
  */
@@ -29,7 +29,7 @@ function cd_get_customizations( $role ) {
  *
  * Wrapper for ClientDashDB()::get_role_menus()
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param string $role Role to get menu for.
  *
@@ -45,7 +45,7 @@ function cd_get_role_menus( $role ) {
  *
  * Wrapper for ClientDashDB()::get_role_dashboard()
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param string $role Role to get dashboard for.
  *
@@ -61,7 +61,7 @@ function cd_get_role_dashboard( $role ) {
  *
  * Wrapper for ClientDashDB()::update_role_customizations()
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param string $role
  * @param array $data
@@ -78,7 +78,7 @@ function cd_update_role_customizations( $role, $data ) {
  *
  * Wrapper for ClientDashDB()::delete_customizations()
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param string $role Customizations role.
  */
@@ -117,7 +117,7 @@ function cd_array_get_index_by_key( $array, $key, $value ) {
 /**
  * Searches an array by a nested key and returns the match.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param array $array
  * @param string $key
@@ -140,7 +140,7 @@ function cd_array_search_by_key( $array, $key, $value ) {
 /**
  * Adds a core CD page.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param array $page
  */
@@ -152,7 +152,7 @@ function cd_add_core_page( $page ) {
 /**
  * Returns the core CD pages.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 function cd_get_core_pages() {
 
@@ -164,7 +164,7 @@ function cd_get_core_pages() {
 /**
  * Loads a template file from the theme if it exists, otherwise from the plugin.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param string $template Template file to load.
  *
@@ -175,7 +175,7 @@ function cd_get_template( $template ) {
 	/**
 	 * Filter the template to be located.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 */
 	$template = apply_filters( 'cd_get_template', $template );
 
@@ -194,7 +194,7 @@ function cd_get_template( $template ) {
 /**
  * Loads a template.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param string $template Template file to load.
  * @param array $args Arguments to extract for the template.
@@ -204,7 +204,7 @@ function cd_template( $template, $args = array() ) {
 	/**
 	 * Filter the args to use in the template.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 */
 	$args = apply_filters( 'cd_get_template_args', $args, $template );
 
@@ -216,7 +216,7 @@ function cd_template( $template, $args = array() ) {
 /**
  * Takes an ID and determines if it's a Client Dash core page.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param string $ID Menu/page ID.
  *
@@ -297,7 +297,7 @@ function cd_format_dir_size( $size ) {
 /**
  * Resets ALL Client Dash settings.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @global WPDB $wpdb
  */
@@ -316,7 +316,7 @@ function cd_reset_all_settings() {
 	/**
 	 * Fires during Client Dash settings reset.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @hooked ClientDash_PluginPages::reset_admin_page 10
 	 */
@@ -326,7 +326,7 @@ function cd_reset_all_settings() {
 /**
  * Outputs the Dashicon selector.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @param array $args
  */
@@ -347,7 +347,7 @@ if ( ! function_exists( 'clientdash_custom_widget_text' ) ) {
 	/**
 	 * Output for the Text custom widget.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @param array $settings Widget settings (if any).
 	 * @param array $widget Widget array.

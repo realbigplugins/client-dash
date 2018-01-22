@@ -21,7 +21,7 @@ const l10n = ClientdashCustomize_Data.l10n || false;
  *
  * One panel shows at a time and they can be loaded and unloaded.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class Panel extends React.Component {
     render() {
@@ -36,7 +36,7 @@ class Panel extends React.Component {
 /**
  * The primary (and first loading) panel.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class PanelPrimary extends React.Component {
 
@@ -79,7 +79,7 @@ class PanelPrimary extends React.Component {
 /**
  * Panel for confirming or cancelling resetting the role.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class PanelConfirmReset extends React.Component {
     render() {
@@ -106,7 +106,7 @@ class PanelConfirmReset extends React.Component {
  *
  * Shows on primary panel. Clicking loads new panels.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @prop (string) text The text to show in the action.
  * @prop (string) target The target panel ID.
@@ -140,7 +140,7 @@ class PanelLoadButton extends React.Component {
  *
  * Edits the admin menu.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class PanelMenu extends React.Component {
 
@@ -277,7 +277,7 @@ class PanelMenu extends React.Component {
  *
  * Edits the admin menu.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class PanelSubmenu extends React.Component {
 
@@ -385,7 +385,7 @@ class PanelSubmenu extends React.Component {
 /**
  * The add items panel.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class PanelAddItems extends React.Component {
 
@@ -447,7 +447,7 @@ class PanelAddItems extends React.Component {
 /**
  * The Dashboard panel
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class PanelDashboard extends React.Component {
 
@@ -522,7 +522,7 @@ class PanelDashboard extends React.Component {
 /**
  * Panel for loading indicator.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class PanelLoading extends React.Component {
     render() {
@@ -538,7 +538,7 @@ class PanelLoading extends React.Component {
 /**
  * Panel with nothing in it.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class PanelBlank extends React.Component {
     render() {

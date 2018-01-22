@@ -2,7 +2,7 @@
 /**
  * Handles all plugin settings.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 
 defined( 'ABSPATH' ) || die();
@@ -12,14 +12,14 @@ defined( 'ABSPATH' ) || die();
  *
  * Handles all plugin settings.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class ClientDash_Settings {
 
 	/**
 	 * ClientDash_Settings constructor.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 */
 	function __construct() {
 
@@ -29,7 +29,7 @@ class ClientDash_Settings {
 	/**
 	 * Registers settings.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function register_settings() {
@@ -59,7 +59,7 @@ class ClientDash_Settings {
 	/**
 	 * Adds settings fields.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	private function add_settings_fields() {
@@ -122,7 +122,7 @@ class ClientDash_Settings {
 		/**
 		 * All plugin settings fields displayed on the setting page.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 */
 		$settings = apply_filters( 'cd_settings_fields', $settings );
 

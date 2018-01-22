@@ -2,7 +2,7 @@
 /**
  * The body file for the customizer.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  * @subpackage ClientDash/core/customize/views
  */
 

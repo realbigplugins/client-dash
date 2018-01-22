@@ -2,7 +2,7 @@
 /**
  * The Client Dash Admin Customizer.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @package ClientDash
  * @subpackage ClientDash/core
@@ -15,14 +15,14 @@ defined( 'ABSPATH' ) || die;
  *
  * The Client Dash Admin Customizer.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class ClientDash_Customize {
 
 	/**
 	 * ClientDash_Customize constructor.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 */
 	function __construct() {
 
@@ -64,7 +64,7 @@ class ClientDash_Customize {
 	/**
 	 * Tells if Client Dash is in the customize view.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @return bool True if customizing, false otherwise.
 	 */
@@ -76,7 +76,7 @@ class ClientDash_Customize {
 	/**
 	 * Tells if the current page IS the customizer preview.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @return bool True if in customizer, false otherwise.
 	 */
@@ -88,7 +88,7 @@ class ClientDash_Customize {
 	/**
 	 * Tells if current in customizer window should save current role settings.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @return bool True if should save role, false otherwise.
 	 */
@@ -100,7 +100,7 @@ class ClientDash_Customize {
 	/**
 	 * Loads the customizer.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function load() {
@@ -115,7 +115,7 @@ class ClientDash_Customize {
 	/**
 	 * Prevents WordPress from loading the frontend so that we can load our customizer.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function unload_wordpress() {
@@ -149,7 +149,7 @@ class ClientDash_Customize {
 	/**
 	 * Remove all enqueue actions as early as possible.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	public function strip_enqueues() {
@@ -165,7 +165,7 @@ class ClientDash_Customize {
 	/**
 	 * Reset the style and script registries in case anything is still registered
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	public function reset_enqueues() {
@@ -182,7 +182,7 @@ class ClientDash_Customize {
 	/**
 	 * Loads actions after WordPress has been unloaded.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function load_actions() {
@@ -193,7 +193,7 @@ class ClientDash_Customize {
 	/**
 	 * Enqueues the Customizer assets.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function enqueue_assets() {
@@ -206,7 +206,7 @@ class ClientDash_Customize {
 	/**
 	 * Localizes data for JS.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function localize_data() {
@@ -301,7 +301,7 @@ class ClientDash_Customize {
 	/**
 	 * Adds custom REST API fields.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function rest_add_fields() {
@@ -319,7 +319,7 @@ class ClientDash_Customize {
 	/**
 	 * Updates a user meta field.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 *
 	 * @param mixed $value The value of the field
@@ -336,7 +336,7 @@ class ClientDash_Customize {
 	/**
 	 * Extra dashboard widgets.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	public static function get_custom_dashboard_widgets() {
@@ -344,7 +344,7 @@ class ClientDash_Customize {
 		/**
 		 * Extra, re-usable dashboard widgets.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 */
 		$widgets = apply_filters( 'cd_customize_dashboard_widgets', array(
 			array(
@@ -367,7 +367,7 @@ class ClientDash_Customize {
 	/**
 	 * Callback for displaying custom widgets.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @param array $object
 	 * @param array $box
@@ -386,7 +386,7 @@ class ClientDash_Customize {
 				/**
 				 * Output for a custom widget.
 				 *
-				 * @since {{VERSION}}
+				 * @since 2.0.0
 				 *
 				 * @param string $output Widget output.
 				 * @param array $args Current widget args.
@@ -411,7 +411,7 @@ class ClientDash_Customize {
 	 *
 	 * Each panel should have a unique key as the ID, a title, and an array of content where each item is a new line.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function get_tutorial_panels() {
@@ -618,7 +618,7 @@ class ClientDash_Customize {
 		/**
 		 * The Customize tutorial panels.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 */
 		$panels = apply_filters( 'cd_customize_tutorial_panels', $panels );
 
@@ -628,7 +628,7 @@ class ClientDash_Customize {
 	/**
 	 * Loads up the templates.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function inject_template() {
@@ -636,7 +636,7 @@ class ClientDash_Customize {
 		/**
 		 * Loads the customize header.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 *
 		 * @hooked ClientDash_Customize->template_header() 10
 		 */
@@ -645,7 +645,7 @@ class ClientDash_Customize {
 		/**
 		 * Loads the customize body.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 *
 		 * @hooked ClientDash_Customize->template_body() 10
 		 */
@@ -654,7 +654,7 @@ class ClientDash_Customize {
 		/**
 		 * Loads the customize footer.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 *
 		 * @hooked ClientDash_Customize->template_footer() 10
 		 */
@@ -664,7 +664,7 @@ class ClientDash_Customize {
 	/**
 	 * Outputs the Customize title tag.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function title_tag() {
@@ -675,7 +675,7 @@ class ClientDash_Customize {
 		/**
 		 * The main page title tag for the Customize tool.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 */
 		$title = apply_filters( 'cd_customize_page_title', $title );
 
@@ -685,7 +685,7 @@ class ClientDash_Customize {
 	/**
 	 * Loads the header template.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function template_header() {
@@ -696,7 +696,7 @@ class ClientDash_Customize {
 	/**
 	 * Loads the customize body.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function template_body() {
@@ -707,7 +707,7 @@ class ClientDash_Customize {
 	/**
 	 * Loads the footer template.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function template_footer() {
@@ -718,7 +718,7 @@ class ClientDash_Customize {
 	/**
 	 * Retrieves and stores the current role.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 *
 	 * @return bool|null|WP_Role
@@ -743,7 +743,7 @@ class ClientDash_Customize {
 	/**
 	 * Modifies the current user to set the role.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function modify_current_user() {
@@ -763,7 +763,7 @@ class ClientDash_Customize {
 	/**
 	 * Loads scripts and styles for inside the preview iframe.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function preview_scripts() {
@@ -775,7 +775,7 @@ class ClientDash_Customize {
 	/**
 	 * Initially saves a role's menu preview for the customizer.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function save_menu_preview( $bool ) {
@@ -927,7 +927,7 @@ class ClientDash_Customize {
 	/**
 	 * Initially saves a role's dashboard preview.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 *
 	 * @param array $dashboard_widgets
@@ -1005,7 +1005,7 @@ class ClientDash_Customize {
 	/**
 	 * Processes a menu item before inserting into the Customize tool.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @param array $item Menu item array.
 	 *
@@ -1027,7 +1027,7 @@ class ClientDash_Customize {
 		/**
 		 * Processed menu item for insertion into the Customize tool.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 */
 		$item = apply_filters( 'cd_customize_process_menu_item', $item );
 
@@ -1037,7 +1037,7 @@ class ClientDash_Customize {
 	/**
 	 * Processes a submenu item before inserting into the Customize tool.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @param array $item Submenu item array.
 	 * @param string $menu_ID Parent menu item ID.
@@ -1076,7 +1076,7 @@ class ClientDash_Customize {
 		/**
 		 * Processed submenu item for insertion into the Customize tool.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 */
 		$item = apply_filters( 'cd_customize_process_submenu_item', $item, $menu_ID );
 
@@ -1086,7 +1086,7 @@ class ClientDash_Customize {
 	/**
 	 * Processes a dashboard item before inserting into the Customize tool.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @param array $item Dashboard item array.
 	 *
@@ -1104,7 +1104,7 @@ class ClientDash_Customize {
 		/**
 		 * Processed dashboard item for insertion into the Customize tool.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 */
 		$item = apply_filters( 'cd_customize_process_dashboard_item', $item );
 

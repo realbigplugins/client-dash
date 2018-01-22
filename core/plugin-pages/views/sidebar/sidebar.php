@@ -2,7 +2,7 @@
 /**
  * The plugin pages' sidebar.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @package ClientDash
  * @subpackage ClientDash/core/pluginpages/views/sidebar
@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || die;
 	/**
 	 * Fires inside sidebar.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @hooked ClientDash_PluginPages::sidebar_rbp_pro-prompt() 10
      * @hooked ClientDash_PluginPages::sidebar_review_support() 15

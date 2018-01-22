@@ -1,29 +1,72 @@
-![banner](https://raw.githubusercontent.com/brashrebel/client-dash/master/assets/static/banner.png)
+![Client Dash Banner](https://raw.githubusercontent.com/realbigplugins/client-dash/master/assets/static/banner.png)
 
 # v2.0.0
 
-[Releases](https://github.com/brashrebel/client-dash/releases)
+[Releases](https://github.com/realbigplugins/client-dash/releases)
 
 At long last, a vastly improved interface for clients has arrived. Client Dash seeks to provide a simplified and intuitive admin user experience for customers who login to WordPress sites which were developed and are managed by an agency/webmaster.
 
-## What does Client Dash do?
+## Take control of the WordPress Admin
 
-Upon activation, Client Dash modifies the wp-admin in the following ways:
+With Client Dash, WordPress administrators have full control of the WordPresss admin. With an end goal of helping improve the user experience within WordPress specifically for clients, we've created and implemented numerous powerful features for simplifying and customizing the dashboard.
 
-* Removes all default dashboard widgets
-* Provides options for selectively adding back dashboard widgets
-* Creates several new admin pages and adds their links under Dashboard in the admin menu
-* Creates new dashboard widgets with large buttons that direct users to these new pages
-* Adds tabs with helpful information on each of these new pages
-* Removes the WordPress logo and menu from the toolbar
-* (Multisite) Removes the My Sites menu from the toolbar and the admin menu
-* (Multisite) Moves the My Sites information to a tab on the Account page
+## Client Dash Customize Admin Tool
 
-There is a lot more to come from this plugin in the future. Client Dash has been designed from day 1 to be as flexible as possible so if you are a developer you will absolutely love it. In the near future we will be publishing detailed documentation on how this plugin can be modified and extended. We will also be releasing numerous extensions of our own which will integrate with a variety of useful external tools to help you provide even more value to your customers.
+Client Dash offers a powerful tool for you to take complete control of the WordPress admin for you and your users. The Customize Admin Tool gives you a, never before seen, live preview of your admin area as you customize it. Customizations are easy, intuitive, and simple to make. You can give each user role a unique view of the admin area.
 
-We are also extremely receptive to suggestions, feature requests and collaborations so if you have anything to add or that you would like to see included in Client Dash, please visit the support forum here and engage us. Also, stay tuned as we are working on lots of new updates to this plugin and are also actively developing some exciting add-ons.
+![Customize Admin Tool](https://raw.githubusercontent.com/realbigplugins/client-dash/master/assets/static/screenshot-customize-admin-tool.png)
 
-![example](https://raw.githubusercontent.com/brashrebel/client-dash/master/assets/static/main-example.gif)
+This tool allows you to customize the following:
+
+## Customize the Admin Menu
+
+You are able to completely customize the WordPress admin menu using the powerful Client Dash Customize Admin tool. You are able to:
+
+* Customize menu items
+* Reorder all menu items
+* Remove menu items
+* Add new menu items
+
+Admin menus are also controlled on a per role basis so you are able to completely control the admin menu for each individual role.
+
+![Customize Admin Menu](https://raw.githubusercontent.com/realbigplugins/client-dash/master/assets/static/screenshot-customize-menu.png)
+
+## Customize the Dashboard Widgets
+
+Have you ever wished you could customize the WordPress dashboard a little more? Well with Client Dash you've found your solution.
+
+We implemented a powerful dashboard widget control feature using the powerful Client Dash Customize Admin tool. So now, adding, removing, rearranging and customizing WP dashboard widgets is easier than ever before.
+
+![Customize Admin Dashboard](https://raw.githubusercontent.com/realbigplugins/client-dash/master/assets/static/screenshot-customize-dashboard.png)
+
+## Customizable Admin Page
+
+Client Dash offers you a fully customizable Admin Page. You customize the following:
+
+* Which roles can see the page.
+* The page icon.
+* The page content, using the same editor you use for regular pages.
+* The page title.
+
+You can put anything you like in this page. You could use this page as a landing page for clients, an instructions page, etc.
+
+Want to have an unlimitted number of customizable Admin Pages? Try out [Client Dash Pro](https://realbigplugins.com/plugins/client-dash-pro) to unlock this feature!
+
+![Customize Admin Page](https://raw.githubusercontent.com/realbigplugins/client-dash/master/assets/static/screenshot-customize-admin-page.png)
+
+## Helper Pages
+
+Client Dash includes a few helpful pages for your users and clients. These pages include some basic, helpful information. Each of these helper pages can be renamed, re-positioned, and visible to roles that you specify.
+
+## Extremely Extensible
+
+From the start, Client Dash has been created with developers in mind. We've worked very hard to make extending Client Dash as easy as possible.
+
+We are also extremely receptive to suggestions, feature requests and collaborations so if you have anything to add or that you would like to see included in Client Dash, please visit the support forum here and engage us. Also, stay tuned as we are working on lots of new updates to this plugin and are also actively developing some exciting add-ons. Lots more to come!
+
+## Like this plugin?
+
+We love making plugins for WordPress! This is just one of the many we have released and are working on. If you'd like to stay informed about what we release and receive exclusive discounts on our premium plugins, [subscribe here](http://realbigplugins.com/subscribe/?utm_source=Client%20Dash&utm_medium=Readme%20link&utm_campaign=Client%20Dash%20Plugin). We've got some really cool stuff in the works so you'll be the first to know about all of it.
 
 ## Installation
 

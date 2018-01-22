@@ -1,7 +1,7 @@
 /**
  * Functionality shared across the board.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 
 var l10n = typeof ClientDash_Data != 'undefined' ? ClientDash_Data.l10n : {};
@@ -45,7 +45,7 @@ var l10n = typeof ClientDash_Data != 'undefined' ? ClientDash_Data.l10n : {};
     /**
      * Removes any non-necessary query params.
      *
-     * @since {{VERSION}}
+     * @since 2.0.0
      */
     function init_url() {
 
@@ -59,7 +59,7 @@ var l10n = typeof ClientDash_Data != 'undefined' ? ClientDash_Data.l10n : {};
     /**
      * Initializes all select2's on the page.
      *
-     * @since {{VERSION}}
+     * @since 2.0.0
      */
     function init_select2() {
 

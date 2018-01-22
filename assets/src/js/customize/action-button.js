@@ -3,7 +3,7 @@ import React from 'react';
 /**
  * Action button that appears in header and footer of Customizer.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @prop (string) text The button text.
  * @prop (string) icon The button icon.

@@ -2,7 +2,7 @@
 /**
  * The settings page.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @package ClientDash
  * @subpackage ClientDash/core/pluginpages/views

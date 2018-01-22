@@ -5,7 +5,7 @@
  * Page: Account
  * Tab: Sites
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @package ClientDash
  * @subpackage ClientDash/core/core-pages/views/account

@@ -2,7 +2,7 @@
 /**
  * Settings page section for Other.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @var string $reset_settings_link
  * @var string $enable_customize_tutorial_link

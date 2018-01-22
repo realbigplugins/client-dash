@@ -2,7 +2,7 @@
 /**
  * Adds Helper Pages.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @package ClientDash
  * @subpackage ClientDash/core/helper-pages
@@ -15,14 +15,14 @@ defined( 'ABSPATH' ) || die;
  *
  * Adds Helper Pages.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class ClientDash_Helper_Pages {
 
 	/**
 	 * Pages only viewable by the current user.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @var array
 	 */
@@ -31,7 +31,7 @@ class ClientDash_Helper_Pages {
 	/**
 	 * ClientDash_Helper_Pages constructor.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 */
 	function __construct() {
 
@@ -48,7 +48,7 @@ class ClientDash_Helper_Pages {
 	/**
 	 * Returns the pages the current user can view.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @return array
 	 */
@@ -60,7 +60,7 @@ class ClientDash_Helper_Pages {
 	/**
 	 * Loads the custom pages.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function load_pages() {
@@ -71,7 +71,7 @@ class ClientDash_Helper_Pages {
 	/**
 	 * Loads current user viewable pages only.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @param array $pages All pages.
 	 *
@@ -109,7 +109,7 @@ class ClientDash_Helper_Pages {
 	/**
 	 * Gets custom CD pages.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	static public function get_pages() {
@@ -124,7 +124,7 @@ class ClientDash_Helper_Pages {
 		/**
 		 * Client Dash helper pages modifications (straight from the DB).
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 */
 		$pages = apply_filters( 'cd_helper_pages_modifications', $page_modifications );
 
@@ -250,7 +250,7 @@ class ClientDash_Helper_Pages {
 		/**
 		 * Client Dash helper pages.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 */
 		$pages = apply_filters( 'cd_helper_pages', $pages );
 
@@ -260,7 +260,7 @@ class ClientDash_Helper_Pages {
 	/**
 	 * Adds the custom pages.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function add_pages() {
@@ -313,7 +313,7 @@ class ClientDash_Helper_Pages {
 	/**
 	 * Adds dashboard widgets for the Core CD Pages.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function add_widgets() {
@@ -342,7 +342,7 @@ class ClientDash_Helper_Pages {
 	/**
 	 * Loads a custom page.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function load_page() {
@@ -356,7 +356,7 @@ class ClientDash_Helper_Pages {
 		/**
 		 * The template to use for helper CD pages.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 */
 		$page_template = apply_filters(
 			'cd_helper_page_template',
@@ -385,7 +385,7 @@ class ClientDash_Helper_Pages {
 	/**
 	 * Loads Core CD Page widgets.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 *
 	 * @param mixed $object Who the heck knows...
@@ -402,7 +402,7 @@ class ClientDash_Helper_Pages {
 	/**
 	 * Loads the Account page tab About.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 */
 	static public function load_cd_page_account_tab_about() {
 
@@ -417,7 +417,7 @@ class ClientDash_Helper_Pages {
 	/**
 	 * Loads the Account page tab Sites.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 */
 	static public function load_cd_page_account_tab_sites() {
 
@@ -431,7 +431,7 @@ class ClientDash_Helper_Pages {
 	/**
 	 * Loads the Help page tab Domain.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 */
 	static public function load_cd_page_help_tab_domain() {
 
@@ -445,7 +445,7 @@ class ClientDash_Helper_Pages {
 	/**
 	 * Loads the Help page tab Info.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 */
 	static public function load_cd_page_help_tab_info() {
 
@@ -475,7 +475,7 @@ class ClientDash_Helper_Pages {
 	/**
 	 * Loads the Reports page tab Site.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 */
 	static public function load_cd_page_reports_tab_site() {
 
@@ -494,7 +494,7 @@ class ClientDash_Helper_Pages {
 	/**
 	 * Loads the Admin Page tab Main.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 */
 	static public function load_cd_page_admin_page_tab_main() {
 
@@ -508,7 +508,7 @@ class ClientDash_Helper_Pages {
 	/**
 	 * Loads the Admin Page tab Feed.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 */
 	static public function load_cd_page_admin_page_tab_feed() {
 
@@ -522,7 +522,7 @@ class ClientDash_Helper_Pages {
 	/**
 	 * Shortcode for RSS feed.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @param array $atts
 	 */

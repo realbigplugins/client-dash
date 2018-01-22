@@ -2,7 +2,7 @@
 /**
  * The Helper Pages page.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @package ClientDash
  * @subpackage ClientDash/core/pluginpages/views
@@ -18,8 +18,7 @@ defined( 'ABSPATH' ) || die;
     <h1 class="clientdash-page-title">
 		<?php echo get_admin_page_title(); ?>
 		<?php
-		cd_field_tip( __( 'Helper pages are special admin pages that Client Dash provides. You can enable or disable them' .
-		                  ' for different roles.', 'client-dash' ) );
+		cd_field_tip( __( 'Helper pages are special admin pages that Client Dash provides. You can enable or disable them for different roles.', 'client-dash' ) );
 		?>
     </h1>
 

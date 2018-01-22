@@ -2,7 +2,7 @@
 /**
  * Database functions.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @package ClientDash
  * @subpackage ClientDash/core
@@ -15,14 +15,14 @@ defined( 'ABSPATH' ) || die;
  *
  * Database functions.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class ClientDash_DB {
 
 	/**
 	 * Gets a set of customizations.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @param string $role Role of the customization.
 	 *
@@ -56,7 +56,7 @@ class ClientDash_DB {
 		/**
 		 * Filters the get_customizations results.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 */
 		$results = apply_filters(
 			'cd_db_get_customizations_by_role',
@@ -70,7 +70,7 @@ class ClientDash_DB {
 	/**
 	 * Gets the role's custom menu, if set.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @param string $role Role to get menu for.
 	 *
@@ -91,7 +91,7 @@ class ClientDash_DB {
 		/**
 		 * Filters the role's custom menu, if set.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 */
 		$menu = apply_filters( 'cd_role_menu', $results['menu'] );
 
@@ -101,7 +101,7 @@ class ClientDash_DB {
 	/**
 	 * Gets the role's custom submenu, if set.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @param string $role Role to get menu for.
 	 *
@@ -122,7 +122,7 @@ class ClientDash_DB {
 		/**
 		 * Filters the role's custom submenu, if set.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 */
 		$submenu = apply_filters( 'cd_role_submenu', $results['submenu'] );
 
@@ -132,7 +132,7 @@ class ClientDash_DB {
 	/**
 	 * Gets the role's custom dashboard, if set.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @param string $role Role to get dashboard for.
 	 *
@@ -153,7 +153,7 @@ class ClientDash_DB {
 		/**
 		 * Filters the role's custom dashboard, if set.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 */
 		$dashboard = apply_filters( 'cd_role_dashboard', $results['dashboard'] );
 
@@ -163,7 +163,7 @@ class ClientDash_DB {
 	/**
 	 * Updates or adds a role customizations.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @param string $role
 	 * @param array $customizations
@@ -177,7 +177,7 @@ class ClientDash_DB {
 		/**
 		 * Filters the customizations to update/add.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 */
 		$customizations = apply_filters( 'cd_db_update_role_customizations', $customizations, $role );
 
@@ -237,7 +237,7 @@ class ClientDash_DB {
 	/**
 	 * Deletes a role customizations.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @param string $role
 	 *
@@ -269,7 +269,7 @@ class ClientDash_DB {
 	/**
 	 * Totally empty customizations table
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 */
 	public static function delete_everything() {
 
@@ -282,7 +282,7 @@ class ClientDash_DB {
 /**
  * Quick access to database class.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 function ClientDashDB() {
 

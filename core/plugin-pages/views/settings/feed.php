@@ -2,7 +2,7 @@
 /**
  * Settings page section for Feed.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @var string $feed_url
  * @var string $feed_count

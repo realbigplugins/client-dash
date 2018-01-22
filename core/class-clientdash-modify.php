@@ -2,7 +2,7 @@
 /**
  * Modifies the admin from the customizations.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @package ClientDash
  * @subpackage ClientDash/core
@@ -15,14 +15,14 @@ defined( 'ABSPATH' ) || die;
  *
  * Modifies the admin from the customizations.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class ClientDash_Modify {
 
 	/**
 	 * The modified menu.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @var array|null
 	 */
@@ -31,7 +31,7 @@ class ClientDash_Modify {
 	/**
 	 * The modified submenu.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @var array|null
 	 */
@@ -40,7 +40,7 @@ class ClientDash_Modify {
 	/**
 	 * The modified dashboard.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @var array|null
 	 */
@@ -49,7 +49,7 @@ class ClientDash_Modify {
 	/**
 	 * ClientDash_Modify constructor.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 */
 	function __construct() {
 
@@ -60,7 +60,7 @@ class ClientDash_Modify {
 	/**
 	 * Grabs the customizations, if any.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	private function get_customizations() {
@@ -102,7 +102,7 @@ class ClientDash_Modify {
 		/**
 		 * The current user's customizations.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 */
 		$customizations = apply_filters( 'cd_customizations', $customizations );
 
@@ -114,7 +114,7 @@ class ClientDash_Modify {
 	/**
 	 * Modifies the menu.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function modify_menu( $bool ) {
@@ -202,7 +202,7 @@ class ClientDash_Modify {
 		/**
 		 * The new, customized admin menu for the current role.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 */
 		$new_menu = apply_filters( 'cd_customized_menu', $new_menu, $menu );
 
@@ -325,7 +325,7 @@ class ClientDash_Modify {
 		/**
 		 * The new, customized admin submenu for the current role.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 */
 		$new_submenu = apply_filters( 'cd_customized_submenu', $new_submenu, $submenu );
 
@@ -346,7 +346,7 @@ class ClientDash_Modify {
 	/**
 	 * Modifies the dashboard.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function modify_dashboard() {
@@ -426,7 +426,7 @@ class ClientDash_Modify {
 	/**
 	 * Gets a processed menu ID from the Customize tool.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 *
 	 * @param string $item Menu item ID
@@ -438,7 +438,7 @@ class ClientDash_Modify {
 		/**
 		 * Processed menu item ID for menu lookup.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 */
 		$ID = apply_filters( 'cd_customize_get_processed_menu_id', $ID );
 
@@ -448,7 +448,7 @@ class ClientDash_Modify {
 	/**
 	 * Gets a processed submenu ID from the Customize tool.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 *
 	 * @param string $item Submenu item ID
@@ -484,7 +484,7 @@ class ClientDash_Modify {
 		/**
 		 * Processed submenu item ID for submenu lookup.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 */
 		$ID = apply_filters( 'cd_customize_get_processed_submenu_id', $ID, $menu_ID );
 
@@ -494,7 +494,7 @@ class ClientDash_Modify {
 	/**
 	 * Gets a processed dashboard ID from the Customize tool.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 *
 	 * @param string $item Dashboard item ID
@@ -506,7 +506,7 @@ class ClientDash_Modify {
 		/**
 		 * Processed dashboard item ID for dashboard lookup.
 		 *
-		 * @since {{VERSION}}
+		 * @since 2.0.0
 		 */
 		$ID = apply_filters( 'cd_customize_get_processed_dashboard_id', $ID );
 

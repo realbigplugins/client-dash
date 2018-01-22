@@ -2,7 +2,7 @@
 /**
  * Outputs the Dashicon selector.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @package ClientDashPro
  * @subpackage ClientDashPro/core/includes/views

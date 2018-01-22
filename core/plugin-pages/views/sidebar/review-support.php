@@ -2,7 +2,7 @@
 /**
  * Sidebar section: Review Support
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  *
  * @package ClientDash
  * @subpackage ClientDash/core/pluginpages/views/sidebar
@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || die;
     <p>
 		<?php
 		printf(
-			__( 'Like this plugin? Consider leaving us a rating.' ),
+			__( 'Like this plugin? Consider leaving us a rating.', 'client-dash' ),
 			'<a href="https://wordpress.org/support/view/plugin-reviews/client-dash?rate=5#postform">',
 			'</a>'
 		);
@@ -33,7 +33,7 @@ defined( 'ABSPATH' ) || die;
     <p>
 		<?php
 		printf(
-			__( 'Need help? Visit our %ssupport forums%s.', 'clientdash' ),
+			__( 'Need help? Visit our %ssupport forums%s.', 'client-dash' ),
 			'<a href="https://wordpress.org/support/plugin/client-dash" target="_blank">',
 			'</a>'
 		);

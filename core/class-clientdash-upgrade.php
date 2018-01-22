@@ -2,7 +2,7 @@
 /**
  * Handles Client Dash upgrades.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 
 defined( 'ABSPATH' ) || die();
@@ -12,14 +12,14 @@ defined( 'ABSPATH' ) || die();
  *
  * Handles Client Dash upgrades.
  *
- * @since {{VERSION}}
+ * @since 2.0.0
  */
 class ClientDash_Upgrade {
 
 	/**
 	 * ClientDash_Upgrade constructor.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @return bool True if needs to upgrade, false if does not.
 	 */
@@ -46,7 +46,7 @@ class ClientDash_Upgrade {
 	/**
 	 * Returns if Client Dash needs to update.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 *
 	 * @return bool
 	 */
@@ -58,7 +58,7 @@ class ClientDash_Upgrade {
 	/**
 	 * Initializes the upgrade so we can hook it after admin menu has loaded.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function init_upgrade() {
@@ -81,7 +81,7 @@ class ClientDash_Upgrade {
 	/**
 	 * Determines if the plugin has "migrate-able" settings or not.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 *
 	 * @return bool
@@ -101,7 +101,7 @@ class ClientDash_Upgrade {
 	/**
 	 * Displays the database upgrade nag.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function show_upgrade_nag() {
@@ -115,31 +115,18 @@ class ClientDash_Upgrade {
 
 		$confirm_text_1 = sprintf(
 		/* translators: %s is current Client Dash version */
-			__(
-				'Important: If you have made any customizations since updating Client Dash to %s, all customizations ' .
-				'will be overwritten by previous Client Dash customizations. It is recommended to backup your website ' .
-				'first.',
-				'client-dash'
-			),
+			__( 'Important: If you have made any customizations since updating Client Dash to %s, all customizations will be overwritten by previous Client Dash customizations. It is recommended to backup your website first.', 'client-dash' ),
 			CLIENTDASH_VERSION
 		);
 
-		$confirm_text_2 = __(
-			'Are you sure you want to upgrade the database WITHOUT migrating previous customizations? You will be ' .
-			'starting from scratch.',
-			'client-dash'
-		);
+		$confirm_text_2 = __( 'Are you sure you want to upgrade the database WITHOUT migrating previous customizations? You will be starting from scratch.', 'client-dash' );
 		?>
         <div class="notice notice-warning">
             <p>
 				<?php
 				printf(
-					__(
-					/* translators: Both %s are HTML for <strong> */
-						'In order to use %sClient Dash%s, your database needs to be upgraded and your previous ' .
-						'customizations need to be migrated. It is highly advised to backup your database first.',
-						'client-dash'
-					),
+				    /* translators: Both %s are HTML for <strong> */
+					__( 'In order to use %sClient Dash%s, your database needs to be upgraded and your previous customizations need to be migrated. It is highly advised to backup your database first.', 'client-dash' ),
 					'<strong>',
 					'</strong>'
 				);
@@ -159,11 +146,7 @@ class ClientDash_Upgrade {
             <p>
                 <strong>
 					<?php
-					_e(
-						'IMPORTANT: None of your previous Client Dash customizations have been migrated yet. If you ' .
-						'want to keep your previous customizations, you must first perform this database upgrade.',
-						'client-dash'
-					);
+					_e( 'IMPORTANT: None of your previous Client Dash customizations have been migrated yet. If you want to keep your previous customizations, you must first perform this database upgrade.', 'client-dash' );
 					?>
                 </strong>
             </p>
@@ -174,7 +157,7 @@ class ClientDash_Upgrade {
 	/**
 	 * Displays update nag for no migration.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	private function show_upgrade_nag_no_migration() {
@@ -184,11 +167,8 @@ class ClientDash_Upgrade {
             <p>
 				<?php
 				printf(
-					__(
-					/* translators: Both %s are HTML for <strong> */
-						'In order to use %sClient Dash%s, your database needs to be upgraded.',
-						'client-dash'
-					),
+				    /* translators: Both %s are HTML for <strong> */
+					__( 'In order to use %sClient Dash%s, your database needs to be upgraded.', 'client-dash' ),
 					'<strong>',
 					'</strong>'
 				);
@@ -204,24 +184,18 @@ class ClientDash_Upgrade {
 	/**
 	 * Displays to notify the user the ugprade is done.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	function show_upgraded_nag() {
 
 		if ( $_GET['clientdash_upgraded'] === '1' ) {
 
-			$message = __(
-				'Client Dash has successfully upgraded the database and migrated your previous settings!',
-				'client-dash'
-			);
+			$message = __( 'Client Dash has successfully upgraded the database and migrated your previous settings!', 'client-dash' );
 
 		} else {
 
-			$message = __(
-				'Client Dash has successfully upgraded the database!',
-				'client-dash'
-			);
+			$message = __( 'Client Dash has successfully upgraded the database!', 'client-dash' );
 		}
 		?>
         <div class="notice notice-success is-dismissible">
@@ -235,7 +209,7 @@ class ClientDash_Upgrade {
 	/**
 	 * Upgrades Client Dash to the latest version.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	private function upgrade() {
@@ -249,7 +223,7 @@ class ClientDash_Upgrade {
 	/**
 	 * Migrates previousy (pre-2.0) Client Dash settings.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	private function migrate() {
@@ -263,7 +237,7 @@ class ClientDash_Upgrade {
 	/**
 	 * Returns any old CD Nav menus.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 *
 	 * @return array
@@ -287,7 +261,7 @@ class ClientDash_Upgrade {
 	/**
 	 * Returns any old CD widgets.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 *
 	 * @return array
@@ -309,7 +283,7 @@ class ClientDash_Upgrade {
 	/**
 	 * Returns old helper pages settings.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 *
 	 * @return array
@@ -341,7 +315,7 @@ class ClientDash_Upgrade {
 	/**
 	 * Returns old admin page settings.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 *
 	 * @return array
@@ -360,7 +334,7 @@ class ClientDash_Upgrade {
 	/**
 	 * Migrate admin menus.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	private function migrate_admin_menus() {
@@ -518,7 +492,7 @@ class ClientDash_Upgrade {
 	/**
 	 * Migrates dashboard widgets.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	private function migrate_dashboard_widgets() {
@@ -585,7 +559,7 @@ class ClientDash_Upgrade {
 	/**
 	 * Migrates any Helper Pages (previously CD Core Pages) customizations.
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	private function migrate_helper_pages() {
@@ -674,7 +648,7 @@ class ClientDash_Upgrade {
 	/**
 	 * Migrates the Admin Page (previously Webmaster page).
 	 *
-	 * @since {{VERSION}}
+	 * @since 2.0.0
 	 * @access private
 	 */
 	private function migrate_admin_page() {
