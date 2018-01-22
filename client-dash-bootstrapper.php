@@ -39,40 +39,38 @@ class ClientDash_Bootstrapper {
 	 */
 	function __construct() {
 
-		add_action( 'plugins_loaded', array( $this, 'maybe_disable_client_dash_pro' ), 9 );
+		add_action( 'plugins_loaded', array( $this, 'maybe_nag_client_dash_pro' ), 9 );
 		add_action( 'plugins_loaded', array( $this, 'maybe_load' ), 1 );
 	}
 
 	/**
-	 * Disable Client Dash Pro, if version is too low.
-	 *
-	 * Client Dash Pro, when configured for Client Dash < 2.0, will break with > 2.0 versions. Removing the load hook
-	 * is tricky because the Bootstrapper instance is not accessible, so I must loop through the tags to find it
-	 * manually so I can remove it.
+	 * Potentially nag to upgrade Pro.
 	 *
 	 * @since 2.0.0
 	 * @access private
 	 */
-	function maybe_disable_client_dash_pro() {
+	function maybe_nag_client_dash_pro() {
 
 		// Don't disable if active and past version 1.1
-		if ( ! defined( 'CLIENTDASH_PRO_VERSION' ) || version_compare( CLIENTDASH_PRO_VERSION, '1.1', '>=' ) ) {
+		if ( ! defined( 'CLIENTDASH_PRO_VERSION' ) ) {
 			return;
 		}
 
-		global $wp_filter;
-
-		if ( isset( $wp_filter['plugins_loaded'] ) && isset( $wp_filter['plugins_loaded']->callbacks['10'] ) ) {
-
-			foreach ( $wp_filter['plugins_loaded']->callbacks['10'] as $id => $callback ) {
-
-				if ( is_array( $callback['function'] ) && $callback['function'][0] instanceof ClientDash_Pro_Bootstrapper ) {
-
-					remove_action( 'plugins_loaded', array( $callback['function'][0], 'maybe_load' ) );
-					add_action( 'admin_notices', array( $this, 'disable_cd_pro_admin_notice' ) );
-				}
-			}
+		if ( version_compare( CLIENTDASH_PRO_VERSION, '1.1' ) !== - 1 ) {
+			return;
 		}
+
+		add_action( 'admin_notices', array( $this, 'cd_pro_admin_notice' ) );
+
+		// Some disabling
+		remove_action( 'admin_init', array( ClientDash_Pro()->admin, 'register_settings' ) );
+		remove_action( 'admin_notices', array( ClientDash_Pro()->admin, 'licensing_notice' ) );
+		remove_action( 'cd_sidebar', array( 'CD_Pro_Admin', 'sidebar_support' ) );
+		remove_action( 'admin_init', array( ClientDash_Pro()->admin, 'send_support_email' ) );
+		remove_filter( 'parent_file', array( ClientDash_Pro()->admin_pages->admin, 'activate_settings_menu' ) );
+		remove_filter( 'submenu_file', array( ClientDash_Pro()->admin_pages->admin, 'activate_clientdash_submenu' ) );
+		remove_action( 'all_admin_notices', array( ClientDash_Pro()->admin_pages->admin, 'output_clientdash_menu' ) );
+		remove_action( 'admin_init', array( ClientDash_Pro()->admin_pages->admin, 'redirect_cd_tab' ) );
 	}
 
 	/**
@@ -157,18 +155,18 @@ class ClientDash_Bootstrapper {
 	}
 
 	/**
-	 * Shows notice on disabling of CD Pro.
+	 * Shows notice on upgrading of CD Pro.
 	 *
 	 * @since 2.0.0
 	 * @access private
 	 */
-	function disable_cd_pro_admin_notice() {
+	function cd_pro_admin_notice() {
 		?>
         <div class="notice error">
             <p>
 				<?php
 				printf(
-					__( '%sClient Dash Pro%s could not load because it needs to be upgraded first.', 'client-dash' ),
+					__( '%sClient Dash Pro%s needs to be updated to version 1.1 or it will not perform properly. Please update Client Dash Pro immediately.', 'client-dash' ),
 					'<strong>',
 					'</strong>'
 				);
