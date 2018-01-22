@@ -81,7 +81,12 @@ Using this plugin is very simple. All you have to do is:
 ## Changelog
 
 ### [2.0.0](https://github.com/brashrebel/client-dash/releases/tag/v2.0.0)
-* First major revision of Client Dash. See clientdash.io for release information.
+* First major revision of Client Dash. Includes many features
+* Client Dash Customize Admin Tool
+* Helper Pages rework
+* Settings page rework
+* Addons page rework
+* Webmaster page is now Admin Page and completely reworked
 
 ### [1.6.19](https://github.com/brashrebel/client-dash/releases/tag/v1.6.19)
 * Bug fix for an invalid admin notice.
