@@ -13,20 +13,20 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: client-dash-bootstrapper.php:93
+#: client-dash-bootstrapper.php:91
 msgid "Minimum PHP version of 5.3.0 required. Current version is %s. Please contact your system administrator to upgrade PHP to its latest version."
 msgstr ""
 
-#: client-dash-bootstrapper.php:102
+#: client-dash-bootstrapper.php:100
 msgid "Minimum WordPress version of 4.0.0 required. Current version is %s. Please contact your system administrator to upgrade WordPress to its latest version."
 msgstr ""
 
-#: client-dash-bootstrapper.php:141
+#: client-dash-bootstrapper.php:139
 msgid "%sClient Dash%s could not load because of the following errors:"
 msgstr ""
 
-#: client-dash-bootstrapper.php:171
-msgid "%sClient Dash Pro%s could not load because it needs to be upgraded first."
+#: client-dash-bootstrapper.php:169
+msgid "%sClient Dash Pro%s needs to be updated to version 1.1 or it will not perform properly. Please update Client Dash Pro immediately."
 msgstr ""
 
 #: client-dash.php:244
