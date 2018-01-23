@@ -211,20 +211,14 @@ class ClientDash_Customize {
 	 */
 	function localize_data() {
 
-		global $menu, $submenu;
+		global $menu, $submenu, $wp_roles;
 
-		if ( ! function_exists( 'get_editable_roles' ) ) {
-
-			require_once ABSPATH . 'wp-admin/includes/user.php';
-		}
-
-		$_roles = get_editable_roles();
 		$roles  = array();
 
-		foreach ( $_roles as $role_ID => $role ) {
+		foreach ( $wp_roles->role_names as $role_ID => $role_name ) {
 
 			$roles[] = array(
-				'text'  => $role['name'],
+				'text'  => $role_name,
 				'value' => $role_ID,
 			);
 		}
