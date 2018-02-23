@@ -52,12 +52,12 @@ class ClientDash_Customize {
 			add_filter( 'custom_menu_order', array(
 				$this,
 				'save_menu_preview'
-			), 99998 ); // Priority just after modifying
+			), 99998 ); // Priority just before modifying
 
-			add_filter( 'wp_dashboard_widgets', array(
+			add_filter( 'wp_dashboard_setup', array(
 				$this,
 				'save_dashboard_preview'
-			), 100000 ); // Priority just after modifying
+			), 99998 ); // Priority just before modifying
 		}
 	}
 
