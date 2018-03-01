@@ -364,6 +364,12 @@ class ClientDash_Upgrade {
 					'new'            => false,
 				);
 
+				// Skip old Client Dash settings page.
+				if ( $menu_item['id'] === 'cd_settings' ) {
+
+				    continue;
+                }
+
 				if ( (int) $item->menu_item_parent > 0 ) {
 
 					// Edge case: Webmaster is now Admin Page. Change ID
