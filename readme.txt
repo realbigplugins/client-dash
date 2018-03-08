@@ -3,7 +3,7 @@
 Contributors: BrashRebel, joelworsham
 Tags: client, portal, dashboard, admin, users, webmaster, customize
 Requires at least: 4.7.0
-Tested up to: 4.9.2
+Tested up to: 4.9.4
 Stable tag: 2.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
