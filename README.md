@@ -1,6 +1,6 @@
 ![Client Dash Banner](https://raw.githubusercontent.com/realbigplugins/client-dash/master/assets/static/banner.png)
 
-# v2.0.5
+# v2.0.6
 
 [Releases](https://github.com/realbigplugins/client-dash/releases)
 
@@ -80,10 +80,13 @@ Using this plugin is very simple. All you have to do is:
 
 ## Changelog
 
+### [2.0.6](https://github.com/realbigplugins/client-dash/releases/tag/v2.0.6)
+* Get Client Dash Customize URL properly in case of sub-directory installs.
+
 ### [2.0.5](https://github.com/realbigplugins/client-dash/releases/tag/v2.0.5)
 * Fix bug with customized Dashboard Widgets not showing in Customize tool.
 
-### [2.0.5](https://github.com/realbigplugins/client-dash/releases/tag/v2.0.5)
+### [2.0.4](https://github.com/realbigplugins/client-dash/releases/tag/v2.0.4)
 * Fix new Dashboard Widgets not showing in Customize tool.
 * Fix loading icon display.
 
