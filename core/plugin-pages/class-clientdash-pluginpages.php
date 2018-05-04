@@ -210,7 +210,7 @@ class ClientDash_PluginPages {
 			$submenu['clientdash'][0] = array(
 				__( 'Customize Admin', 'client-dash' ),
 				'customize_admin',
-				'/?clientdash_customize=1'
+				site_url( '/?clientdash_customize=1' ),
 			);
 		}
 	}
