@@ -213,7 +213,7 @@ class ClientDash_Customize {
 
 		global $menu, $submenu, $wp_roles;
 
-		$roles  = array();
+		$roles = array();
 
 		foreach ( $wp_roles->role_names as $role_ID => $role_name ) {
 
@@ -936,8 +936,22 @@ class ClientDash_Customize {
 
 		$customizations = cd_get_customizations( $role );
 
-		$save_dashboard       = array();
-		$customized_dashboard = isset( $customizations['dashboard'] ) ? $customizations['dashboard'] : array();
+		if ( $customizations && ! empty( $customizations['dashboard'] ) ) {
+
+			$customized_dashboard = $customizations['dashboard'];
+			$save_dashboard       = $customized_dashboard;
+
+			// Set all to "missing" by default
+			foreach ( $save_dashboard as $i => $dashboard_item ) {
+
+				$save_dashboard[ $i ]['missing'] = true;
+			}
+
+		} else {
+
+			$customized_dashboard = array();
+			$save_dashboard       = array();
+		}
 
 		if ( isset( $wp_meta_boxes['dashboard'] ) ) {
 
@@ -946,6 +960,14 @@ class ClientDash_Customize {
 				foreach ( $priorities as $widgets ) {
 
 					foreach ( $widgets as $widget ) {
+
+						$customized_widget_key = cd_array_get_index_by_key( $save_dashboard, 'id', $widget['id'] );
+
+						if ( $customized_widget_key !== false ) {
+
+							$save_dashboard[ $customized_widget_key ]['missing'] = false;
+							continue;
+						}
 
 						$widget_title = isset( $widget['title'] ) ? $widget['title'] : '';
 
@@ -959,30 +981,14 @@ class ClientDash_Customize {
 						$helper_pages          = array_keys( ClientDash_Helper_Pages::get_pages() );
 						$is_helper_page_widget = in_array( substr( $widget['id'], 3 ), $helper_pages );
 
-						$customized_widget = cd_array_search_by_key( $customized_dashboard, 'id', $widget['id'] );
-
-						if ( $customized_widget ) {
-
-							$save_dashboard[] = $this->process_dashboard_item( wp_parse_args( $customized_widget, array(
-								'id'             => $widget['id'],
-								'title'          => '',
-								'original_title' => $widget_title,
-								'new'            => false,
-								'deleted'        => $customized_widget['deleted'] ? $customized_widget['deleted'] : false,
-								'type'           => 'default',
-							) ) );
-
-						} else {
-
-							$save_dashboard[] = $this->process_dashboard_item( array(
-								'id'             => $widget['id'],
-								'title'          => '',
-								'original_title' => $widget_title,
-								'new'            => ! empty( $customized_dashboard ) && ! $is_helper_page_widget,
-								'deleted'        => ! empty( $customized_dashboard ),
-								'type'           => 'default',
-							) );
-						}
+						$save_dashboard[] = $this->process_dashboard_item( array(
+							'id'             => $widget['id'],
+							'title'          => '',
+							'original_title' => $widget_title,
+							'new'            => ! empty( $customized_dashboard ) && ! $is_helper_page_widget,
+							'deleted'        => ! empty( $customized_dashboard ),
+							'type'           => 'default',
+						) );
 					}
 				}
 			}

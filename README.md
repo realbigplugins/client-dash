@@ -1,6 +1,6 @@
 ![Client Dash Banner](https://raw.githubusercontent.com/realbigplugins/client-dash/master/assets/static/banner.png)
 
-# v2.0.3
+# v2.0.5
 
 [Releases](https://github.com/realbigplugins/client-dash/releases)
 
@@ -79,6 +79,13 @@ Using this plugin is very simple. All you have to do is:
 3. Configure settings by going to Settings - >Client Dash
 
 ## Changelog
+
+### [2.0.5](https://github.com/realbigplugins/client-dash/releases/tag/v2.0.5)
+* Fix bug with customized Dashboard Widgets not showing in Customize tool.
+
+### [2.0.5](https://github.com/realbigplugins/client-dash/releases/tag/v2.0.5)
+* Fix new Dashboard Widgets not showing in Customize tool.
+* Fix loading icon display.
 
 ### [2.0.3](https://github.com/realbigplugins/client-dash/releases/tag/v2.0.3)
 * Bug fix forCustomize Admin Tool role switcher select box invisible with long role names.
