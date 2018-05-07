@@ -337,6 +337,17 @@ class ClientDash_Modify {
 			$new_submenu['clientdash'] = $submenu['clientdash'];
 		}
 
+		// Edge case where cusotmize admin page could be gone
+		if ( current_user_can( 'manage_options' ) &&
+		     $new_submenu['clientdash'][0][2] !== site_url( '/?clientdash_customize=1' ) ) {
+
+			array_unshift( $new_submenu['clientdash'], array(
+				__( 'Customize Admin', 'client-dash' ),
+				'customize_admin',
+				site_url( '/?clientdash_customize=1' ),
+			));
+		}
+
 		$menu    = $new_menu;
 		$submenu = $new_submenu;
 
