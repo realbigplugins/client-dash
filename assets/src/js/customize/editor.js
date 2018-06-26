@@ -31,6 +31,8 @@ import Message from './message';
 
 const l10n          = ClientdashCustomize_Data.l10n || false;
 const adminurl      = ClientdashCustomize_Data.adminurl || false;
+const resturl       = ClientdashCustomize_Data.rest_url || false;
+const cdresturl     = ClientdashCustomize_Data.cd_rest_url || false;
 const api_nonce     = ClientdashCustomize_Data.api_nonce || false;
 const customWidgets = ClientdashCustomize_Data.widgets || [];
 
@@ -135,7 +137,7 @@ class Editor extends React.Component {
             saving: true,
         });
 
-        fetch('wp-json/clientdash/v1/customizations/' + this.props.role, {
+        fetch(cdresturl + 'customizations/' + this.props.role, {
             method: 'POST',
             credentials: 'same-origin',
             headers: new Headers({
@@ -174,7 +176,7 @@ class Editor extends React.Component {
             loadingPreview: true,
         });
 
-        fetch('wp-json/clientdash/v1/customizations/preview_' + this.props.role, {
+        fetch(cdresturl + 'customizations/preview_' + this.props.role, {
             method: 'POST',
             credentials: 'same-origin',
             headers: new Headers({
@@ -241,7 +243,7 @@ class Editor extends React.Component {
             }
         });
 
-        fetch('wp-json/clientdash/v1/customizations/' + this.props.role, {
+        fetch(cdresturl + 'customizations/' + this.props.role, {
             method: 'DELETE',
             credentials: 'same-origin',
             headers: new Headers({
@@ -303,7 +305,7 @@ class Editor extends React.Component {
                 loading: true
             });
 
-            fetch('wp-json/clientdash/v1/customizations/preview_' + role, {
+            fetch(cdresturl + 'customizations/preview_' + role, {
                 method: 'GET',
                 credentials: 'same-origin',
                 headers: new Headers({

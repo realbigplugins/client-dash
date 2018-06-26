@@ -1,6 +1,7 @@
 import React from 'react';
 
 const l10n           = ClientdashCustomize_Data.l10n || false;
+const resturl       = ClientdashCustomize_Data.rest_url || false;
 const tutorialPanels = ClientdashCustomize_Data.tutorial_panels || {};
 const panelList      = Object.keys(tutorialPanels);
 
@@ -161,7 +162,7 @@ class Tutorial extends React.Component {
 
     close() {
 
-        fetch('wp-json/wp/v2/users/' + ClientdashCustomize_Data['current_user_id'], {
+        fetch(resturl + 'users/' + ClientdashCustomize_Data['current_user_id'], {
             method: 'POST',
             credentials: 'same-origin',
             headers: new Headers({

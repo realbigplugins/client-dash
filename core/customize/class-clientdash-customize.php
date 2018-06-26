@@ -227,6 +227,8 @@ class ClientDash_Customize {
 			'roles'           => $roles,
 			'adminurl'        => admin_url(),
 			'domain'          => get_bloginfo( 'url' ),
+			'rest_url'        => rest_url(),
+			'cd_rest_url'     => rest_url() . 'clientdash/v1/',
 			'dashicons'       => json_decode( file_get_contents( CLIENTDASH_DIR . 'core/dashicons.json' ) ),
 			'api_nonce'       => wp_create_nonce( 'wp_rest' ),
 			'current_user_id' => get_current_user_id(),

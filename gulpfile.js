@@ -93,7 +93,7 @@ gulp.task('customize_js', function () {
     return browserify({
         transform: [
             [babelify, {
-                presets: ["latest", "stage-2", "react"]
+                presets: ["es2015", "stage-2", "react"]
             }]
         ],
         entries: ['./assets/src/js/customize/customize.js'],
