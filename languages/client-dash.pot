@@ -129,6 +129,10 @@ msgstr ""
 msgid "Subscribe"
 msgstr ""
 
+#: core/class-clientdash-modify.php:345, core/customize/class-clientdash-customize.php:667, core/plugin-pages/class-clientdash-pluginpages.php:211
+msgid "Customize Admin"
+msgstr ""
+
 #: core/class-clientdash-upgrade.php:118
 msgid "Important: If you have made any customizations since updating Client Dash to %s, all customizations will be overwritten by previous Client Dash customizations. It is recommended to backup your website first."
 msgstr ""
@@ -557,24 +561,19 @@ msgstr ""
 msgid "Click the \"Finish\" button to end this tutorial."
 msgstr ""
 
-#. translators: Customize page title
-#: core/customize/class-clientdash-customize.php:667, core/plugin-pages/class-clientdash-pluginpages.php:211
-msgid "Customize Admin"
-msgstr ""
-
-#: core/customize/class-clientdash-customize.php:1013
+#: core/customize/class-clientdash-customize.php:1019
 msgid "Plugins"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:1017, core/helper-pages/views/reports/site.php:113, core/helper-pages/views/reports/site.php:116
+#: core/customize/class-clientdash-customize.php:1023, core/helper-pages/views/reports/site.php:113, core/helper-pages/views/reports/site.php:116
 msgid "Comments"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:1051
+#: core/customize/class-clientdash-customize.php:1057
 msgid "Updates"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:1094
+#: core/customize/class-clientdash-customize.php:1100
 msgid "Quick Draft"
 msgstr ""
 

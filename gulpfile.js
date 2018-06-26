@@ -164,4 +164,4 @@ gulp.task('default', ['admin_sass', 'admin_js', 'customize_sass', 'customize_inp
     gulp.watch(['./assets/src/js/customize-inpreview/customize-inpreview.js'], ['customize_inpreview_js']);
 });
 
-gulp.task('build', ['version', 'apply-prod-environment', 'admin_sass', 'admin_js', 'customize_sass', 'customize_inpreview_sass', 'customize_inpreview_js', 'customize_js', 'generate_pot']);
+gulp.task('build', ['apply-prod-environment', 'admin_sass', 'admin_js', 'customize_sass', 'customize_inpreview_sass', 'customize_inpreview_js', 'customize_js', 'generate_pot']);
