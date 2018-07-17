@@ -162,7 +162,7 @@ class Tutorial extends React.Component {
 
     close() {
 
-        fetch(resturl + 'users/' + ClientdashCustomize_Data['current_user_id'], {
+        fetch(resturl + 'wp/v2/users/' + ClientdashCustomize_Data['current_user_id'], {
             method: 'POST',
             credentials: 'same-origin',
             headers: new Headers({
@@ -172,10 +172,6 @@ class Tutorial extends React.Component {
             body: JSON.stringify({
                 'clientdash_hide_customize_tutorial': 'yes',
             })
-        }).then(function (response) {
-
-            console.log(response);
-
         }).catch(function (error) {
 
             console.log('error: ', error);

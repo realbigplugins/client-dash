@@ -1,6 +1,6 @@
 ![Client Dash Banner](https://raw.githubusercontent.com/realbigplugins/client-dash/master/assets/static/banner.png)
 
-# v2.0.7
+# v2.0.8
 
 [Releases](https://github.com/realbigplugins/client-dash/releases)
 
@@ -79,6 +79,9 @@ Using this plugin is very simple. All you have to do is:
 3. Configure settings by going to Settings - >Client Dash
 
 ## Changelog
+
+### [2.0.8](https://github.com/realbigplugins/client-dash/releases/tag/v2.0.8)
+* Sometimes Rest URL doesn't load properly in Customize Admin Tool.
 
 ### [2.0.7](https://github.com/realbigplugins/client-dash/releases/tag/v2.0.7)
 * Ensure Client Dash Customize Tool is accessible.
