@@ -103,7 +103,7 @@ class ClientDash_REST_Customizations_Controller {
 
 		if ( ! current_user_can( 'customize_admin' ) ) {
 
-			return new WP_Error( 'rest_forbidden', esc_html__( 'You cannot edit the customizations resource.', 'client-dash'  ), array( 'status' => $this->authorization_status_code() ) );
+			return new WP_Error( 'rest_forbidden', esc_html__( 'You cannot edit the customizations resource.', 'client-dash' ), array( 'status' => $this->authorization_status_code() ) );
 		}
 
 		return true;
@@ -120,7 +120,7 @@ class ClientDash_REST_Customizations_Controller {
 
 		if ( ! current_user_can( 'customize_admin' ) ) {
 
-			return new WP_Error( 'rest_forbidden', esc_html__( 'You cannot view the customizations resource.', 'client-dash'  ), array( 'status' => $this->authorization_status_code() ) );
+			return new WP_Error( 'rest_forbidden', esc_html__( 'You cannot view the customizations resource.', 'client-dash' ), array( 'status' => $this->authorization_status_code() ) );
 		}
 
 		return true;
@@ -137,7 +137,7 @@ class ClientDash_REST_Customizations_Controller {
 
 		if ( ! current_user_can( 'customize_admin' ) ) {
 
-			return new WP_Error( 'rest_forbidden', esc_html__( 'You cannot view the customizations resource.', 'client-dash'  ), array( 'status' => $this->authorization_status_code() ) );
+			return new WP_Error( 'rest_forbidden', esc_html__( 'You cannot view the customizations resource.', 'client-dash' ), array( 'status' => $this->authorization_status_code() ) );
 		}
 
 		return true;
@@ -150,7 +150,7 @@ class ClientDash_REST_Customizations_Controller {
 	 */
 	public function get_item( $request ) {
 
-		$role = $request['role'];
+		$role = urldecode( $request['role'] );
 
 		$customizations = cd_get_customizations( $role );
 
@@ -166,7 +166,7 @@ class ClientDash_REST_Customizations_Controller {
 	 */
 	public function create_item( $request ) {
 
-		$results = cd_update_role_customizations( $request['role'], array(
+		$results = cd_update_role_customizations( urldecode( $request['role'] ), array(
 			'menu'      => $request['menu'],
 			'submenu'   => $request['submenu'],
 			'dashboard' => $request['dashboard'],
@@ -199,7 +199,7 @@ class ClientDash_REST_Customizations_Controller {
 	 */
 	public function update_item( $request ) {
 
-		$role = $request['role'];
+		$role = urldecode( $request['role'] );
 
 		if ( empty( $role ) ) {
 
@@ -212,7 +212,7 @@ class ClientDash_REST_Customizations_Controller {
 
 		$customizations = $this->prepare_item_for_database( $request );
 
-		$results = cd_update_role_customizations( $request['role'], array(
+		$results = cd_update_role_customizations( $role, array(
 			'menu'      => $request['menu'],
 			'submenu'   => $request['submenu'],
 			'dashboard' => $request['dashboard'],
@@ -241,7 +241,7 @@ class ClientDash_REST_Customizations_Controller {
 	 */
 	public function delete_item( $request ) {
 
-		$role = $request['role'];
+		$role = urldecode( $request['role'] );
 
 		if ( empty( $role ) ) {
 
@@ -252,7 +252,7 @@ class ClientDash_REST_Customizations_Controller {
 			);
 		}
 
-		$customizations = cd_get_customizations( $request['role'] );
+		$customizations = cd_get_customizations( $role );
 
 		if ( ! $customizations ) {
 
@@ -265,7 +265,7 @@ class ClientDash_REST_Customizations_Controller {
 			return $response;
 		}
 
-		$results = cd_delete_customizations( $request['role'] );
+		$results = cd_delete_customizations( $role );
 
 		if ( $results === false ) {
 
