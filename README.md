@@ -1,6 +1,6 @@
 ![Client Dash Banner](https://raw.githubusercontent.com/realbigplugins/client-dash/master/assets/static/banner.png)
 
-# v2.0.9
+# v2.0.10
 
 [Releases](https://github.com/realbigplugins/client-dash/releases)
 
@@ -79,6 +79,9 @@ Using this plugin is very simple. All you have to do is:
 3. Configure settings by going to Settings - >Client Dash
 
 ## Changelog
+
+### [2.0.10](https://github.com/realbigplugins/client-dash/releases/tag/v2.0.10)
+* Fix: Potential crash with invalid Role IDs from third party plugins.
 
 ### [2.0.9](https://github.com/realbigplugins/client-dash/releases/tag/v2.0.9)
 * Fix: Unable to hide customize admin tutorial.
