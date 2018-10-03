@@ -846,7 +846,8 @@ class ClientDash_Customize {
 		}
 
 		ksort( $save_menu );
-
+		
+		$save_submenu = array();
 		if ( $customizations && ! empty( $customizations['submenu'] ) ) {
 
 			$customized_submenu = $customizations['submenu'];
@@ -858,9 +859,6 @@ class ClientDash_Customize {
 				$save_submenu[ $i ]['missing'] = true;
 			}
 
-		} else {
-
-			$save_submenu = array();
 		}
 
 		foreach ( $submenu as $menu_ID => $submenu_items ) {
