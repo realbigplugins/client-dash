@@ -1,6 +1,6 @@
 ![Client Dash Banner](https://raw.githubusercontent.com/realbigplugins/client-dash/master/assets/static/banner.png)
 
-# v2.0.11
+# v2.0.12
 
 [Releases](https://github.com/realbigplugins/client-dash/releases)
 
@@ -79,6 +79,9 @@ Using this plugin is very simple. All you have to do is:
 3. Configure settings by going to Settings - >Client Dash
 
 ## Changelog
+
+### [2.0.12](https://github.com/realbigplugins/client-dash/releases/tag/v2.0.12)
+* Fix: Build script messed up the version number
 
 ### [2.0.11](https://github.com/realbigplugins/client-dash/releases/tag/v2.0.11)
 * Fix: Incompatibility with a User's Role not being stored at the 0 Index
