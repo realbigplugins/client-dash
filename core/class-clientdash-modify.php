@@ -80,6 +80,8 @@ class ClientDash_Modify {
 
 			return;
 		}
+		
+		$current_user->roles = array_values( $current_user->roles );
 
 		if ( ! isset( $current_user->roles[0] ) ) {
 
