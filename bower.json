@@ -1,8 +1,8 @@
 {
-  "name": "ClientDash",
+  "name": "clientdash",
   "main": [
-    "assets/dist/css/clientdash-admin.min.css",
-    "assets/dist/js/clientdash-admin.min.js"
+    "assets/dist/css/clientdash-admin.css",
+    "assets/dist/js/clientdash-admin.js"
   ],
   "customize": [
     "assets/dist/css/clientdash-customize.min.css",
