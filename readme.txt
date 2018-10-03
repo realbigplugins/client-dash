@@ -4,7 +4,7 @@ Contributors: BrashRebel, joelworsham
 Tags: client, portal, dashboard, admin, users, webmaster, customize
 Requires at least: 4.7.0
 Tested up to: 4.9.5
-Stable tag: 2.0.10
+Stable tag: 2.0.1110
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -87,6 +87,10 @@ Using this plugin is very simple. All you have to do is:
 5. Customizing your custom Admin Page.
 
 == Changelog ==
+
+= 2.0.11 =
+* Fix: Incompatibility with a User's Role not being stored at the 0 Index
+* Fix: Potential PHP Errors in the Client Dash Customizer when no customizations to Submenus were made
 
 = 2.0.10 =
 * Fix: Potential crash with invalid Role IDs from third party plugins.

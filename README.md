@@ -80,6 +80,10 @@ Using this plugin is very simple. All you have to do is:
 
 ## Changelog
 
+### [2.0.11](https://github.com/realbigplugins/client-dash/releases/tag/v2.0.11)
+* Fix: Incompatibility with a User's Role not being stored at the 0 Index
+* Fix: Potential PHP Errors in the Client Dash Customizer when no customizations to Submenus were made
+
 ### [2.0.10](https://github.com/realbigplugins/client-dash/releases/tag/v2.0.10)
 * Fix: Potential crash with invalid Role IDs from third party plugins.
 
