@@ -353,7 +353,54 @@ if ( ! function_exists( 'clientdash_custom_widget_text' ) ) {
 	 * @param array $widget Widget array.
 	 */
 	function clientdash_custom_widget_text( $settings = array(), $widget ) {
+		
+		global $wp_embed;
 
-		return do_shortcode( wpautop( wp_kses_post( $settings['text'] ) ) );
+		return $wp_embed->autoembed( do_shortcode( wpautop( wp_kses( $settings['text'], 'clientdash_widget' ) ) ) );
 	}
+}
+
+add_filter( 'wp_kses_allowed_html', 'cd_widget_allowed_posttags', 10, 2 );
+
+/**
+ * Allow additional Tags and Attributes that Posts don't normally allow
+ * <iframe> was specifically set up for YouTube embeds, so other attributes may need added for other implementations
+ * 
+ * @param		array        $allowedposttags Allowed Tags and Attributes
+ * @param 		string|array $context         Context for which Tags and Attributes should be allowed
+ *                                                                                        
+ * @since		{{VERSION}}
+ * @return		array        Allowed Tags and Attributes
+ */
+function cd_widget_allowed_posttags( $allowedposttags, $context ) {
+	
+	if ( $context !== 'clientdash_widget' ) return $allowedposttags;
+	
+	$allowedposttags = wp_kses_allowed_html( 'post' );
+	
+	$allowedposttags = array_merge( $allowedposttags, apply_filters( 'cd_widget_allowed_posttags', array(
+		'span' => array(
+			'id' => true,
+			'class' => true,
+			'style' => true,
+		),
+		'i' => array(
+			'id' => true,
+			'class' => true,
+			'style' => true,
+		),
+		'iframe' => array(
+			'id' => true,
+			'class' => true,
+			'width' => true,
+			'height' => true,
+			'src' => true,
+			'frameborder' => true,
+			'allow' => true,
+			'allowfullscreen' => true,
+		),
+	) ) );
+	
+	return $allowedposttags;
+	
 }

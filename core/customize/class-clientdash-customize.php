@@ -345,7 +345,7 @@ class ClientDash_Customize {
 		$widgets = apply_filters( 'cd_customize_dashboard_widgets', array(
 			array(
 				'id'       => 'text',
-				'label'    => __( 'Text', 'client-dash' ),
+				'label'    => __( 'Text/HTML', 'client-dash' ),
 				'settings' => array(
 					array(
 						'name'  => 'text',

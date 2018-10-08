@@ -98,6 +98,35 @@ var l10n = typeof ClientDash_Data != 'undefined' ? ClientDash_Data.l10n : {};
 
         $form.submit();
     }
+	
+	/**
+	 * Resizes an iFrame to fit the width of its Parent and adjusts the height to match the original Aspect Ratio
+	 * 
+	 * @param		{object} iFrame DOM Object of the iFrame
+	 * @since		{{VERSION}}
+	 * @return		void
+	 */
+	function resizeIframe( iFrame ) {
+
+		var $el = $( iFrame ),
+			newWidth = $el.parent().width();
+
+		if ( ! $el.data( 'aspectRatio' ) ) {
+
+			$el
+				.data( 'aspectRatio', iFrame.height / iFrame.width )
+
+				// and remove the hard coded width/height
+				.removeAttr( 'height' )
+				.removeAttr( 'width' );
+
+		}
+
+		$el
+			.width( newWidth )
+			.height( newWidth * $el.data( 'aspectRatio' ) );
+
+	}
 
     init_url();
     $(function () {
@@ -106,5 +135,23 @@ var l10n = typeof ClientDash_Data != 'undefined' ? ClientDash_Data.l10n : {};
 
         $('[data-cd-submit-form]').click(submit_button);
         $('[data-cd-submit-form]').prop('disabled', false);
+		
+		// Find all YouTube videos
+		var $allVideos = $( 'iframe:not(.ignore-responsive)' );
+
+		// When the window is resized
+		// (You'll probably want to debounce this)
+		$( window ).resize( function() {
+
+			// Resize all videos according to their own aspect ratio
+			$allVideos.each( function() {
+
+				resizeIframe( this );
+
+			} );
+
+		// Kick off one resize to fix all videos on page load
+		} ).resize();
+		
     });
 })(jQuery);
