@@ -103,7 +103,7 @@ var l10n = typeof ClientDash_Data != 'undefined' ? ClientDash_Data.l10n : {};
 	 * Resizes an iFrame to fit the width of its Parent and adjusts the height to match the original Aspect Ratio
 	 * 
 	 * @param		{object} iFrame DOM Object of the iFrame
-	 * @since		{{VERSION}}
+	 * @since		2.1.0
 	 * @return		void
 	 */
 	function resizeIframe( iFrame ) {

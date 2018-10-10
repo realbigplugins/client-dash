@@ -4,7 +4,7 @@ Contributors: BrashRebel, joelworsham
 Tags: client, portal, dashboard, admin, users, webmaster, customize
 Requires at least: 4.7.0
 Tested up to: 4.9.5
-Stable tag: 2.0.12
+Stable tag: 2.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -87,6 +87,10 @@ Using this plugin is very simple. All you have to do is:
 5. Customizing your custom Admin Page.
 
 == Changelog ==
+
+= 2.1.0 =
+* Fix: Bumping to a minor version to ensure that anyone who may have updated to v2.0.1110 will continue to recieve updates properly
+* You can now use `<span>` and `<i>` tags with Class Names and `<iframe>` tags within the Text/HTML Dashboard Widget
 
 = 2.0.12 =
 * Fix: Build script messed up the version number

@@ -1,6 +1,6 @@
 ![Client Dash Banner](https://raw.githubusercontent.com/realbigplugins/client-dash/master/assets/static/banner.png)
 
-# v2.0.12
+# v2.1.0
 
 [Releases](https://github.com/realbigplugins/client-dash/releases)
 
@@ -79,6 +79,10 @@ Using this plugin is very simple. All you have to do is:
 3. Configure settings by going to Settings - >Client Dash
 
 ## Changelog
+
+### [2.1.0](https://github.com/realbigplugins/client-dash/releases/tag/v2.1.0)
+* Fix: Bumping to a minor version to ensure that anyone who may have updated to v2.0.1110 will continue to recieve updates properly
+* You can now use `<span>` and `<i>` tags with Class Names and `<iframe>` tags within the Text/HTML Dashboard Widget
 
 ### [2.0.12](https://github.com/realbigplugins/client-dash/releases/tag/v2.0.12)
 * Fix: Build script messed up the version number
