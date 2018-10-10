@@ -19,8 +19,8 @@ const gutil       = require('gulp-util');
 const reactify    = require('reactify');
 const wpPot       = require('gulp-wp-pot');
 const sort        = require('gulp-sort');
-const justReplace = require('gulp-just-replace');
 const gulpIf      = require('gulp-if');
+var $             = require('gulp-load-plugins')();
 
 gulp.task('admin_sass', function () {
     return gulp.src(['./assets/src/scss/admin/**/*.scss'])
@@ -124,23 +124,28 @@ gulp.task('apply-prod-environment', function () {
 });
 
 gulp.task('version', function () {
-    return gulp.src(['./**/*.{php,js,scss,txt}', '!node_modules/', '!src/vendor'], {base: './'})
-        .pipe(justReplace([
-            {
-                search: /\{\{VERSION}}/g,
-                replacement: packageInfo.version
-            },
-            {
-                search: /(\* Version: )\d\.\d\.\d/,
-                replacement: "$1" + packageInfo.version
-            }, {
-                search: /(define\( 'CLIENTDASH_VERSION', ')\d\.\d\.\d/,
-                replacement: "$1" + packageInfo.version
-            }, {
-                search: /(Stable tag: )\d\.\d\.\d/,
-                replacement: "$1" + packageInfo.version
-            }
-        ]))
+    return gulp.src([
+        'admin/**/*',
+        'assets/src/**/*',
+        'core/**/*',
+        '!core/library/**/*',
+        'languages/**/*',
+        'templates/**/*',
+        'client-dash.php',
+        'client-dash-bootstrapper.php',
+        'readme.txt',
+		'README.md'
+    ], {base: './'})
+		// Doc block versions
+        .pipe($.replace(/\{\{VERSION}}/g, packageInfo.version))
+        // Plugin header
+        .pipe($.replace(/(\* Version: )\d+\.\d+\.\d+/, "$1" + packageInfo.version))
+        // Version constant
+        .pipe($.replace(/(define\( 'CLIENTDASH_VERSION', ')\d+\.\d+\.\d+/, "$1" + packageInfo.version))
+        // readme.txt
+        .pipe($.replace(/(Stable tag: )\d+\.\d+\.\d+/, "$1" + packageInfo.version))
+		// README.md
+        .pipe($.replace(/(\#\sv)\d+\.\d+\.\d+/, "$1" + packageInfo.version))
         .pipe(gulp.dest('./'));
 });
 
