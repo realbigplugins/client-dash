@@ -1,6 +1,6 @@
 === Client Dash ===
 
-Contributors: BrashRebel, joelworsham
+Contributors: joelworsham, d4mation, BrashRebel
 Tags: client, portal, dashboard, admin, users, webmaster, customize
 Requires at least: 4.7.0
 Tested up to: 4.9.5
