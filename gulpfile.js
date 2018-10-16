@@ -113,13 +113,27 @@ gulp.task('customize_js', function () {
         .pipe(notify({message: 'JS Customize complete'}));
 });
 
-gulp.task('apply-prod-environment', function () {
+gulp.task('apply-prod-environment', function ( done ) {
     process.stdout.write("Setting NODE_ENV to 'production'" + "\n");
     process.env.NODE_ENV = 'production';
     if ( process.env.NODE_ENV != 'production' ) {
         throw new Error("Failed to set NODE_ENV to production!!!!");
+		done();
     } else {
         process.stdout.write("Successfully set NODE_ENV to production" + "\n");
+		done();
+    }
+});
+
+gulp.task('remove-prod-environment', function ( done ) {
+    process.stdout.write("Setting NODE_ENV to 'dev'" + "\n");
+    process.env.NODE_ENV = 'dev';
+    if ( process.env.NODE_ENV != 'dev' ) {
+        throw new Error("Failed to set NODE_ENV to dev!!!!");
+		done();
+    } else {
+        process.stdout.write("Successfully set NODE_ENV to dev" + "\n");
+		done();
     }
 });
 
@@ -160,13 +174,51 @@ gulp.task('generate_pot', function () {
 });
 
 
-gulp.task('default', ['admin_sass', 'admin_js', 'customize_sass', 'customize_inpreview_sass', 'customize_inpreview_js', 'customize_js'], function () {
+gulp.task('default', gulp.parallel( 'admin_sass', 'admin_js', 'customize_sass', 'customize_inpreview_sass', 'customize_inpreview_js', 'customize_js', function () {
     gulp.watch(['./assets/src/scss/admin/**/*.scss'], ['admin_sass']);
     gulp.watch(['./assets/src/scss/customize/*.scss'], ['customize_sass']);
     gulp.watch(['./assets/src/scss/customize-inpreview/*.scss'], ['customize_inpreview_sass']);
     gulp.watch(['./assets/src/js/admin/**/*.js'], ['admin_js']);
     gulp.watch(['./assets/src/js/customize/*.js'], ['customize_js']);
     gulp.watch(['./assets/src/js/customize-inpreview/customize-inpreview.js'], ['customize_inpreview_js']);
-});
+} ) );
 
-gulp.task('build', ['apply-prod-environment', 'admin_sass', 'admin_js', 'customize_sass', 'customize_inpreview_sass', 'customize_inpreview_js', 'customize_js', 'generate_pot']);
+gulp.task('build', gulp.series( 'admin_sass', 'admin_js', 'customize_sass', 'customize_inpreview_sass', 'customize_inpreview_js', 'customize_js', 'generate_pot' ) );
+
+gulp.task( 'svn_copy', function() {
+	
+	return gulp.src( [
+		'admin/**/*',
+        'assets/**/*',
+		'!assets/vendor/**',
+        'core/**/*',
+        'core/library/**/*',
+        'languages/**/*',
+        'templates/**/*',
+        'client-dash.php',
+        'client-dash-bootstrapper.php',
+        'readme.txt',
+		'!core/library/rbm-field-helpers/assets/{src,src/**}',
+		'!core/library/rbm-field-helpers/{bin,bin/**}',
+		'!./**/.babelrc',
+		'!./**/.gitignore',
+		'!./**/.git',
+		'!./**/config.yml',
+		'!./**/config-default.yml',
+		'!./**/gulpfile.js',
+		'!./**/gulpfile.babel.js',
+		'!./**/grunfile.js',
+		'!./**/package.json',
+		'!./**/package-lock.json',
+		'!./**/README.md',
+		'!./**/webpack.config.js',
+	], { base: '*' } )
+	.pipe(rename(function(file) {
+		file.dirname = file.dirname.replace( '..', '' );
+		return file;
+	 }))
+	.pipe( gulp.dest( 'client-dash-svn/trunk/' ) );
+	
+} );
+
+gulp.task( 'svn_build', gulp.series( 'version', 'apply-prod-environment', 'build', 'svn_copy', 'remove-prod-environment', 'build' ) );
