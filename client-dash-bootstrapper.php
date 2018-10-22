@@ -39,8 +39,8 @@ class ClientDash_Bootstrapper {
 	 */
 	function __construct() {
 
-		add_action( 'plugins_loaded', array( $this, 'maybe_nag_client_dash_pro' ), 9 );
-		add_action( 'plugins_loaded', array( $this, 'maybe_load' ), 1 );
+		add_action( 'client_dash_loaded', array( $this, 'maybe_nag_client_dash_pro' ), 10 );
+		add_action( 'plugins_loaded', array( $this, 'maybe_load' ), 10 );
 	}
 
 	/**
@@ -122,6 +122,9 @@ class ClientDash_Bootstrapper {
 	private function load() {
 
 		ClientDash();
+		
+		do_action( 'client_dash_loaded' );
+		
 	}
 
 	/**
