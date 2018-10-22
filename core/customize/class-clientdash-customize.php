@@ -891,22 +891,28 @@ class ClientDash_Customize {
 					'new'            => $new,
 				);
 			}
+			
+			if ( isset( $save_submenu[ $menu_ID ] ) && 
+			   is_array( $save_submenu[ $menu_ID ] ) ) {
 
-			// Process submenu
-			foreach ( $save_submenu[ $menu_ID ] as $i => $save_submenu_item ) {
+				// Process submenu
+				foreach ( $save_submenu[ $menu_ID ] as $i => $save_submenu_item ) {
 
-				$save_submenu[ $menu_ID ][ $i ] = $this->process_submenu_item( $save_submenu_item, $menu_ID );
+					$save_submenu[ $menu_ID ][ $i ] = $this->process_submenu_item( $save_submenu_item, $menu_ID );
 
-				// Edge-case: Header is in there twice under "Appearance" and then one is hidden via CSS. So, I remove
-				// one here, and then add it back on submenu modify. This way, they stay together and the user doesn't
-				// see 2 of them when customizing.
-				if ( $save_submenu_item['id'] === 'custom-header' ) {
-					unset( $save_submenu[ $menu_ID ][ $i ] );
+					// Edge-case: Header is in there twice under "Appearance" and then one is hidden via CSS. So, I remove
+					// one here, and then add it back on submenu modify. This way, they stay together and the user doesn't
+					// see 2 of them when customizing.
+					if ( $save_submenu_item['id'] === 'custom-header' ) {
+						unset( $save_submenu[ $menu_ID ][ $i ] );
+					}
 				}
-			}
 
-			ksort( $save_submenu[ $menu_ID ] );
-			$save_submenu[ $menu_ID ] = array_values( $save_submenu[ $menu_ID ] );
+				ksort( $save_submenu[ $menu_ID ] );
+				$save_submenu[ $menu_ID ] = array_values( $save_submenu[ $menu_ID ] );
+				
+			}
+			
 		}
 
 		// Set current role menu
