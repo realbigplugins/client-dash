@@ -175,12 +175,12 @@ gulp.task('generate_pot', function () {
 
 
 gulp.task('default', gulp.parallel( 'admin_sass', 'admin_js', 'customize_sass', 'customize_inpreview_sass', 'customize_inpreview_js', 'customize_js', function () {
-    gulp.watch(['./assets/src/scss/admin/**/*.scss'], ['admin_sass']);
-    gulp.watch(['./assets/src/scss/customize/*.scss'], ['customize_sass']);
-    gulp.watch(['./assets/src/scss/customize-inpreview/*.scss'], ['customize_inpreview_sass']);
-    gulp.watch(['./assets/src/js/admin/**/*.js'], ['admin_js']);
-    gulp.watch(['./assets/src/js/customize/*.js'], ['customize_js']);
-    gulp.watch(['./assets/src/js/customize-inpreview/customize-inpreview.js'], ['customize_inpreview_js']);
+    gulp.watch(['./assets/src/scss/admin/**/*.scss'], gulp.parallel( 'admin_sass' ) );
+    gulp.watch(['./assets/src/scss/customize/*.scss'], gulp.parallel( 'customize_sass' ) );
+    gulp.watch(['./assets/src/scss/customize-inpreview/*.scss'], gulp.parallel( 'customize_inpreview_sass' ) );
+    gulp.watch(['./assets/src/js/admin/**/*.js'], gulp.parallel( 'admin_js' ) );
+    gulp.watch(['./assets/src/js/customize/*.js'], gulp.parallel( 'customize_js' ) );
+    gulp.watch(['./assets/src/js/customize-inpreview/customize-inpreview.js'], gulp.parallel( 'customize_inpreview_js' ) );
 } ) );
 
 gulp.task('build', gulp.series( 'admin_sass', 'admin_js', 'customize_sass', 'customize_inpreview_sass', 'customize_inpreview_js', 'customize_js', 'generate_pot' ) );
