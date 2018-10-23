@@ -83,6 +83,7 @@ Using this plugin is very simple. All you have to do is:
 ### [2.1.0](https://github.com/realbigplugins/client-dash/releases/tag/v2.1.0)
 * Fix: Bumping to a minor version to ensure that anyone who may have updated to v2.0.1110 will continue to recieve updates properly
 * You can now use `<span>` and `<i>` tags with Class Names and `<iframe>` tags within the Text/HTML Dashboard Widget
+* Auto-Embeds (such as YouTube videos) now work by just pasting in the URL
 
 ### [2.0.12](https://github.com/realbigplugins/client-dash/releases/tag/v2.0.12)
 * Fix: Build script messed up the version number
