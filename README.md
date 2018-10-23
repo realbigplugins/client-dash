@@ -1,6 +1,6 @@
 ![Client Dash Banner](https://raw.githubusercontent.com/realbigplugins/client-dash/master/assets/static/banner.png)
 
-# v2.1.0
+# v2.1.1
 
 [Releases](https://github.com/realbigplugins/client-dash/releases)
 
@@ -79,6 +79,12 @@ Using this plugin is very simple. All you have to do is:
 3. Configure settings by going to Settings - >Client Dash
 
 ## Changelog
+
+### [2.1.1](https://github.com/realbigplugins/client-dash/releases/tag/v2.1.1)
+* Fix: bbPress Menu Items now show properly in the Menu Customizer
+  * This also should fix problems with other plugins that were loading after Client Dash was and therefore not allowing Client Dash to see their Menu Items
+* Fix: Prevents PHP Errors when using the Menu Customizer with BuddyPress active
+* Added a `client_dash_loaded` Action Hook to easily run code only after Client Dash has fully loaded
 
 ### [2.1.0](https://github.com/realbigplugins/client-dash/releases/tag/v2.1.0)
 * Fix: Bumping to a minor version to ensure that anyone who may have updated to v2.0.1110 will continue to recieve updates properly

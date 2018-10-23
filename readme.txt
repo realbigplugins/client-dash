@@ -4,7 +4,7 @@ Contributors: joelworsham, d4mation, BrashRebel
 Tags: client, portal, dashboard, admin, users, webmaster, customize
 Requires at least: 4.7.0
 Tested up to: 4.9.5
-Stable tag: 2.1.0
+Stable tag: 2.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -87,6 +87,12 @@ Using this plugin is very simple. All you have to do is:
 5. Customizing your custom Admin Page.
 
 == Changelog ==
+
+= 2.1.1 =
+* Fix: bbPress Menu Items now show properly in the Menu Customizer
+  * This also should fix problems with other plugins that were loading after Client Dash was and therefore not allowing Client Dash to see their Menu Items
+* Fix: Prevents PHP Errors when using the Menu Customizer with BuddyPress active
+* Added a `client_dash_loaded` Action Hook to easily run code only after Client Dash has fully loaded
 
 = 2.1.0 =
 * Fix: Bumping to a minor version to ensure that anyone who may have updated to v2.0.1110 will continue to recieve updates properly
