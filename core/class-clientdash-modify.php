@@ -53,7 +53,7 @@ class ClientDash_Modify {
 	 */
 	function __construct() {
 
-		add_filter( 'custom_menu_order', array( $this, 'modify_menu' ), 99999 );
+		add_filter( 'parent_file', array( $this, 'modify_menu' ), 99999 );
 		add_action( 'wp_dashboard_setup', array( $this, 'modify_dashboard' ), 99999 );
 	}
 
@@ -119,7 +119,7 @@ class ClientDash_Modify {
 	 * @since 2.0.0
 	 * @access private
 	 */
-	function modify_menu( $bool ) {
+	function modify_menu( $parent_file ) {
 
 		global $menu, $submenu;
 
@@ -353,7 +353,7 @@ class ClientDash_Modify {
 		$menu    = $new_menu;
 		$submenu = $new_submenu;
 
-		return $bool;
+		return $parent_file;
 	}
 
 	/**

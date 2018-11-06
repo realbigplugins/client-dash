@@ -49,7 +49,7 @@ class ClientDash_Customize {
 		// Save role settings on first role load
 		if ( self::is_saving_role() ) {
 
-			add_filter( 'custom_menu_order', array(
+			add_filter( 'parent_file', array(
 				$this,
 				'save_menu_preview'
 			), 99998 ); // Priority just before modifying
@@ -774,7 +774,7 @@ class ClientDash_Customize {
 	 * @since 2.0.0
 	 * @access private
 	 */
-	function save_menu_preview( $bool ) {
+	function save_menu_preview( $parent_file ) {
 
 		global $menu, $submenu;
 
@@ -915,7 +915,7 @@ class ClientDash_Customize {
 			'submenu' => $save_submenu,
 		) );
 
-		return $bool;
+		return $parent_file;
 	}
 
 	/**
