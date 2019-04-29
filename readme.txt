@@ -4,7 +4,7 @@ Contributors: joelworsham, d4mation, BrashRebel
 Tags: client, portal, dashboard, admin, users, webmaster, customize
 Requires at least: 4.7.0
 Tested up to: 5.2
-Stable tag: 2.1.1
+Stable tag: 2.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -87,6 +87,9 @@ Using this plugin is very simple. All you have to do is:
 5. Customizing your custom Admin Page.
 
 == Changelog ==
+
+= 2.1.2 =
+* Fix: Fixes issues with loading resources on Windows Servers
 
 = 2.1.1 =
 * Fix: bbPress Menu Items now show properly in the Menu Customizer
