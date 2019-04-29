@@ -80,6 +80,10 @@ Using this plugin is very simple. All you have to do is:
 
 ## Changelog
 
+### [2.1.2](https://github.com/realbigplugins/client-dash/releases/tag/v2.1.2)
+* Fix: Fixes issues with loading resources on Windows Servers
+* Fix: Translation file was including references to development-only files. These references have been removed.
+
 ### [2.1.1](https://github.com/realbigplugins/client-dash/releases/tag/v2.1.1)
 * Fix: bbPress Menu Items now show properly in the Menu Customizer
   * This also should fix problems with other plugins that were loading after Client Dash was and therefore not allowing Client Dash to see their Menu Items
