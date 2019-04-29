@@ -164,7 +164,7 @@ gulp.task('version', function () {
 });
 
 gulp.task('generate_pot', function () {
-    return gulp.src('./**/*.php')
+    return gulp.src(['./**/*.php', '!client-dash-svn/**/*.php'])
         .pipe(sort())
         .pipe(wpPot({
             domain: 'client-dash',
