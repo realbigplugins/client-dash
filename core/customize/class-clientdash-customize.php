@@ -39,10 +39,15 @@ class ClientDash_Customize {
 			add_action( 'cd_customize_footer', array( $this, 'template_footer' ) );
 		}
 
+		// bbPress explictly tries to reorder their items, but we can't allow that
+		remove_action( 'custom_menu_order', 'bbp_admin_custom_menu_order' );
+		remove_action( 'menu_order', 'bbp_admin_menu_order' );
+
 		// If in the customizer, modify the role
 		if ( self::in_customizer() ) {
 
 			add_action( 'set_current_user', array( $this, 'modify_current_user' ), 99999 );
+			add_filter( 'user_has_cap', array( $this, 'modify_caps' ), 10, 4 );
 			add_action( 'admin_enqueue_scripts', array( $this, 'preview_scripts' ), 1 );
 		}
 
@@ -755,6 +760,53 @@ class ClientDash_Customize {
 
 		$current_user->caps    = $role->capabilities;
 		$current_user->allcaps = $role->capabilities;
+	}
+
+	/**
+	 * Use the Caps for the chosen Role when a current_user_can() function is called rather than the Caps for the logged in User (Which is likely an Admin)
+	 *
+	 * @param   array  $all_caps  All the capabilities of the user
+	 * @param   array  $caps      Required capability
+	 * @param   array  $args      Requested capability, Concerned user ID, Optional second and further parameters, typically object ID.
+	 * @param   object $user      WP_User Object
+	 *
+	 * @access	public
+	 * @since	{{VERSION}}
+	 * @return  array             The user's capabilities
+	 */
+	public function modify_caps( $all_caps, $caps, $args, $user ) {
+
+		if ( ! ( $role = $this->get_role() ) ) {
+
+			return $all_caps;
+		}
+
+		$all_caps = $role->capabilities;
+
+		if ( class_exists( 'bbPress' ) && 
+		function_exists( 'bbp_get_caps_for_role' ) && 
+		function_exists( 'bbp_get_user_role_map' ) ) {
+
+			// bbPress does some automatic Role Mapping for things like Keymaster to Administrators
+			// However, these Roles are applied to Users and grant those Caps to the Users rather than as part of the Roles, which is what most users expect
+			// This allows us to include those Caps for the Client Dash Menu Customizer for the mapped Roles
+
+			$bbpress_role_map = bbp_get_user_role_map();
+
+			if ( isset( $bbpress_role_map[ $role->name ] ) && 
+			$bbpress_role_map[ $role->name ] ) {
+				$bbpress_role = $bbpress_role_map[ $role->name ];
+			}
+			else {
+				$bbpress_role = $role->name; // If not in the role map, then run the check as normal. This will default to Subscriber/Participant in bbPress
+			}
+
+			$all_caps = array_merge( bbp_get_caps_for_role( $bbpress_role ), $all_caps );
+
+		}
+
+		return $all_caps;
+
 	}
 
 	/**
