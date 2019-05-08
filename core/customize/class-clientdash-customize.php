@@ -752,7 +752,8 @@ class ClientDash_Customize {
 		}
 
 		$current_user->roles   = array( $role->name );
-		$current_user->caps    = array( $role->name => true );
+
+		$current_user->caps    = $role->capabilities;
 		$current_user->allcaps = $role->capabilities;
 	}
 
