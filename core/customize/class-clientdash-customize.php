@@ -771,7 +771,7 @@ class ClientDash_Customize {
 	 * @param   object $user      WP_User Object
 	 *
 	 * @access	public
-	 * @since	{{VERSION}}
+	 * @since	2.1.3
 	 * @return  array             The user's capabilities
 	 */
 	public function modify_caps( $all_caps, $caps, $args, $user ) {

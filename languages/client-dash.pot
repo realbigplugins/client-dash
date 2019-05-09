@@ -77,7 +77,7 @@ msgstr ""
 msgid "Are you sure you want to delete this element?"
 msgstr ""
 
-#: client-dash.php:263, core/customize/class-clientdash-customize.php:270
+#: client-dash.php:263, core/customize/class-clientdash-customize.php:275
 msgid "Delete"
 msgstr ""
 
@@ -109,7 +109,7 @@ msgstr ""
 msgid "Change"
 msgstr ""
 
-#: client-dash.php:336, core/customize/class-clientdash-customize.php:276
+#: client-dash.php:336, core/customize/class-clientdash-customize.php:281
 msgid "Close"
 msgstr ""
 
@@ -129,7 +129,7 @@ msgstr ""
 msgid "Subscribe"
 msgstr ""
 
-#: core/class-clientdash-modify.php:347, core/customize/class-clientdash-customize.php:669, core/plugin-pages/class-clientdash-pluginpages.php:211
+#: core/class-clientdash-modify.php:347, core/customize/class-clientdash-customize.php:674, core/plugin-pages/class-clientdash-pluginpages.php:211
 msgid "Customize Admin"
 msgstr ""
 
@@ -201,379 +201,379 @@ msgstr ""
 msgid "Cannot delete customization for unknown reasons."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:239
+#: core/customize/class-clientdash-customize.php:244
 msgid "Customizing:"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:240
+#: core/customize/class-clientdash-customize.php:245
 msgid "Menu"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:241, core/helper-pages/views/account/sites.php:37
+#: core/customize/class-clientdash-customize.php:246, core/helper-pages/views/account/sites.php:37
 msgid "Dashboard"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:242
+#: core/customize/class-clientdash-customize.php:247
 msgid "Pages"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:243
+#: core/customize/class-clientdash-customize.php:248
 msgid "Editing: Menu"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:244
+#: core/customize/class-clientdash-customize.php:249
 msgid "Editing: Sub-Menu"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:245
+#: core/customize/class-clientdash-customize.php:250
 msgid "Adding: Menu Items"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:246
+#: core/customize/class-clientdash-customize.php:251
 msgid "Adding: Sub-Menu Items"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:247
+#: core/customize/class-clientdash-customize.php:252
 msgid "Editing: Dashboard"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:248
+#: core/customize/class-clientdash-customize.php:253
 msgid "Adding: Widgets"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:249
+#: core/customize/class-clientdash-customize.php:254
 msgid "Editing: Pages"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:250
+#: core/customize/class-clientdash-customize.php:255
 msgid "Adding: Pages"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:251
+#: core/customize/class-clientdash-customize.php:256
 msgid "Back"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:252
+#: core/customize/class-clientdash-customize.php:257
 msgid "Add Items"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:253
+#: core/customize/class-clientdash-customize.php:258
 msgid "Choose something to customize."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:254
+#: core/customize/class-clientdash-customize.php:259
 msgid "Yes, I understand."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:255
+#: core/customize/class-clientdash-customize.php:260
 msgid "Nevermind."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:256
+#: core/customize/class-clientdash-customize.php:261
 msgid "Show Controls"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:257
+#: core/customize/class-clientdash-customize.php:262
 msgid "Title"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:258
+#: core/customize/class-clientdash-customize.php:263
 msgid "Original title:"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:259
+#: core/customize/class-clientdash-customize.php:264
 msgid "Original icon:"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:260
+#: core/customize/class-clientdash-customize.php:265
 msgid "Icon"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:261
+#: core/customize/class-clientdash-customize.php:266
 msgid "Link"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:262
+#: core/customize/class-clientdash-customize.php:267
 msgid "No items added yet. Click the \"Add Items\" button to add your first item."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:263
+#: core/customize/class-clientdash-customize.php:268
 msgid "No items available."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:264
+#: core/customize/class-clientdash-customize.php:269
 msgid "Separator"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:265
+#: core/customize/class-clientdash-customize.php:270
 msgid "Custom Link"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:266
+#: core/customize/class-clientdash-customize.php:271
 msgid "Click to move"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:267
+#: core/customize/class-clientdash-customize.php:272
 msgid "Edit"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:268
+#: core/customize/class-clientdash-customize.php:273
 msgid "Edit submenu"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:269
+#: core/customize/class-clientdash-customize.php:274
 msgid "Submenu"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:271
+#: core/customize/class-clientdash-customize.php:276
 msgid "Are you sure you want to leave? Any unsaved changes will be lost."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:272
+#: core/customize/class-clientdash-customize.php:277
 msgid "Save"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:273
+#: core/customize/class-clientdash-customize.php:278
 msgid "Saved"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:274
+#: core/customize/class-clientdash-customize.php:279
 msgid "Changes saved and live!"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:275
+#: core/customize/class-clientdash-customize.php:280
 msgid "Role successfully reset!"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:277
+#: core/customize/class-clientdash-customize.php:282
 msgid "Cancel"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:278
+#: core/customize/class-clientdash-customize.php:283
 msgid "Confirm"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:279
+#: core/customize/class-clientdash-customize.php:284
 msgid "None"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:280
+#: core/customize/class-clientdash-customize.php:285
 msgid "Reset Role"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:281
+#: core/customize/class-clientdash-customize.php:286
 msgid "Up to date"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:282
+#: core/customize/class-clientdash-customize.php:287
 msgid "Are you sure you want to reset all customizations for this role? This can not be undone."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:283
+#: core/customize/class-clientdash-customize.php:288
 msgid "Preview only. Cannot do that. Sorry!"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:284
+#: core/customize/class-clientdash-customize.php:289
 msgid "Only administrative links can be viewed."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:285
+#: core/customize/class-clientdash-customize.php:290
 msgid "Current location"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:286
+#: core/customize/class-clientdash-customize.php:291
 msgid "Top Level"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:287
+#: core/customize/class-clientdash-customize.php:292
 msgid "New Items"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:288
+#: core/customize/class-clientdash-customize.php:293
 msgid "New"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:289
+#: core/customize/class-clientdash-customize.php:294
 msgid "Next"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:290
+#: core/customize/class-clientdash-customize.php:295
 msgid "Previous"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:291
+#: core/customize/class-clientdash-customize.php:296
 msgid "Finish"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:292
+#: core/customize/class-clientdash-customize.php:297
 msgid "Missing"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:348
+#: core/customize/class-clientdash-customize.php:353
 msgid "Text/HTML"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:352
+#: core/customize/class-clientdash-customize.php:357
 msgid "Text or HTML"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:417
+#: core/customize/class-clientdash-customize.php:422
 msgid "Welcome."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:420
+#: core/customize/class-clientdash-customize.php:425
 msgid "This tutorial will quickly walk you through how to use the Client Dash Customize Admin tool."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:423
+#: core/customize/class-clientdash-customize.php:428
 msgid "The Customize Admin tool is designed to help you customize the \"Admin Experience\" for each role on this website. You can change how each role views their \"Admin Menu\" and \"Dashboard\" in order to give them the best possible experience."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:426
+#: core/customize/class-clientdash-customize.php:431
 msgid "You can click the \"X\" to the right of this pop-up at any point to close this tutorial. Once you finish or close this tutorial, it will not show again. If you would like to view it again, please visit the Client Dash Settings page to turn it back on."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:433
+#: core/customize/class-clientdash-customize.php:438
 msgid "The Editor."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:436
+#: core/customize/class-clientdash-customize.php:441
 msgid "The Editor is the pane on the left side of the screen where all of the Customize controls are. This is where you can make all customizations."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:439
+#: core/customize/class-clientdash-customize.php:444
 msgid "Any edits you make will appear live in the Preview Screen, which appears to the right of the Editor (behind this tutorial)."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:442
+#: core/customize/class-clientdash-customize.php:447
 msgid "To get started editing, you can select any of the items in the list."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:455
+#: core/customize/class-clientdash-customize.php:460
 msgid "Close/Save."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:458
+#: core/customize/class-clientdash-customize.php:463
 msgid "None of your changes will be saved for the role you are editing until you click \"Save\". You will be warned before leaving the page if you have any unsaved changes."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:461
+#: core/customize/class-clientdash-customize.php:466
 msgid "Click the \"X\" to exit the Customize tool."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:473
+#: core/customize/class-clientdash-customize.php:478
 msgid "Role Switcher."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:476
+#: core/customize/class-clientdash-customize.php:481
 msgid "By default you will be editing the Admin Screen for the \"Administrator\" role. You can change which role you are editing the experience for by using the \"Role Switcher\" drop-down."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:479
+#: core/customize/class-clientdash-customize.php:484
 msgid "All changes you make will only apply to the role you are editing."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:491
+#: core/customize/class-clientdash-customize.php:496
 msgid "Hide the Editor."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:494
+#: core/customize/class-clientdash-customize.php:499
 msgid "You can hide the Editor by clicking the arrow button. Click the button again to un-hide the Editor."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:506
+#: core/customize/class-clientdash-customize.php:511
 msgid "The Menu."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:509
+#: core/customize/class-clientdash-customize.php:514
 msgid "The Menu editor is what you use to edit the Admin Menu (in other words, the tall menu on the left side of the screen)."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:512
+#: core/customize/class-clientdash-customize.php:517
 msgid "You can drag and drop items, delete them, add any new items, rename them, and more!"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:515
+#: core/customize/class-clientdash-customize.php:520
 msgid "To edit each sub-menu, click on the sub-menu edit button that appears when editing a menu item. Once there, you can edit the sub-menu in the same way you edit the menu."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:518
+#: core/customize/class-clientdash-customize.php:523
 msgid "IMPORTANT: Once you save customizations for a role's menu, no menu items will be added automatically in the future. You will need to come back here and add any new items (which will be highlighted as \"New\"). Normally activating new plugins or themes might add menu items, but now you will need to add them manually for any roles with customizations."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:532
+#: core/customize/class-clientdash-customize.php:537
 msgid "Action Buttons."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:535
+#: core/customize/class-clientdash-customize.php:540
 msgid "When editing the Menu or the Dashboard, you can go back to the previous panel with the back arrow."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:538
+#: core/customize/class-clientdash-customize.php:543
 msgid "You can add items by clicking the \"Add Items\" button."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:550
+#: core/customize/class-clientdash-customize.php:555
 msgid "The Dashboard."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:553
+#: core/customize/class-clientdash-customize.php:558
 msgid "The Dashboard editor is what you use to edit the Dashboard (the primary screen users see when logging into the website)."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:556
+#: core/customize/class-clientdash-customize.php:561
 msgid "Each \"box\" on the Dashboard is called a \"Dashboard Widget\", and each item in this list represents a widget. You can delete them, add new ones, or edit the title of them."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:559
+#: core/customize/class-clientdash-customize.php:564
 msgid "IMPORTANT: Once you save customizations for a role's dashboard, no widgets will be added automatically in the future. You will need to come back here and add any new items (which will be highlighted as \"New\"). Normally activating new plugins or themes might add widgets, but now you will need to add them manually for any roles with customizations."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:573
+#: core/customize/class-clientdash-customize.php:578
 msgid "Reset a Role."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:576
+#: core/customize/class-clientdash-customize.php:581
 msgid "If you want to completely erase all customizations for the selected role, click the \"Reset role customizations\" button. This will reset the role customizations back to the original, un-modified state."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:579
+#: core/customize/class-clientdash-customize.php:584
 msgid "WARNING: Deleting a role's customizations cannot be undone."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:593
+#: core/customize/class-clientdash-customize.php:598
 msgid "That's All."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:596
+#: core/customize/class-clientdash-customize.php:601
 msgid "Hopefully you found this useful!"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:599
+#: core/customize/class-clientdash-customize.php:604
 msgid "If you need any more help or information for Client Dash, be sure to check out our documentation."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:603
+#: core/customize/class-clientdash-customize.php:608
 msgid "View Documentation"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:607
+#: core/customize/class-clientdash-customize.php:612
 msgid "Click the \"Finish\" button to end this tutorial."
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:1025
+#: core/customize/class-clientdash-customize.php:1078
 msgid "Plugins"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:1029, core/helper-pages/views/reports/site.php:113, core/helper-pages/views/reports/site.php:116
+#: core/customize/class-clientdash-customize.php:1082, core/helper-pages/views/reports/site.php:113, core/helper-pages/views/reports/site.php:116
 msgid "Comments"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:1063
+#: core/customize/class-clientdash-customize.php:1116
 msgid "Updates"
 msgstr ""
 
-#: core/customize/class-clientdash-customize.php:1106
+#: core/customize/class-clientdash-customize.php:1159
 msgid "Quick Draft"
 msgstr ""
 

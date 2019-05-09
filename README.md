@@ -1,6 +1,6 @@
 ![Client Dash Banner](https://raw.githubusercontent.com/realbigplugins/client-dash/master/assets/static/banner.png)
 
-# v2.1.2
+# v2.1.3
 
 [Releases](https://github.com/realbigplugins/client-dash/releases)
 
@@ -79,6 +79,11 @@ Using this plugin is very simple. All you have to do is:
 3. Configure settings by going to Settings - >Client Dash
 
 ## Changelog
+
+### [2.1.3](https://github.com/realbigplugins/client-dash/releases/tag/v2.1.3)
+* Fix: Reverts priority change in 2.1.1
+* Fix: Properly implements support for bbPress menu items. This is done by grabbing the capabilities from bbPress for each of their Forum Roles and mapping them to the Roles seen in the Client Dash Menu Customizer. See `bbp_get_user_role_map()` in bbPress.
+  * Since Client Dash only allows editing the Menu for a Role and not for a User, this means that if a User were to have a combination of Roles like Subscriber and bbPress Keymaster and the Subscriber Role's Menu was customized for all Subscriber Users, the extra bbPress menu items would not show for them.
 
 ### [2.1.2](https://github.com/realbigplugins/client-dash/releases/tag/v2.1.2)
 * Fix: Fixes issues with loading resources on Windows Servers

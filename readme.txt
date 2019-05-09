@@ -4,7 +4,7 @@ Contributors: joelworsham, d4mation, BrashRebel
 Tags: client, portal, dashboard, admin, users, webmaster, customize
 Requires at least: 4.7.0
 Tested up to: 5.2
-Stable tag: 2.1.2
+Stable tag: 2.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -87,6 +87,11 @@ Using this plugin is very simple. All you have to do is:
 5. Customizing your custom Admin Page.
 
 == Changelog ==
+
+= 2.1.3 =
+* Fix: Reverts priority change in 2.1.1
+* Fix: Properly implements support for bbPress menu items. This is done by grabbing the capabilities from bbPress for each of their Forum Roles and mapping them to the Roles seen in the Client Dash Menu Customizer. See `bbp_get_user_role_map()` in bbPress.
+  * Since Client Dash only allows editing the Menu for a Role and not for a User, this means that if a User were to have a combination of Roles like Subscriber and bbPress Keymaster and the Subscriber Role's Menu was customized for all Subscriber Users, the extra bbPress menu items would not show for them.
 
 = 2.1.2 =
 * Fix: Fixes issues with loading resources on Windows Servers
