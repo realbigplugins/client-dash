@@ -362,6 +362,7 @@ class MenuItemEdit extends React.Component {
                 form={this.state.editing ? form : false}
                 editing={this.state.editing}
                 toggleEdit={this.props.type !== 'clientdash' && !this.props.missing ? this.toggleEdit : false}
+                deleteItem={this.props.missing ? this.deleteItem : false}
             />
         )
     }
