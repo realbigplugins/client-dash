@@ -4,7 +4,7 @@ Contributors: joelworsham, d4mation, BrashRebel
 Tags: client, portal, dashboard, admin, users, webmaster, customize
 Requires at least: 4.7.0
 Tested up to: 5.2
-Stable tag: 2.1.3
+Stable tag: 2.1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -87,6 +87,12 @@ Using this plugin is very simple. All you have to do is:
 5. Customizing your custom Admin Page.
 
 == Changelog ==
+
+= 2.1.4 =
+* Added a Delete Button for "Missing" Menu Items in the Customizer
+  * An item normally goes "Missing" if you customize a Role's Menu and then deactivate the plugin that had originally added that Menu Item.
+  * However, in Client Dash v2.1.1 and v2.1.2 it was sometimes possible to save Menu Items to a Role that the Role could not actually access. When updating to v2.1.3 or later it would cause these Menu Items to be "Missing". 
+  * By adding a Delete Button for these Menu Items it makes it easier to remove them without having to Reset all Menu Customizations for the Role. If the Menu Items were added by the glitch in Client Dash v2.1.1 and v2.1.2 that would be the only other way to remove them.
 
 = 2.1.3 =
 * Fix: Reverts priority change in 2.1.1

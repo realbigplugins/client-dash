@@ -1,6 +1,6 @@
 ![Client Dash Banner](https://raw.githubusercontent.com/realbigplugins/client-dash/master/assets/static/banner.png)
 
-# v2.1.3
+# v2.1.4
 
 [Releases](https://github.com/realbigplugins/client-dash/releases)
 
@@ -79,6 +79,12 @@ Using this plugin is very simple. All you have to do is:
 3. Configure settings by going to Settings - >Client Dash
 
 ## Changelog
+
+### [2.1.4](https://github.com/realbigplugins/client-dash/releases/tag/v2.1.4)
+* Added a Delete Button for "Missing" Menu Items in the Customizer
+  * An item normally goes "Missing" if you customize a Role's Menu and then deactivate the plugin that had originally added that Menu Item.
+  * However, in Client Dash v2.1.1 and v2.1.2 it was sometimes possible to save Menu Items to a Role that the Role could not actually access. When updating to v2.1.3 or later it would cause these Menu Items to be "Missing". 
+  * By adding a Delete Button for these Menu Items it makes it easier to remove them without having to Reset all Menu Customizations for the Role. If the Menu Items were added by the glitch in Client Dash v2.1.1 and v2.1.2 that would be the only other way to remove them.
 
 ### [2.1.3](https://github.com/realbigplugins/client-dash/releases/tag/v2.1.3)
 * Fix: Reverts priority change in 2.1.1
