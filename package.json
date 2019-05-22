@@ -43,5 +43,6 @@
     "vinyl-transform": "^1.0.0",
     "whatwg-fetch": "^2.0.3"
   },
-  "private": true
+  "private": true,
+  "dependencies": {}
 }
