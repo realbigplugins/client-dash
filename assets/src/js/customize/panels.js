@@ -47,32 +47,29 @@ class PanelPrimary extends React.Component {
         this.loadPanel = this.loadPanel.bind(this);
 
         this.state = {
-            panelButtons: []
+            panelButtons: [
+                {
+                    text: l10n['panel_text_menu'],
+                    target: 'menu',
+                    onLoadPanel: this.loadPanel,
+                },
+                {
+                    text: l10n['panel_text_dashboard'],
+                    target: 'dashboard',
+                    onLoadPanel: this.loadPanel,
+                }
+            ]
         }
 
     }
 
     componentDidMount() {
 
-        clientDashEvents.subscribe( 'clientDashAddPanelButtons', ( button ) => this.addPanelButton( button ) );
-
         clientDashEvents.dispatch( 'clientDashAddPanelButtons', {
-            text: l10n['panel_text_menu'],
-            target: 'menu',
-            onLoadPanel: this.loadPanel,
+            detail: {
+                this: this,
+            }
         } );
-
-        clientDashEvents.dispatch( 'clientDashAddPanelButtons', {
-            text: l10n['panel_text_dashboard'],
-            target: 'dashboard',
-            onLoadPanel: this.loadPanel,
-        } );
-
-    }
-
-    componentWillUnmount() {
-
-        delete clientDashEvents.events['clientDashAddPanelButtons'];
 
     }
 
@@ -82,8 +79,6 @@ class PanelPrimary extends React.Component {
     }
 
     addPanelButton( button ) {
-
-        console.log( this );
 
         this.setState( ( prevState ) => {
 
