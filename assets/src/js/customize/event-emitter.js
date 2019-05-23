@@ -20,4 +20,4 @@ const EventEmitter = {
 
 }
 
-module.exports = { EventEmitter };
+export default EventEmitter;

@@ -7,7 +7,7 @@ import Editor from './editor';
 import Preview from './preview';
 import Tutorial from './tutorial';
 import LoadingIcon from "./loading-icon";
-import { EventEmitter } from "./event-emitter";
+import EventEmitter from "./event-emitter";
 
 // Making an Event Bus global like this is a little dirty, but it helps make 3rd party integration clearer
 window.clientDashEvents = EventEmitter;
