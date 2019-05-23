@@ -45,6 +45,11 @@ class PanelPrimary extends React.Component {
         super(props);
 
         this.loadPanel = this.loadPanel.bind(this);
+
+        clientDashEvents.subscribe( 'clientDashAddPanelButtons', ( event ) => this.addMenuPanelButton( event ) );
+
+        clientDashEvents.subscribe( 'clientDashAddPanelButtons', ( event ) => this.addDashboardPanelButton( event ) );
+
     }
 
     loadPanel(panel_ID) {
@@ -52,20 +57,31 @@ class PanelPrimary extends React.Component {
         this.props.onLoadPanel(panel_ID, 'forward');
     }
 
+    addMenuPanelButton( event ) {
+
+        return <PanelLoadButton
+            text={l10n['panel_text_menu']}
+            target="menu"
+            onLoadPanel={this.loadPanel}
+        />
+
+    }
+
+    addDashboardPanelButton( event ) {
+
+        return <PanelLoadButton
+            text={l10n['panel_text_dashboard']}
+            target="dashboard"
+            onLoadPanel={this.loadPanel}
+        />
+
+    }
 
     render() {
         return (
             <Panel id="primary">
-                <PanelLoadButton
-                    text={l10n['panel_text_menu']}
-                    target="menu"
-                    onLoadPanel={this.loadPanel}
-                />
-                <PanelLoadButton
-                    text={l10n['panel_text_dashboard']}
-                    target="dashboard"
-                    onLoadPanel={this.loadPanel}
-                />
+
+                { clientDashEvents.dispatch( 'clientDashAddPanelButtons', {} ) }
 
                 <a href="#" className="cd-editor-reset-role cd-editor-sub-action delete"
                    onClick={this.props.confirmReset}>
