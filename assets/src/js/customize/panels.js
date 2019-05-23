@@ -45,6 +45,7 @@ class PanelPrimary extends React.Component {
         super(props);
 
         this.loadPanel = this.loadPanel.bind(this);
+        this.addPanelButton = this.addPanelButton.bind(this);
 
         this.state = {
             panelButtons: [
@@ -66,9 +67,8 @@ class PanelPrimary extends React.Component {
     componentDidMount() {
 
         clientDashEvents.dispatch( 'clientDashAddPanelButtons', {
-            detail: {
-                this: this,
-            }
+            addPanelButton: this.addPanelButton,
+            loadPanel: this.loadPanel,
         } );
 
     }

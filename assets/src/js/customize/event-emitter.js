@@ -4,19 +4,17 @@ const EventEmitter = {
 
     dispatch: function( event, data ) {
 
-        window.dispatchEvent( new CustomEvent( event, data ) );
+        if ( ! this.events[ event ] ) return;
+
+        this.events[ event ].forEach( callback => callback( data ) );
         
     },
 
     subscribe: function( event, callback ) {
 
-        window.addEventListener( event, callback );
+        if ( ! this.events[ event ] ) this.events[ event ] = [];
 
-    },
-
-    unsubscribe: function( event, callback ) {
-
-        window.removeEventListener( event, callback );
+        this.events[ event ].push( callback );
 
     }
 
