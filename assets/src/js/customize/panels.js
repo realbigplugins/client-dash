@@ -52,12 +52,10 @@ class PanelPrimary extends React.Component {
                 {
                     text: l10n['panel_text_menu'],
                     target: 'menu',
-                    onLoadPanel: this.loadPanel,
                 },
                 {
                     text: l10n['panel_text_dashboard'],
                     target: 'dashboard',
-                    onLoadPanel: this.loadPanel,
                 }
             ]
         }
@@ -67,8 +65,7 @@ class PanelPrimary extends React.Component {
     componentDidMount() {
 
         clientDashEvents.dispatch( 'clientDashAddPanelButtons', {
-            addPanelButton: this.addPanelButton,
-            loadPanel: this.loadPanel,
+            addPanelButton: this.addPanelButton, // Use this method to add your PanelButton. Provide a PanelButton object similar to the State above
         } );
 
     }
@@ -100,6 +97,9 @@ class PanelPrimary extends React.Component {
             <Panel id="primary">
 
                 { this.state.panelButtons.map( ( button, index ) => {
+
+                    // Makes things a little more DRY, and less confusing for 3rd party integrations
+                    button.onLoadPanel = this.loadPanel;
 
                     return <PanelLoadButton key={index} {...button} />
 
