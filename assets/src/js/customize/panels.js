@@ -46,9 +46,33 @@ class PanelPrimary extends React.Component {
 
         this.loadPanel = this.loadPanel.bind(this);
 
-        clientDashEvents.subscribe( 'clientDashAddPanelButtons', ( event ) => this.addMenuPanelButton( event ) );
+        this.state = {
+            panelButtons: []
+        }
 
-        clientDashEvents.subscribe( 'clientDashAddPanelButtons', ( event ) => this.addDashboardPanelButton( event ) );
+    }
+
+    componentDidMount() {
+
+        clientDashEvents.subscribe( 'clientDashAddPanelButtons', ( button ) => this.addPanelButton( button ) );
+
+        clientDashEvents.dispatch( 'clientDashAddPanelButtons', {
+            text: l10n['panel_text_menu'],
+            target: 'menu',
+            onLoadPanel: this.loadPanel,
+        } );
+
+        clientDashEvents.dispatch( 'clientDashAddPanelButtons', {
+            text: l10n['panel_text_dashboard'],
+            target: 'dashboard',
+            onLoadPanel: this.loadPanel,
+        } );
+
+    }
+
+    componentWillUnmount() {
+
+        delete clientDashEvents.events['clientDashAddPanelButtons'];
 
     }
 
@@ -57,31 +81,34 @@ class PanelPrimary extends React.Component {
         this.props.onLoadPanel(panel_ID, 'forward');
     }
 
-    addMenuPanelButton( event ) {
+    addPanelButton( button ) {
 
-        return <PanelLoadButton
-            text={l10n['panel_text_menu']}
-            target="menu"
-            onLoadPanel={this.loadPanel}
-        />
+        console.log( this );
 
-    }
+        this.setState( ( prevState ) => {
 
-    addDashboardPanelButton( event ) {
+            return {
+                ...prevState,
+                panelButtons: [
+                    ...prevState.panelButtons,
+                    button,
+                ]
+            }
 
-        return <PanelLoadButton
-            text={l10n['panel_text_dashboard']}
-            target="dashboard"
-            onLoadPanel={this.loadPanel}
-        />
+        } );
 
     }
 
     render() {
+
         return (
             <Panel id="primary">
 
-                { clientDashEvents.dispatch( 'clientDashAddPanelButtons', {} ) }
+                { this.state.panelButtons.map( ( button, index ) => {
+
+                    return <PanelLoadButton key={index} {...button} />
+
+                } ) }
 
                 <a href="#" className="cd-editor-reset-role cd-editor-sub-action delete"
                    onClick={this.props.confirmReset}>
