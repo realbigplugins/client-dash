@@ -63,7 +63,7 @@ class PanelPrimary extends React.Component {
 
     componentDidMount() {
 
-        clientDashEvents.dispatch( 'clientDashAddPanelButtons', {
+        clientDashEvents.dispatch( 'addPanelButtons', {
             addPanelButton: this.addPanelButton, // Use this method to add your PanelButton. Provide a PanelButton object similar to the State above
         } );
 

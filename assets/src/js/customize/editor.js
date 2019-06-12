@@ -902,13 +902,27 @@ class Editor extends React.Component {
 
     render() {
 
-        const PanelName = this.state.panels[ this.state.activePanel ].component;
+        if ( typeof this.state.panels[ this.state.activePanel ] !== 'undefined' ) {
 
-        var panel = <PanelName {...this.state.panels[ this.state.activePanel ].props} />;
+            const PanelName = this.state.panels[ this.state.activePanel ].component;
 
-        const SecondaryActionsName = this.state.secondaryActions[ this.state.activeSecondaryAction ].component;
+            var panel = <PanelName {...this.state.panels[ this.state.activePanel ].props} />;
 
-        var secondary_actions = <SecondaryActionsName {...this.state.secondaryActions[ this.state.activeSecondaryAction ].props} />;
+        }
+        else {
+            console.error( 'The Panel being accessed has not been added using the addPanels Event' );
+        }
+
+        if ( typeof this.state.secondaryActions[ this.state.activeSecondaryAction ] !== 'undefined' ) {
+
+            const SecondaryActionsName = this.state.secondaryActions[ this.state.activeSecondaryAction ].component;
+
+            var secondary_actions = <SecondaryActionsName {...this.state.secondaryActions[ this.state.activeSecondaryAction ].props} />;
+
+        }
+        else {
+            console.error( 'The SecondaryActions being accessed has not been added using the addSecondaryActions Event' );
+        }
 
         return (
             <div id="cd-editor">
