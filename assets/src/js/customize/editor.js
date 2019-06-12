@@ -47,25 +47,6 @@ class Editor extends React.Component {
 
         super(props);
 
-        this.state = {
-            nextPanel: null,
-            panelDirection: 'forward',
-            activePanel: 'loading',
-            hidden: false,
-            submenuEdit: null,
-            loadingPreview: false,
-            saving: false,
-            deleting: false,
-            loading: true,
-            changes: false,
-            message: {
-                type: 'default',
-                text: null
-            },
-            customizations: {},
-            history: {},
-        }
-
         this.loadPanel         = this.loadPanel.bind(this);
         this.saveChanges       = this.saveChanges.bind(this);
         this.confirmReset      = this.confirmReset.bind(this);
@@ -89,6 +70,97 @@ class Editor extends React.Component {
         this.widgetDelete      = this.widgetDelete.bind(this);
         this.widgetEdit        = this.widgetEdit.bind(this);
         this.showMessage       = this.showMessage.bind(this);
+        this.setPanel          = this.setPanel.bind(this);
+        this.setSecondaryActions = this.setSecondaryActions.bind(this);
+        this.addPanel          = this.addPanel.bind(this);
+        this.addSecondaryAction = this.addSecondaryAction.bind(this);
+
+        this.state = {
+            nextPanel: null,
+            panelDirection: 'forward',
+            activePanel: 'loading',
+            activeSecondaryAction: 'loading',
+            hidden: false,
+            submenuEdit: null,
+            loadingPreview: false,
+            saving: false,
+            deleting: false,
+            loading: true,
+            changes: false,
+            message: {
+                type: 'default',
+                text: null
+            },
+            customizations: {},
+            history: {},
+            panels: {
+                'loading': {
+                    component: PanelLoading,
+                    props: {
+                        key: "loading",
+                    }
+                },
+                'primary': {
+                    component: PanelPrimary,
+                    props: {
+                        key: "primary",
+                        loadPanel: this.loadPanel,
+                        confirmReset: this.confirmReset,
+                        butts: 'test',
+                    }
+                },
+                'menu': {
+                    component: PanelMenu,
+                    props: {
+                        key: "menu",
+                        //menuItems={available_items}
+                        menuItems: [],
+                        //editing={history.menuItemLastAdded || false}
+                        onMenuItemEdit: this.menuItemEdit,
+                        onDeleteItem: this.menuItemDelete,
+                        onSubmenuEdit: this.submenuEdit,
+                        reOrderMenu: this.reOrderMenu,
+                        onItemSubmitForm: this.previewChanges,
+                    }
+                }
+            },
+            secondaryActions: {
+                'loading': {
+                    component: SecondaryActions,
+                    props: {
+                        key: "loading",
+                    }
+                },
+                'primary': {
+                    component: SecondaryActionsPrimary,
+                    props: {
+                        key: "primary",
+                        title: l10n['choose_something_to_customize'],
+                        //deleting: this.state.deleting,
+                        deleting: false,
+                        //disabled: this.state.saving || this.state.deleting,
+                        disabled: false,
+                    }
+                },
+                'menu': {
+                    component: SecondaryActions,
+                    props: {
+                        key: "menu",
+                        title: l10n['panel_actions_title_menu'],
+                        previousPanel: "primary",
+                        nextPanel: "addMenuItems",
+                        loadNextText: l10n['action_button_add_items'],
+                        loadPanel: this.loadPanel,
+                        //disabled: this.state.saving || this.state.deleting,
+                        disabled: false,
+                        //nextPanelNotification: new_items ? l10n['new_items'] : false,
+                        nextPanelNotification: false,
+                    }
+                }
+            },
+
+        }
+
     }
 
     componentDidMount() {
@@ -103,20 +175,63 @@ class Editor extends React.Component {
                 return l10n['leave_confirmation'];
             }
         };
+
+        clientDashEvents.dispatch( 'addPanels', {
+            addPanel: this.addPanel, // Use this method to add your Panel. Provide a Panel object similar to the State above
+        } );
+
+        clientDashEvents.dispatch( 'addSecondaryActions', {
+            addSecondaryAction: this.addSecondaryAction, // Use this method to add your Secondary Actions. Provide a Secondary Actions object similar to the State above
+        } );
+
     }
 
-    loadPanel(panel_ID, direction) {
+    loadPanel(panel_ID, direction ) {
 
         direction = direction || 'forward';
 
         this.setState({
             activePanel: panel_ID,
+            activeSecondaryAction: panel_ID,
             panelDirection: direction,
             message: {
-                type: this.state.message.type || 'default',
+                //type: this.getState( 'message' ).type || 'default',
+                type: 'default',
                 text: ''
             }
         });
+    }
+
+    addPanel( panel ) {
+
+        this.setState( ( prevState ) => {
+
+            return {
+                ...prevState,
+                panels: [
+                    ...prevState.panels,
+                    panel,
+                ]
+            }
+
+        } );
+
+    }
+
+    addSecondaryAction( secondaryAction ) {
+
+        this.setState( ( prevState ) => {
+
+            return {
+                ...prevState,
+                secondaryActions: [
+                    ...prevState.secondaryActions,
+                    secondaryAction,
+                ]
+            }
+
+        } );
+
     }
 
     hideCustomizer() {
@@ -262,6 +377,7 @@ class Editor extends React.Component {
                 prevState.loading        = true;
                 prevState.changes        = false;
                 prevState.activePanel    = 'loading';
+                prevState.activeSecondaryAction = 'loading';
                 prevState.panelDirection = 'backward';
                 prevState.message        = {
                     type: 'success',
@@ -287,6 +403,7 @@ class Editor extends React.Component {
 
         this.setState({
             activePanel: 'loading',
+            activeSecondaryAction: 'loading',
             panelDirection: 'forward',
             loading: true
         });
@@ -302,6 +419,7 @@ class Editor extends React.Component {
 
             this.setState({
                 activePanel: 'loading',
+                activeSecondaryAction: 'loading',
                 loading: true
             });
 
@@ -320,15 +438,33 @@ class Editor extends React.Component {
 
                 api.setState((prevState) => {
 
-                    prevState.activePanel = 'primary';
-                    prevState.loading     = false;
-
                     // Force some customizations to array
                     customizations.menu      = ensureArray(customizations.menu);
                     customizations.dashboard = ensureArray(customizations.dashboard);
 
                     prevState.customizations[role] = customizations;
                     prevState.history[role]        = {};
+
+                    let current_items   = prevState.customizations[role].menu;
+                    let available_items = getAvailableItems(current_items);
+                    let new_items       = false;
+
+                    // Check if any new items
+                    current_items.map(item => {
+
+                        if ( item.new ) {
+
+                            new_items = true;
+                        }
+                    });
+
+                    prevState.activePanel = 'primary';
+                    prevState.loading     = false;
+                    prevState.panels['primary'].props.menuItems = available_items || [];
+                    prevState.panels['primary'].props.editing = prevState.history.menuItemLastAdded || false;
+                    prevState.panels['primary'].props.newItems = new_items || false;
+
+                    prevState.activeSecondaryAction = 'primary';
 
                     return prevState;
                 });
@@ -344,6 +480,7 @@ class Editor extends React.Component {
 
                 prevState.activePanel = 'primary';
                 prevState.loading     = false;
+                prevState.activeSecondaryAction = 'primary';
             });
         }
     }
@@ -414,6 +551,19 @@ class Editor extends React.Component {
         });
 
         this.dataChange(false);
+
+        let current_items   = customizations.menu;
+        let available_items = getAvailableItems(current_items);
+        let new_items       = false;
+
+        // Check if any new items
+        current_items.map(item => {
+
+            if ( item.new ) {
+
+                new_items = true;
+            }
+        });
 
         this.loadPanel('menu', 'backward');
     }
@@ -734,339 +884,31 @@ class Editor extends React.Component {
         });
     }
 
+    setPanel( panel ) {
+
+        this.setState( {
+            panel: panel,
+        } );
+
+    }
+
+    setSecondaryActions( secondaryActions ) {
+
+        this.setState( {
+            secondaryActions: secondaryActions,
+        } );
+
+    }
+
     render() {
 
-        let customizations = this.state.customizations[this.props.role];
-        let panel;
-        let secondary_actions;
-        let history        = this.state.history[this.props.role] || {};
+        const PanelName = this.state.panels[ this.state.activePanel ].component;
 
-        switch ( this.state.activePanel ) {
+        var panel = <PanelName {...this.state.panels[ this.state.activePanel ].props} />;
 
-            case 'primary': {
-                panel =
-                    <PanelPrimary
-                        key="primary"
-                        onLoadPanel={this.loadPanel}
-                        confirmReset={this.confirmReset}
-                    />
-                ;
+        const SecondaryActionsName = this.state.secondaryActions[ this.state.activeSecondaryAction ].component;
 
-                secondary_actions =
-                    <SecondaryActionsPrimary
-                        key="primary"
-                        title={l10n['choose_something_to_customize']}
-                        deleting={this.state.deleting}
-                        disabled={this.state.saving || this.state.deleting}
-                    />
-                ;
-                break;
-            }
-            case 'confirmReset': {
-                panel =
-                    <PanelConfirmReset
-                        key="confirmReset"
-                        resetRole={this.resetRole}
-                        cancelReset={this.cancelReset}
-                    />
-                ;
-                break;
-            }
-            case 'menu': {
-
-                let current_items   = customizations.menu;
-                let available_items = getAvailableItems(current_items);
-                let new_items       = false;
-
-                // Check if any new items
-                current_items.map(item => {
-
-                    if ( item.new ) {
-
-                        new_items = true;
-                    }
-                });
-
-                panel =
-                    <PanelMenu
-                        key="menu"
-                        menuItems={available_items}
-                        editing={history.menuItemLastAdded || false}
-                        onMenuItemEdit={this.menuItemEdit}
-                        onDeleteItem={this.menuItemDelete}
-                        onSubmenuEdit={this.submenuEdit}
-                        reOrderMenu={this.reOrderMenu}
-                        onItemSubmitForm={this.previewChanges}
-                    />
-                ;
-
-                secondary_actions =
-                    <SecondaryActions
-                        key="menu"
-                        title={l10n['panel_actions_title_menu']}
-                        previousPanel="primary"
-                        nextPanel="addMenuItems"
-                        loadNextText={l10n['action_button_add_items']}
-                        onLoadPanel={this.loadPanel}
-                        disabled={this.state.saving || this.state.deleting}
-                        nextPanelNotification={new_items ? l10n['new_items'] : false}
-                    />
-                ;
-                break;
-            }
-            case 'submenu': {
-
-                let current_items   = customizations.submenu[this.state.submenuEdit] || [];
-                let available_items = getAvailableItems(current_items);
-                let menu_item       = getItem(customizations.menu, this.state.submenuEdit);
-                let new_items       = false;
-                let item_info       =
-                        <div className="cd-editor-panel-menuinfo">
-                            <span className={"cd-editor-panel-menuinfo-icon dashicons " +
-                            (menu_item.icon || menu_item.original_icon)}></span>
-                            <span className="cd-editor-panel-menuinfo-title">
-                                    {menu_item.title || menu_item.original_title}
-                                </span>
-                        </div>
-                ;
-
-                // Check if any new items
-                current_items.map(item => {
-
-                    if ( item.new ) {
-
-                        new_items = true;
-                    }
-                });
-
-                panel =
-                    <PanelSubmenu
-                        key="submenu"
-                        itemInfo={item_info}
-                        editing={history.submenuItemLastAdded || false}
-                        onSubmenuItemEdit={this.submenuItemEdit}
-                        submenuItems={available_items}
-                        onDeleteItem={this.submenuItemDelete}
-                        reOrderSubmenu={this.reOrderSubmenu}
-                        onItemSubmitForm={this.previewChanges}
-                    />
-                ;
-
-                secondary_actions =
-                    <SecondaryActions
-                        key="submenu"
-                        title={l10n['panel_actions_title_submenu']}
-                        nextPanel="addSubmenuItems"
-                        previousPanel="menu"
-                        loadNextText={l10n['action_button_add_items']}
-                        onLoadPanel={this.loadPanel}
-                        disabled={this.state.saving || this.state.deleting}
-                        nextPanelNotification={new_items ? l10n['new_items'] : false}
-                    />
-                ;
-                break;
-            }
-            case 'addMenuItems': {
-
-                let current_items   = customizations.menu;
-                let available_items = getDeletedItems(current_items);
-
-                // Skip separators
-                available_items = available_items.filter((item) => {
-
-                    return item.type !== 'separator';
-                });
-
-                // Add custom link
-                available_items.push({
-                    id: 'custom_link',
-                    original_title: l10n['custom_link'],
-                    type: 'custom_link',
-                });
-
-                // Add separator to bottom always
-                available_items.push({
-                    id: 'separator',
-                    original_title: l10n['separator'],
-                    type: 'separator',
-                });
-
-                panel =
-                    <PanelAddItems
-                        key="addMenuItems"
-                        availableItems={available_items}
-                        onAddItem={this.menuItemAdd}
-                    />
-                ;
-
-                secondary_actions =
-                    <SecondaryActions
-                        key="addMenuItems"
-                        title={l10n['panel_actions_title_menu_add']}
-                        previousPanel="menu"
-                        onLoadPanel={this.loadPanel}
-                        disabled={this.state.saving || this.state.deleting}
-                    />
-                ;
-                break;
-            }
-            case 'addSubmenuItems': {
-                let menu_item       = getItem(customizations.menu, this.state.submenuEdit);
-                let item_info       =
-                        <div className="cd-editor-panel-menuinfo">
-                            <span className={"cd-editor-panel-menuinfo-icon dashicons " +
-                            (menu_item.icon || menu_item.original_icon)}></span>
-                            <span className="cd-editor-panel-menuinfo-title">
-                                {menu_item.title || menu_item.original_title}
-                            </span>
-                        </div>
-                ;
-                let current_items   = customizations.submenu[this.state.submenuEdit] || [];
-                let available_items = getDeletedItems(current_items);
-
-                // Add custom link
-                available_items.push({
-                    id: 'custom_link',
-                    original_title: l10n['custom_link'],
-                    type: 'custom_link',
-                });
-
-                panel =
-                    <PanelAddItems
-                        key="addSubmenuItems"
-                        itemInfo={item_info}
-                        availableItems={available_items}
-                        onAddItem={this.submenuItemAdd}
-                    />
-                ;
-
-                secondary_actions =
-                    <SecondaryActions
-                        key="addSubmenuItems"
-                        title={l10n['panel_actions_title_submenu_add']}
-                        previousPanel="submenu"
-                        onLoadPanel={this.loadPanel}
-                        disabled={this.state.saving || this.state.deleting}
-                    />
-                ;
-                break;
-            }
-            case 'dashboard': {
-
-                let current_items   = customizations.dashboard;
-                let available_items = getAvailableItems(current_items);
-                let new_items       = false;
-
-                // Check if any new items
-                current_items.map(item => {
-
-                    if ( item.new ) {
-
-                        new_items = true;
-                    }
-                });
-
-                panel =
-                    <PanelDashboard
-                        key="dashboard"
-                        widgets={available_items}
-                        editing={history.widgetItemLastAdded || false}
-                        onWidgetEdit={this.widgetEdit}
-                        onDeleteWidget={this.widgetDelete}
-                        onLoadPanel={this.loadPanel}
-                        onItemSubmitForm={this.previewChanges}
-                    />
-                ;
-
-                secondary_actions =
-                    <SecondaryActions
-                        key="dashboard"
-                        title={l10n['panel_actions_title_dashboard']}
-                        previousPanel="primary"
-                        nextPanel="addWidgets"
-                        loadNextText={l10n['action_button_add_items']}
-                        onLoadPanel={this.loadPanel}
-                        disabled={this.state.saving || this.state.deleting}
-                        nextPanelNotification={new_items ? l10n['new_items'] : false}
-                    />
-                ;
-                break;
-            }
-            case 'addWidgets': {
-
-                let current_items   = customizations.dashboard;
-                let available_items = getDeletedItems(current_items);
-
-                // Add custom widgets
-                if ( customWidgets ) {
-
-                    customWidgets.map((widget) => {
-
-                        available_items.push({
-                            deleted: true,
-                            new: false,
-                            id: widget.id,
-                            original_title: widget.label,
-                            title: '',
-                            settings: {},
-                            type: widget.id,
-                        });
-                    });
-                }
-
-                panel =
-                    <PanelAddItems
-                        key="addWidgets"
-                        availableItems={available_items}
-                        onAddItem={this.widgetAdd}
-                    />
-                ;
-
-                secondary_actions =
-                    <SecondaryActions
-                        key="addWidgets"
-                        title={l10n['panel_actions_title_dashboard_add']}
-                        previousPanel="dashboard"
-                        onLoadPanel={this.loadPanel}
-                        disabled={this.state.saving || this.state.deleting}
-                    />
-                ;
-                break;
-            }
-
-            case 'deleting':
-            case 'loading': {
-
-                panel =
-                    <PanelLoading
-                        key="loading"
-                    />
-                ;
-
-                secondary_actions =
-                    <SecondaryActions
-                        key="loading"
-                    />
-                ;
-                break;
-            }
-
-            case 'blank': {
-
-                panel =
-                    <PanelBlank
-                        key="blank"
-                    />
-                ;
-
-                secondary_actions =
-                    <SecondaryActions
-                        key="blank"
-                    />
-                ;
-                break;
-            }
-        }
+        var secondary_actions = <SecondaryActionsName {...this.state.secondaryActions[ this.state.activeSecondaryAction ].props} />;
 
         return (
             <div id="cd-editor">

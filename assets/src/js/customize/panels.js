@@ -44,7 +44,6 @@ class PanelPrimary extends React.Component {
 
         super(props);
 
-        this.loadPanel = this.loadPanel.bind(this);
         this.addPanelButton = this.addPanelButton.bind(this);
 
         this.state = {
@@ -68,11 +67,6 @@ class PanelPrimary extends React.Component {
             addPanelButton: this.addPanelButton, // Use this method to add your PanelButton. Provide a PanelButton object similar to the State above
         } );
 
-    }
-
-    loadPanel(panel_ID) {
-
-        this.props.onLoadPanel(panel_ID, 'forward');
     }
 
     addPanelButton( button ) {
@@ -99,7 +93,7 @@ class PanelPrimary extends React.Component {
                 { this.state.panelButtons.map( ( button, index ) => {
 
                     // Makes things a little more DRY, and less confusing for 3rd party integrations
-                    button.onLoadPanel = this.loadPanel;
+                    button.loadPanel = this.props.loadPanel;
 
                     return <PanelLoadButton key={index} {...button} />
 
@@ -155,17 +149,11 @@ class PanelLoadButton extends React.Component {
 
         super(props);
 
-        this.handleClick = this.handleClick.bind(this);
-    }
-
-    handleClick() {
-
-        this.props.onLoadPanel(this.props.target);
     }
 
     render() {
         return (
-            <div className="cd-editor-panel-load-button" onClick={this.handleClick}>
+            <div className="cd-editor-panel-load-button" onClick={ () => this.props.loadPanel( this.props.target ) }>
                 {this.props.text}
                 <span className="cd-editor-panel-icon fa fa-chevron-right"></span>
             </div>
