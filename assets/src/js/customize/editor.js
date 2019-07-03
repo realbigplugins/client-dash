@@ -8,6 +8,7 @@ import {
     modifyItem,
     getDeletedItems,
     getAvailableItems,
+    getNewItems,
     getNewItemID,
     getItemIndex,
     ensureArray
@@ -100,6 +101,18 @@ class Editor extends React.Component {
                         key: "loading",
                     }
                 },
+                'deleting': {
+                    component: PanelLoading,
+                    props: {
+                        key: "deleting",
+                    }
+                },
+                'blank': {
+                    component: PanelBlank,
+                    props: {
+                        key: "blank",
+                    }
+                },
                 'primary': {
                     component: PanelPrimary,
                     props: {
@@ -113,7 +126,6 @@ class Editor extends React.Component {
                     component: PanelMenu,
                     props: {
                         key: "menu",
-                        //menuItems={available_items}
                         menuItems: [],
                         //editing={history.menuItemLastAdded || false}
                         onMenuItemEdit: this.menuItemEdit,
@@ -122,13 +134,53 @@ class Editor extends React.Component {
                         reOrderMenu: this.reOrderMenu,
                         onItemSubmitForm: this.previewChanges,
                     }
-                }
+                },
+                'dashboard': {
+                    component: PanelDashboard,
+                    props: {
+                        key: 'dashboard',
+                        widgets: [],
+                        //editing={history.widgetItemLastAdded || false}
+                        onWidgetEdit: this.widgetEdit,
+                        onDeleteWidget: this.widgetDelete,
+                        onLoadPanel: this.loadPanel,
+                        onItemSubmitForm: this.previewChanges,
+                    },
+                },
+                'addWidgets': {
+                    component: PanelAddItems,
+                    props: {
+                        key: "addWidgets",
+                        availableItems: [],
+                        onAddItem: this.widgetAdd,
+                    },
+                },
+                'confirmReset': {
+                    component: PanelConfirmReset,
+                    props: {
+                        key: "confirmReset",
+                        resetRole: this.resetRole,
+                        cancelReset: this.cancelReset,
+                    },
+                },
             },
             secondaryActions: {
                 'loading': {
                     component: SecondaryActions,
                     props: {
                         key: "loading",
+                    }
+                },
+                'deleting': {
+                    component: SecondaryActions,
+                    props: {
+                        key: "deleting",
+                    }
+                },
+                'blank': {
+                    component: SecondaryActions,
+                    props: {
+                        key: 'blank',
                     }
                 },
                 'primary': {
@@ -156,6 +208,32 @@ class Editor extends React.Component {
                         //nextPanelNotification: new_items ? l10n['new_items'] : false,
                         nextPanelNotification: false,
                     }
+                },
+                'dashboard': {
+                    component: SecondaryActions,
+                    props: {
+                        key: 'dashboard',
+                        title: l10n['panel_actions_title_dashboard'],
+                        previousPanel: 'primary',
+                        nextPanel: 'addWidgets',
+                        loadNextText: l10n['action_button_add_items'],
+                        loadPanel: this.loadPanel,
+                        //disabled={this.state.saving || this.state.deleting}
+                        disabled: false,
+                        //nextPanelNotification={new_items ? l10n['new_items'] : false}
+                        nextPanelNotification: false,
+                    },
+                },
+                'addWidgets': {
+                    component: SecondaryActions,
+                    props: {
+                        key: "addWidgets",
+                        title: l10n['panel_actions_title_dashboard_add'],
+                        previousPanel: "dashboard",
+                        loadPanel: this.loadPanel,
+                        //disabled: this.state.saving || this.state.deleting,
+                        disabled: false,
+                    },
                 }
             },
 
@@ -445,24 +523,51 @@ class Editor extends React.Component {
                     prevState.customizations[role] = customizations;
                     prevState.history[role]        = {};
 
+                    // Get Menu data
+
                     let current_items   = prevState.customizations[role].menu;
                     let available_items = getAvailableItems(current_items);
-                    let new_items       = false;
-
-                    // Check if any new items
-                    current_items.map(item => {
-
-                        if ( item.new ) {
-
-                            new_items = true;
-                        }
-                    });
+                    let new_items       = getNewItems(current_items);
 
                     prevState.activePanel = 'primary';
                     prevState.loading     = false;
+
                     prevState.panels['menu'].props.menuItems = available_items || [];
                     prevState.panels['menu'].props.editing = prevState.history.menuItemLastAdded || false;
                     prevState.panels['menu'].props.newItems = new_items || false;
+
+                    // Get Widget Data
+
+                    current_items   = prevState.customizations[role].dashboard;
+                    available_items = getAvailableItems(current_items);
+                    new_items       = getNewItems(current_items);
+
+                    prevState.panels['dashboard'].props.widgets = current_items;
+                    prevState.panels['dashboard'].props.editing = prevState.history.widgetItemLastAdded || false;
+                    prevState.panels['dashboard'].props.newItems = new_items || false;
+
+                    // Get Widgets for addWidget panel
+
+                    let addWidgets = getDeletedItems( current_items );
+
+                    if ( customWidgets ) {
+
+                        customWidgets.map( (widget) => {
+    
+                            addWidgets.push( {
+                                deleted: true,
+                                new: false,
+                                id: widget.id,
+                                original_title: widget.label,
+                                title: '',
+                                settings: {},
+                                type: widget.id,
+                            } );
+                        } );
+
+                    }
+
+                    prevState.panels['addWidgets'].props.availableItems = addWidgets;
 
                     prevState.activeSecondaryAction = 'primary';
 
@@ -554,16 +659,7 @@ class Editor extends React.Component {
 
         let current_items   = customizations.menu;
         let available_items = getAvailableItems(current_items);
-        let new_items       = false;
-
-        // Check if any new items
-        current_items.map(item => {
-
-            if ( item.new ) {
-
-                new_items = true;
-            }
-        });
+        let new_items       = getNewItems(current_items);
 
         this.loadPanel('menu', 'backward');
     }
@@ -910,7 +1006,7 @@ class Editor extends React.Component {
 
         }
         else {
-            console.error( 'The Panel being accessed has not been added using the addPanels Event' );
+            console.error( 'The Panel, "' + this.state.activePanel +'", being accessed has not been added using the addPanels Event' );
         }
 
         if ( typeof this.state.secondaryActions[ this.state.activeSecondaryAction ] !== 'undefined' ) {
@@ -921,7 +1017,7 @@ class Editor extends React.Component {
 
         }
         else {
-            console.error( 'The SecondaryActions being accessed has not been added using the addSecondaryActions Event' );
+            console.error( 'The SecondaryActions, "' + this.state.activeSecondaryAction +'", being accessed has not been added using the addSecondaryActions Event' );
         }
 
         return (

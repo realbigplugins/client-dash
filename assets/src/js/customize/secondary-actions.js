@@ -25,10 +25,7 @@ class SecondaryActions extends React.Component {
             return;
         }
 
-        this.props.loadPanel(this.props.nextPanel, this.props.panel, {
-            component: SecondaryActions,
-            props: this.props,
-        }, 'forward');
+        this.props.loadPanel(this.props.nextPanel, 'forward');
     }
 
     loadPreviousPanel() {
@@ -37,10 +34,7 @@ class SecondaryActions extends React.Component {
             return;
         }
 
-        this.props.loadPanel(this.props.previousPanel, this.props.panel, {
-            component: SecondaryActions,
-            props: this.props,
-        }, 'backward');
+        this.props.loadPanel(this.props.previousPanel, 'backward');
     }
 
     render() {

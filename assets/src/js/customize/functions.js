@@ -188,6 +188,31 @@ function getAvailableItems(items) {
 }
 
 /**
+ * Returns any "New" Items from a set of Current Items
+ *
+ * @param   {[array]}  current_items  Array of Current Items. Read from the State.
+ *
+ * @since   {{VERSION}}
+ * @return  {[array]}                 Array of New Items
+ */
+function getNewItems( current_items ) {
+
+    let new_items = false;
+
+    // Check if any new items
+    current_items.map(item => {
+
+        if ( item.new ) {
+
+            new_items = true;
+        }
+    });
+
+    return new_items;
+
+}
+
+/**
  * Sets each item's title to the original title.
  *
  * @since 2.0.0
@@ -282,6 +307,7 @@ export {
     modifyItem,
     getDeletedItems,
     getAvailableItems,
+    getNewItems,
     setToOriginalTitles,
     sortableCancelStart,
     ensureArray

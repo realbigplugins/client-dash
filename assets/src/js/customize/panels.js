@@ -510,19 +510,24 @@ class PanelDashboard extends React.Component {
 
             this.props.widgets.map((item) => {
 
-                widgets.push(
-                    <WidgetEdit
-                        key={item.id}
-                        id={item.id}
-                        title={item.title}
-                        type={item.type}
-                        original_title={item.original_title}
-                        settings={item.settings || {}}
-                        onWidgetEdit={this.widgetEdit}
-                        onWidgetDelete={this.widgetDelete}
-                        onItemFormSubmit={this.itemSubmitForm}
-                    />
-                );
+                if ( ! item.deleted ) {
+
+                    widgets.push(
+                        <WidgetEdit
+                            key={item.id}
+                            id={item.id}
+                            title={item.title}
+                            type={item.type}
+                            original_title={item.original_title}
+                            settings={item.settings || {}}
+                            onWidgetEdit={this.widgetEdit}
+                            onWidgetDelete={this.widgetDelete}
+                            onItemFormSubmit={this.itemSubmitForm}
+                        />
+                    );
+
+                }
+                
             });
 
             panel_contents =
