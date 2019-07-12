@@ -135,6 +135,20 @@ class Editor extends React.Component {
                         onItemSubmitForm: this.previewChanges,
                     }
                 },
+                'submenu': {
+                    component: PanelSubmenu,
+                    props: {
+                        key: "submenu",
+                        itemInfo: null,
+                        //editing={history.submenuItemLastAdded || false}
+                        editing: false,
+                        onSubmenuItemEdit: this.submenuItemEdit,
+                        submenuItems: [],
+                        onDeleteItem: this.submenuItemDelete,
+                        reOrderSubmenu: this.reOrderSubmenu,
+                        onItemSubmitForm: this.previewChanges,
+                    },
+                },
                 'dashboard': {
                     component: PanelDashboard,
                     props: {
@@ -206,6 +220,21 @@ class Editor extends React.Component {
                         //disabled: this.state.saving || this.state.deleting,
                         disabled: false,
                         //nextPanelNotification: new_items ? l10n['new_items'] : false,
+                        nextPanelNotification: false,
+                    }
+                },
+                'submenu': {
+                    component: SecondaryActions,
+                    props: {
+                        key: "submenu",
+                        title: l10n['panel_actions_title_submenu'],
+                        nextPanel: "addSubmenuItems",
+                        previousPanel: "menu",
+                        loadNextText: l10n['action_button_add_items'],
+                        loadPanel: this.loadPanel,
+                        //disabled={this.state.saving || this.state.deleting}
+                        disabled: false,
+                        //nextPanelNotification={new_items ? l10n['new_items'] : false}
                         nextPanelNotification: false,
                     }
                 },
@@ -519,6 +548,7 @@ class Editor extends React.Component {
                     // Force some customizations to array
                     customizations.menu      = ensureArray(customizations.menu);
                     customizations.dashboard = ensureArray(customizations.dashboard);
+                    //customizations.submenu = ensureArray(customizations.submenu);
 
                     prevState.customizations[role] = customizations;
                     prevState.history[role]        = {};
@@ -535,6 +565,31 @@ class Editor extends React.Component {
                     prevState.panels['menu'].props.menuItems = available_items || [];
                     prevState.panels['menu'].props.editing = prevState.history.menuItemLastAdded || false;
                     prevState.panels['menu'].props.newItems = new_items || false;
+
+                    // Get Submenu Data. This ends up being mainly defaults as everything gets properly set in this.submenuEdit()
+
+                    current_items = prevState.customizations[role].submenu[ prevState.submenuEdit ] || [];
+                    available_items = getAvailableItems( current_items );
+                    let menu_item = getItem( prevState.customizations[role].menu, prevState.submenuEdit );
+
+                    let item_info       =
+                        <div className="cd-editor-panel-menuinfo">
+                            <span className={"cd-editor-panel-menuinfo-icon dashicons " +
+                            (menu_item.icon || menu_item.original_icon)}></span>
+                            <span className="cd-editor-panel-menuinfo-title">
+                                    {menu_item.title || menu_item.original_title}
+                                </span>
+                        </div>
+                    ;
+
+                    new_items = getNewItems( current_items );
+
+                    prevState.panels['submenu'].props.itemInfo = item_info;
+                    prevState.panels['submenu'].props.editing = prevState.history.submenuItemLastAdded || false;
+                    prevState.panels['submenu'].props.submenuItems = available_items;
+
+                    prevState.secondaryActions['submenu'].props.disabled = prevState.saving || prevState.deleting;
+                    prevState.secondaryActions['submenu'].props.nextPanelNotification = new_items ? l10n['new_items'] : false;
 
                     // Get Widget Data
 
@@ -756,6 +811,8 @@ class Editor extends React.Component {
 
             let item = getItem(submenu, ID);
 
+            console.log( submenu );
+
             switch ( item.type ) {
                 case 'custom_link':
 
@@ -770,8 +827,11 @@ class Editor extends React.Component {
                         submenu,
                         ID,
                         {deleted: true, title: ''}
-                    )
+                    );
+
             }
+
+            console.log( prevState.customizations[role].submenu[submenu_edit] );
 
             return prevState;
         });
@@ -781,9 +841,53 @@ class Editor extends React.Component {
 
     submenuEdit(ID) {
 
-        this.setState({
-            submenuEdit: ID
-        });
+        let current_items = this.state.customizations[ this.props.role ].submenu[ ID ] || [];
+        console.log( current_items );
+        let available_items = getAvailableItems( current_items );
+        let menu_item = getItem( this.state.customizations[ this.props.role ].menu, ID );
+
+        let item_info       =
+            <div className="cd-editor-panel-menuinfo">
+                <span className={"cd-editor-panel-menuinfo-icon dashicons " +
+                (menu_item.icon || menu_item.original_icon)}></span>
+                <span className="cd-editor-panel-menuinfo-title">
+                        {menu_item.title || menu_item.original_title}
+                    </span>
+            </div>
+        ;
+
+        let new_items = false;
+
+        new_items = getNewItems( current_items );
+
+        // We have to set our Panel and Secondary Action data in here on-change
+        this.setState( ( prevState ) => {
+            return { 
+                ...prevState,
+                submenuEdit: ID,
+                panels: {
+                    ...prevState.panels,
+                    'submenu': {
+                        ...prevState.panels.submenu,
+                        props: {
+                            ...prevState.panels.submenu.props,
+                            submenuItems: available_items,
+                            itemInfo: item_info,
+                        }
+                    }
+                },
+                secondaryActions: {
+                    ...prevState.secondaryActions,
+                    'submenu': {
+                        ...prevState.secondaryActions.submenu,
+                        props: {
+                            ...prevState.secondaryActions.submenu.props,
+                            nextPanelNotification: new_items ? l10n['new_items'] : false,
+                        }
+                    }
+                }
+            }
+        } );
 
         this.loadPanel('submenu', 'forward');
     }

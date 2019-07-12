@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {sortableCancelStart} from './functions';
+import {sortableCancelStart, getAvailableItems} from './functions';
 import LoadingIcon from './loading-icon';
 import {
     LineItems,
@@ -338,7 +338,7 @@ class PanelSubmenu extends React.Component {
 
         if ( this.props.submenuItems.length ) {
 
-            this.props.submenuItems.map((item) => {
+            getAvailableItems( this.props.submenuItems ).map((item) => {
 
                 let menu_item;
 
@@ -508,25 +508,21 @@ class PanelDashboard extends React.Component {
 
         if ( this.props.widgets.length ) {
 
-            this.props.widgets.map((item) => {
+            getAvailableItems( this.props.widgets ).map((item) => {
 
-                if ( ! item.deleted ) {
-
-                    widgets.push(
-                        <WidgetEdit
-                            key={item.id}
-                            id={item.id}
-                            title={item.title}
-                            type={item.type}
-                            original_title={item.original_title}
-                            settings={item.settings || {}}
-                            onWidgetEdit={this.widgetEdit}
-                            onWidgetDelete={this.widgetDelete}
-                            onItemFormSubmit={this.itemSubmitForm}
-                        />
-                    );
-
-                }
+                widgets.push(
+                    <WidgetEdit
+                        key={item.id}
+                        id={item.id}
+                        title={item.title}
+                        type={item.type}
+                        original_title={item.original_title}
+                        settings={item.settings || {}}
+                        onWidgetEdit={this.widgetEdit}
+                        onWidgetDelete={this.widgetDelete}
+                        onItemFormSubmit={this.itemSubmitForm}
+                    />
+                );
                 
             });
 
