@@ -906,12 +906,6 @@ class ClientDash_Customize {
 			$customized_submenu = $customizations['submenu'];
 			$save_submenu       = $customized_submenu;
 
-			// Set all to "missing" by default
-			foreach ( $save_submenu as $i => $submenu_item ) {
-
-				$save_submenu[ $i ]['missing'] = true;
-			}
-
 		}
 
 		foreach ( $submenu as $menu_ID => $submenu_items ) {
