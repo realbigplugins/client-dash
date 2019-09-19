@@ -222,7 +222,7 @@ class ClientDash_REST_Customizations_Controller {
 
 			return new WP_Error(
 				'rest_customizations_cant_update',
-				__( 'Cannot update customization for unkown reasons.', 'client-dash' ),
+				__( 'Cannot update customization for unknown reasons.', 'client-dash' ),
 				array( 'status' => 500 )
 			);
 		}
