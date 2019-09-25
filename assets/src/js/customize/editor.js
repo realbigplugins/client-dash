@@ -323,15 +323,20 @@ class Editor extends React.Component {
 
         direction = direction || 'forward';
 
-        this.setState({
-            activePanel: panel_ID,
-            activeSecondaryAction: panel_ID,
-            panelDirection: direction,
-            message: {
-                //type: this.getState( 'message' ).type || 'default',
-                type: 'default',
-                text: ''
+        this.setState( ( prevState ) => {
+
+            return {
+                ...prevState,
+                activePanel: panel_ID,
+                activeSecondaryAction: panel_ID,
+                panelDirection: direction,
+                message: {
+                    type: prevState.message.type || 'default',
+                    type: 'default',
+                    text: ''
+                }
             }
+
         });
     }
 
