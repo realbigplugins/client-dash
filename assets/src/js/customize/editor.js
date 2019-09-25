@@ -1058,6 +1058,8 @@ class Editor extends React.Component {
             prevState.customizations[role].submenu[submenu_edit] =
                 arrayMove(prevState.customizations[role].submenu[submenu_edit], args.oldIndex, args.newIndex);
 
+            prevState.panels.submenu.props.submenuItems = getAvailableItems( prevState.customizations[role].submenu[submenu_edit] );
+
             return prevState;
         });
 
