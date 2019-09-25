@@ -593,6 +593,31 @@ class Editor extends React.Component {
                     prevState.panels['menu'].props.editing = prevState.history.menuItemLastAdded || false;
                     prevState.panels['menu'].props.newItems = new_items || false;
 
+                    // Get Add Menu Item Data
+
+                    available_items = getDeletedItems(current_items);
+
+                    // Skip separators
+                    available_items = available_items.filter((item) => {
+                        return item.type !== 'separator';
+                    });
+    
+                    // Add custom link
+                    available_items.push({
+                        id: 'custom_link',
+                        original_title: l10n['custom_link'],
+                        type: 'custom_link',
+                    });
+    
+                    // Add separator to bottom always
+                    available_items.push({
+                        id: 'separator',
+                        original_title: l10n['separator'],
+                        type: 'separator',
+                    });
+
+                    prevState.panels['addMenuItems'].props.availableItems = available_items;
+
                     // Get Submenu Data. This ends up being mainly defaults as everything gets properly set in this.submenuEdit()
 
                     current_items = prevState.customizations[role].submenu[ prevState.submenuEdit ] || [];
