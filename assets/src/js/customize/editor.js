@@ -1040,6 +1040,8 @@ class Editor extends React.Component {
             prevState.customizations[role].menu =
                 arrayMove(prevState.customizations[role].menu, oldIndex, newIndex);
 
+            prevState.panels.menu.props.menuItems = getAvailableItems( prevState.customizations[role].menu );
+
             return prevState;
         });
 
