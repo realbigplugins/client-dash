@@ -732,7 +732,15 @@ class Editor extends React.Component {
                     );
 
                     prevState.history[role].menuItemLastAdded = item.id;
+
+                    prevState.panels.addMenuItems.props.availableItems = deleteItem(
+                        prevState.panels.addMenuItems.props.availableItems,
+                        item.id
+                    );
+
             }
+
+            prevState.panels.menu.props.menuItems = getAvailableItems( prevState.customizations[role].menu );
 
             return prevState;
         });
@@ -826,7 +834,12 @@ class Editor extends React.Component {
                         ID,
                         {deleted: true, title: '', icon: ''}
                     );
+
+                    prevState.panels.addMenuItems.props.availableItems.push( item );
+
             }
+
+            prevState.panels.menu.props.menuItems = getAvailableItems( prevState.customizations[role].menu );
 
             return prevState;
         });
