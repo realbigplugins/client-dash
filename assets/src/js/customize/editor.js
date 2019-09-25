@@ -127,7 +127,7 @@ class Editor extends React.Component {
                     props: {
                         key: "menu",
                         menuItems: [],
-                        //editing={history.menuItemLastAdded || false}
+                        editing: false,
                         onMenuItemEdit: this.menuItemEdit,
                         onDeleteItem: this.menuItemDelete,
                         onSubmenuEdit: this.submenuEdit,
@@ -135,12 +135,19 @@ class Editor extends React.Component {
                         onItemSubmitForm: this.previewChanges,
                     }
                 },
+                'addMenuItems': {
+                    component: PanelAddItems,
+                    props: {
+                        key: 'addMenuItems',
+                        availableItems: [],
+                        onAddItem: this.menuItemAdd,
+                    }
+                },
                 'submenu': {
                     component: PanelSubmenu,
                     props: {
                         key: "submenu",
                         itemInfo: null,
-                        //editing={history.submenuItemLastAdded || false}
                         editing: false,
                         onSubmenuItemEdit: this.submenuItemEdit,
                         submenuItems: [],
@@ -149,12 +156,21 @@ class Editor extends React.Component {
                         onItemSubmitForm: this.previewChanges,
                     },
                 },
+                'addSubmenuItems': {
+                    component: PanelAddItems,
+                    props: {
+                        key: 'addSubmenuItems',
+                        itemInfo: null,
+                        availableItems: [],
+                        onAddItem: this.submenuItemAdd,
+                    }
+                },
                 'dashboard': {
                     component: PanelDashboard,
                     props: {
                         key: 'dashboard',
                         widgets: [],
-                        //editing={history.widgetItemLastAdded || false}
+                        editing: false,
                         onWidgetEdit: this.widgetEdit,
                         onDeleteWidget: this.widgetDelete,
                         onLoadPanel: this.loadPanel,
@@ -202,9 +218,7 @@ class Editor extends React.Component {
                     props: {
                         key: "primary",
                         title: l10n['choose_something_to_customize'],
-                        //deleting: this.state.deleting,
                         deleting: false,
-                        //disabled: this.state.saving || this.state.deleting,
                         disabled: false,
                     }
                 },
@@ -217,10 +231,18 @@ class Editor extends React.Component {
                         nextPanel: "addMenuItems",
                         loadNextText: l10n['action_button_add_items'],
                         loadPanel: this.loadPanel,
-                        //disabled: this.state.saving || this.state.deleting,
                         disabled: false,
-                        //nextPanelNotification: new_items ? l10n['new_items'] : false,
                         nextPanelNotification: false,
+                    }
+                },
+                'addMenuItems' : {
+                    component: SecondaryActions,
+                    props: {
+                        key: 'addMenuItems',
+                        title: l10n['panel_actions_title_menu_add'],
+                        previousPanel: 'menu',
+                        loadPanel: this.loadPanel,
+                        //disabled={this.state.saving || this.state.deleting}
                     }
                 },
                 'submenu': {
@@ -232,10 +254,18 @@ class Editor extends React.Component {
                         previousPanel: "menu",
                         loadNextText: l10n['action_button_add_items'],
                         loadPanel: this.loadPanel,
-                        //disabled={this.state.saving || this.state.deleting}
                         disabled: false,
-                        //nextPanelNotification={new_items ? l10n['new_items'] : false}
                         nextPanelNotification: false,
+                    }
+                },
+                'addSubmenuItems': {
+                    component: SecondaryActions,
+                    props: {
+                        key: 'addSubmenuItems',
+                        title: l10n['panel_actions_title_submenu_add'],
+                        previousPanel: 'submenu',
+                        loadPanel: this.loadPanel,
+                        //disabled={this.state.saving || this.state.deleting}
                     }
                 },
                 'dashboard': {
@@ -247,9 +277,7 @@ class Editor extends React.Component {
                         nextPanel: 'addWidgets',
                         loadNextText: l10n['action_button_add_items'],
                         loadPanel: this.loadPanel,
-                        //disabled={this.state.saving || this.state.deleting}
                         disabled: false,
-                        //nextPanelNotification={new_items ? l10n['new_items'] : false}
                         nextPanelNotification: false,
                     },
                 },
@@ -260,7 +288,6 @@ class Editor extends React.Component {
                         title: l10n['panel_actions_title_dashboard_add'],
                         previousPanel: "dashboard",
                         loadPanel: this.loadPanel,
-                        //disabled: this.state.saving || this.state.deleting,
                         disabled: false,
                     },
                 }
@@ -740,6 +767,7 @@ class Editor extends React.Component {
 
                     this.state.customizations[role].submenu[submenu_edit] = submenu;
                     prevState.history[role].submenuItemLastAdded          = new_item_id;
+                    this.state.panels.submenu.props.submenuItems = submenu;
 
                     break;
 
@@ -756,6 +784,12 @@ class Editor extends React.Component {
                         prevState.customizations[role].submenu[submenu_edit],
                         getItemIndex(prevState.customizations[role].submenu[submenu_edit], item.id),
                         0
+                    );
+
+                    this.state.panels.submenu.props.submenuItems = prevState.customizations[role].submenu[submenu_edit];
+                    this.state.panels.addSubmenuItems.props.availableItems = deleteItem(
+                        prevState.panels.addSubmenuItems.props.availableItems,
+                        item.id
                     );
 
                     prevState.history[role].submenuItemLastAdded = item.id;
@@ -811,13 +845,13 @@ class Editor extends React.Component {
 
             let item = getItem(submenu, ID);
 
-            console.log( submenu );
-
             switch ( item.type ) {
                 case 'custom_link':
 
                     prevState.customizations[role].submenu[submenu_edit] =
                         deleteItem(submenu, ID);
+
+                    prevState.panels.submenu.props.submenuItems = prevState.customizations[role].submenu[submenu_edit];
 
                     break;
 
@@ -829,9 +863,9 @@ class Editor extends React.Component {
                         {deleted: true, title: ''}
                     );
 
-            }
+                    prevState.panels.addSubmenuItems.props.availableItems.push( item );
 
-            console.log( prevState.customizations[role].submenu[submenu_edit] );
+            }
 
             return prevState;
         });
@@ -842,7 +876,6 @@ class Editor extends React.Component {
     submenuEdit(ID) {
 
         let current_items = this.state.customizations[ this.props.role ].submenu[ ID ] || [];
-        console.log( current_items );
         let available_items = getAvailableItems( current_items );
         let menu_item = getItem( this.state.customizations[ this.props.role ].menu, ID );
 
@@ -860,6 +893,17 @@ class Editor extends React.Component {
 
         new_items = getNewItems( current_items );
 
+        let submenuAddAvailableItems = [];
+
+        submenuAddAvailableItems = getDeletedItems( current_items );
+
+        // Add custom link
+        submenuAddAvailableItems.push({
+            id: 'custom_link',
+            original_title: l10n['custom_link'],
+            type: 'custom_link',
+        });
+
         // We have to set our Panel and Secondary Action data in here on-change
         this.setState( ( prevState ) => {
             return { 
@@ -874,6 +918,14 @@ class Editor extends React.Component {
                             submenuItems: available_items,
                             itemInfo: item_info,
                         }
+                    },
+                    'addSubmenuItems': {
+                        ...prevState.panels.addSubmenuItems,
+                        props: {
+                            ...prevState.panels.addSubmenuItems.props,
+                            availableItems: submenuAddAvailableItems,
+                            itemInfo: item_info,
+                        }
                     }
                 },
                 secondaryActions: {
@@ -883,6 +935,13 @@ class Editor extends React.Component {
                         props: {
                             ...prevState.secondaryActions.submenu.props,
                             nextPanelNotification: new_items ? l10n['new_items'] : false,
+                        }
+                    },
+                    'addSubmenuItems': {
+                        ...prevState.secondaryActions.addSubmenuItems,
+                        props: {
+                            ...prevState.secondaryActions.addSubmenuItems.props,
+                            disabled: this.state.saving || this.state.deleting,
                         }
                     }
                 }
