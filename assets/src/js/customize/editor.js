@@ -575,7 +575,6 @@ class Editor extends React.Component {
                     // Force some customizations to array
                     customizations.menu      = ensureArray(customizations.menu);
                     customizations.dashboard = ensureArray(customizations.dashboard);
-                    //customizations.submenu = ensureArray(customizations.submenu);
 
                     prevState.customizations[role] = customizations;
                     prevState.history[role]        = {};
