@@ -177,7 +177,7 @@ class ClientDash_Modify {
 					$new_menu[ $i ] = array(
 						isset( $menu_item['title'] ) && $menu_item['title'] ? $menu_item['title'] : $menu_item['original_title'],
 						'read',
-						$menu_item['link'] ? $menu_item['link'] : '#',
+						isset( $menu_item['link'] ) && $menu_item['link'] ? $menu_item['link'] : '#',
 						isset( $menu_item['title'] ) && $menu_item['title'] ? $menu_item['title'] : $menu_item['original_title'],
 						'menu-top menu-custom-link',
 						'menu-custom-link',
@@ -289,7 +289,7 @@ class ClientDash_Modify {
 							$new_submenu[ $menu_parent ][ $i ] = array(
 								isset( $submenu_item['title'] ) && $submenu_item['title'] ? $submenu_item['title'] : $submenu_item['original_title'],
 								'read',
-								$submenu_item['link'] ? $submenu_item['link'] : '#',
+								isset( $submenu_item['link'] ) && $submenu_item['link'] ? $submenu_item['link'] : '#',
 								isset( $submenu_item['title'] ) && $submenu_item['title'] ? $submenu_item['title'] : $submenu_item['original_title'],
 								'submenu-custom-link',
 								'submenu-custom-link'
@@ -392,7 +392,7 @@ class ClientDash_Modify {
 
 					wp_add_dashboard_widget(
 						$widget['id'],
-						$widget['title'] ? $widget['title'] : $widget['original_title'],
+						isset( $widget['title'] ) && $widget['title'] ? $widget['title'] : $widget['original_title'],
 						array( 'ClientDash_Customize', 'custom_widget_callback' ),
 						null,
 						$widget
