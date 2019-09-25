@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {sortableCancelStart, getAvailableItems} from './functions';
+import {sortableCancelStart} from './functions';
 import LoadingIcon from './loading-icon';
 import {
     LineItems,
@@ -338,7 +338,7 @@ class PanelSubmenu extends React.Component {
 
         if ( this.props.submenuItems.length ) {
 
-            getAvailableItems( this.props.submenuItems ).map((item) => {
+            this.props.submenuItems.map((item) => {
 
                 let menu_item;
 
@@ -508,7 +508,7 @@ class PanelDashboard extends React.Component {
 
         if ( this.props.widgets.length ) {
 
-            getAvailableItems( this.props.widgets ).map((item) => {
+            this.props.widgets.map((item) => {
 
                 widgets.push(
                     <WidgetEdit

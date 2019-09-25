@@ -747,10 +747,6 @@ class Editor extends React.Component {
 
         this.dataChange(false);
 
-        let current_items   = customizations.menu;
-        let available_items = getAvailableItems(current_items);
-        let new_items       = getNewItems(current_items);
-
         this.loadPanel('menu', 'backward');
     }
 
@@ -775,7 +771,7 @@ class Editor extends React.Component {
 
                     this.state.customizations[role].submenu[submenu_edit] = submenu;
                     prevState.history[role].submenuItemLastAdded          = new_item_id;
-                    this.state.panels.submenu.props.submenuItems = submenu;
+                    this.state.panels.submenu.props.submenuItems = getAvailableItems( submenu );
 
                     break;
 
@@ -794,7 +790,7 @@ class Editor extends React.Component {
                         0
                     );
 
-                    this.state.panels.submenu.props.submenuItems = prevState.customizations[role].submenu[submenu_edit];
+                    this.state.panels.submenu.props.submenuItems = getAvailableItems( prevState.customizations[role].submenu[submenu_edit] );
                     this.state.panels.addSubmenuItems.props.availableItems = deleteItem(
                         prevState.panels.addSubmenuItems.props.availableItems,
                         item.id
@@ -864,8 +860,6 @@ class Editor extends React.Component {
                     prevState.customizations[role].submenu[submenu_edit] =
                         deleteItem(submenu, ID);
 
-                    prevState.panels.submenu.props.submenuItems = prevState.customizations[role].submenu[submenu_edit];
-
                     break;
 
                 default:
@@ -879,6 +873,8 @@ class Editor extends React.Component {
                     prevState.panels.addSubmenuItems.props.availableItems.push( item );
 
             }
+
+            prevState.panels.submenu.props.submenuItems = getAvailableItems( prevState.customizations[role].submenu[submenu_edit] );
 
             return prevState;
         });
@@ -1059,6 +1055,11 @@ class Editor extends React.Component {
                         {deleted: false, new: false}
                     );
 
+                    prevState.panels.addWidgets.props.availableItems = deleteItem(
+                        prevState.panels.addWidgets.props.availableItems,
+                        widget.id
+                    );
+
                     prevState.history[role].widgetItemLastAdded = widget.id;
 
                     break;
@@ -1075,6 +1076,8 @@ class Editor extends React.Component {
 
                     prevState.history[role].widgetItemLastAdded = new_item_id;
             }
+
+            prevState.panels.dashboard.props.widgets = getAvailableItems( prevState.customizations[role].dashboard );
 
             return prevState;
         });
@@ -1101,12 +1104,16 @@ class Editor extends React.Component {
                         {deleted: true, title: '', settings: {}}
                     );
 
+                    prevState.panels.addWidgets.props.availableItems.push( widget );
+
                     break;
 
                 default: // Custom added widget
 
                     prevState.customizations[role].dashboard = deleteItem(prevState.customizations[role].dashboard, ID);
             }
+
+            prevState.panels.dashboard.props.widgets = getAvailableItems( prevState.customizations[role].dashboard );
 
             return prevState;
         });
