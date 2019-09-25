@@ -242,7 +242,7 @@ class Editor extends React.Component {
                         title: l10n['panel_actions_title_menu_add'],
                         previousPanel: 'menu',
                         loadPanel: this.loadPanel,
-                        //disabled={this.state.saving || this.state.deleting}
+                        disabled: false,
                     }
                 },
                 'submenu': {
@@ -265,7 +265,6 @@ class Editor extends React.Component {
                         title: l10n['panel_actions_title_submenu_add'],
                         previousPanel: 'submenu',
                         loadPanel: this.loadPanel,
-                        //disabled={this.state.saving || this.state.deleting}
                     }
                 },
                 'dashboard': {
@@ -336,17 +335,15 @@ class Editor extends React.Component {
         });
     }
 
-    addPanel( panel ) {
+    addPanel( data ) {
 
         this.setState( ( prevState ) => {
 
-            return {
-                ...prevState,
-                panels: [
-                    ...prevState.panels,
-                    panel,
-                ]
-            }
+            if ( typeof prevState.panels[ data['id'] ] == 'undefined' ) prevState.panels[ data['id'] ] = {};
+
+            prevState.panels[ data['id'] ] = Object.assign( prevState.panels[ data['id'] ], data['panel'] );
+            
+            return prevState;
 
         } );
 
@@ -382,9 +379,61 @@ class Editor extends React.Component {
 
         let api = this;
 
-        this.setState({
-            saving: true,
-        });
+        this.setState( ( prevState ) => {
+            return { 
+                ...prevState,
+                saving: true,
+                secondaryActions: {
+                    ...prevState.secondaryActions,
+                    primary: {
+                        ...prevState.secondaryActions.primary,
+                        props: {
+                            ...prevState.secondaryActions.primary.props,
+                            disabled: true,
+                        }
+                    },
+                    menu: {
+                        ...prevState.secondaryActions.menu,
+                        props: {
+                            ...prevState.secondaryActions.menu.props,
+                            disabled: true,
+                        }
+                    },
+                    submenu: {
+                        ...prevState.secondaryActions.submenu,
+                        props: {
+                            ...prevState.secondaryActions.submenu.props,
+                            disabled: true,
+                        }
+                    },
+                    addSubmenuItems: {
+                        ...prevState.secondaryActions.addSubmenuItems,
+                        props: {
+                            ...prevState.secondaryActions.addSubmenuItems.props,
+                            disabled: true,
+                        }
+                    },
+                    dashboard: {
+                        ...prevState.secondaryActions.dashboard,
+                        props: {
+                            ...prevState.secondaryActions.dashboard.props,
+                            disabled: true,
+                        }
+                    },
+                    addWidgets: {
+                        ...prevState.secondaryActions.addWidgets,
+                        props: {
+                            ...prevState.secondaryActions.addWidgets.props,
+                            disabled: true,
+                        }
+                    },
+                }
+            }
+        } );
+
+        clientDashEvents.dispatch( 'savingChanges', {
+            addPanel: api.addPanel, // Use this to set any necessary State during Save for your Panels
+        } );
 
         fetch(cdresturl + 'customizations/' + this.props.role, {
             method: 'POST',
@@ -400,14 +449,61 @@ class Editor extends React.Component {
 
         }).then(function (customizations) {
 
-            api.setState({
-                saving: false,
-                changes: false,
-                message: {
-                    type: 'success',
-                    text: l10n['saved_and_live']
+            api.setState( ( prevState ) => {
+                return { 
+                    ...prevState,
+                    saving: false,
+                    secondaryActions: {
+                        ...prevState.secondaryActions,
+                        primary: {
+                            ...prevState.secondaryActions.primary,
+                            props: {
+                                ...prevState.secondaryActions.primary.props,
+                                disabled: false,
+                            }
+                        },
+                        menu: {
+                            ...prevState.secondaryActions.menu,
+                            props: {
+                                ...prevState.secondaryActions.menu.props,
+                                disabled: false,
+                            }
+                        },
+                        submenu: {
+                            ...prevState.secondaryActions.submenu,
+                            props: {
+                                ...prevState.secondaryActions.submenu.props,
+                                disabled: false,
+                            }
+                        },
+                        addSubmenuItems: {
+                            ...prevState.secondaryActions.addSubmenuItems,
+                            props: {
+                                ...prevState.secondaryActions.addSubmenuItems.props,
+                                disabled: false,
+                            }
+                        },
+                        dashboard: {
+                            ...prevState.secondaryActions.dashboard,
+                            props: {
+                                ...prevState.secondaryActions.dashboard.props,
+                                disabled: false,
+                            }
+                        },
+                        addWidgets: {
+                            ...prevState.secondaryActions.addWidgets,
+                            props: {
+                                ...prevState.secondaryActions.addWidgets.props,
+                                disabled: false,
+                            }
+                        },
+                    }
                 }
-            });
+            } );
+
+            clientDashEvents.dispatch( 'savedChanges', {
+                addPanel: api.addPanel, // Use this to set any necessary State after Save for your Panels
+            } );
 
         }).catch(function (error) {
 
@@ -482,15 +578,67 @@ class Editor extends React.Component {
         let role = this.props.role;
         let api  = this;
 
-        this.setState({
-            deleting: true,
-            activePanel: 'deleting',
-            panelDirection: 'forward',
-            message: {
-                type: this.state.message.type || 'default',
-                text: ''
+        this.setState( ( prevState ) => {
+            return { 
+                ...prevState,
+                deleting: true,
+                activePanel: 'deleting',
+                panelDirection: 'forward',
+                message: {
+                    type: prevState.message.type || 'default',
+                    text: ''
+                },
+                secondaryActions: {
+                    ...prevState.secondaryActions,
+                    primary: {
+                        ...prevState.secondaryActions.primary,
+                        props: {
+                            ...prevState.secondaryActions.primary.props,
+                            disabled: true,
+                        }
+                    },
+                    menu: {
+                        ...prevState.secondaryActions.menu,
+                        props: {
+                            ...prevState.secondaryActions.menu.props,
+                            disabled: true,
+                        }
+                    },
+                    submenu: {
+                        ...prevState.secondaryActions.submenu,
+                        props: {
+                            ...prevState.secondaryActions.submenu.props,
+                            disabled: true,
+                        }
+                    },
+                    addSubmenuItems: {
+                        ...prevState.secondaryActions.addSubmenuItems,
+                        props: {
+                            ...prevState.secondaryActions.addSubmenuItems.props,
+                            disabled: true,
+                        }
+                    },
+                    dashboard: {
+                        ...prevState.secondaryActions.dashboard,
+                        props: {
+                            ...prevState.secondaryActions.dashboard.props,
+                            disabled: true,
+                        }
+                    },
+                    addWidgets: {
+                        ...prevState.secondaryActions.addWidgets,
+                        props: {
+                            ...prevState.secondaryActions.addWidgets.props,
+                            disabled: true,
+                        }
+                    },
+                }
             }
-        });
+        } );
+
+        clientDashEvents.dispatch( 'resettingRole', {
+            addPanel: api.addPanel, // Use this to set any necessary State during Role Reset for your Panels
+        } );
 
         fetch(cdresturl + 'customizations/' + this.props.role, {
             method: 'DELETE',
@@ -505,23 +653,74 @@ class Editor extends React.Component {
 
         }).then(function (customizations) {
 
-            api.setState((prevState) => {
-
-                prevState.deleting       = false;
-                prevState.loading        = true;
-                prevState.changes        = false;
-                prevState.activePanel    = 'loading';
-                prevState.activeSecondaryAction = 'loading';
-                prevState.panelDirection = 'backward';
-                prevState.message        = {
-                    type: 'success',
-                    text: l10n['role_reset']
-                };
+            api.setState( ( prevState ) => {
 
                 delete prevState.customizations[role];
 
-                return prevState;
-            });
+                return { 
+                    ...prevState,
+                    deleting: false,
+                    loading: true,
+                    changes: false,
+                    activePanel: 'loading',
+                    activeSecondaryAction: 'loading',
+                    panelDirection: 'backward',
+                    message: {
+                        type: 'success',
+                        text: l10n['role_reset']
+                    },
+                    secondaryActions: {
+                        ...prevState.secondaryActions,
+                        primary: {
+                            ...prevState.secondaryActions.primary,
+                            props: {
+                                ...prevState.secondaryActions.primary.props,
+                                disabled: false,
+                            }
+                        },
+                        menu: {
+                            ...prevState.secondaryActions.menu,
+                            props: {
+                                ...prevState.secondaryActions.menu.props,
+                                disabled: false,
+                            }
+                        },
+                        submenu: {
+                            ...prevState.secondaryActions.submenu,
+                            props: {
+                                ...prevState.secondaryActions.submenu.props,
+                                disabled: false,
+                            }
+                        },
+                        addSubmenuItems: {
+                            ...prevState.secondaryActions.addSubmenuItems,
+                            props: {
+                                ...prevState.secondaryActions.addSubmenuItems.props,
+                                disabled: false,
+                            }
+                        },
+                        dashboard: {
+                            ...prevState.secondaryActions.dashboard,
+                            props: {
+                                ...prevState.secondaryActions.dashboard.props,
+                                disabled: false,
+                            }
+                        },
+                        addWidgets: {
+                            ...prevState.secondaryActions.addWidgets,
+                            props: {
+                                ...prevState.secondaryActions.addWidgets.props,
+                                disabled: false,
+                            }
+                        },
+                    }
+                }
+
+            } );
+
+            clientDashEvents.dispatch( 'resetRole', {
+                addPanel: api.addPanel, // Use this to set any necessary State after Role Reset for your Panels
+            } );
 
             api.props.onResetRole(role);
 
@@ -616,6 +815,7 @@ class Editor extends React.Component {
                     });
 
                     prevState.panels['addMenuItems'].props.availableItems = available_items;
+                    prevState.secondaryActions['addMenuItems'].props.disabled = prevState.saving || prevState.deleting;
 
                     // Get Submenu Data. This ends up being mainly defaults as everything gets properly set in this.submenuEdit()
 
@@ -968,6 +1168,7 @@ class Editor extends React.Component {
                         props: {
                             ...prevState.secondaryActions.submenu.props,
                             nextPanelNotification: new_items ? l10n['new_items'] : false,
+                            disabled: this.state.saving || this.state.deleting,
                         }
                     },
                     'addSubmenuItems': {
@@ -995,6 +1196,9 @@ class Editor extends React.Component {
                 item.id,
                 item
             );
+
+            prevState.secondaryActions.menu.props.disabled = prevState.saving || prevState.deleting;
+            prevState.secondaryActions.addMenuItems.props.disabled = prevState.saving || prevState.deleting;
 
             return prevState;
         });
