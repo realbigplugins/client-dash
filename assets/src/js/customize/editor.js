@@ -595,6 +595,7 @@ class Editor extends React.Component {
                         props: {
                             ...prevState.secondaryActions.primary.props,
                             disabled: true,
+                            deleting: true,
                         }
                     },
                     menu: {
@@ -676,6 +677,7 @@ class Editor extends React.Component {
                             props: {
                                 ...prevState.secondaryActions.primary.props,
                                 disabled: false,
+                                deleting: false,
                             }
                         },
                         menu: {
