@@ -173,8 +173,12 @@
   position: relative;
   width: 100%;
   overflow-y: scroll;
-  height: calc(100% - 200px);
+  height: calc(100% - 150px);
   z-index: 5;
+
+  &.secondaryAction-SecondaryActions {
+    height: calc(100% - 200px);
+  }
 
   &.cd-editor-panels-disabled {
     opacity: 0.4;

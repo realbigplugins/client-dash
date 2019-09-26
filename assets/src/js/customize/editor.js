@@ -1491,7 +1491,9 @@ class Editor extends React.Component {
                 </div>
 
                 <div className={'cd-editor-panels' +
-                (this.state.saving || this.state.deleting ? ' cd-editor-panels-disabled' : '')}>
+                (this.state.saving || this.state.deleting ? ' cd-editor-panels-disabled' : '') + 
+                ' panel-' + ( ( typeof this.state.panels[ this.state.activePanel ] !== 'undefined' ) ? this.state.panels[ this.state.activePanel ].component.name : 'none' ) + 
+                ' secondaryAction-' + ( ( typeof this.state.secondaryActions[ this.state.activeSecondaryAction ] !== 'undefined' ) ? this.state.secondaryActions[ this.state.activeSecondaryAction ].component.name : 'none' )}>
                     <ReactCSSTransitionReplace
                         transitionName={"panel-" + this.state.panelDirection}
                         transitionEnterTimeout={300}
