@@ -295,6 +295,7 @@ class ClientDash_Customize {
 				'previous'                          => __( 'Previous', 'client-dash' ),
 				'finish'                            => __( 'Finish', 'client-dash' ),
 				'missing'                           => __( 'Missing', 'client-dash' ),
+				'missing_panel_button_text'         => __( 'Missing text property', 'client-dash' ),
 			),
 		) );
 	}

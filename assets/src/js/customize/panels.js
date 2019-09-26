@@ -79,7 +79,9 @@ class PanelPrimary extends React.Component {
 
                 prevState.panelButtons[ target ] = Object.assign( prevState.panelButtons[ target ], newButtons[ target ] );
 
-                if ( typeof prevState.panelButtons[ target ].text == 'undefined' ) prevState.panelButtons[ target ].text = 'missing panel text';
+                console.log( l10n );
+
+                if ( typeof prevState.panelButtons[ target ].text == 'undefined' ) prevState.panelButtons[ target ].text = l10n['missing_panel_button_text'];
 
                 if ( typeof prevState.panelButtons[ target ].loadPanel == 'undefined' ) prevState.panelButtons[ target ].loadPanel = this.props.loadPanel;
 
