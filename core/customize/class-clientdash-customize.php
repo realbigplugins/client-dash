@@ -215,89 +215,7 @@ class ClientDash_Customize {
 	 * @access private
 	 */
 	function localize_data() {
-
-		global $menu, $submenu, $wp_roles;
-
-		$roles = array();
-
-		foreach ( $wp_roles->role_names as $role_ID => $role_name ) {
-
-			$roles[] = array(
-				'text'  => $role_name,
-				'value' => $role_ID,
-			);
-		}
-
-		wp_localize_script( 'clientdash-customize', 'ClientdashCustomize_Data', array(
-			'roles'           => $roles,
-			'adminurl'        => admin_url(),
-			'domain'          => get_bloginfo( 'url' ),
-			'rest_url'        => rest_url(),
-			'cd_rest_url'     => rest_url() . 'clientdash/v1/',
-			'dashicons'       => json_decode( file_get_contents( CLIENTDASH_DIR . 'core/dashicons.json' ) ),
-			'api_nonce'       => wp_create_nonce( 'wp_rest' ),
-			'current_user_id' => get_current_user_id(),
-			'load_tutorial'   => get_user_meta( get_current_user_id(), 'clientdash_hide_customize_tutorial', true ) !== 'yes',
-			'tutorial_panels' => $this->get_tutorial_panels(),
-			'widgets'         => self::get_custom_dashboard_widgets(),
-			'l10n'            => array(
-				'role_switcher_label'               => __( 'Customizing:', 'client-dash' ),
-				'panel_text_menu'                   => __( 'Menu', 'client-dash' ),
-				'panel_text_dashboard'              => __( 'Dashboard', 'client-dash' ),
-				'panel_text_cd_pages'               => __( 'Pages', 'client-dash' ),
-				'panel_actions_title_menu'          => __( 'Editing: Menu', 'client-dash' ),
-				'panel_actions_title_submenu'       => __( 'Editing: Sub-Menu', 'client-dash' ),
-				'panel_actions_title_menu_add'      => __( 'Adding: Menu Items', 'client-dash' ),
-				'panel_actions_title_submenu_add'   => __( 'Adding: Sub-Menu Items', 'client-dash' ),
-				'panel_actions_title_dashboard'     => __( 'Editing: Dashboard', 'client-dash' ),
-				'panel_actions_title_dashboard_add' => __( 'Adding: Widgets', 'client-dash' ),
-				'panel_actions_title_cdpages'       => __( 'Editing: Pages', 'client-dash' ),
-				'panel_actions_title_cdpages_add'   => __( 'Adding: Pages', 'client-dash' ),
-				'action_button_back'                => __( 'Back', 'client-dash' ),
-				'action_button_add_items'           => __( 'Add Items', 'client-dash' ),
-				'choose_something_to_customize'     => __( 'Choose something to customize.', 'client-dash' ),
-				'yes_understand'                    => __( 'Yes, I understand.', 'client-dash' ),
-				'nevermind'                         => __( 'Nevermind.', 'client-dash' ),
-				'show_controls'                     => __( 'Show Controls', 'client-dash' ),
-				'title'                             => __( 'Title', 'client-dash' ),
-				'original_title'                    => __( 'Original title:', 'client-dash' ),
-				'original_icon'                     => __( 'Original icon:', 'client-dash' ),
-				'icon'                              => __( 'Icon', 'client-dash' ),
-				'link'                              => __( 'Link', 'client-dash' ),
-				'no_items_added'                    => __( 'No items added yet. Click the "Add Items" button to add your first item.', 'client-dash' ),
-				'no_items_available'                => __( 'No items available.', 'client-dash' ),
-				'separator'                         => __( 'Separator', 'client-dash' ),
-				'custom_link'                       => __( 'Custom Link', 'client-dash' ),
-				'click_to_move'                     => __( 'Click to move', 'client-dash' ),
-				'edit'                              => __( 'Edit', 'client-dash' ),
-				'edit_submenu'                      => __( 'Edit submenu', 'client-dash' ),
-				'submenu'                           => __( 'Submenu', 'client-dash' ),
-				'delete'                            => __( 'Delete', 'client-dash' ),
-				'leave_confirmation'                => __( 'Are you sure you want to leave? Any unsaved changes will be lost.', 'client-dash' ),
-				'save'                              => __( 'Save', 'client-dash' ),
-				'saved'                             => __( 'Saved', 'client-dash' ),
-				'saved_and_live'                    => __( 'Changes saved and live!', 'client-dash' ),
-				'role_reset'                        => __( 'Role successfully reset!', 'client-dash' ),
-				'close'                             => __( 'Close', 'client-dash' ),
-				'cancel'                            => __( 'Cancel', 'client-dash' ),
-				'confirm'                           => __( 'Confirm', 'client-dash' ),
-				'none'                              => __( 'None', 'client-dash' ),
-				'reset_role'                        => __( 'Reset Role', 'client-dash' ),
-				'up_do_date'                        => __( 'Up to date', 'client-dash' ),
-				'confirm_role_reset'                => __( 'Are you sure you want to reset all customizations for this role? This can not be undone.', 'client-dash' ),
-				'cannot_submit_form'                => __( 'Preview only. Cannot do that. Sorry!', 'client-dash' ),
-				'cannot_view_link'                  => __( 'Only administrative links can be viewed.', 'client-dash' ),
-				'current_location'                  => __( 'Current location', 'client-dash' ),
-				'toplevel'                          => __( 'Top Level', 'client-dash' ),
-				'new_items'                         => __( 'New Items', 'client-dash' ),
-				'new'                               => __( 'New', 'client-dash' ),
-				'next'                              => __( 'Next', 'client-dash' ),
-				'previous'                          => __( 'Previous', 'client-dash' ),
-				'finish'                            => __( 'Finish', 'client-dash' ),
-				'missing'                           => __( 'Missing', 'client-dash' ),
-				'missing_panel_button_text'         => __( 'Missing text property', 'client-dash' ),
-			),
-		) );
+		wp_localize_script( 'clientdash-customize', 'ClientdashCustomize_Data', $this->get_javascript_localization() );
 	}
 
 	/**
@@ -406,6 +324,107 @@ class ClientDash_Customize {
 				echo $output;
 			}
 		}
+	}
+
+	/**
+	 * Grabs all the data that gets localized into JavaScript for the Customizer
+	 * 
+	 * 3rd party integrations will likely want to localize their own script with this in order to ensure they can see this data as well, since they will be loading before Client Dash does
+	 * This is especially important if you're reusing React Components from Client Dash
+	 * 
+	 * Example: wp_localize_script( 'your-script-handle', 'ClientdashCustomize_Data', ClientDash()->customize->get_javascript_localization() );
+	 *
+	 * @access	public
+	 * @since	{{VERSION}}
+	 * @return  array  Localized data
+	 */
+	public function get_javascript_localization() {
+
+		global $menu, $submenu, $wp_roles;
+
+		$roles = array();
+
+		foreach ( $wp_roles->role_names as $role_ID => $role_name ) {
+
+			$roles[] = array(
+				'text'  => $role_name,
+				'value' => $role_ID,
+			);
+		}
+
+		$l10n = array(
+			'roles'           => $roles,
+			'adminurl'        => admin_url(),
+			'domain'          => get_bloginfo( 'url' ),
+			'rest_url'        => rest_url(),
+			'cd_rest_url'     => rest_url() . 'clientdash/v1/',
+			'dashicons'       => json_decode( file_get_contents( CLIENTDASH_DIR . 'core/dashicons.json' ) ),
+			'api_nonce'       => wp_create_nonce( 'wp_rest' ),
+			'current_user_id' => get_current_user_id(),
+			'load_tutorial'   => get_user_meta( get_current_user_id(), 'clientdash_hide_customize_tutorial', true ) !== 'yes',
+			'tutorial_panels' => $this->get_tutorial_panels(),
+			'widgets'         => self::get_custom_dashboard_widgets(),
+			'l10n'            => array(
+				'role_switcher_label'               => __( 'Customizing:', 'client-dash' ),
+				'panel_text_menu'                   => __( 'Menu', 'client-dash' ),
+				'panel_text_dashboard'              => __( 'Dashboard', 'client-dash' ),
+				'panel_text_cd_pages'               => __( 'Pages', 'client-dash' ),
+				'panel_actions_title_menu'          => __( 'Editing: Menu', 'client-dash' ),
+				'panel_actions_title_submenu'       => __( 'Editing: Sub-Menu', 'client-dash' ),
+				'panel_actions_title_menu_add'      => __( 'Adding: Menu Items', 'client-dash' ),
+				'panel_actions_title_submenu_add'   => __( 'Adding: Sub-Menu Items', 'client-dash' ),
+				'panel_actions_title_dashboard'     => __( 'Editing: Dashboard', 'client-dash' ),
+				'panel_actions_title_dashboard_add' => __( 'Adding: Widgets', 'client-dash' ),
+				'panel_actions_title_cdpages'       => __( 'Editing: Pages', 'client-dash' ),
+				'panel_actions_title_cdpages_add'   => __( 'Adding: Pages', 'client-dash' ),
+				'action_button_back'                => __( 'Back', 'client-dash' ),
+				'action_button_add_items'           => __( 'Add Items', 'client-dash' ),
+				'choose_something_to_customize'     => __( 'Choose something to customize.', 'client-dash' ),
+				'yes_understand'                    => __( 'Yes, I understand.', 'client-dash' ),
+				'nevermind'                         => __( 'Nevermind.', 'client-dash' ),
+				'show_controls'                     => __( 'Show Controls', 'client-dash' ),
+				'title'                             => __( 'Title', 'client-dash' ),
+				'original_title'                    => __( 'Original title:', 'client-dash' ),
+				'original_icon'                     => __( 'Original icon:', 'client-dash' ),
+				'icon'                              => __( 'Icon', 'client-dash' ),
+				'link'                              => __( 'Link', 'client-dash' ),
+				'no_items_added'                    => __( 'No items added yet. Click the "Add Items" button to add your first item.', 'client-dash' ),
+				'no_items_available'                => __( 'No items available.', 'client-dash' ),
+				'separator'                         => __( 'Separator', 'client-dash' ),
+				'custom_link'                       => __( 'Custom Link', 'client-dash' ),
+				'click_to_move'                     => __( 'Click to move', 'client-dash' ),
+				'edit'                              => __( 'Edit', 'client-dash' ),
+				'edit_submenu'                      => __( 'Edit submenu', 'client-dash' ),
+				'submenu'                           => __( 'Submenu', 'client-dash' ),
+				'delete'                            => __( 'Delete', 'client-dash' ),
+				'leave_confirmation'                => __( 'Are you sure you want to leave? Any unsaved changes will be lost.', 'client-dash' ),
+				'save'                              => __( 'Save', 'client-dash' ),
+				'saved'                             => __( 'Saved', 'client-dash' ),
+				'saved_and_live'                    => __( 'Changes saved and live!', 'client-dash' ),
+				'role_reset'                        => __( 'Role successfully reset!', 'client-dash' ),
+				'close'                             => __( 'Close', 'client-dash' ),
+				'cancel'                            => __( 'Cancel', 'client-dash' ),
+				'confirm'                           => __( 'Confirm', 'client-dash' ),
+				'none'                              => __( 'None', 'client-dash' ),
+				'reset_role'                        => __( 'Reset Role', 'client-dash' ),
+				'up_do_date'                        => __( 'Up to date', 'client-dash' ),
+				'confirm_role_reset'                => __( 'Are you sure you want to reset all customizations for this role? This can not be undone.', 'client-dash' ),
+				'cannot_submit_form'                => __( 'Preview only. Cannot do that. Sorry!', 'client-dash' ),
+				'cannot_view_link'                  => __( 'Only administrative links can be viewed.', 'client-dash' ),
+				'current_location'                  => __( 'Current location', 'client-dash' ),
+				'toplevel'                          => __( 'Top Level', 'client-dash' ),
+				'new_items'                         => __( 'New Items', 'client-dash' ),
+				'new'                               => __( 'New', 'client-dash' ),
+				'next'                              => __( 'Next', 'client-dash' ),
+				'previous'                          => __( 'Previous', 'client-dash' ),
+				'finish'                            => __( 'Finish', 'client-dash' ),
+				'missing'                           => __( 'Missing', 'client-dash' ),
+				'missing_panel_button_text'         => __( 'Missing text property', 'client-dash' ),
+			),
+		);
+
+		return apply_filters( 'clientdash_customize_get_javascript_localization', $l10n );
+
 	}
 
 	/**
