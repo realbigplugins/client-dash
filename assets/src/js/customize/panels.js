@@ -47,16 +47,16 @@ class PanelPrimary extends React.Component {
         this.addPanelButton = this.addPanelButton.bind(this);
 
         this.state = {
-            panelButtons: [
-                {
+            panelButtons: {
+                'menu': {
                     text: l10n['panel_text_menu'],
-                    target: 'menu',
+                    loadPanel: this.props.loadPanel,
                 },
-                {
+                'dashboard': {
                     text: l10n['panel_text_dashboard'],
-                    target: 'dashboard',
+                    loadPanel: this.props.loadPanel,
                 }
-            ]
+            }
         }
 
     }
@@ -64,22 +64,28 @@ class PanelPrimary extends React.Component {
     componentDidMount() {
 
         clientDashEvents.dispatch( 'addPanelButtons', {
-            addPanelButton: this.addPanelButton, // Use this method to add your PanelButton. Provide a PanelButton object similar to the State above
+            addPanelButton: this.addPanelButton, // Use this method to add your PanelButton. Provide a Key/Value pair similar to the State above
         } );
 
     }
 
-    addPanelButton( button ) {
+    addPanelButton( newButtons ) {
 
         this.setState( ( prevState ) => {
 
-            return {
-                ...prevState,
-                panelButtons: [
-                    ...prevState.panelButtons,
-                    button,
-                ]
+            for ( var target in newButtons ) {
+
+                if ( typeof prevState.panelButtons[ target ] == 'undefined' ) prevState.panelButtons[ target ] = {};
+
+                prevState.panelButtons[ target ] = Object.assign( prevState.panelButtons[ target ], newButtons[ target ] );
+
+                if ( typeof prevState.panelButtons[ target ].text == 'undefined' ) prevState.panelButtons[ target ].text = 'missing panel text';
+
+                if ( typeof prevState.panelButtons[ target ].loadPanel == 'undefined' ) prevState.panelButtons[ target ].loadPanel = this.props.loadPanel;
+
             }
+
+            return prevState;
 
         } );
 
@@ -90,10 +96,10 @@ class PanelPrimary extends React.Component {
         return (
             <Panel id="primary">
 
-                { this.state.panelButtons.map( ( button, index ) => {
+                { Object.keys( this.state.panelButtons ).map( ( target, index ) => {
 
-                    // Makes things a little more DRY, and less confusing for 3rd party integrations
-                    button.loadPanel = this.props.loadPanel;
+                    let button = this.state.panelButtons[ target ];
+                    button.target = target;
 
                     return <PanelLoadButton key={index} {...button} />
 

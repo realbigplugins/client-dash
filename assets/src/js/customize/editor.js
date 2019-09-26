@@ -119,7 +119,6 @@ class Editor extends React.Component {
                         key: "primary",
                         loadPanel: this.loadPanel,
                         confirmReset: this.confirmReset,
-                        butts: 'test',
                     }
                 },
                 'menu': {
@@ -310,11 +309,13 @@ class Editor extends React.Component {
         };
 
         clientDashEvents.dispatch( 'addPanels', {
-            addPanel: this.addPanel, // Use this method to add your Panel. Provide a Panel object similar to the State above
+            addPanel: api.addPanel, // Use this method to add your Panel. Provide a Panel object similar to the State above
+            loadPanel: api.loadPanel,
         } );
 
         clientDashEvents.dispatch( 'addSecondaryActions', {
-            addSecondaryAction: this.addSecondaryAction, // Use this method to add your Secondary Actions. Provide a Secondary Actions object similar to the State above
+            addSecondaryAction: api.addSecondaryAction, // Use this method to add your Secondary Actions. Provide a Secondary Actions object similar to the State above
+            loadPanel: api.loadPanel,
         } );
 
     }
@@ -340,13 +341,23 @@ class Editor extends React.Component {
         });
     }
 
-    addPanel( data ) {
+    addPanel( newPanels ) {
 
         this.setState( ( prevState ) => {
 
-            if ( typeof prevState.panels[ data['id'] ] == 'undefined' ) prevState.panels[ data['id'] ] = {};
+            for ( var id in newPanels ) {
 
-            prevState.panels[ data['id'] ] = Object.assign( prevState.panels[ data['id'] ], data['panel'] );
+                if ( typeof prevState.panels[ id ] == 'undefined' ) prevState.panels[ id ] = {};
+
+                prevState.panels[ id ] = Object.assign( prevState.panels[ id ], newPanels[ id ] );
+
+                if ( typeof prevState.panels[ id ].props == 'undefined' ) prevState.panels[ id ].props = {};
+
+                if ( typeof prevState.panels[ id ].props.key == 'undefined' ) prevState.panels[ id ].props.key = id;
+
+                if ( typeof prevState.panels[ id ].props.loadPanel == 'undefined' ) prevState.panels[ id ].props.loadPanel = this.loadPanel;
+
+            }
             
             return prevState;
 
@@ -354,17 +365,25 @@ class Editor extends React.Component {
 
     }
 
-    addSecondaryAction( secondaryAction ) {
+    addSecondaryAction( newSecondaryActions ) {
 
         this.setState( ( prevState ) => {
 
-            return {
-                ...prevState,
-                secondaryActions: [
-                    ...prevState.secondaryActions,
-                    secondaryAction,
-                ]
+            for ( var id in newSecondaryActions ) {
+
+                if ( typeof prevState.secondaryActions[ id ] == 'undefined' ) prevState.secondaryActions[ id ] = {};
+
+                prevState.secondaryActions[ id ] = Object.assign( prevState.secondaryActions[ id ], newSecondaryActions[ id ] );
+
+                if ( typeof prevState.secondaryActions[ id ].props == 'undefined' ) prevState.secondaryActions[ id ].props = {};
+
+                if ( typeof prevState.secondaryActions[ id ].props.key == 'undefined' ) prevState.secondaryActions[ id ].props.key = id;
+
+                if ( typeof prevState.secondaryActions[ id ].props.loadPanel == 'undefined' ) prevState.secondaryActions[ id ].props.loadPanel = this.loadPanel;
+
             }
+
+            return prevState;
 
         } );
 

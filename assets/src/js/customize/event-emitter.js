@@ -20,4 +20,7 @@ const EventEmitter = {
 
 }
 
+// Making an Event Bus global like this is a little dirty, but it helps make 3rd party integration clearer
+window.clientDashEvents = EventEmitter;
+
 export default EventEmitter;

@@ -314,9 +314,17 @@ if ( ! class_exists( 'ClientDash' ) ) {
 			);
 
 			wp_register_script(
+				'clientdash-event-emitter', // Your extension must declare this script as a dependency to ensure that the Event Emitter is available to you
+				CLIENTDASH_URI . '/assets/dist/js/event-emitter.min.js',
+				array(),
+				defined( 'WP_DEBUG' ) && WP_DEBUG ? time() : CLIENTDASH_VERSION,
+				true
+			);
+
+			wp_register_script(
 				'clientdash-customize',
 				CLIENTDASH_URI . '/assets/dist/js/clientdash-customize.min.js',
-				array(),
+				apply_filters( 'clientdash_customize_script_dependencies', array( 'clientdash-event-emitter' ) ), // Your extension should declare itself as a dependency of Client Dash's Customize JS in order to ensure that it loads first
 				defined( 'WP_DEBUG' ) && WP_DEBUG ? time() : CLIENTDASH_VERSION,
 				true
 			);
