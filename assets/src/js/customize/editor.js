@@ -310,12 +310,10 @@ class Editor extends React.Component {
 
         clientDashEvents.dispatch( 'addPanels', {
             addPanel: api.addPanel, // Use this method to add your Panel. Provide a Panel object similar to the State above
-            loadPanel: api.loadPanel,
         } );
 
         clientDashEvents.dispatch( 'addSecondaryActions', {
             addSecondaryAction: api.addSecondaryAction, // Use this method to add your Secondary Actions. Provide a Secondary Actions object similar to the State above
-            loadPanel: api.loadPanel,
         } );
 
     }
