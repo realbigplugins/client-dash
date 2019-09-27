@@ -25,7 +25,8 @@ import {
     PanelSubmenu
 } from './panels';
 
-import {SecondaryActions, SecondaryActionsPrimary} from './secondary-actions';
+import {SecondaryActions} from './secondary-actions';
+import {SecondaryActionsPrimary} from './secondary-actions-primary';
 import PrimaryActions from './primary-actions';
 import RoleSwitcher from './role-switcher';
 import Message from './message';
