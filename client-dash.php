@@ -373,14 +373,14 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		 */
 		function action_links( $links ) {
 
-			$links[] = '<a href="' . admin_url( 'admin.php?page=clientdash_settings' ) . '">' .
+			$links['settings'] = '<a href="' . admin_url( 'admin.php?page=clientdash_settings' ) . '">' .
 			           __( 'Settings', 'client-dash' ) . '</a>';
 
-			$links[] = '<a href="http://realbigplugins.com/?utm_source=Client%20Dash&utm_medium=Plugins%20list%20link&utm' .
+			$links['more'] = '<a href="http://realbigplugins.com/?utm_source=Client%20Dash&utm_medium=Plugins%20list%20link&utm' .
 			           '_campaign=Client%20Dash%20Plugin" target="_blank">' . __( 'More Real Big Plugins', 'client-dash' ) .
 			           '</a>';
 
-			$links[] = '<a href="http://realbigplugins.com/subscribe/?utm_source=Client%20Dash&utm_medium=Plugins%20list%' .
+			$links['subscribe'] = '<a href="http://realbigplugins.com/subscribe/?utm_source=Client%20Dash&utm_medium=Plugins%20list%' .
 			           '20link&utm_campaign=Client%20Dash%20Plugin" target="_blank">' . __( 'Subscribe', 'client-dash' ) .
 			           '</a>';
 
