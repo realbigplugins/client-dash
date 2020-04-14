@@ -397,7 +397,7 @@ class ClientDash_Customize {
 				 */
 				$output = apply_filters(
 					"clientdash_custom_widget_{$custom_widget['id']}_output",
-					$output,
+					'<div class="clientdash-widget">' . $output . '</div>',
 					$box['args'],
 					$custom_widget
 				);

@@ -136,8 +136,8 @@ var l10n = typeof ClientDash_Data != 'undefined' ? ClientDash_Data.l10n : {};
         $('[data-cd-submit-form]').click(submit_button);
         $('[data-cd-submit-form]').prop('disabled', false);
 		
-		// Find all YouTube videos
-		var $allVideos = $( 'body.index-php, .clientdash, .cd-custom-admin-page' ).find( 'iframe:not(.ignore-responsive)' );
+		// Find all YouTube videos within our Widgets and Admin Pages (Free and Pro)
+		var $allVideos = $( '.clientdash-widget, .clientdash, .cd-custom-admin-page' ).find( 'iframe:not(.ignore-responsive)' );
 
 		// When the window is resized
 		// (You'll probably want to debounce this)
