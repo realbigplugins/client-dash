@@ -80,6 +80,11 @@ Using this plugin is very simple. All you have to do is:
 
 ## Changelog
 
+### [2.1.5](https://github.com/realbigplugins/client-dash/releases/tag/v2.1.5)
+* Adjust a potential issue with the links that show below Client Dash in the plugins list
+* Fixes a bug when a Title isn't defined for a Dashboard Widget
+* Fixes a conflict with Smart Slider 3 and possibly other plugins where iFrames in the admin may have been resized when they should not have been.
+
 ### [2.1.4](https://github.com/realbigplugins/client-dash/releases/tag/v2.1.4)
 * Added a Delete Button for "Missing" Menu Items in the Customizer
   * An item normally goes "Missing" if you customize a Role's Menu and then deactivate the plugin that had originally added that Menu Item.
