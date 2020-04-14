@@ -392,7 +392,7 @@ class ClientDash_Modify {
 
 					wp_add_dashboard_widget(
 						$widget['id'],
-						$widget['title'] ? $widget['title'] : $widget['original_title'],
+						isset( $widget['title'] ) && $widget['title'] ? $widget['title'] : $widget['original_title'],
 						array( 'ClientDash_Customize', 'custom_widget_callback' ),
 						null,
 						$widget
