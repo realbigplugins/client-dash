@@ -4,7 +4,7 @@ Contributors: joelworsham, d4mation, BrashRebel
 Tags: client, portal, dashboard, admin, users, webmaster, customize
 Requires at least: 4.7.0
 Tested up to: 5.4
-Stable tag: 2.1.4
+Stable tag: 2.1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -87,6 +87,11 @@ Using this plugin is very simple. All you have to do is:
 5. Customizing your custom Admin Page.
 
 == Changelog ==
+
+= 2.1.5 =
+* Adjust a potential issue with the links that show below Client Dash in the plugins list
+* Fixes a bug when a Title isn't defined for a Dashboard Widget
+* Fixes a conflict with Smart Slider 3 and possibly other plugins where iFrames in the admin may have been resized when they should not have been.
 
 = 2.1.4 =
 * Added a Delete Button for "Missing" Menu Items in the Customizer
