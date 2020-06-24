@@ -54,6 +54,15 @@ class ClientDash_Customize {
 		// Save role settings on first role load
 		if ( self::is_saving_role() ) {
 
+			global $WishListMemberInstance;
+
+			if ( $WishListMemberInstance ) {
+
+				// Prevents WishList Member from breaking the Customizer
+				remove_action( 'init', array( $WishListMemberInstance, 'Init' ) );
+				
+			}
+
 			add_filter( 'custom_menu_order', array(
 				$this,
 				'save_menu_preview'
@@ -221,6 +230,10 @@ class ClientDash_Customize {
 		$roles = array();
 
 		foreach ( $wp_roles->role_names as $role_ID => $role_name ) {
+
+			$role = get_role( $role_ID );
+
+			if ( ! $role->has_cap( 'read' ) ) continue;
 
 			$roles[] = array(
 				'text'  => $role_name,
