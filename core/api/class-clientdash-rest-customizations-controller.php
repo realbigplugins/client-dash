@@ -296,9 +296,9 @@ class ClientDash_REST_Customizations_Controller {
 	public function prepare_item_for_response( $data ) {
 
 		$response = array(
-			'menu'      => $data['menu'],
-			'submenu'   => $data['submenu'],
-			'dashboard' => $data['dashboard'],
+			'menu'      => ( isset( $data['menu'] ) && $data['menu'] ) ? $data['menu'] : array(),
+			'submenu'   => ( isset( $data['submenu'] ) && $data['submenu'] ) ? $data['submenu'] : array(),
+			'dashboard' => ( isset( $data['dashboard'] ) && $data['dashboard'] ) ? $data['dashboard'] : array(),
 		);
 
 		return rest_ensure_response( $response );
