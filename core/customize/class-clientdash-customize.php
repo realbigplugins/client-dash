@@ -969,9 +969,12 @@ class ClientDash_Customize {
 					// Edge-case: Header is in there twice under "Appearance" and then one is hidden via CSS. So, I remove
 					// one here, and then add it back on submenu modify. This way, they stay together and the user doesn't
 					// see 2 of them when customizing.
-					if ( $save_submenu_item['id'] === 'custom-header' ) {
-						unset( $save_submenu[ $menu_ID ][ $i ] );
+					if ( is_array( $save_submenu_item ) ) {
+						if ( $save_submenu_item['id'] === 'custom-header' ) {
+							unset( $save_submenu[ $menu_ID ][ $i ] );
+						}
 					}
+					
 				}
 
 				ksort( $save_submenu[ $menu_ID ] );
@@ -1123,26 +1126,30 @@ class ClientDash_Customize {
 		$customize_header_url     = esc_url( add_query_arg( array( 'autofocus' => array( 'control' => 'header_image' ) ), $customize_url ) );
 		$customize_background_url = esc_url( add_query_arg( array( 'autofocus' => array( 'control' => 'background_image' ) ), $customize_url ) );
 
-		switch ( $item['id'] ) {
+		if ( is_array( $item ) ) {
 
-			case 'update-core.php';
-				$item['original_title'] = __( 'Updates', 'client-dash' );
-				break;
+			switch ( $item['id'] ) {
 
-			case $customize_url:
+				case 'update-core.php';
+					$item['original_title'] = __( 'Updates', 'client-dash' );
+					break;
 
-				$item['id'] = 'wp_customize';
-				break;
+				case $customize_url:
 
-			case $customize_header_url:
+					$item['id'] = 'wp_customize';
+					break;
 
-				$item['id'] = 'wp_customize_header';
-				break;
+				case $customize_header_url:
 
-			case $customize_background_url:
+					$item['id'] = 'wp_customize_header';
+					break;
 
-				$item['id'] = 'wp_customize_background';
-				break;
+				case $customize_background_url:
+
+					$item['id'] = 'wp_customize_background';
+					break;
+			}
+
 		}
 
 		/**

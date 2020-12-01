@@ -177,7 +177,7 @@ class ClientDash_Modify {
 					$new_menu[ $i ] = array(
 						isset( $menu_item['title'] ) && $menu_item['title'] ? $menu_item['title'] : $menu_item['original_title'],
 						'read',
-						$menu_item['link'] ? $menu_item['link'] : '#',
+						isset( $menu_item['link'] ) && $menu_item['link'] ? $menu_item['link'] : '#',
 						isset( $menu_item['title'] ) && $menu_item['title'] ? $menu_item['title'] : $menu_item['original_title'],
 						'menu-top menu-custom-link',
 						'menu-custom-link',
