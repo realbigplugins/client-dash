@@ -21,6 +21,7 @@
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^4.0.0",
     "gulp-concat": "^2.6.0",
+    "gulp-dos2unix-js": "^1.0.0",
     "gulp-if": "^2.0.0",
     "gulp-load-plugins": "^1.5.0",
     "gulp-notify": "^3.0.0",

@@ -21,6 +21,7 @@ const wpPot       = require('gulp-wp-pot');
 const sort        = require('gulp-sort');
 const gulpIf      = require('gulp-if');
 var $             = require('gulp-load-plugins')();
+const dos2unix    = require('gulp-dos2unix-js');
 
 gulp.task('admin_sass', function () {
     return gulp.src(['./assets/src/scss/admin/**/*.scss'])
@@ -212,11 +213,12 @@ gulp.task( 'svn_copy', function() {
 		'!./**/package-lock.json',
 		'!./**/README.md',
 		'!./**/webpack.config.js',
-	], { base: '*' } )
+    ], { base: '*' } )
+    .pipe( dos2unix() )
 	.pipe(rename(function(file) {
 		file.dirname = file.dirname.replace( '..', '' );
 		return file;
-	 }))
+     }))
 	.pipe( gulp.dest( 'client-dash-svn/trunk/' ) );
 	
 } );
