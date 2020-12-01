@@ -4,7 +4,7 @@ Contributors: joelworsham, d4mation, BrashRebel
 Tags: client, portal, dashboard, admin, users, webmaster, customize
 Requires at least: 4.7.0
 Tested up to: 5.5.3
-Stable tag: 2.1.5
+Stable tag: 2.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -87,6 +87,13 @@ Using this plugin is very simple. All you have to do is:
 5. Customizing your custom Admin Page.
 
 == Changelog ==
+
+= 2.1.6 =
+* Fixes an issue where if another plugin/theme prevented Client Dash's customizer from loading a response it would cause the customizer to crash in some cases
+* Prevents WishList Member from breaking the Customizer
+* If a User Role does not have the `read` capability, it will now not show within the Role selector
+* Fixes some potential PHP errors
+* Bumps the "Tested To" value
 
 = 2.1.5 =
 * Adjust a potential issue with the links that show below Client Dash in the plugins list

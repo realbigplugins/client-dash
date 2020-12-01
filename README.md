@@ -1,6 +1,6 @@
 ![Client Dash Banner](https://raw.githubusercontent.com/realbigplugins/client-dash/master/assets/static/banner.png)
 
-# v2.1.5
+# v2.1.6
 
 [Releases](https://github.com/realbigplugins/client-dash/releases)
 
@@ -79,6 +79,13 @@ Using this plugin is very simple. All you have to do is:
 3. Configure settings by going to Settings - >Client Dash
 
 ## Changelog
+
+### [2.1.6](https://github.com/realbigplugins/client-dash/releases/tag/v2.1.6)
+* Fixes an issue where if another plugin/theme prevented Client Dash's customizer from loading a response it would cause the customizer to crash in some cases
+* Prevents WishList Member from breaking the Customizer
+* If a User Role does not have the `read` capability, it will now not show within the Role selector
+* Fixes some potential PHP errors
+* Bumps the "Tested To" value
 
 ### [2.1.5](https://github.com/realbigplugins/client-dash/releases/tag/v2.1.5)
 * Adjust a potential issue with the links that show below Client Dash in the plugins list
