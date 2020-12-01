@@ -36,7 +36,7 @@
     "promise-polyfill": "^7.0.0",
     "react": "^16.0.0",
     "react-css-transition-replace": "^3.0.2",
-    "react-dom": "^16.0.0",
+    "react-dom": "^16.0.1",
     "react-sortable-hoc": "^0.6.8",
     "reactify": "^1.1.1",
     "vinyl-buffer": "^1.0.1",
