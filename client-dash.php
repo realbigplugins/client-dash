@@ -9,6 +9,8 @@
  * Plugin Name: Client Dash
  * Description: Creating a more intuitive admin interface for clients.
  * Version: 2.1.6
+ * Requires at least: 4.8.0
+ * Requires PHP: 5.3.0
  * Author: Real Big Plugins
  * Author URI: https://realbigplugins.com
  * Text Domain: client-dash
