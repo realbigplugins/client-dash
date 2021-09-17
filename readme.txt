@@ -1,8 +1,9 @@
 === Client Dash ===
 
-Contributors: joelworsham, d4mation, BrashRebel
+Contributors: joelworsham, d4mation, BrashRebel, joelyoder
 Tags: client, portal, dashboard, admin, users, webmaster, customize
 Requires at least: 4.7.0
+Requires PHP: 5.3
 Tested up to: 5.5.3
 Stable tag: 2.1.6
 License: GPLv2 or later
