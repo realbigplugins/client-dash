@@ -94,7 +94,7 @@ class ClientDash_Bootstrapper {
 		}
 
 		// Minimum WordPress version
-		if ( version_compare( $wp_version, '4.7.0' ) === - 1 ) {
+		if ( version_compare( $wp_version, '4.8.0' ) === - 1 ) {
 
 			$this->notices[] = sprintf(
 				__( 'Minimum WordPress version of 4.0.0 required. Current version is %s. Please contact your system administrator to upgrade WordPress to its latest version.', 'client-dash' ),
