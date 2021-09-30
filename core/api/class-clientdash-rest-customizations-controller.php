@@ -26,7 +26,7 @@ class ClientDash_REST_Customizations_Controller {
 	 */
 	function __construct() {
 
-		$this->namespace     = '/clientdash/v1';
+		$this->namespace     = 'clientdash/v1';
 		$this->resource_name = 'customizations';
 	}
 
