@@ -1,4 +1,4 @@
-# Copyright (C) 2020 ClientDash
+# Copyright (C) 2022 ClientDash
 # This file is distributed under the same license as the ClientDash package.
 msgid ""
 msgstr ""
@@ -29,103 +29,103 @@ msgstr ""
 msgid "%sClient Dash Pro%s needs to be updated to version 1.1 or it will not perform properly. Please update Client Dash Pro immediately."
 msgstr ""
 
-#: client-dash.php:244
+#: client-dash.php:246
 msgid "Delete Row"
 msgstr ""
 
-#: client-dash.php:245
+#: client-dash.php:247
 msgid "Delete Column"
 msgstr ""
 
-#: client-dash.php:248
+#: client-dash.php:250
 msgid "No select options."
 msgstr ""
 
-#: client-dash.php:249
+#: client-dash.php:251
 msgid "The results could not be loaded"
 msgstr ""
 
-#: client-dash.php:251
+#: client-dash.php:253
 msgid "Please delete %d character(s)"
 msgstr ""
 
-#: client-dash.php:253
+#: client-dash.php:255
 msgid "Please enter %d or more characters"
 msgstr ""
 
-#: client-dash.php:254
+#: client-dash.php:256
 msgid "Loading more results..."
 msgstr ""
 
-#: client-dash.php:256
+#: client-dash.php:258
 msgid "You can only select %d item(s)"
 msgstr ""
 
-#: client-dash.php:257
+#: client-dash.php:259
 msgid "No results found"
 msgstr ""
 
-#: client-dash.php:258
+#: client-dash.php:260
 msgid "Searching..."
 msgstr ""
 
-#: client-dash.php:261
+#: client-dash.php:263
 msgid "New Row"
 msgstr ""
 
-#: client-dash.php:262
+#: client-dash.php:264
 msgid "Are you sure you want to delete this element?"
 msgstr ""
 
-#: client-dash.php:263, core/customize/class-clientdash-customize.php:288
+#: client-dash.php:265, core/customize/class-clientdash-customize.php:288
 msgid "Delete"
 msgstr ""
 
-#: client-dash.php:264
+#: client-dash.php:266
 msgid "Add"
 msgstr ""
 
-#: client-dash.php:267
+#: client-dash.php:269
 msgid "Upload / Choose Media"
 msgstr ""
 
-#: client-dash.php:268
+#: client-dash.php:270
 msgid "Remove Media"
 msgstr ""
 
-#: client-dash.php:269
+#: client-dash.php:271
 msgid "Choose Media"
 msgstr ""
 
-#: client-dash.php:272
+#: client-dash.php:274
 msgid "No options available."
 msgstr ""
 
-#: client-dash.php:334
+#: client-dash.php:336
 msgid "This will reset ALL Client Dash settings permanently. This can NOT be undone. Are you sure you want to proceed?"
 msgstr ""
 
-#: client-dash.php:335
+#: client-dash.php:337
 msgid "Change"
 msgstr ""
 
-#: client-dash.php:336, core/customize/class-clientdash-customize.php:294
+#: client-dash.php:338, core/customize/class-clientdash-customize.php:294
 msgid "Close"
 msgstr ""
 
-#: client-dash.php:337
+#: client-dash.php:339
 msgid "Saving..."
 msgstr ""
 
-#: client-dash.php:377, core/plugin-pages/class-clientdash-pluginpages.php:192, core/plugin-pages/class-clientdash-pluginpages.php:193, core/plugin-pages/views/settings.php:21
+#: client-dash.php:379, core/plugin-pages/class-clientdash-pluginpages.php:192, core/plugin-pages/class-clientdash-pluginpages.php:193, core/plugin-pages/views/settings.php:21
 msgid "Settings"
 msgstr ""
 
-#: client-dash.php:380
+#: client-dash.php:382
 msgid "More Real Big Plugins"
 msgstr ""
 
-#: client-dash.php:384
+#: client-dash.php:386
 msgid "Subscribe"
 msgstr ""
 
