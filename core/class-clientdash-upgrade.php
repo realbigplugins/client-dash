@@ -27,6 +27,14 @@ class ClientDash_Upgrade {
 
 		$version = get_option( 'cd_version', 0 );
 
+		if ( ! $version ) {
+
+			// If this is a fresh site, just run the "upgrade" to get them set up
+			$this->upgrade();
+			return;
+
+		}
+
 		if ( version_compare( $version, '2.0', '<=' ) ) {
 
 			add_action( 'admin_notices', array( $this, 'show_upgrade_nag' ) );
