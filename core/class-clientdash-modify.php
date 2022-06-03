@@ -269,10 +269,10 @@ class ClientDash_Modify {
 
 				// Modify item
 				$new_submenu[ $menu_parent ][ $customized_submenu_item_key ] = array(
-					$customized_submenu_item['title'] ? $customized_submenu_item['title'] : $submenu_item[0],
+					$customized_submenu_item['title'] ? $customized_submenu_item['title'] : ( isset( $submenu_item[0] ) ? $submenu_item[0] : '' ),
 					$submenu_item[1],
 					$submenu_item[2],
-					$customized_submenu_item['title'] ? $customized_submenu_item['title'] : $submenu_item[3],
+					$customized_submenu_item['title'] ? $customized_submenu_item['title'] : ( isset( $submenu_item[3] ) ? $submenu_item[3] : '' ),
 				);
 			}
 
