@@ -289,7 +289,7 @@ class ClientDash_Modify {
 							$new_submenu[ $menu_parent ][ $i ] = array(
 								isset( $submenu_item['title'] ) && $submenu_item['title'] ? $submenu_item['title'] : $submenu_item['original_title'],
 								'read',
-								$submenu_item['link'] ? $submenu_item['link'] : '#',
+								isset( $submenu_item['link'] ) && $submenu_item['link'] ? $submenu_item['link'] : '#',
 								isset( $submenu_item['title'] ) && $submenu_item['title'] ? $submenu_item['title'] : $submenu_item['original_title'],
 								'submenu-custom-link',
 								'submenu-custom-link'
