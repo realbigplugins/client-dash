@@ -5,7 +5,7 @@ Tags: client, portal, dashboard, admin, users, webmaster, customize
 Requires at least: 4.7.0
 Requires PHP: 5.3.0
 Tested up to: 6.0.0
-Stable tag: 2.1.6
+Stable tag: 2.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,6 +88,11 @@ Using this plugin is very simple. All you have to do is:
 5. Customizing your custom Admin Page.
 
 == Changelog ==
+
+= 2.2.0 =
+* If Client Dash is being activated for the first time, the database upgrade now runs automatically to prevent confusion. Previously manually running the database upgrade process was required before the plugin could funciton.
+* Fixes an incompatibility with LearnDash.
+* Fixes an issue with Custom Links that don't have a link properly set yet.
 
 = 2.1.6 =
 * Fixes an issue where if another plugin/theme prevented Client Dash's customizer from loading a response it would cause the customizer to crash in some cases
