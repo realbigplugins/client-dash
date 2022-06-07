@@ -90,7 +90,7 @@ Using this plugin is very simple. All you have to do is:
 == Changelog ==
 
 = 2.2.0 =
-* If Client Dash is being activated for the first time, the database upgrade now runs automatically to prevent confusion. Previously manually running the database upgrade process was required before the plugin could funciton.
+* If Client Dash is being activated for the first time, the database upgrade now runs automatically to prevent confusion. Previously manually running the database upgrade process was required before the plugin could function.
 * Fixes an incompatibility with LearnDash.
 * Fixes an issue with Custom Links that don't have a link properly set yet.
 
