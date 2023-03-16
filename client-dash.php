@@ -128,10 +128,10 @@ if ( ! class_exists( 'ClientDash' ) ) {
 		 */
 		public $helper_pages;
 
-		protected function __wakeup() {
+		public function __wakeup() {
 		}
 
-		protected function __clone() {
+		public function __clone() {
 		}
 
 		/**
