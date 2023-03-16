@@ -1,6 +1,6 @@
 ![Client Dash Banner](https://raw.githubusercontent.com/realbigplugins/client-dash/master/assets/static/banner.png)
 
-# v2.2.0
+# v2.2.1
 
 [Releases](https://github.com/realbigplugins/client-dash/releases)
 
